@@ -1,0 +1,272 @@
+<template>
+  <Page>
+    <ActionBar>
+      <GridLayout width="100%" columns="auto, *, auto">
+        <Label class="title" :text="$t('menu')" col="0" @tap="openDrawer()"/>
+        <StackLayout orientation="horizontal" @tap="$navigateTo($routes.Home)" col="1"
+            horizontalAlignment="center">
+          <Image src="~/assets/images/go-back-arrow.png" height="15"/>
+          <Label class="title" :text="$t('orders')"/>
+        </StackLayout>
+      </GridLayout>
+    </ActionBar>
+    <TabView :selectedIndex="currentTab" paddingTop="10"
+        @selectedIndexChange="tabChange">
+      <TabViewItem :title="$t('takeOrder')">
+        <StackLayout>
+          <Label class="h3" :text="$t('selectTableLocation')"
+                horizontalAlignment="center"/>
+          <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
+            @propertyCommitted="onHeaderCommitted"/>
+          <label :text="$t('tables')" paddingLeft="15"/>
+          <RadListView ref="listView" for="table in tableMatrix">
+            <v-template>
+              <StackLayout>
+                <GridLayout columns="*, *, *, *, *, *" rows="30" class="item">
+                  <label :text="table[0]?table[0].spotNumber:''" class="h3"
+                      col="0" horizontalAlignment="center" @tap="onSpotSelect(table[0])"/>
+                  <label :text="table[1]?table[1].spotNumber:''" class="h3"
+                      col="1" horizontalAlignment="center" @tap="onSpotSelect(table[1])"/>
+                  <label :text="table[2]?table[2].spotNumber:''" class="h3"
+                      col="2" horizontalAlignment="center" @tap="onSpotSelect(table[2])"/>
+                  <label :text="table[3]?table[3].spotNumber:''" class="h3"
+                      col="3" horizontalAlignment="center" @tap="onSpotSelect(table[3])"/>
+                  <label :text="table[4]?table[4].spotNumber:''" class="h3"
+                      col="4" horizontalAlignment="center" @tap="onSpotSelect(table[4])"/>
+                  <label :text="table[5]?table[5].spotNumber:''" class="h3"
+                      col="5" horizontalAlignment="center" @tap="onSpotSelect(table[5])"/>
+                </GridLayout>
+              </StackLayout>
+            </v-template>
+          </RadListView>
+        </StackLayout>
+      </TabViewItem>
+      <TabViewItem :title="$t('serve')">
+        <StackLayout>
+          <Button :text="$t('refresh')" @tap="refresh()"/>
+          <Accordion row="1" col="0" colSpan="3" height="100%"
+              :visibility="servOrders.length ? 'visible':'collapse'"
+                ref="accordion" allowMultiple="false"
+                for="item of servOrders"  childItems="items">
+            <v-template name="title">
+              <GridLayout columns="50,*,auto,auto" rows="*">
+                <Image :src="item.image"  col="0" class="thumbnail"/>
+                <StackLayout col="1">
+                  <Label :text="item.prepDescription" class="h2"/>
+                  <label :text="$t('quantity') + ': ' + item.totalQuantity" class="p"/>
+                </StackLayout>
+                <Label :text="item.description + '-' + item.spotNumber"
+                    paddingRight="20" class="h2" col="2"/>
+                <Label :text="$t('done')" col="3" paddingRight="5" class="h2"
+                      @tap="setDone(item)" backgroundColor="rgb(211, 215, 207)"/>
+              </GridLayout>
+            </v-template>
+            <v-template name="content">
+              <GridLayout columns="50, *, auto" rows="*" class="item"
+                      paddingRight="5" paddingLeft="25" >
+                    <Image :src="item.image"  col="0" class="thumbnail"/>
+                    <Label :text="item.itemDescription" class="h2" col="1"/>
+                    <Label :text="item.quantity" class="h2" col="2"/>
+              </GridLayout>
+            </v-template>
+          </Accordion>
+          <GridLayout columns="*" rows="*"
+                :visibility="servOrders.length ? 'collapse':'visible'">
+              <Label class="message" col="0" row="0"
+              :text="$t('noOrdersTo') + ' ' + $t('serve')"/>
+          </GridLayout>
+        </StackLayout>
+      </TabViewItem>
+      <TabViewItem :title="$t('bill')">
+        <StackLayout>
+          <Button :text="$t('refresh')" @tap="refresh()"/>
+          <Accordion row="1" col="0" colSpan="3" height="100%"
+                ref="accordion" allowMultiple="false"
+                :visibility="billOrders.length ? 'visible':'collapse'"
+                for="item of billOrders"  childItems="items">
+            <v-template name="title">
+                <GridLayout columns="50,*,auto, auto, 5, auto" rows="*" paddingRight="5">
+                  <Image col="0" :src="item.image" class="thumbnail"/>
+                  <Label col="1" :text="item.description + '-' + item.spotNumber"
+                      class="h2" paddingLeft="10"/>
+                  <Label col="2" :text="item.totalAmount" class="h2" paddingRight="10"/>
+                  <Label col="3" :text="$t('print')" class="h2" @tap="print(item)"
+                          backgroundColor="rgb(211, 215, 207)" padding="10"/>
+                  <Label col="5" :text="$t('done')" class="h2" @tap="setDone(item)"
+                      backgroundColor="rgb(211, 215, 207)" padding="10"/>
+                </GridLayout>
+            </v-template>
+            <v-template name="content">
+                <GridLayout columns="50, *, 30, 70, 70" rows="*" class="item"
+                    paddingRight="5" paddingLeft="25" >
+                  <Image :src="item.image"  col="0" class="thumbnail"/>
+                  <Label :text="item.itemDescription" class="h2" col="1"/>
+                  <Label :text="item.quantity" class="h2" col="2" paddingRight="10"/>
+                  <Label :text="item.price" class="h2" col="3" paddingRight="10"/>
+                  <Label :text="Number(item.price) * Number(item.quantity)" class="h2" col="4"/>
+                </GridLayout>
+            </v-template>
+          </Accordion>
+          <GridLayout columns="*" rows="*"
+                :visibility="billOrders.length ? 'collapse':'visible'">
+            <Label class="message" col="0" row="0"
+                :text="$t('noOrdersTo') + ' ' + $t('bill')"/>
+          </GridLayout>
+        </StackLayout>
+      </TabViewItem>
+    </TabView>
+  </Page>
+</template>
+
+<script>
+import sideDrawer from '~/mixins/sideDrawer'
+import AddToOrder from './modalPages/AddToOrder'
+import general from '~/mixins/general'
+import * as frameModule from 'tns-core-modules/ui/frame'
+import { AutoCompleteDisplayMode } from 'nativescript-ui-dataform'
+export default {
+    name: 'orders',
+    mixins: [ sideDrawer, general],
+    props: {
+        startTab: Number
+    },
+    data () {
+        return {
+            text: 'Order Page',
+            currentTab: 0,
+            editedOrderHeader: {},
+            orderHeader: {
+              areaDescription: '',
+            },
+            orderHeaderMeta: {
+                propertyAnnotations:[
+                    { name: 'areaDescription', displayName: this.$t('areaName'),
+                        editor: 'SegmentedEditor', index: 3,
+                        valuesProvider:  this.$store.getters.areas},
+                ]
+            },
+            areaId: '',
+            areaDescription: '',
+            tableMatrix: this.makeTableMatix(this.$store.getters.areasAndSpots[0].spots),
+            servOrders: [[]],
+            billOrders: [[]],
+          }
+    },
+    created() {
+      if (this.$store.getters.areasAndSpots.length == 0) {
+        this.note(this.$t('noAreasTables'))
+        this.$navigateTo(this.$routes.Locations, {props: {startTab: 1}})
+      }
+        this.currentTab = this.startTab
+        this.areaId = this.$store.getters.areasAndSpots[0].accommodationAreaId,
+        this.areaDescription = this.$store.getters.areasAndSpots[0].description,
+        this.$backendService.getOrdersAndItems('serv').then( result => {
+            this.servOrders = result.data.ordersAndItems})
+        this.$backendService.getOrdersAndItems('bill').then( result => {
+            this.billOrders = result.data.ordersAndItems})
+    },
+    methods: {
+        tabChange(args) {
+            this.currentTab = args.value
+            this.createBanner()
+        },
+        refresh() {
+          if (this.currentTab == 1) {
+              this.$backendService.getOrdersAndItems('serv').then( result => {
+                  this.servOrders = result.data.ordersAndItems})}
+          if (this.currentTab == 2) {
+              this.$backendService.getOrdersAndItems('bill').then( result => {
+                  this.billOrders = result.data.ordersAndItems})}
+        },
+        setDone(item) {
+            if (this.currentTab == 1) {
+              for (let i=0; i < this.servOrders.length; i++) {
+                if (this.servOrders[i].orderId == item.orderId) {
+                  this.servOrders.splice(i,1)
+                  break}}
+            }
+            let newStat = 'bill'
+            let partId = item.orderPartSeqId
+            if (this.currentTab === 2) {
+              newStat = 'completed'
+              partId = null
+              for (let i=0; i < this.billOrders.length; i++) {
+                if (this.billOrders[i].orderId == item.orderId) {
+                  this.billOrders.splice(i,1); break}}
+            }
+            this.$backendService.changeOrderPartStatus(item.orderId, partId, newStat)
+            .then(() => {
+              if (this.currentTab == 1) {
+                this.note(this.$t('table') + ' ' + item.description + '-' +
+                    item.spotNumber + this.$t('isServedFrom') + item.prepDescription)}
+              if (this.currentTab == 2) {
+                this.note(this.$t('table') + ' ' + item.description + '-' +
+                        item.spotNumber + this.$t('isNowPaid'))
+                this.$backendService.getOrdersItemsPartySpot()} //update store
+            })
+        },
+        print(item) {
+          this.$navigateTo(this.$routes.OrderPrint, { props: { orderId: item.orderId}})
+        },
+        makeTableMatix(tables) { // same as in locations tablearea
+          if (!tables) return
+          let tableMatrix = []
+          let record = 0
+          while (record < tables.length) {
+              let tableRecord = []
+              for (let count = 0; count < 6 ; count++) {
+                  let table = {}
+                  if (tables[record]) {
+                      table = tables[record++]
+                      tableRecord.push(table)
+                  } else break }
+              tableMatrix.push(tableRecord) }
+          return tableMatrix
+      },
+      onSpotSelect(table) {
+        let openOrders = this.$store.getters.openOrdersByAreaSpot(table.accommodationAreaId, table.accommodationSpotId)
+        let externalId =      this.editedOrderHeader.externalId?
+                              this.editedOrderHeader.externalId:
+                              this.editedOrderHeader.newExternalId
+        let itemProps = { props: { orderHeader: {
+                                accommodationAreaId:  this.areaId,
+                                description:          this.areaDescription,
+                                accommodationSpotId:  table.accommodationSpotId,
+                                spotNumber:           table.spotNumber,
+                                externalId:           externalId,
+                                nbrOfGuests:          this.editedOrderHeader.nbrOfGuests,
+                              }}}
+        if (openOrders.length > 0) {
+          this.$showModal(AddToOrder, {props: { openOrders: openOrders,
+              areaDescription: this.areaDescription, spotNumber: table.spotNumber}})
+          .then( result => {
+            if (result) {
+              itemProps.props.orderHeader.orderId = result.orderId
+              this.note(this.$t('addExistingOrderFrom') + result.placedTime)
+            } else {
+              this.$navigateTo(this.$routes.OrderData, itemProps)
+            }
+          })
+          this.$navigateTo(this.$routes.OrderEntry, itemProps)
+        } else {
+          this.$navigateTo(this.$routes.OrderData, itemProps)
+        }
+      },
+      onHeaderCommitted(data) {
+        console.log('committed object:' + data.object.editedObject)
+        if (JSON.parse(data.object.editedObject).areaDescription) {
+            if (JSON.parse(data.object.editedObject).areaDescription != this.editedOrderHeader.areaDescription) {
+                  this.tableMatrix = this.makeTableMatix(this.$store.getters.areaByDesc(
+                      JSON.parse(data.object.editedObject).areaDescription).spots)
+                  this.areaDescription = JSON.parse(data.object.editedObject).areaDescription
+                  this.areaId = this.$store.getters.areaByDesc(
+                      JSON.parse(data.object.editedObject).areaDescription).accommodationAreaId
+        }}
+        this.editedOrderHeader = JSON.parse(data.object.editedObject)
+      },
+   }
+}
+</script>
+
+<style lang="css">
+</style>

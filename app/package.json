@@ -1,0 +1,10 @@
+{
+  "android": {
+    "v8Flags": "--expose_gc"
+  },
+  "main": "main",
+  "discardUncaughtJsExceptions": true,
+  "name": "GrowERP-restaurant",
+  "version": "1.0.0",
+  "repository": "ssh://awsadmin@antwebsystems.com:55555/GrowERP-restaurant"
+}

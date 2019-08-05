@@ -1,0 +1,14 @@
+project.ext {
+  googlePlayServicesVersion = "15.0.0"
+}
+
+dependencies {
+  compile 'com.squareup.picasso:picasso:2.71828'
+  def googlePlayServicesVersion = project.googlePlayServicesVersion
+  compile "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
+  compile "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
+  def supportVer = "28.0.0"
+  compile "com.android.support:support-v4:$supportVer"
+  compile "com.android.support:appcompat-v7:$supportVer"
+  compile "com.android.support:design:$supportVer"
+}
