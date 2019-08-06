@@ -1,11 +1,11 @@
 {
-  "name": "GrowERP-restaurant",
+  "name": "GrowERP-Mobile",
   "version": "0.0.9",
-  "description": "GrowERP for the restaurant and bar business.",
-  "author": "Hans Bakker",
-  "license": "MIT",
+  "description": "GrowERP basic mobile application.",
+  "author": "AntWebsystems",
+  "license": "Commercial",
   "nativescript": {
-    "id": "com.growerp.restaurant",
+    "id": "com.growerp",
     "tns-ios": {
       "version": "6.0.1"
     },
