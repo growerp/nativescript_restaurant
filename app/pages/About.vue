@@ -32,7 +32,7 @@ export default {
         <h2>Credits logos</h2>
             <p>All icons are provided by <a href='https://www.flaticon.com/'  title='Flaticon'>www.flaticon.com</a>
             by means of a paid subscription</p>
-        <h2>Privacy Policy</h2>
+        <h2>Privacy Policy &amp Terms of Service</h2>
               <p> AntWebsystems.com built the GrowERP-Restaurant app as a Free app. This SERVICE is provided by
                   AntWebsystems.com at no cost and is intended for use as is.
                           </p> <p>This page is used to inform visitors regarding our policies with the collection, use, and disclosure

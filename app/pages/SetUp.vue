@@ -62,9 +62,8 @@ export default {
             pageName: 'Organization', pageTab: 1},
           {id: 6, image: '~/assets/images/customers.png', title: this.$t('customer'),
             pageName: 'Organization', pageTab: 2},
-          platformModule.isAndroid ?
-            {id: 7, image: '~/assets/images/payment.png', title: this.$t('upgrade'),
-              pageName: 'Upgrade', pageTab: 0} : {},
+          {id: 7, image: '~/assets/images/payment.png', title: this.$t('upgrade'),
+              pageName: 'Upgrade', pageTab: 0},
           {id: 8, image: '~/assets/images/about.png', title: this.$t('about'),
             pageName: 'About', pageTab: 0},
           ]

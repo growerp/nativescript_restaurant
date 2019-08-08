@@ -12,27 +12,33 @@
       </ActionBar>
       <StackLayout paddingTop="5">
         <Label class="h2" :text="$t('monthlySubscriptions')" horizontalAlignment="center"/>
-        <Label class="h3" :text="$t('freeTrial')" horizontalAlignment="center"/>
-        <Label class="h3" :text="$t('chargedNotCancel')" horizontalAlignment="center"/>
-        <Label class="h3" :text="$t('emailDetails')" horizontalAlignment="center"/>
+        <Label class="h3" :text="$t('freeTrial')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
+        <Label class="h3" :text="$t('chargedNotCancel')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
+        <Label class="h3" :text="$t('emailDetails')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
         <RadListView ref="listView" for="item in itemList" @itemTap="onItemTap"
-             @loaded="onLoaded">
+             @loaded="onLoaded" :height="ios?'25%':'60%'">
             <v-template>
               <GridLayout columns="50, *, auto" rows="*" class="item"
                   padding="10,20,10,20">
                   <Image src="~/assets/images/U.png"  col="0" class="thumbnail"
                     :visibility="item.subscribed?'hidden':'visible'"/>
                   <Image src="~/assets/images/S.png"  col="0" class="thumbnail"
-                    :visibility="item.subscribed?'visible':'hidden'"/>
+                    :visibility="item.subscribed?'hidden':'collapse'"/>
                 <StackLayout paddingLeft="10" col="1">
                   <Label :text="item.localizedTitle" class="h2"/>
                   <Label :text="item.localizedDescription" class="p" textWrap="true"/>
                 </StackLayout>
-                <Label :text="item.priceFormatted" class="h3" col="2"
-                  verticalAlignment="center"/>
+                <StackLayout paddingLeft="10" col="2">
+                  <Label :text="item.priceFormatted" class="h2" verticalAlignment="center"/>
+                  <Label :text="'/' + $t('month')" class="h3" verticalAlignment="center" horizontalAlignment="right"/>
+                </StackLayout>
               </GridLayout>
             </v-template>
         </RadListView>
+        <Label class="h3" :text="$t('upgradeDetailIos')" horizontalAlignment="center" 
+          textWrap="true" :visibility="ios?'visible':'collapse'" padding="30"/>
+        <Button class="button" :text="$t('upgradeMoreDetail')" horizontalAlignment="center"
+          textWrap="true" @tap="$navigateTo($routes.About)"  padding="15"/>
       </StackLayout>
   </Page>
 </template>
@@ -50,15 +56,19 @@ export default {
     data() {
         return {
           itemList: [],
-          selectedIndex: -1
+          selectedIndex: -1,
+          ios: false,
+          android: false
         }
     },
     created() {
       const platformModule = require("tns-core-modules/platform");
+      if (platformModule.isAndroid) this.android = true
+      if (platformModule.isIOS) this.ios = true
       purchase.on(purchase.transactionUpdatedEvent, transaction => {
             console.log('=======updated event: ' + JSON.stringify(transaction))
             if (transaction.transactionState === 'purchased') {
-                if (platformModule.isAndroid) {
+                if (this.android) {
                   purchase.consumePurchase(transaction.transactionReceipt)
                   .then(responseCode => {
                     console.log('consume response code: (0=ok) ' + responseCode)
@@ -99,23 +109,36 @@ export default {
     methods: {
         onLoaded() {
           global.initPurchase.then(() => {
-            purchase.getProducts().then( result => {
+            purchase.getProducts()
+            .then( result => {
               this.itemList = result
-              this.itemList.sort(function (a, b) { // sort by number
-                return a.localizedTitle.substring(0,1).
-                localeCompare(b.localizedTitle.substring(0,1))})
-              for (let i=0;i<this.itemList.length;i++) { //remove number and product name
-                let t = this.itemList[i].localizedTitle
-                if (t.indexOf("(") != -1)
-                  this.itemList[i].localizedTitle = t.substring(2,t.indexOf("("))
-                if (this.$store.getters.isSubActive(this.itemList[i].productIdentifier)) {
-                    this.itemList[i].subscribed = true
+              if (this.android) {
+                this.itemList.sort(function (a, b) { // sort by number
+                  return a.localizedTitle.substring(0,1).
+                  localeCompare(b.localizedTitle.substring(0,1))})
+                for (let i=0;i<this.itemList.length;i++) { //remove number and product name
+                  let t = this.itemList[i].localizedTitle
+                  if (t.indexOf("(") != -1)
+                    this.itemList[i].localizedTitle = t.substring(2,t.indexOf("("))
+                  if (this.$store.getters.isSubActive(this.itemList[i].productIdentifier)) {
+                      this.itemList[i].subscribed = true
                   } else {
-                    this.itemList[i].subscribed = false
+                      this.itemList[i].subscribed = false
                   }
                 }
+              }
+              if (this.ios) {
+                for (let i=0;i<this.itemList.length;i++) {
+                  console.log('processing: ' + i)
+                  if (this.$store.getters.isSubActive(this.itemList[i].productIdentifier)) {
+                      this.itemList[i].subscribed = true
+                  } else {
+                      this.itemList[i].subscribed = false
+                  }
+                }
+              }
             }).catch(function(e) {
-              return alert(e);
+              console.log("get products error: " + e)
             })
           })
         },

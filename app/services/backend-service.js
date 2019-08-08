@@ -10,8 +10,8 @@ const restPost = axios.create({
       baseURL: TNS_ENV === 'production' ?
         'https://mobile.growerp.com/rest/'
 //          'http://10.0.2.2:8080/rest/'
-//          : 'http://192.168.1.3:8080/rest/',
         : 'http://10.0.2.2:8080/rest/',
+//        : 'http://192.168.1.18:8080/rest/',
       headers:
         {   'Content-Type': 'application/json;charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
@@ -21,15 +21,15 @@ const restPost = axios.create({
             'moquiSessionToken': ''
         },
     withCredentials: true,
-    timeout: 500,
+    timeout: 5000, // 5 seconds
 })
 
 const restGet = axios.create({
       baseURL: TNS_ENV === 'production' ?
         'https://mobile.growerp.com/rest/'
 //      'http://10.0.2.2:8080/rest/'
-//        : 'http://192.168.1.3:8080/rest/',
         : 'http://10.0.2.2:8080/rest/',
+//        : 'http://192.168.1.18:8080/rest/',
       headers:
         {   'Content-Type': 'application/json;charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
@@ -38,7 +38,7 @@ const restGet = axios.create({
             'api_key': ''
         },
     withCredentials: true,
-    timeout: 500,
+    timeout: 5000, // 5 seconds
 })
 
 axios.interceptors.request.use(function (config) {

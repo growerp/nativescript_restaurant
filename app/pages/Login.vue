@@ -127,14 +127,14 @@
             };
         },
         created() {
-          if (!this.$store.getters.user.name) { //if used for the first time show register screen
-            this.toggleForm()
-            return}
+          if (!this.$store.getters.user.name) {
+            console.log('===using for the first time so show register screen')
+            this.toggleForm(); return}
           this.processing = true
           console.log('====login.vue: created starting')
           this.$backendService.ping() // check if server present
           .then (result => {
-            console.log('==login.vue: ping result data====' + JSON.stringify(result.data))
+            console.log('===login.vue: ping result data====' + JSON.stringify(result.data))
             if (result.data && result.data.ok === 'ok') {
               this.$backendService.getToken()
               .then (resultToken => {
@@ -142,12 +142,12 @@
                 this.$store.commit('moquiToken', resultToken.data)
                 this.$backendService.saveToken()
                 if (this.$store.getters.apiKey) { // skip login when have api_key
-                  console.log('===got old apiKey')
-                  this.$backendService.saveKey()
+                  console.log('===got old apiKey: ' + this.$store.getters.apiKey)
+                  this.$backendService.saveKey() // save it in the API
                   this.$backendService.checkApiKey() // check if apiKey still valid
                   .then (result => {
                     if (result.data.ok === 'ok') {
-                      console.log('checkApiKey is fine')
+                      console.log('===checkApiKey is fine')
                       this.$backendService.getUser()
                       .then ( result => {
                           console.log('getting user information')
