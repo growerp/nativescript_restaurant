@@ -56,7 +56,7 @@ export default {
             itemImage = selected_item.android
         } else if (platformModule.isIOS) {
             let folder = fs.knownFolders.documents()
-            let path = fs.path.join(folder.path, "Test" + counter + ".png")
+            let path = fs.path.join(folder.path, "Test.png")
             let saved = imagesource.saveToFile(path, "png")
             itemImage = path }
         this.itemImage = itemImage
