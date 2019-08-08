@@ -15,9 +15,9 @@
         <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
             <Image ref="prepForm" :src="itemImage" width="100"
                 height="100" col="0" row="0" rowSpan="2"/>
-            <Button :text="$t('copyFromGal')"  col=2 row="0"
+            <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
                 @tap="selectPicture('prep', item.preparationAreaId)"/>
-            <Button :text="$t('useCamera')"  col="2" row="1"
+            <Button class="button" :text="$t('useCamera')"  col="2" row="1"
                 @tap="takePicture('prep', item.preparationAreaId)"/>
         </GridLayout>
         <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>

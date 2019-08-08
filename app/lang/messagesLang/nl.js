@@ -101,6 +101,7 @@ export default {
     maxEmployeesReached: 'Maximum aantal werknemers bereikt, koop er meer...',
     menu : 'MENU',
     message: 'bericht',
+    month: 'Maand',
     monthlySubscriptions: 'Maandelijkse abbonnementen',
     moveCatProduct: 'Selekteer een artikel om naar een ander categorie te verplaatsen',
     moveProdCat: 'Selekteer een categorie om het artikel naar te verplaatsen',

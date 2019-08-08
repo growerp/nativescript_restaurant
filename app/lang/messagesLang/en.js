@@ -103,6 +103,7 @@ export default {
     maxEmployeesReached: 'Maximum number of employees reached, please purchase more.....',
     menu : 'MENU',
     message: 'message',
+    month: 'Month',
     monthlySubscriptions: 'Monthly subscriptions',
     moveCatProduct: 'Select the products to move the category to',
     moveProdCat: 'Select the category to move this Product to',
@@ -187,6 +188,11 @@ export default {
     tobeBilled: 'To be Billed',
     tobeServed: 'To be Served',
     totalAmount: 'Total Amount',
+    upgradeDetailIos: 'Payment will be charged to your Apple ID account at the confirmation of purchase.' + 
+                         ' Subscription automatically renews unless it is cancelled at least 24 hours before the end of the current period.' + 
+                         ' Your account will be charged for renewal within 24 hours prior to the end of the current period.' +
+                         ' You can manage and cancel your subscriptions by going to your account setting on the AppStore after purchase.',
+    upgradeMoreDetail: 'For more information please visit our terms of service and privacy policy at the "about" page',
     updatePassword: 'Update Password',
     updatePasswordSuccessful: 'Update password successful',
     useCamera: 'Camera',

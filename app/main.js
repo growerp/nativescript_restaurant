@@ -29,12 +29,18 @@ Vue.prototype.$backendService = backendService
 Vue.prototype.$routes = routes
 
 var purchase = require("nativescript-purchase");
+const platformModule = require("tns-core-modules/platform");
 if (process.env.NODE_ENV === 'production') {
-  global.initPurchase = purchase.init(["10010","10011","10003"])
-  global.subscriptions = [
-    { func: "noAdds", productIdentifyer: "10010"},
-    { func: "users03", productIdentifyer: "10011"},
-    { func: "users10", productIdentifyer: "10003"}]
+  if (platformModule.isAndroid) {
+    global.initPurchase = purchase.init(["10010","10011","10003"])
+    global.subscriptions = [
+      { func: "noAdds", productIdentifyer: "10010"},
+      { func: "users03", productIdentifyer: "10011"},
+      { func: "users10", productIdentifyer: "10003"}]}
+  if (platformModule.isIOS) {
+    global.initPurchase = purchase.init(["10010"])
+    global.subscriptions = [
+      { func: "noAdds", productIdentifyer: "10010"}]}
 } else {
   global.initPurchase = purchase.init(["android.test.purchased","android.test.canceled","android.test.item_unavailable"])
   global.subscriptions = [
@@ -42,7 +48,7 @@ if (process.env.NODE_ENV === 'production') {
     { func: "users03", productIdentifyer: "android.test.purchased"},
     { func: "users10", productIdentifyer: ""}]
 }
-const platformModule = require("tns-core-modules/platform");
+
 let locale;
   if (platformModule.isAndroid) {
     locale = java.util.Locale.getDefault().getLanguage();
