@@ -9,9 +9,9 @@
     </ActionBar>
 
     <GridLayout columns="auto,auto,*" rows="auto,*">
-      <Button row="0" col="0" text="Expand" @tap="expandAll"/>
-      <Button row="0" col="1" text="Collapse" @tap="collapseAll"/>
-      <Button row="0" col="2" text="Continue" @tap="goToItems()"/>
+      <Button class="button" row="0" col="0" text="Expand" @tap="expandAll"/>
+      <Button class="button" row="0" col="1" text="Collapse" @tap="collapseAll"/>
+      <Button class="button" row="0" col="2" text="Continue" @tap="goToItems()"/>
       <Accordion row="1" col="0" colSpan="3" height="100%"
           ref="accordion" allowMultiple="true"
           for="item of categoriesAndProducts" childItems="products">
