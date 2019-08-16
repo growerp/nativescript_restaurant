@@ -166,6 +166,8 @@ export default {
     selectTableLocation: 'Selecteer een tafel locatie.',
     serve: 'Serveren',
     served : 'geserveerd',
+    serverNotAvailable: 'Internet konnektie of server niet beschikbaar.',
+    serverProblem: 'Server konnektion probleem',
     setup: 'SetUp',
     setUp: 'setUp',
     setUpMenuTitle:       '__________Konfiguratie___________',

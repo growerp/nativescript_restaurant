@@ -1,8 +1,6 @@
 import axios from 'axios'
 import store from '../store'
 
-import { File, knownFolders, path} from 'tns-core-modules/file-system';
-//require('axios-debug')(axios);
 let log = false
 if (TNS_ENV === 'production') log = false
 
@@ -136,8 +134,7 @@ export default class BackendService {
     async getUserGroups() {
         return await restGet.get('s1/growerp/GetUserGroups')}
     async logout() {
-        restGet.get('logout')
-        store.commit('apiKey','')}
+        return await restGet.get('logout')}
     async register(user, company) {
         return await restPost.post('s1/growerp/RegisterUserAndCompany',
             {   username: user.name, emailAddress: user.email,

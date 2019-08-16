@@ -90,6 +90,7 @@
   import { images } from '~/assets/imagesBase64'
   import PasswordUpdate from './modalPages/PasswordUpdate'
   import { ValueList } from "nativescript-drop-down";
+  import { exit } from 'nativescript-exit';
     export default {
         name: 'Login',
         mixins: [ general ],
@@ -127,20 +128,21 @@
             };
         },
         created() {
+          console.log('===login.vue: created starting')
           if (!this.$store.getters.user.name) {
             console.log('===using for the first time so show register screen')
             this.toggleForm(); return}
           this.processing = true
-          console.log('====login.vue: created starting')
+          console.log ('===checking ==ping')
           this.$backendService.ping() // check if server present
           .then (result => {
-            console.log('===login.vue: ping result data====' + JSON.stringify(result.data))
             if (result.data && result.data.ok === 'ok') {
+              console.log('=== ping is ok now getting token....')
               this.$backendService.getToken()
               .then (resultToken => {
-                console.log('===got moqui token')
                 this.$store.commit('moquiToken', resultToken.data)
                 this.$backendService.saveToken()
+                console.log('=== moqui token is ok....')
                 if (this.$store.getters.apiKey) { // skip login when have api_key
                   console.log('===got old apiKey: ' + this.$store.getters.apiKey)
                   this.$backendService.saveKey() // save it in the API
@@ -154,28 +156,29 @@
                           this.$store.commit("user", result.data.user)
                           this.$backendService.initData()
                           this.$navigateTo(this.$routes.Home, {clearHistory: true})
-                      })}
+                      })
+                    } else this.serverProblem()
                   })
                   .catch( error => {
-                        console.log('====Api key invalid, catch error:' + JSON.stringify(error))
-                        this.$store.commit('apiKey', ' ') //clear old key
-                        console.log(' ====key cleared')
-                        this.processing = false
+                    console.log('====Api key invalid, catch error:' + JSON.stringify(error))
+                    this.$store.commit('apiKey', '') //clear old key
+                    this.processing = false
                   })
                 } else {
-                  this.processing = false
+                  this.processing = false // no api key so show login screen
                 }
               })
             } else {
               this.alert("====Unable to get a token from the GrowERP mobile server!")
               this.processing = false
+              this.serverProblem()
             }
           })
           .catch( error => {
             this.processing = false
             console.log('=========ping server problem: ' + error.message)
-            this.note("Unable to ping the GrowERP mobile server!")
             this.isLoggingIn = true
+            this.serverProblem()
           })
         },
         methods: {
@@ -205,41 +208,40 @@
             },
 
             login() {
-                this.$backendService.getToken().then (resultToken => {
-                    this.$store.commit('moquiToken', resultToken.data)
-                    this.$backendService.saveToken()
-                    this.$backendService.login(this.user).then (result => {
-                        if (result.status == null) {
-                            this.note(this.$t('connError'))
-                        } else if (result.data.passwordChange) {
-                          this.$showModal(PasswordUpdate,{props:
-                                { oldPassword : this.user.password,
-                                  username: this.user.name,
-                                  fullName: this.user.firstName + ' ' +
-                                    this.user.lastName}})
-                          .then (() => {
-                              this.user.password = ''
-                              this.processing = false})
-                        } else if (result.data.apiKey) { // if apiKey present = logged in
-                            this.$store.commit('apiKey', result.data.apiKey)
-                            this.$backendService.saveKey()
-                            this.$store.commit('moquiToken', result.data.moquiSessionToken)
-                            this.$backendService.saveToken()
-                            this.$store.commit('user',result.data.user)
-                            this.$backendService.initData()
-                            this.$navigateTo(this.$routes.Home, {clearHistory: true})
-                        } else {
-                            this.note(this.$t('accountNotFound'))
-                        }
-                    })
-                    .catch( error => {
-                        this.processing = false
-                        if (error.response.status == 401) {
-                          this.note(this.$t('passwordWrong'))
-                        } else {
-                          this.note('Login Error: ' + this.$backendService.getErrorMessage(error))
-                        }
-                    })
+                this.$backendService.login(this.user).then (result => {
+                  console.log('===login status:' + result.status)
+                  if (result.status == null) {
+                      this.note(this.$t('connError'))
+                  } else if (result.data.passwordChange) {
+                    console.log('=== change password')
+                    this.$showModal(PasswordUpdate,{props:
+                          { oldPassword : this.user.password,
+                            username: this.user.name,
+                            fullName: this.user.firstName + ' ' +
+                              this.user.lastName}})
+                    .then (() => {
+                        this.user.password = ''
+                        this.processing = false})
+                  } else if (result.data.apiKey) { // if apiKey present = logged in
+                      console.log('===api key present')
+                      this.$store.commit('apiKey', result.data.apiKey)
+                      this.$backendService.saveKey()
+                      this.$store.commit('moquiToken', result.data.moquiSessionToken)
+                      this.$backendService.saveToken()
+                      this.$store.commit('user',result.data.user)
+                      this.$backendService.initData()
+                      this.$navigateTo(this.$routes.Home, {clearHistory: true})
+                  } else {
+                      this.note(this.$t('accountNotFound'))
+                  }
+                })
+                .catch( error => {
+                    this.processing = false
+                    if (error.response.status == 401) {
+                      this.note(this.$t('passwordWrong'))
+                    } else {
+                      this.note('Login Error: ' + this.$backendService.getErrorMessage(error))
+                    }
                 })
             },
 
@@ -252,29 +254,26 @@
                     okButtonText: "Ok",
                     cancelButtonText: this.$t('cancel')
                 }).then (data => {
-                    this.processing = true
-                    if (data.text && data.result == true) {
-                        this.$backendService.getToken().then (resultToken => {
-                            this.$store.commit('moquiToken', resultToken.data)
-                            this.$backendService.resetUserPassword(data.text.trim()).then (res => {
-                                this.alert(res.data.messages);
-                            })
-                            .catch( error => {
-                                this.note(this.$t('sendPasswordError') + this.$backendService.getErrorMessage(error))
-                            })
-                          })
-                   } else {
-                       if (data.result == true) {
-                           this.note(this.$t('enterEmail'))
-                       }
-                   }
-                   this.processing = false
-                 })
-                 this.processing = false
+                  this.processing = true
+                  if (data.text && data.result == true) {
+                    this.$backendService.resetUserPassword(data.text.trim()).then (res => {
+                        this.alert(res.data.messages);
+                    })
+                    .catch( error => {
+                        this.note(this.$t('sendPasswordError') + this.$backendService.getErrorMessage(error))
+                    })
+                  } else {
+                    if (data.result == true) {
+                      this.note(this.$t('enterEmail'))
+                    }
+                  }
+                  this.processing = false
+                })
+                this.processing = false
             },
 
             register() {
-              console.log('-----company.name: ' + this.company.name)
+                console.log('-----company.name: ' + this.company.name)
                 if (this.user.password !== this.user.confirmPassword) {
                   this.note(this.$t('passwordNotMatch'))
                   this.processing = false
@@ -284,41 +283,37 @@
                 } else if (this.company.currency === '') {
                   this.note(this.$t('enterCurrency'))
                   this.processing = false
-                }else {
-                  this.$backendService.getToken().then (resultToken => {
-                    this.$store.commit('moquiToken', resultToken.data)
-                    this.$backendService.saveToken()
-                    this.$backendService.register(this.user, this.company).then(response => {
-                        this.processing = false
-                        this.alert(response.data.messages + 'You can login now.....')
-                        const appSettings = require("tns-core-modules/application-settings")
-                        appSettings.clear() // start fresh
-                        this.$store.commit('username', this.user.name)
-                        this.user.locale = global.locale
-                        this.$backendService.getToken().then(resultToken => {
-                          this.$store.commit('moquiToken', resultToken.data)
-                          this.$backendService.saveToken()
-                          this.$backendService.login(this.user).then (result => {
-                            this.$store.commit('apiKey', result.data.apiKey)
-                            this.$backendService.saveKey()
-                            this.$store.commit('moquiToken', result.data.moquiSessionToken)
-                            this.$backendService.saveToken()
-                            this.loadDefaultData()
-                            this.toggleForm()
-                            if(TNS_ENV === 'production')
-                              this.user.password = '' // force user to re-enter password only production
-                          })
-                        })
-                      })
-                      .catch( error => {
-                        this.processing = false
-                        if (error.response.data.errors.indexOf("Found issues with password") !== -1) {
-                          this.alert(this.$t('passwordRequirement'))
-                        } else {
-                          this.alert(this.$t('regError') + this.$backendService.getErrorMessage(error))
-                        }
+                } else {
+                  this.$backendService.register(this.user, this.company).then(response => {
+                    this.processing = false
+                    this.alert(response.data.messages + 'You can login now.....')
+                    const appSettings = require("tns-core-modules/application-settings")
+                    appSettings.clear() // start fresh
+                    this.$store.commit('username', this.user.name)
+                    this.user.locale = global.locale
+                    this.$backendService.getToken().then(resultToken => {
+                      this.$store.commit('moquiToken', resultToken.data)
+                      this.$backendService.saveToken()
+                      this.$backendService.login(this.user).then (result => {
+                        this.$store.commit('apiKey', result.data.apiKey)
+                        this.$backendService.saveKey()
+                        this.$store.commit('moquiToken', result.data.moquiSessionToken)
+                        this.$backendService.saveToken()
+                        this.loadDefaultData()
+                        this.toggleForm()
+                        if(TNS_ENV === 'production')
+                          this.user.password = '' // force user to re-enter password only production
                       })
                     })
+                  })
+                  .catch( error => {
+                    this.processing = false
+                    if (error.response.data.errors.indexOf("Found issues with password") !== -1) {
+                      this.alert(this.$t('passwordRequirement'))
+                    } else {
+                      this.alert(this.$t('regError') + this.$backendService.getErrorMessage(error))
+                    }
+                  })
                 }
             },
 
@@ -335,6 +330,18 @@
               title: 'GrowERP ' + this.$t('message'),
               okButtonText: "OK",
               message: message
+              });
+            },
+
+            serverProblem(message) {
+                prompt({
+                    title: this.$t('serverProblem'),
+                    message: message ? message : this.$t('serverNotAvailable'),
+                    okButtonText: this.$t('retry'),
+                    cancelButtonText: this.$t('exit')
+                }).then (data => {
+                  if (data.result) this.$navigateTo(this.$routes.Login)
+                  else exit() 
               });
             },
 
