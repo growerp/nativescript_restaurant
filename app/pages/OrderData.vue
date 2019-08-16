@@ -13,7 +13,7 @@
         <StackLayout>
           <RadDataForm :source="orderHeaderInfo" :metadata="orderHeaderInfoMeta"
             @propertyCommitted="onHeaderCommitted"/>
-        <Button :text="$t('continue')" @tap="goToEntry"/>
+        <Button class="button" :text="$t('continue')" @tap="goToEntry"/>
       </StackLayout>
   </Page>
 </template>

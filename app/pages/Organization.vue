@@ -20,9 +20,9 @@
                   <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
                       <Image ref="itemForm" :src="itemImage" width="100" height="100"
                           col="0" row="0" rowSpan="2"/>
-                      <Button :text="$t('copyFromGal')"
+                      <Button class="button" :text="$t('copyFromGal')"
                           @tap="selectPicture('company', item.partyId)" col=2 row="0"/>
-                      <Button :text="$t('useCamera')"
+                      <Button class="button" :text="$t('useCamera')"
                           @tap="takePicture('company', item.partyId)" col="2" row="1"/>
                   </GridLayout>
                   <RadDataForm ref="itemForm" :source="itemComp"
@@ -80,14 +80,14 @@
                   <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
                       <Image ref="itemForm" :src="itemImage" width="100" height="100"
                           col="0" row="0" rowSpan="2"/>
-                      <Button :text="$t('copyFromGal')"
+                      <Button class="button" :text="$t('copyFromGal')"
                           @tap="selectPicture('user', item.partyId)" col=2 row="0"/>
-                      <Button :text="$t('useCamera')"
+                      <Button class="button" :text="$t('useCamera')"
                           @tap="takePicture('user', item.partyId)" col="2" row="1"/>
                   </GridLayout>
                   <RadDataForm ref="itemForm" :source="item"
                       :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-                  <Button :text="$t('updatePassword')" @tap="onPasswordTap"/>
+                  <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"/>
               </StackLayout>
             </TabViewItem>
 

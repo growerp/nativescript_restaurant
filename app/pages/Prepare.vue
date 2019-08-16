@@ -16,19 +16,18 @@
             <TabViewItem v-for="(prep, index) in this.prepAreasAndCategories"
                 :key="index" row="0" :col="index" :title="prep.description">
               <StackLayout>
-                <Button :text="$t('refresh')" @tap="refresh(index)"/>
+                <Button class="button" :text="$t('refresh')" @tap="refresh(index)"/>
                 <Accordion row="1" col="0" colSpan="3" allowMultiple="false" height="100%"
                         for="item of prepOrders[index]"  childItems="items"
                         :visibility="prepOrders[index][0]? 'visible' : 'collapse'">
                     <v-template name="title">
-                      <GridLayout columns="50,*,auto" rows="*">
+                      <GridLayout columns="50,*,80" rows="*" paddingLeft="10">
                         <Image :src="item.image"  col="0" class="thumbnail"/>
                         <Label :text="item.description + '-' +
                             item.spotNumber + '   ' + item.nbrOfItems + ' ' + $t('items')" class="h2" col="1"
                             paddingLeft="10"/>
-                        <Label @tap="setDone(item, prep, index)"
-                            backgroundColor="rgb(211, 215, 207)"
-                            col="2" :text="$t('done')" class="h2"/>
+                        <Label class="button" @tap="setDone(item, prep, index)"
+                            col="2" :text="$t('done')" text-align="center"/>
                       </GridLayout>
                     </v-template>
                     <v-template name="content">

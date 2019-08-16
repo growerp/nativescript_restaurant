@@ -1,7 +1,7 @@
 <template>
     <page>
 	<StackLayout class="p-20" backgroundColor="white" paddingTop="40">
-    <Button :text="$t('cancel')" @tap="cancelMove()"/>
+    <Button class="button" :text="$t('cancel')" @tap="cancelMove()"/>
     <Label :text="$t('moveCatProduct')"/>
     <RadListView ref="listViewItem" for="item in items" @itemTap="onItemTap">
         <v-template>

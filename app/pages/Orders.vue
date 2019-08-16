@@ -43,13 +43,13 @@
       </TabViewItem>
       <TabViewItem :title="$t('serve')">
         <StackLayout>
-          <Button :text="$t('refresh')" @tap="refresh()"/>
+          <Button class="button" :text="$t('refresh')" @tap="refresh()"/>
           <Accordion row="1" col="0" colSpan="3" height="100%"
               :visibility="servOrders.length ? 'visible':'collapse'"
                 ref="accordion" allowMultiple="false"
                 for="item of servOrders"  childItems="items">
             <v-template name="title">
-              <GridLayout columns="50,*,auto,auto" rows="*">
+              <GridLayout columns="50,*,auto,70" rows="*" paddingLeft="10">
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <StackLayout col="1">
                   <Label :text="item.prepDescription" class="h2"/>
@@ -57,8 +57,8 @@
                 </StackLayout>
                 <Label :text="item.description + '-' + item.spotNumber"
                     paddingRight="20" class="h2" col="2"/>
-                <Label :text="$t('done')" col="3" paddingRight="5" class="h2"
-                      @tap="setDone(item)" backgroundColor="rgb(211, 215, 207)"/>
+                <Label class="button" :text="$t('done')" col="3" paddingRight="5"
+                      @tap="setDone(item)"/>
               </GridLayout>
             </v-template>
             <v-template name="content">
@@ -79,21 +79,19 @@
       </TabViewItem>
       <TabViewItem :title="$t('bill')">
         <StackLayout>
-          <Button :text="$t('refresh')" @tap="refresh()"/>
+          <Button class="button" :text="$t('refresh')" @tap="refresh()"/>
           <Accordion row="1" col="0" colSpan="3" height="100%"
                 ref="accordion" allowMultiple="false"
                 :visibility="billOrders.length ? 'visible':'collapse'"
                 for="item of billOrders"  childItems="items">
             <v-template name="title">
-                <GridLayout columns="50,*,auto, auto, 5, auto" rows="*" paddingRight="5">
+                <GridLayout columns="50,*,auto, auto, 5, auto" rows="*" paddingLeft="10">
                   <Image col="0" :src="item.image" class="thumbnail"/>
                   <Label col="1" :text="item.description + '-' + item.spotNumber"
                       class="h2" paddingLeft="10"/>
                   <Label col="2" :text="item.totalAmount" class="h2" paddingRight="10"/>
-                  <Label col="3" :text="$t('print')" class="h2" @tap="print(item)"
-                          backgroundColor="rgb(211, 215, 207)" padding="10"/>
-                  <Label col="5" :text="$t('done')" class="h2" @tap="setDone(item)"
-                      backgroundColor="rgb(211, 215, 207)" padding="10"/>
+                  <Label class="button" col="3" :text="$t('print')" @tap="print(item)" padding="10"/>
+                  <Label class="button" col="5" :text="$t('done')" @tap="setDone(item)" padding="10"/>
                 </GridLayout>
             </v-template>
             <v-template name="content">

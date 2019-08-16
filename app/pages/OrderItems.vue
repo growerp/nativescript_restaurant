@@ -9,7 +9,7 @@
         </ActionBar>
 
         <StackLayout>
-            <Button :text="$t('saveOrder')" @tap="saveOrder"
+            <Button class="button" :text="$t('saveOrder')" @tap="saveOrder"
                 :visibility="orderItems.length? 'visible':'collapse'"/>
             <RadListView ref="listView" for="item in orderItems"
                   @itemTap="onItemDeleteTap"
