@@ -24,8 +24,8 @@
                       <GridLayout columns="50,*,80" rows="*" paddingLeft="10">
                         <Image :src="item.image"  col="0" class="thumbnail"/>
                         <Label :text="item.description + '-' +
-                            item.spotNumber + '   ' + item.nbrOfItems + ' ' + $t('items')" class="h2" col="1"
-                            paddingLeft="10"/>
+                            item.spotNumber + '   ' + item.nbrOfItems + ' ' + $t('items')" 
+                            class="h2" col="1" paddingLeft="10"/>
                         <Label class="button" @tap="setDone(item, prep, index)"
                             col="2" :text="$t('done')" text-align="center"/>
                       </GridLayout>

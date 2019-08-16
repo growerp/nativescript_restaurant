@@ -129,9 +129,6 @@
         },
         created() {
           console.log('===login.vue: created starting')
-          if (!this.$store.getters.user.name) {
-            console.log('===using for the first time so show register screen')
-            this.toggleForm(); return}
           this.processing = true
           console.log ('===checking ==ping')
           this.$backendService.ping() // check if server present
@@ -143,6 +140,10 @@
                 this.$store.commit('moquiToken', resultToken.data)
                 this.$backendService.saveToken()
                 console.log('=== moqui token is ok....')
+                if (!this.$store.getters.user.name) {
+                  console.log('===using for the first time so show register screen')
+                  this.processing = false
+                  this.toggleForm(); return}
                 if (this.$store.getters.apiKey) { // skip login when have api_key
                   console.log('===got old apiKey: ' + this.$store.getters.apiKey)
                   this.$backendService.saveKey() // save it in the API

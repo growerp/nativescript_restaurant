@@ -58,21 +58,21 @@ export default {
         const platformModule = require("tns-core-modules/platform")
         admob.createBanner({
           testing: TNS_ENV === 'production'?  false : true,
-          size: admob.AD_SIZE.BANNER, // anything in admob.AD_SIZE, like admob.AD_SIZE.SMART_BANNER
+          size: admob.AD_SIZE.SMART_BANNER, // anything in admob.AD_SIZE, like admob.AD_SIZE.SMART_BANNER
           iosBannerId: "ca-app-pub-3815355572205814/4606454149", // add your own
           androidBannerId: "ca-app-pub-3940256099942544/6300978111", // add your own this is test
           // Android automatically adds the connected device as test device with testing:true, iOS does not
-          iosTestDeviceIds: ["yourTestDeviceUDIDs", "canBeAddedHere"],
+          // iosTestDeviceIds: ["yourTestDeviceUDIDs", "canBeAddedHere"],
           margins: { bottom: platformModule.isIOS? 50 : 0 },
           keywords: ["restaurant", "food", "drinks"] // add keywords for ad targeting
         }).then(
-          function() { console.log("admob createBanner done")},
-          function(error) {
-          console.log("admob createBanner error: " + error);
+          () => { console.log("admob createBanner done")},
+          error => {
+            console.log("admob createBanner error: " + error);
         })
       },
       pageLoaded() {
-        if (platformModule.isIOS) return // disable on IOS for now
+        // if (platformModule.isIOS) return // disable on IOS for now
         if (!this.isSubscribed('noAdds')) this.createBanner()
       }
   }
