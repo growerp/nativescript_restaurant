@@ -19,7 +19,8 @@
 
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
-import {exit} from 'nativescript-exit';
+import {exit} from 'nativescript-exit'
+
 export default {
   mixins: [sideDrawer],
   data () {
@@ -54,7 +55,13 @@ export default {
             if (platformModule.isIOS) {
               this.$i18n.locale = NSLocale.preferredLanguages.firstObject;
             }
-            this.$backendService.logout()
+            console.log('logging out....')
+//            this.$backendService.logout()
+//            .then(() =>{
+              this.$store.commit('apiKey', '') //clear old key
+              console.log('logged out')
+//            })
+//            exit() // exit caused update of apiKey to be ignored
         }
         // use the manual navigation method
         this.$navigateTo(pageComponent)

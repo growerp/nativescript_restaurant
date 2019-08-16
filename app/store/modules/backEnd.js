@@ -49,7 +49,9 @@ const state = {
           state.prepAreasAndCategories = value },
         apiKey(state, value) {
             state.apiKey = value
-            appSettings.setString('apiKey', value)},
+            if (value) appSettings.setString('apiKey', value)
+            else appSettings.remove('apiKey')
+            console.log (' store:' + appSettings.getString('apiKey')) },
         moquiToken(state, value) {
             state.moquiToken = value },
         user(state, value) {

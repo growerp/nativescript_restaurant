@@ -72,6 +72,7 @@ export default {
         })
       },
       pageLoaded() {
+        if (platformModule.isIOS) return // disable on IOS for now
         if (!this.isSubscribed('noAdds')) this.createBanner()
       }
   }

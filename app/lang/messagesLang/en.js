@@ -169,6 +169,8 @@ export default {
     selectTableLocation: 'Select table location.',
     serve: 'Serve',
     served : 'served',
+    serverNotAvailable: 'Internet connection or server not available.',
+    serverProblem: 'Server connection problem',
     setup: 'SetUp',
     setUp: 'setUp',
     setUpMenuTitle: '_____________Setup_____________',
