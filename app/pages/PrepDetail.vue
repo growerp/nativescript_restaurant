@@ -25,10 +25,11 @@
             :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
         <Label :text="$t('categoriesPrepared')" class="h3" paddingLeft="20"/>
         <RadListView for="cat in categoryList" @loaded="onLoaded"
-              @itemTap="onCatTap(cat.productCategoryId)">
+              @itemTap="onCatTap">
             <v-template>
                 <GridLayout columns="50, *, auto" rows="*" class="item"
-                    paddingRight="5" paddingLeft="5" paddingTop="15">
+                    paddingRight="5" paddingLeft="10" paddingTop="10">
+                    <Image :src="cat.image"  col="0" class="thumbnail"/>
                     <label :text="cat.categoryName" class="h2" col="1"/>
                 </GridLayout>
             </v-template>
@@ -85,10 +86,11 @@ export default {
         this.hideKeyboard()
         this.$navigateBack()
       },
-      onCatTap(catId) {
+      onCatTap(args) {
+        console.log('===========args' + args.index)
         this.$showModal(PrepCategoryMove, {
             props: {  prepId: this.item.preparationAreaId,
-                      catId: catId }})
+                      catId: this.categoryList[args.index].productCategoryId }})
         .then (result => {
           for (let i=0; i < this.item.categories.length; i++) {
             if (this.categoryList[i].productCategoryId == result) {

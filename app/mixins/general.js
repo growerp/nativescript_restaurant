@@ -2,6 +2,7 @@
 
 
 import * as app from 'tns-core-modules/application';
+import { time } from 'tns-core-modules/profiling/profiling';
 var admob = require("nativescript-admob")
 const platformModule = require("tns-core-modules/platform");
 
@@ -72,8 +73,13 @@ export default {
         })
       },
       pageLoaded() {
-        // if (platformModule.isIOS) return // disable on IOS for now
-        if (!this.isSubscribed('noAdds')) this.createBanner()
+        if (!this.isSubscribed('noAdds')) {
+          if (platformModule.isIOS) {
+            time.setTimeout(() => {
+              this.createBanner() }, 1)
+          }
+          if (platformModule.isAndroid) this.createBanner() // enable for android for now
+        }
       }
   }
 }

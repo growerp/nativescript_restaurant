@@ -60,6 +60,7 @@ export default {
 //            .then(() =>{
               this.$store.commit('apiKey', '') //clear old key
               console.log('logged out')
+              this.$navigateTo(this.$routes.Home, {clearHistory: true})
 //            })
 //            exit() // exit caused update of apiKey to be ignored
         }

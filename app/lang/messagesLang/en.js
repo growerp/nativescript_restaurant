@@ -106,6 +106,7 @@ export default {
     month: 'Month',
     monthlySubscriptions: 'Monthly subscriptions',
     moveCatProduct: 'Select the products to move the category to',
+    movePrepCat: 'select the preparation area to move the category to',
     moveProdCat: 'Select the category to move this Product to',
     myInformation: 'My Information',
     mytasks: 'My Tasks',

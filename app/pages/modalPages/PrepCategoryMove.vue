@@ -2,12 +2,13 @@
     <page>
 	<StackLayout class="p-20" backgroundColor="white" paddingTop="40">
     <Button class="button" :text="$t('cancel')" @tap="cancelMove()"/>
-    <Label :text="$t('moveCatProduct')"/>
+    <Label :text="$t('movePrepCat')" textWrap="true"/>
     <RadListView ref="listViewItem" for="item in items" @itemTap="onItemTap">
         <v-template>
             <GridLayout columns="50, *, auto" rows="*" class="item"
                   paddingRight="5" paddingLeft="5">
-                <label :text="item.description" class="h2" col="1"/>
+                <Image :src="item.image"  col="0" class="thumbnail"/>
+                <label :text="item.description" class="button" col="1"/>
             </GridLayout>
         </v-template>
     </RadListView>
@@ -17,7 +18,7 @@
 
 <script>
 export default {
-    name: 'ProdCategoryMove',
+    name: 'PrepCategoryMove',
     props: [ 'prepId', 'catId'],
     data() {
         return {
