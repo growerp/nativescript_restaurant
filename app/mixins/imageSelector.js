@@ -1,7 +1,6 @@
 import ImageSource from "tns-core-modules/image-source"
 var platformModule = require("tns-core-modules/platform");
 var permissions = require("nativescript-permissions");
-var fs = require("tns-core-modules/file-system");
 var camera = require("nativescript-camera");
 var imagepicker = require("nativescript-imagepicker");
 
@@ -50,17 +49,23 @@ export default {
           console.log('====error picture selection:' + e)
         })
       },
-      scaleUploadImage(type,id, selectedItem) {
-        let itemImage = selectedItem
-        if (platformModule.isAndroid) {
-            itemImage = selectedItem.android } 
-        if (platformModule.isIOS) {
-            itemImage = selectedItem.ios }
-        this.itemImage = itemImage // show
-        // create bitmap to be resized
-        const imageSourceModule = require("tns-core-modules/image-source")
+      scaleUploadImage(type,id, selected_item) {
         const fileSystemModule = require("tns-core-modules/file-system")
-        var BitmapFactory = require("nativescript-bitmap-factory")
+        const imageSourceModule = require("tns-core-modules/image-source")
+        const BitmapFactory = require("nativescript-bitmap-factory")
+        let itemImage = ''
+        if (platformModule.isAndroid) {
+            itemImage = selected_item.android}
+        if (platformModule.isIOS) {
+          imageSourceModule.fromAsset(selected_item)
+          .then((imageSource) => {
+            const folder = fileSystemModule.knownFolders.documents().path;
+            const fileName = "Photo.png"; 
+            const path = fileSystemModule.path.join(folder, fileName);
+            const saved = imageSource.saveToFile(path, "png")
+            if (saved) itemImage = path }) }
+        this.itemImage = itemImage
+        // create bitmap to be resized
         const image = imageSourceModule.fromFile(itemImage)
         var bmp = BitmapFactory.create(image.height, image.width)
         // resize
