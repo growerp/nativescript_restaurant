@@ -1,9 +1,9 @@
-import * as imagepicker from 'nativescript-imagepicker';
-import * as camera from "nativescript-camera";
 import ImageSource from "tns-core-modules/image-source"
 var platformModule = require("tns-core-modules/platform");
 var permissions = require("nativescript-permissions");
 var fs = require("tns-core-modules/file-system");
+var camera = require("nativescript-camera");
+var imagepicker = require("nativescript-imagepicker");
 
 export default {
     name: 'imageSelector',
@@ -32,15 +32,15 @@ export default {
       selectPicture(type,id) {
         let localPath = null
         let context = imagepicker.create({mode: 'single'})
-/*            if (platformModule.device.os === "Android" && platformModule.device.sdkVersion >= 23) {
-                permissions.requestPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        if (platformModule.device.os === "Android" && platformModule.device.sdkVersion >= 23) {
+            permissions.requestPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     "I need these permissions to read a picture from galery")
-                .then(function() {
+            .then(function() {
                     console.log("Permissions granted!");
                     startSelection(context)})
-                .catch(function() {
+            .catch(function() {
                     console.log("Uh oh, no permissions - plan B time?")})}
-*/      context.authorize()
+        context.authorize()
         .then(function() {
             return context.present()})
         .then((selection) => {
@@ -50,16 +50,13 @@ export default {
           console.log('====error picture selection:' + e)
         })
       },
-      scaleUploadImage(type,id, selected_item) {
-        let itemImage = ''
+      scaleUploadImage(type,id, selectedItem) {
+        let itemImage = selectedItem
         if (platformModule.isAndroid) {
-            itemImage = selected_item.android
-        } else if (platformModule.isIOS) {
-            let folder = fs.knownFolders.documents()
-            let path = fs.path.join(folder.path, "Test.png")
-            let saved = imagesource.saveToFile(path, "png")
-            itemImage = path }
-        this.itemImage = itemImage
+            itemImage = selectedItem.android } 
+        if (platformModule.isIOS) {
+            itemImage = selectedItem.ios }
+        this.itemImage = itemImage // show
         // create bitmap to be resized
         const imageSourceModule = require("tns-core-modules/image-source")
         const fileSystemModule = require("tns-core-modules/file-system")
