@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded">
+  <Page @loaded="pageLoaded(0)">
       <ActionBar>
         <GridLayout width="100%" columns="auto, *,auto">
             <Label @tap="openDrawer()" col="0" :text="$t('menu')"/>
@@ -14,7 +14,7 @@
             itemReorder="true" @itemReordered="onItemReordered" layout="grid" itemHeight="120">
           <v-template>
               <StackLayout orientation="vertical" padding="10">
-                <Image :src="item.image" height="80"/>
+                <Image :src="item.image" height="60"/>
                 <Label :text="item.title" horizontalAlignment="center" class="h3"/>
               </StackLayout>
           </v-template>

@@ -1,5 +1,5 @@
 <template lang="html">
-  <Page>
+  <Page @loaded="pageLoaded()">
     <ActionBar>
       <GridLayout width="100%" columns="auto, *, auto">
         <Label @tap="openDrawer()" col="0" :text="$t('menu')"/>
