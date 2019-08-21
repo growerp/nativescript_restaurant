@@ -1,5 +1,5 @@
 <template lang="html">
-  <Page>
+  <Page @loaded="pageLoaded()">
     <ActionBar>
       <GridLayout width="100%" columns="auto, *, auto">
         <Label class="title" :text="$t('menu')" col="0" @tap="openDrawer()"/>
@@ -60,8 +60,9 @@ import sideDrawer from '~/mixins/sideDrawer'
 import TaskAdd from './modalPages/TaskAdd'
 import RequestAdd from './modalPages/RequestAdd'
 import RequestNoteAdd from './modalPages/RequestNoteAdd'
+import general from '~/mixins/general'
 export default {
-  mixins: [ sideDrawer ],
+  mixins: [ sideDrawer, general ],
   props: {
       startTab: Number
   },

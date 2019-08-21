@@ -55,7 +55,7 @@ export default {
       hideBanner() {
         admob.hideBanner()
       },
-      createBanner() {
+      createBanner(location=50) {
         const platformModule = require("tns-core-modules/platform")
         admob.createBanner({
           testing: TNS_ENV === 'production'?  false : true,
@@ -64,7 +64,7 @@ export default {
           androidBannerId: "ca-app-pub-3940256099942544/6300978111", // add your own this is test
           // Android automatically adds the connected device as test device with testing:true, iOS does not
           // iosTestDeviceIds: ["yourTestDeviceUDIDs", "canBeAddedHere"],
-          margins: { bottom: platformModule.isIOS? 50 : 0 },
+          margins: { bottom: platformModule.isIOS? location : 0 },
           keywords: ["restaurant", "food", "drinks"] // add keywords for ad targeting
         }).then(
           () => { console.log("admob createBanner done")},
@@ -72,11 +72,11 @@ export default {
             console.log("admob createBanner error: " + error);
         })
       },
-      pageLoaded() {
+      pageLoaded(bottom) {
         if (!this.isSubscribed('noAdds')) {
           if (platformModule.isIOS) {
-            time.setTimeout(() => {
-              this.createBanner() }, 1)
+            setTimeout(() => {
+              this.createBanner(bottom) }, 10)
           }
           if (platformModule.isAndroid) this.createBanner() // enable for android for now
         }

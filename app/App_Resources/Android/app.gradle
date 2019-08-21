@@ -3,7 +3,11 @@
 android {
   defaultConfig {
     generatedDensities = []
-    applicationId = "com.growerp.restaurant"
+    applicationId = "org.growerp"
+    ndk {
+      abiFilters.clear()
+      abiFilters.addAll(['armeabi-v7a','arm64-v8a','x86'])
+    }
   }
   aaptOptions {
     additionalParameters "--no-version-vectors"
