@@ -53,38 +53,33 @@ export default {
         const fileSystemModule = require("tns-core-modules/file-system")
         const imageSourceModule = require("tns-core-modules/image-source")
         const BitmapFactory = require("nativescript-bitmap-factory")
-        let itemImage = ''
-        if (platformModule.isAndroid) {
-            itemImage = selected_item.android}
-        if (platformModule.isIOS) {
-          imageSourceModule.fromAsset(selected_item)
-          .then((imageSource) => {
-            const folder = fileSystemModule.knownFolders.documents().path;
-            const fileName = "Photo.png"; 
-            const path = fileSystemModule.path.join(folder, fileName);
-            const saved = imageSource.saveToFile(path, "png")
-            if (saved) itemImage = path }) }
-        this.itemImage = itemImage
-        // create bitmap to be resized
-        const image = imageSourceModule.fromFile(itemImage)
-        var bmp = BitmapFactory.create(image.height, image.width)
-        // resize
-        let base64Small = ''
-        let base64Medium = ''
-        bmp.dispose(function (b) {
-            b.insert(BitmapFactory.makeMutable(image));
-            var b2 = b.resizeMax(100);
-            var thumb_image = b2.toImageSource();
-            base64Small = thumb_image.toBase64String("png")
-            var b3 = b.resizeMax(500);
-            var medium_image = b3.toImageSource();
-            base64Medium = medium_image.toBase64String("png")})
-//      console.log('====base64 image small:' + base64Small)
-//      console.log('====base64 image medium:' + base64Medium)
-        this.item.image = 'data:image/png;base64,' + base64Small
-//        this.itemImage = 'data:image/png;base64,' + base64Medium
-        this.$backendService.uploadImage('small', base64Small, type, id)
-        this.$backendService.uploadImage('medium', base64Medium, type, id)
+        imageSourceModule.fromAsset(selected_item)
+        .then((imageSource) => {
+          const folder = fileSystemModule.knownFolders.documents().path;
+          const fileName = "growerp" + Math.floor(Math.random() * 1000) + ".png";
+          const path = fileSystemModule.path.join(folder, fileName);
+          const saved = imageSource.saveToFile(path, "png")
+          if (saved) {
+            this.itemImage = path // show onscreen
+            // create bitmap to be resized
+            const image = imageSourceModule.fromFile(this.itemImage)
+            var bmp = BitmapFactory.create(image.height, image.width)
+            // resize
+            let base64Small = ''
+            let base64Medium = ''
+            bmp.dispose(function (b) {
+                b.insert(BitmapFactory.makeMutable(image));
+                var b2 = b.resizeMax(100);
+                var thumb_image = b2.toImageSource();
+                base64Small = thumb_image.toBase64String("png")
+                var b3 = b.resizeMax(500);
+                var medium_image = b3.toImageSource();
+                base64Medium = medium_image.toBase64String("png")})
+            this.item.image = 'data:image/png;base64,' + base64Small
+            this.$backendService.uploadImage('small', base64Small, type, id)
+            this.$backendService.uploadImage('medium', base64Medium, type, id)
+          } else console.log('Image could not be saved')
+        })
       }
   }
 }
