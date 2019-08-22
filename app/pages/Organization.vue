@@ -223,7 +223,7 @@ export default {
                   this.hideKeyboard()}
                 break
               case 1: // employees
-                if (platformModule.isAndroid && this.users.length >= this.subscribedUsers()) {
+                if (this.users.length >= this.subscribedUsers()) {
                   this.note(this.$t('maxEmployeesReached'))
                   this.$navigateTo(this.$routes.Upgrade)
                 } else {
