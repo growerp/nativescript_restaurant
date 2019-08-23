@@ -61,8 +61,9 @@ export default {
           const saved = imageSource.saveToFile(path, "png")
           if (saved) {
             this.itemImage = path // show onscreen
+            if (this.list) this.list[this.index].image = path // and on list if exist
             // create bitmap to be resized
-            const image = imageSourceModule.fromFile(this.itemImage)
+            const image = imageSourceModule.fromFile(path)
             var bmp = BitmapFactory.create(image.height, image.width)
             // resize
             let base64Small = ''
