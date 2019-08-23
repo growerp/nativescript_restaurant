@@ -106,17 +106,19 @@
                     confirmPassword: '',
                     firstName: '',
                     lastName: '',
+                    currency: '',
                     locale: ''
                 } : {
-                    name: this.$store.getters.user.name ? this.$store.getters.user.name : "admin-restaurant@growerp.com",
-                    email: "admin-restaurant@growerp.com",
-                    password: "Moqui9!!",
-                    confirmPassword: "Moqui9!!",
+                    name: this.$store.getters.user.name ? this.$store.getters.user.name : "admin@growerp.com",
+                    email: "admin@growerp.com",
+                    password: "qqqqqq9!",
+                    confirmPassword: "qqqqqq9!",
                     firstName: 'Admin',
                     lastName: 'Owner',
-                    locale: 'TH'
+                    locale: 'TH',
+                    currency: 'THB'
                 },
-                locales: ['EN', 'TH', 'US'],
+                locales: ['EN', 'TH', 'US', 'NL'],
                 company: (TNS_ENV === 'production')? {
                     name: '',
                     currency: '',
@@ -163,7 +165,7 @@
                   .catch( error => {
                     console.log('====Api key invalid, catch error:' + JSON.stringify(error))
                     this.$store.commit('apiKey', '') //clear old key
-                    this.processing = false
+                    this.$navigateTo(this.$routes.Login, {clearHistory: true})
                   })
                 } else {
                   this.processing = false // no api key so show login screen

@@ -67,6 +67,8 @@ export default {
               this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
             else if (!this.editedUser.email)
               this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
+            else if (!this.editedUser.groupDescription)
+              this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
             else {
                 const platformModule = require("tns-core-modules/platform");
                 this.editedUser.locale = platformModule.device.language

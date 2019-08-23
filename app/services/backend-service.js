@@ -168,10 +168,11 @@ export default class BackendService {
         return await restPost.post('s1/growerp/GetUser',
             { partyId: id })}
     async createUser(user) { // roletypeid; Customer Employee
-        return await restPost.post('s1/growerp/CreateUser',
+         return await restPost.post('s1/growerp/CreateUser',
             {   firstName: user.firstName, lastName: user.lastName,
                 emailAddress: user.email, locale: user.locale,
-                roleTypeId: user.roleTypeId, externalId: user.externalId})}
+                roleTypeId: user.roleTypeId, externalId: user.externalId,
+                groupDescription: user.groupDescription})}
     async updateUser(user) {
         return await restPost.post('s1/growerp/UpdateUser',
             {   partyId: user.partyId, userId: user.loginId,

@@ -54,7 +54,7 @@ export default {
                     { name: 'roleTypeId', hidden: true, ignore: true},
                     { name: 'firstName', required: true, index: 0},
                     { name: 'lastName', required: true, index: 1},
-                    { name: 'username', displayName: this.$t('loginname'),
+                    { name: 'username', displayName: this.$t('loginName'),
                         required: true, index: 2, hidden: this.roleTypeId==='Customer', ignore: this.roleTypeId==='Customer'},
                     { name: 'email', displayName: this.$t('email'), required: true,
                         editor: "Email", index: 4},
