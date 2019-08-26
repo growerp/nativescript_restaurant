@@ -1,14 +1,15 @@
 <template lang="html">
     <Page>
         <ActionBar>
-          <GridLayout width="100%" columns="auto, *, auto">
+          <GridLayout width="100%" columns="auto, *, auto" paddingRight="10">
             <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
             <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
                 horizontalAlignment="center">
               <Image src="~/assets/images/go-back-arrow.png" height="15"/>
               <Label class="title" :text="$t('companyEmplCust')"/>
             </StackLayout>
-            <Label :text="action + '  '" @tap="onActionTap" col="2"/>
+            <Image src="~/assets/images/plus.png" height="20" @tap="onActionTap" col="2" :visibility="plus? 'visible': 'hidden'"/>
+            <Image src="~/assets/images/save.png" height="20" @tap="onActionTap" col="2" :visibility="save? 'visible': 'hidden'"/>
           </GridLayout>
         </ActionBar>
 
@@ -112,7 +113,6 @@ export default {
     data () {
         return {
             text: this.$t('companyEmplCust'),
-            action: '',
             currentTab: 0,
             users: [],
             customers: [],
@@ -152,6 +152,8 @@ export default {
                     { name: 'currency', displayName: 'Currency (enter a request to change)',
                         readOnly: true, index: 2}]
             },
+            save: false,
+            plus: false,
         }
     },
     created() {
@@ -174,13 +176,13 @@ export default {
             switch(this.currentTab) {
               case 3:
               case 0:
-                this.action = this.$t('save')
+                this.save = true
+                this.plus = false
                 break
               case 1:
-                this.action = this.$t('add')
-                break
               case 2:
-                this.action = this.$t('add')
+                this.plus = true
+                this.save = false
                 break
             }
         },

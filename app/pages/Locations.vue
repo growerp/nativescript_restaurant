@@ -1,14 +1,14 @@
 <template lang="html">
 <Page>
     <ActionBar>
-        <GridLayout width="100%" columns="auto, *, auto">
+        <GridLayout width="100%" columns="auto, *, auto" paddingRight="10">
             <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
             <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
                 horizontalAlignment="center">
               <Image src="~/assets/images/go-back-arrow.png" height="15"/>
               <Label class="title" :text="$t('locations')"/>
             </StackLayout>
-            <Label @tap="onAddTap" :text="$t('add')" col="2"/>
+            <Image src="~/assets/images/plus.png" height="20" @tap="onAddTap" col="2"/>
         </GridLayout>
     </ActionBar>
     <TabView :selectedIndex="currentTab" paddingTop="10"
