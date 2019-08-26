@@ -14,7 +14,7 @@
                 </GridLayout>
               </v-template>
             </RadListView>
-            <Button class="btn btn-outline" :text="$t('cancel')" @tap="$modal.close()"/>
+            <Button class="button" :text="$t('cancel')" @tap="$modal.close()"/>
           </StackLayout>
         </page>
 </template>

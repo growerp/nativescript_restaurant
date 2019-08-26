@@ -4,8 +4,8 @@
          <label :text="header"/>
          <RadDataForm :source="user", :metadata="userMetaData"
             @propertyCommitted="onCommitted"/>
-         <Button class="btn btn-outline" :text="actionText" @tap="submit" />
-         <Button class="btn btn-outline" :text="$t('cancel')" @tap="$modal.close()" />
+         <Button class="button" :text="actionText" @tap="submit" />
+         <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
 	    </StackLayout>
     </page>
 </template>

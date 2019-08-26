@@ -2,7 +2,7 @@
 <Page>
     <ActionBar>
         <GridLayout width="100%" columns="auto, *, auto">
-            <Label @tap="openDrawer()" col="0" :text="$t('menu')"/>"
+            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
             <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
                 horizontalAlignment="center">
               <Image src="~/assets/images/go-back-arrow.png" height="15"/>
