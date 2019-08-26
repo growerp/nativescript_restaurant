@@ -69,14 +69,14 @@ export default {
               priceFormatted: "100"},
               ],
           selectedIndex: -1,
-          ios: true,
+          ios: false,
           android: false
         }
     },
     created() {
       const platformModule = require("tns-core-modules/platform");
-//      if (platformModule.isAndroid) this.android = true
-//      if (platformModule.isIOS) this.ios = true
+      if (platformModule.isAndroid) this.android = true
+      if (platformModule.isIOS) this.ios = true
       purchase.on(purchase.transactionUpdatedEvent, transaction => {
             console.log('=======updated event: ' + JSON.stringify(transaction))
             if (transaction.transactionState === 'purchased') {
