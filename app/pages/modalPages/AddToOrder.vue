@@ -21,7 +21,7 @@
 
 <script>
 export default {
-    name: 'AddOrder',
+    name: 'AddToOrder',
     props: {
       openOrders: Array,
       areaDescription: String,

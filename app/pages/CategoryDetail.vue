@@ -1,14 +1,14 @@
 <template>
 <Page>
     <ActionBar>
-        <GridLayout width="100%" columns="auto, *, auto">
+        <GridLayout width="100%" columns="auto, *, auto" paddingRight="10">
           <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
             <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
                 horizontalAlignment="center">
               <Label class="title" :text="$t('categoryDetail')"/>
               <Image src="~/assets/images/go-back-arrow.png" height="15"/>
             </StackLayout>
-          <Label @tap="onSaveTap" :text="$t('save')" col="2"/>
+          <Image src="~/assets/images/save.png" height="20" @tap="onSaveTap" col="2"/>
         </GridLayout>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
