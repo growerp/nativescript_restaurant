@@ -16,26 +16,22 @@
         <Label class="h3" :text="$t('chargedNotCancel')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
         <Label class="h3" :text="$t('emailDetails')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
         <RadListView ref="listView" for="item in itemList" @itemTap="onItemTap"
-             @loaded="onLoaded" :height="ios?'25%':'60%'">
+             @loaded="onLoaded" :height="ios?'35%':'60%'">
             <v-template>
-              <GridLayout columns="50, *, auto" rows="*" class="item"
-                  padding="10,20,10,20">
-                  <Image src="~/assets/images/U.png"  col="0" class="thumbnail"
+              <GridLayout columns="50, *, auto" rows="auto,auto,auto" class="item" padding="10,20,10,20">
+                  <Label :text="item.localizedTitle" class="h3" row="0" col="0" 
+                    paddingLeft="30" colSpan="2"/>
+                  <Image src="~/assets/images/U.png"  row="1" col="0" class="thumbnail" rowSpan="2"
                     :visibility="item.subscribed?'hidden':'visible'"/>
-                  <Image src="~/assets/images/S.png"  col="0" class="thumbnail"
-                    :visibility="item.subscribed?'hidden':'collapse'"/>
-                <StackLayout paddingLeft="10" col="1">
-                  <Label :text="item.localizedTitle" class="h2"/>
-                  <Label :text="item.localizedDescription" class="p" textWrap="true"/>
-                </StackLayout>
-                <StackLayout paddingLeft="10" col="2">
-                  <Label :text="item.priceFormatted" class="h2" verticalAlignment="center"/>
-                  <Label :text="'/' + $t('month')" class="h3" verticalAlignment="center" horizontalAlignment="right"/>
-                </StackLayout>
+                  <Image src="~/assets/images/S.png"  row="1" col="0" class="thumbnail" rowSpan="2"
+                    :visibility="item.subscribed?'visible':'hidden'"/>
+                  <Label :text="item.priceFormatted + '/' + $t('month')" row="0" col="2" class="h3" verticalAlignment="center"/>
+                  <Label :text="item.localizedDescription" class="p" textWrap="true" row="1" col="1" 
+                    paddingLeft="10" rowSpan="2" colSpan="1"/>
               </GridLayout>
             </v-template>
         </RadListView>
-        <Label class="h3" :text="$t('upgradeDetailIos')" horizontalAlignment="center" 
+        <Label class="h5" :text="$t('upgradeDetailIos')" horizontalAlignment="center" 
           textWrap="true" :visibility="ios?'visible':'collapse'" padding="30"/>
         <Button class="button" :text="$t('upgradeMoreDetail')" horizontalAlignment="center"
           textWrap="true" @tap="$navigateTo($routes.About)"  padding="15"/>
@@ -55,16 +51,32 @@ export default {
     mixins: [ sideDrawer, general],
     data() {
         return {
-          itemList: [],
+          itemList: process.env.NODE_ENV === 'production'? [] :
+            [{productIdentifier: '10000',
+              subscribed: false,
+              localizedTitle: 'No advertisements',
+              localizedDescription: 'Remove advertisements from all pages',
+              priceFormatted: "100"},
+             {productIdentifier: '10001',
+              subscribed: true,
+              localizedTitle: 'Add 3 more employees',
+              localizedDescription: 'Be able to add 3 more employees logins',
+              priceFormatted: "100"},
+             {productIdentifier: '10003',
+              subscribed: true,
+              localizedTitle: 'Add 10 more employees',
+              localizedDescription: 'Be able to add 10 more employees logins',
+              priceFormatted: "100"},
+              ],
           selectedIndex: -1,
-          ios: false,
+          ios: true,
           android: false
         }
     },
     created() {
       const platformModule = require("tns-core-modules/platform");
-      if (platformModule.isAndroid) this.android = true
-      if (platformModule.isIOS) this.ios = true
+//      if (platformModule.isAndroid) this.android = true
+//      if (platformModule.isIOS) this.ios = true
       purchase.on(purchase.transactionUpdatedEvent, transaction => {
             console.log('=======updated event: ' + JSON.stringify(transaction))
             if (transaction.transactionState === 'purchased') {
