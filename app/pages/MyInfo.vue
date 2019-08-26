@@ -1,14 +1,14 @@
 <template lang="html">
     <Page>
         <ActionBar>
-          <GridLayout width="100%" columns="auto, *, auto">
+          <GridLayout width="100%" columns="auto, *, auto", paddingRight="10">
             <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
             <StackLayout orientation="horizontal" @tap="$navigateTo($routes.Home)" col="1"
                 horizontalAlignment="center">
               <Image src="~/assets/images/go-back-arrow.png" height="15"/>
               <Label class="title" :text="$t('myInfoLong')"/>
             </StackLayout>
-            <Label :text="$t('save')" @tap="onSaveTap" col="2"/>
+            <Image src="~/assets/images/save.png" height="20" @tap="onSaveTap" col="2"/>
           </GridLayout>
         </ActionBar>
         <StackLayout>
