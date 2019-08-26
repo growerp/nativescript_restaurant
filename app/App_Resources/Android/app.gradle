@@ -3,10 +3,17 @@
 android {
   defaultConfig {
     generatedDensities = []
-    applicationId = "org.growerp"
+    applicationId = "com.growerp.restaurant"
     ndk {
       abiFilters.clear()
-      abiFilters.addAll(['armeabi-v7a','arm64-v8a','x86']) // remove x86 when publish in play store, required to run emulator 
+      abiFilters.addAll(['armeabi-v7a','arm64-v8a']) // remove x86 when publish in play store, required to run emulator 
+    }
+  }
+  buildTypes {
+    debug {
+      ndk {
+        abiFilters 'x86'
+      }
     }
   }
   aaptOptions {
