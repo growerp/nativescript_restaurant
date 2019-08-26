@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded(0)">
       <ActionBar>
         <GridLayout width="100%" columns="auto, *,auto">
-            <Label @tap="openDrawer()" col="0" :text="$t('menu')"/>
+            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
             <Label class="title" col="1"
               horizontalAlignment="center" :text="$t('dashBoard')"/>
             <!--Label class="title" col="2"

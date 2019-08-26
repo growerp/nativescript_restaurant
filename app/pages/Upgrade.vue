@@ -2,7 +2,7 @@
     <Page>
       <ActionBar>
         <GridLayout width="100%" columns="auto, *, auto">
-          <Label class="title" :text="$t('menu')" col="0" @tap="openDrawer()"/>
+          <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
           <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
               horizontalAlignment="center">
             <Image src="~/assets/images/go-back-arrow.png" height="15"/>
@@ -18,16 +18,16 @@
         <RadListView ref="listView" for="item in itemList" @itemTap="onItemTap"
              @loaded="onLoaded" :height="ios?'35%':'60%'">
             <v-template>
-              <GridLayout columns="50, *, auto" rows="auto,auto,auto" class="item" padding="10,20,10,20">
+              <GridLayout columns="50, *, auto" rows="auto, 40" class="item" padding="10,20,10,20">
                   <Label :text="item.localizedTitle" class="h3" row="0" col="0" 
-                    paddingLeft="30" colSpan="2"/>
-                  <Image src="~/assets/images/U.png"  row="1" col="0" class="thumbnail" rowSpan="2"
+                    paddingLeft="10" colSpan="2"/>
+                  <Image src="~/assets/images/U.png"  row="1" col="0" class="thumbnail"
                     :visibility="item.subscribed?'hidden':'visible'"/>
-                  <Image src="~/assets/images/S.png"  row="1" col="0" class="thumbnail" rowSpan="2"
+                  <Image src="~/assets/images/S.png"  row="1" col="0" class="thumbnail"
                     :visibility="item.subscribed?'visible':'hidden'"/>
                   <Label :text="item.priceFormatted + '/' + $t('month')" row="0" col="2" class="h3" verticalAlignment="center"/>
                   <Label :text="item.localizedDescription" class="p" textWrap="true" row="1" col="1" 
-                    paddingLeft="10" rowSpan="2" colSpan="1"/>
+                    paddingLeft="10" colSpan="2"/>
               </GridLayout>
             </v-template>
         </RadListView>
@@ -56,17 +56,17 @@ export default {
               subscribed: false,
               localizedTitle: 'No advertisements',
               localizedDescription: 'Remove advertisements from all pages',
-              priceFormatted: "100"},
+              priceFormatted: "THB 100"},
              {productIdentifier: '10001',
               subscribed: true,
               localizedTitle: 'Add 3 more employees',
-              localizedDescription: 'Be able to add 3 more employees logins',
-              priceFormatted: "100"},
+              localizedDescription: 'Be able to add 3 more employees logins which can be added to the organisation, employee page.',
+              priceFormatted: "THB 500"},
              {productIdentifier: '10003',
               subscribed: true,
               localizedTitle: 'Add 10 more employees',
               localizedDescription: 'Be able to add 10 more employees logins',
-              priceFormatted: "100"},
+              priceFormatted: "THB 1500"},
               ],
           selectedIndex: -1,
           ios: false,

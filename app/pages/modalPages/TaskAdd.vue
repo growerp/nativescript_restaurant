@@ -3,8 +3,8 @@
 	     <StackLayout class="p-20" backgroundColor="white" paddingTop="40">
         <RadDataForm ref="addItem" :source="item" :metadata="itemMeta"
             @propertyCommitted="onCommitted"/>
-        <Button class="btn btn-outline" :text="$t('addTask')" @tap="submit" />
-        <Button class="btn btn-outline" :text="$t('cancel')" @tap="$modal.close()" />
+        <Button class="button" :text="$t('addTask')" @tap="submit" />
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
 	</StackLayout>
 </page>
 </template>

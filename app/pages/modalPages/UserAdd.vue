@@ -4,8 +4,8 @@
         <label :text="header" horizontalAlignment="center" class="h3"/>
         <RadDataForm :source="user", :metadata="userMetaData"
             @propertyCommitted="onCommitted"/>
-        <Button class="btn btn-outline" :text="actionText" @tap="submit" />
-        <Button class="btn btn-outline" :text="$t('cancel')" @tap="$modal.close()" />
+        <Button class="button" :text="actionText" @tap="submit"/>
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()"/>
 	</StackLayout>
 </page>
 </template>
@@ -29,17 +29,17 @@ export default {
             },
             userMetaData: {
                 propertyAnnotations:[
-                  { name: 'firstName'},
-                  { name: 'lastName'},
+                  { name: 'firstName', index: 1},
+                  { name: 'lastName', index: 2},
                   { name: 'externalId', displayName: this.$t('externalId'),
-                    hidden: this.roleTypeId !== 'Customer'},
-                  { name: 'email', editor: 'Email', index: 3,
+                    hidden: this.roleTypeId !== 'Customer', index: 3},
+                  { name: 'email', editor: 'Email', index: 4,
                     validators: [
                       { name: "RegEx", params: {regEx: "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}\\@[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25})+.",
                         errorMessage: "Please provide a valid email address."}}]},
                   { name: 'groupDescription', displayName: this.$t('securityGroup'),
-                      valuesProvider: this.$store.getters.userGroupValues, index: 4,
-                      editor: 'List', hidden: this.roleTypeId !== 'Employee'},
+                      valuesProvider: this.$store.getters.userGroupValues, index: 5,
+                      editor: 'List', hidden: this.roleTypeId !== 'Employee' },
                 ],
             },
             editedUser: {},
