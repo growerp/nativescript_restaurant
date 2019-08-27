@@ -1,5 +1,6 @@
 const nsAppium = require("nativescript-dev-appium");
 const assert = require("chai").assert;
+const expect = require("chai").expect;
 const addContext = require('mochawesome/addContext');
 
 describe("1. Start test register, login and forgot your password functions on GrowERP-restaurant App", () => {
@@ -113,6 +114,15 @@ describe("1. Start test register, login and forgot your password functions on Gr
             await logInButton.click();
         }
         // Fix me to check the current login user.
+        const menuImage = await driver.findElementByClassName("android.widget.ImageView");
+        await menuImage.click();
+
+        const myInfo = await driver.findElementByXPath("//" + driver.locators.getElementByName("label") + "[@text='My Info']");
+        await myInfo.click();
+
+        const userLoginLabel = await driver.driver.waitForElementsByClassName(driver.locators.getElementByName("textfield"), 10000);
+        const userLoginText = await userLoginLabel[0].text();
+        expect(userLoginText).to.equal(USERNAME, "Not logged with the same user");
 
     });
 
