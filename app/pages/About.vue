@@ -1,14 +1,7 @@
 <template lang="html">
   <Page>
     <ActionBar>
-      <GridLayout width="100%" columns="auto, *">
-        <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-        <GridLayout columns="auto,auto" @tap="$navigateTo($routes.SetUp)" col="1"
-              horizontalAlignment="center">
-          <Image src="~/assets/images/go-back-arrow.png" col="0" height="20"/>
-          <Label class="title" :text="$t('about')" col="1"/>
-        </GridLayout>
-      </GridLayout>
+      <myActionBar :openDrawer="openDrawer" header="about" :onHeaderTap="onHeaderTapSetUp"/>
     </ActionBar>
     <ScrollView>
       <StackLayout padding="10">
@@ -20,6 +13,8 @@
 
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
+import general from '~/mixins/general'
+
 export default {
   name: 'About',
   data() {
@@ -27,7 +22,7 @@ export default {
       text: this.policy()
     }
   },
-  mixins: [sideDrawer],
+  mixins: [sideDrawer, general],
   methods: {
     policy() {
         return `

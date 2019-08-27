@@ -1,14 +1,8 @@
 <template lang="html">
   <Page @loaded="pageLoaded()">
     <ActionBar>
-      <GridLayout width="100%" columns="auto, *, auto">
-        <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-        <StackLayout orientation="horizontal" @tap="$navigateTo($routes.Home)" col="1"
-            horizontalAlignment="center">
-          <Image src="~/assets/images/go-back-arrow.png" height="15"/>
-          <Label class="title" :text="$t('preparation')"/>
-        </StackLayout>
-      </GridLayout>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
+          header="preparation"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange"
              paddingTop="10">

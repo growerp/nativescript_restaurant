@@ -1,16 +1,7 @@
 <template>
   <Page @loaded="pageLoaded(0)">
       <ActionBar>
-        <GridLayout width="100%" columns="auto, *,auto">
-            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-            <StackLayout orientation="horizontal" @tap="$navigateTo($routes.Home)" col="1"
-                horizontalAlignment="center">
-              <Image src="~/assets/images/go-back-arrow.png" height="15"/>
-              <Label class="title" :text="$t('setup')"/>
-            </StackLayout>
-            <!--Label class="title" :text="$t('backToDefault')" col="2"
-                @tap="backToDefault"/-->
-        </GridLayout>
+        <myActionBar :openDrawer="openDrawer" header="setup" :onHeaderTap="onHeaderTapHome"/>
       </ActionBar>
       <StackLayout padding="20" width="1000">
         <RadListView ref="listView" for="item in dashBoard" @itemTap="onItemTap"

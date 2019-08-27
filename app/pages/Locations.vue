@@ -1,15 +1,8 @@
 <template lang="html">
-<Page>
+  <Page @loaded="pageLoaded()">
     <ActionBar>
-        <GridLayout width="100%" columns="auto, *, auto" paddingRight="10">
-            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-            <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
-                horizontalAlignment="center">
-              <Image src="~/assets/images/go-back-arrow.png" height="15"/>
-              <Label class="title" :text="$t('locations')"/>
-            </StackLayout>
-            <Image src="~/assets/images/plus.png" height="20" @tap="onAddTap" col="2"/>
-        </GridLayout>
+        <myActionBar :onHeaderTap="onHeaderTapSetUp" plus="plus" 
+            :onActionTap="onAddTap" :openDrawer="openDrawer" header="locations"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" paddingTop="10"
         @selectedIndexChange="tabChange">
@@ -53,10 +46,11 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import AreaAdd from './modalPages/AreaAdd'
 import PrepAdd from './modalPages/PrepAdd'
+import general from '~/mixins/general'
 
 export default {
     name: 'Locations',
-    mixins: [ sideDrawer ],
+    mixins: [ sideDrawer, general ],
     props: {
         startTab: Number
     },

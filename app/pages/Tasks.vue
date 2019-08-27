@@ -1,15 +1,8 @@
 <template lang="html">
-  <Page>
+  <Page @loaded="pageLoaded()">
     <ActionBar>
-      <GridLayout width="100%" columns="auto, *, auto" paddingRight="10">
-        <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-        <StackLayout orientation="horizontal" @tap="$navigateTo($routes.Home)"
-            col="1" horizontalAlignment="center">
-          <Image src="~/assets/images/go-back-arrow.png" height="15"/>
-          <Label class="title" :text="$t('tasksMeOthers')"/>
-        </StackLayout>
-        <Image src="~/assets/images/plus.png" height="20" @tap="onAddTap" col="2"/>
-      </GridLayout>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :save="save" :plus="plus" 
+          :onActionTap="onAddTap" :openDrawer="openDrawer" header="tasksMeOthers"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" paddingTop="10"
         @selectedIndexChange="tabChange">
@@ -58,8 +51,9 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import TaskAdd from './modalPages/TaskAdd'
+import general from '~/mixins/general'
 export default {
-  mixins: [ sideDrawer,],
+  mixins: [ sideDrawer, general],
   props: {
       startTab: Number
   },
@@ -69,6 +63,9 @@ export default {
       myItemList: [],
       otherItemList: [],
     }
+  },
+  created() {
+    this.plus = true // show button at header
   },
   methods: {
       tabChange(args) {

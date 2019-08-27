@@ -1,14 +1,28 @@
 
-
-
 import * as app from 'tns-core-modules/application';
 import { time } from 'tns-core-modules/profiling/profiling';
 var admob = require("nativescript-admob")
 const platformModule = require("tns-core-modules/platform");
+import myActionBar from '../components/actionBar'
 
 export default {
     name: 'general',
+    data() { 
+      return {
+        save: false, //actionbar
+        plus: false, //actionbar
+      }
+    },
+    components: {
+      myActionBar
+    },
     methods: {
+      onHeaderTapSetUp() {
+        this.$navigateTo(this.$routes.SetUp)
+      },
+      onHeaderTapHome() {
+        this.$navigateTo(this.$routes.Home)
+      },
       note(text) {
         var nstoasts = require("nativescript-toasts");
         var options = {

@@ -4,12 +4,12 @@ export default {
     accountNotFound: 'Helaas kunnen we uw inlog niet vinden of er was een communicatie fout',
     add: 'NIEUW  ',
     addAreas: 'Nieuw tafel gebied',
-    addExistingOrderFrom: 'Nu togevoegd aan bestaande bestelling van: ',
-    addprepLoc: 'Add BrdLoK',
+    addCategory: 'Kategorie toevoegen',
+    addExistingOrderFrom: 'Nu toegevoegd aan bestaande bestelling van: ',
     added: ' toegevoegd',
     addNote: 'Nieuwe opmerking',
     addPreparationArea: 'Nieuw bereidings lokatie',
-    addPrepLoc: 'Nieuw BereidsLoc  ', //short of: Add preparation location
+    addPrepLoc: 'Nieuw BereidsLokatie  ', //short of: Add preparation location
     addRequest: 'Niewe aanvraag ',
     addTable: 'Nieuwe Tafel  ',
     addTableArea: 'Nieuwe TafGeb. ', //short of: add table area

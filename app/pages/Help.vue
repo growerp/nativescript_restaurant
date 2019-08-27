@@ -1,15 +1,8 @@
 <template lang="html">
   <Page @loaded="pageLoaded()">
     <ActionBar>
-      <GridLayout width="100%" columns="auto, *, auto">
-        <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-        <StackLayout orientation="horizontal" @tap="$navigateTo($routes.Home)" col="1"
-            horizontalAlignment="center">
-          <Image src="~/assets/images/go-back-arrow.png" height="15"/>
-          <Label class="title" :text="$t('help')"/>
-        </StackLayout>
-        <Label @tap="onAddTap" :text="currentTab==1?$t('add'):''" col="2"/>
-      </GridLayout>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
+          header="help" :onActionTap="onAddTap" plus="plus"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" paddingTop="10"
         @selectedIndexChange="tabChange">
@@ -74,6 +67,7 @@ export default {
     }
   },
   created() {
+    this.plus = true
     this.$backendService.getRequestList(false).then( result => {
         this.faqList = result.data.requests})
         this.faqList.sort(function (a, b) {
@@ -86,9 +80,6 @@ export default {
   methods: {
       tabChange(args) {
         this.currentTab = args.value
-      },
-      onHeaderTap() {
-        this.$navigateTo(this.$routes.Home)
       },
       onAddTap() { //get new item and add to end
         this.$showModal(RequestAdd).then (result => {
