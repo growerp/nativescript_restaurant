@@ -1,15 +1,8 @@
 <template lang="html">
   <Page>
     <ActionBar>
-      <GridLayout width="100%" columns="auto, *, auto"  paddingRight="10">
-        <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-        <GridLayout columns="auto,auto" @tap="$navigateTo($routes.SetUp)" col="1"
-              horizontalAlignment="center">
-          <Image src="~/assets/images/go-back-arrow.png" col="0" height="20"/>
-          <Label class="title" :text="$t('product')" col="1"/>
-        </GridLayout>
-        <Image src="~/assets/images/plus.png" height="20" @tap="onAddTap" col="2"/>
-      </GridLayout>
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="plus" 
+            :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
     </ActionBar>
     <StackLayout paddingTop="5">
       <RadListView ref="listView" for="item in itemList" @itemTap="onItemTap"
@@ -33,9 +26,11 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import ProductAdd from './modalPages/ProductAdd'
+import general from '~/mixins/general'
+
 export default {
   name: 'products',
-  mixins: [ sideDrawer ],
+  mixins: [ sideDrawer, general ],
   props: {
   },
   data () {

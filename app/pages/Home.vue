@@ -1,26 +1,20 @@
 <template>
   <Page @loaded="pageLoaded(0)">
-      <ActionBar>
-        <GridLayout width="100%" columns="auto, *,auto">
-            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-            <Label class="title" col="1"
-              horizontalAlignment="center" :text="$t('dashBoard')"/>
-            <!--Label class="title" col="2"
-                @tap="backToDefault" :text="$t('backToDefault')"-->
-        </GridLayout>
-      </ActionBar>
-      <StackLayout padding="20">
-        <RadListView ref="listView" for="item in dashBoard" @itemTap="onItemTap"
-            itemReorder="true" @itemReordered="onItemReordered" layout="grid" itemHeight="120">
-          <v-template>
-              <StackLayout orientation="vertical" padding="10">
-                <Image :src="item.image" height="60"/>
-                <Label :text="item.title" horizontalAlignment="center" class="h3"/>
-              </StackLayout>
-          </v-template>
-        </RadListView>
-      </StackLayout>
-    </Page>
+    <ActionBar>
+      <myActionBar :openDrawer="openDrawer" header="dashBoard"/>
+    </ActionBar>
+    <StackLayout padding="20">
+      <RadListView ref="listView" for="item in dashBoard" @itemTap="onItemTap"
+          itemReorder="true" @itemReordered="onItemReordered" layout="grid" itemHeight="120">
+        <v-template>
+            <StackLayout orientation="vertical" padding="10">
+              <Image :src="item.image" height="60"/>
+              <Label :text="item.title" horizontalAlignment="center" class="h3"/>
+            </StackLayout>
+        </v-template>
+      </RadListView>
+    </StackLayout>
+  </Page>
 </template>
 
 <script>

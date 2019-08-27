@@ -1,18 +1,8 @@
 <template lang="html">
     <Page @loaded="pageLoaded()">
         <ActionBar>
-          <GridLayout width="80%" columns="auto, 10, *, 10, auto, 10" horizontalAlignment="right">
-            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
-            <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" 
-                horizontalAlignment="center" col="2">
-              <Image src="~/assets/images/go-back-arrow.png" height="20"/>
-              <Label class="title" :text="$t('companyEmplCust')"/>
-            </StackLayout>
-            <Image src="~/assets/images/plus.png" height="20" @tap="onActionTap" 
-              col="4" :visibility="plus? 'visible': 'hidden'"/>
-            <Image src="~/assets/images/save.png" height="20" @tap="onActionTap" 
-              col="4" :visibility="save? 'visible': 'hidden'"/>
-          </GridLayout>
+          <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="save" :plus="plus" 
+            :onActionTap="onActionTap" :openDrawer="openDrawer" header="companyEmplCust"/>
         </ActionBar>
 
         <TabView :selectedIndex="currentTab" paddingTop="10"
@@ -107,7 +97,7 @@ import passwordUpdate from './modalPages/PasswordUpdate'
 var platformModule = require("tns-core-modules/platform");
 
 export default {
-    name: 'organizationInfo',
+    name: 'organization',
     mixins: [ sideDrawer, imageSelector, general ],
     props: {
         startTab: Number
@@ -154,8 +144,6 @@ export default {
                     { name: 'currency', displayName: 'Currency (enter a request to change)',
                         readOnly: true, index: 2}]
             },
-            save: false,
-            plus: false,
         }
     },
     created() {
