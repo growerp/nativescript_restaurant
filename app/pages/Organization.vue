@@ -1,16 +1,17 @@
 <template lang="html">
-    <Page>
+    <Page @loaded="pageLoaded()">
         <ActionBar>
-          <GridLayout width="100%" columns="auto, auto, *, auto" paddingRight="10">
-            <ActionItem ios.position="left" :text="'< ' + $t('back')" tap="$navigateBack" col="0"/>
-            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="1"/>
-            <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="2"
-                horizontalAlignment="center">
-              <Image src="~/assets/images/go-back-arrow.png" height="15"/>
+          <GridLayout width="80%" columns="auto, 10, *, 10, auto, 10" horizontalAlignment="right">
+            <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer()" col="0"/>
+            <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" 
+                horizontalAlignment="center" col="2">
+              <Image src="~/assets/images/go-back-arrow.png" height="20"/>
               <Label class="title" :text="$t('companyEmplCust')"/>
             </StackLayout>
-            <Image src="~/assets/images/plus.png" height="20" @tap="onActionTap" col="3" :visibility="plus? 'visible': 'hidden'"/>
-            <Image src="~/assets/images/save.png" height="20" @tap="onActionTap" col="3" :visibility="save? 'visible': 'hidden'"/>
+            <Image src="~/assets/images/plus.png" height="20" @tap="onActionTap" 
+              col="4" :visibility="plus? 'visible': 'hidden'"/>
+            <Image src="~/assets/images/save.png" height="20" @tap="onActionTap" 
+              col="4" :visibility="save? 'visible': 'hidden'"/>
           </GridLayout>
         </ActionBar>
 
