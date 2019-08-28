@@ -1,6 +1,6 @@
 <template lang="html">
   <Page>
-    <ActionBar>
+    <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="plus" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
     </ActionBar>
@@ -38,6 +38,7 @@ export default {
       itemList: [],
     }
   },
+  
   methods: {
     onLoaded () {
       if (!this.itemList.length) {

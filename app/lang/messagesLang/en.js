@@ -4,9 +4,9 @@ export default {
     accountNotFound: 'Unfortunately we could not find your account or there was a server error',
     add: 'CREATE   ',
     addAreas: 'Add Table Areas',
-    addExistingOrderFrom: 'Now adding to existing order from: ',
-    addprepLoc: 'Add PrepLoc',
+    addCategory: 'Add Category',
     added: ' added.',
+    addExistingOrderFrom: 'Now adding to existing order from: ',
     addNote: 'Add a Note',
     addPreparationArea: 'Add preparation area',
     addPrepLoc: 'Add PrepLoctn  ', //short of: Add preparation location

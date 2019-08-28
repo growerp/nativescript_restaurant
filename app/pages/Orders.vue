@@ -1,6 +1,6 @@
 <template>
   <Page @loaded="pageLoaded()">
-    <ActionBar>
+    <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
           header="orders"/>
     </ActionBar>
