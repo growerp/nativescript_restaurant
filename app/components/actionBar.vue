@@ -1,6 +1,5 @@
 <template>
-  <GridLayout width="80%" columns="auto, 10, *, 10, auto, 10" horizontalAlignment="right">
-    <NavigationButton visibility="collapsed"/>
+  <GridLayout width="100%" columns="auto, 10, *, 10, auto, 10" horizontalAlignment="right">
     <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer" col="0"/>
     <StackLayout orientation="horizontal" @tap="onHeaderTap" 
         horizontalAlignment="center" col="2">

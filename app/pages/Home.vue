@@ -1,6 +1,6 @@
 <template>
   <Page @loaded="pageLoaded(0)">
-    <ActionBar>
+    <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :openDrawer="openDrawer" header="dashBoard"/>
     </ActionBar>
     <StackLayout padding="20">
