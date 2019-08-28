@@ -1,6 +1,6 @@
 <template>
     <Page>
-      <ActionBar>
+      <ActionBar><NavigationButton visibility="collapsed"/>
         <myActionBar :openDrawer="openDrawer" header="upgrade" :onHeaderTap="onHeaderTapSetUp"/>
       </ActionBar>
       <StackLayout paddingTop="5">

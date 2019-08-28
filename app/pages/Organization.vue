@@ -94,6 +94,7 @@ import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import UserAdd from './modalPages/UserAdd'
 import passwordUpdate from './modalPages/PasswordUpdate'
+import { stringify } from 'querystring';
 var platformModule = require("tns-core-modules/platform");
 
 export default {
@@ -117,9 +118,9 @@ export default {
                     { name: 'externalId', hidden: true, ignore: true},
                     { name: 'firstName', required: true, displayName: this.$t('firstName'), index: 0},
                     { name: 'lastName', required: true, displayName: this.$t('lastName'), index: 1},
-                    { name: 'username', displayName: this.$t('loginname'),
+                    { name: 'username', displayName: this.$t('loginName'),
                         required: true, index: 2, hidden: this.roleTypeId==='Customer', ignore: this.roleTypeId==='Customer'},
-                    { name: 'email', required: true, displayName: this.$t('emailaddress'),
+                    { name: 'email', required: true, displayName: this.$t('emailAddress'),
                         editor: "Email", index: 4},
                     { name: 'image', hidden: true, ignore: true},
                     { name: 'userId', hidden: true, ignore: true},
@@ -144,6 +145,8 @@ export default {
                     { name: 'currency', displayName: 'Currency (enter a request to change)',
                         readOnly: true, index: 2}]
             },
+            save: false,
+            plus: false,
         }
     },
     created() {
@@ -179,7 +182,10 @@ export default {
         onLoadedUsers() {
           if (!this.users.length) {
             this.$backendService.getUserList('Employee')
-            .then (result => { this.users = result.data.users})}
+            .then (result => { 
+              this.users = result.data.users
+              console.log('====users: ' + JSON(stringify( this.users)))
+          })}
         },
         onLoadedCustomers() {
           if (!this.customers.length) {
