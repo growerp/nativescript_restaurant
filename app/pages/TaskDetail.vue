@@ -36,14 +36,14 @@ export default {
             editedItem: {},
             itemMeta: {
                 propertyAnnotations: [
-                    { name: 'workEffortId', hidden: true, ignore: true},
-                    { name: 'image', hidden: true, ignore: true},
+                    { name: 'workEffortId', ignore: true},
+                    { name: 'image', ignore: true},
                     { name: 'workEffortName', displayName: this.$t('title'),
                         required: true, index: 0},
                     { name: 'description', editor: 'MultilineText', index: 2},
                     { name: 'priority', editor: 'Picker', index: 3,
                         valuesProvider: [1,2,3,4,5]},
-                    { name: 'userPartyId', hidden: true, ignore: true},
+                    { name: 'userPartyId', ignore: true},
                     { name: 'fullName', displayName: this.$t('assignedTo'),
                       index: 4, editor: 'Picker',
                       valuesProvider: this.$store.getters.userNames },

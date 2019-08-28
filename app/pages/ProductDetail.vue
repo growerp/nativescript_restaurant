@@ -36,12 +36,12 @@ export default {
             item: this.list[this.index],
             itemMeta: {
                 propertyAnnotations: [
-                    { name: 'productId', hidden: true, ignore: true},
-                    { name: 'image', hidden: true, ignore: true},
+                    { name: 'productId', ignore: true},
+                    { name: 'image', ignore: true},
                     { name: 'productName', required: true, index: 0},
                     { name: 'price', required: true, index: 1,
                         editor: 'Decimal'},
-                    { name: 'productCategoryId', hidden: true, ignore: true},
+                    { name: 'productCategoryId', ignore: true},
                     { name: 'categoryName', required: true, index: 2,
                       editor: 'Label'},
                     { name: 'newCategoryName', displayName: 'New Category',

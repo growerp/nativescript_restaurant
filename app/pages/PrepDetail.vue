@@ -50,8 +50,8 @@ export default {
             editedItem: {},
             itemMeta: {
                 propertyAnnotations: [
-                    { name: 'preparationAreaId', hidden: true, ignore: true},
-                    { name: 'image', hidden: true, ignore: true},
+                    { name: 'preparationAreaId', ignore: true},
+                    { name: 'image', ignore: true},
                     { name: 'description', required: true, index: 0}]},
         }
     },

@@ -19,7 +19,7 @@ export default {
                     categoryName: ''},
             itemMeta: {
                   propertyAnnotations: [
-                      { name: 'productId', hidden: true, ignore: true},
+                      { name: 'productId', ignore: true},
                       { name: 'name', required: true, index: 0},
                       { name: 'price', required: true, index: 1},
                       { name: 'categoryName', required: true, index: 2,
