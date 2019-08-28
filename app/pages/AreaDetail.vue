@@ -52,10 +52,10 @@ export default {
             editedItem: {},
             itemMeta: {
                 propertyAnnotations: [
-                    { name: 'accommodationAreaId', hidden: true, ignore: true},
-                    { name: 'image', hidden: true, ignore: true},
+                    { name: 'accommodationAreaId', ignore: true},
+                    { name: 'image', ignore: true},
                     { name: 'description', required: true, index: 0},
-                    { name: 'nbrOfSpots', hidden: true, ignore: true}]},
+                    { name: 'nbrOfSpots', ignore: true}]},
             tables: [],
             tableMatrix: [],
         }

@@ -49,10 +49,10 @@ export default {
             editedItem: {},
             itemMeta: {
                 propertyAnnotations: [
-                    { name: 'productCategoryId', hidden: true, ignore: true},
-                    { name: 'image', hidden: true, ignore: true},
+                    { name: 'productCategoryId', ignore: true},
+                    { name: 'image', ignore: true},
                     { name: 'description', required: true, index: 0},
-                    { name: 'nbrOfProducts', hidden: true , ignore: true}]},
+                    { name: 'nbrOfProducts', ignore: true}]},
           }
     },
     created() {

@@ -21,10 +21,10 @@ export default {
             },
             itemMeta: {
                   propertyAnnotations: [
-                      { name: 'requestId', hidden: true , ignore: true},
+                      { name: 'requestId', ignore: true},
                       { name: 'text', displayName: 'Note',
                             editor: 'MultilineText', required: true},
-                      { name: 'date', hidden: true, ignore: true}
+                      { name: 'date', ignore: true}
                   ]
             },
             editedItem: {},
