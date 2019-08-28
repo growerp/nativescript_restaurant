@@ -1,16 +1,9 @@
 <template>
 <Page>
-    <ActionBar>
-      <GridLayout width="100%" columns="auto, *,auto" paddingRight="10">
-          <Label class="title" text="BACK" col="0" @tap="$navigateBack"/>
-          <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
-              horizontalAlignment="center">
-            <Image src="~/assets/images/go-back-arrow.png" height="15"/>
-            <Label class="title" :text="heading" col="1"
-                  @tap="$navigateTo($routes.Organization,{props:{startTab: 2}})"/>
-          </StackLayout>
-          <Image src="~/assets/images/save.png" height="20" @tap="onSaveTap" col="2"/>
-      </GridLayout>
+    <ActionBar><NavigationButton visibility="collapsed"/>
+        <myActionBar :onHeaderTap="onHeaderTap" :save="true" 
+            :onActionTap="onSaveTap" :openDrawer="openDrawer" 
+            :header="this.$t(this.roleTypeId.toLowerCase()) + ' ' + this.$t('detailedInfo')"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
         <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
@@ -44,7 +37,6 @@ export default {
     },
     data() {
         return {
-            heading: this.$t(this.roleTypeId.toLowerCase()) + ' ' + this.$t('detailedInfo'),
             item: this.list[this.index],
             editedItem: {},
             itemMeta: {
@@ -75,6 +67,12 @@ export default {
         .then(result => { this.itemImage = result.data.imageFile})}
     },
     methods: {
+        onHeaderTap() {
+            if (this.roleTypeId === "Employee")
+                this.$navigateTo(this.$routes.Organization,{props:{startTab: 1}})
+            if (this.roleTypeId === "Customer")
+                this.$navigateTo(this.$routes.Organization,{props:{startTab: 2}})
+        },
         onDeleteTap() {
             prompt({
                 title: this.$t('deleteSmall') + this.roleTypeId + ' ' +

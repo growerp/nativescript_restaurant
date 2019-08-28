@@ -7,12 +7,6 @@ import myActionBar from '../components/actionBar'
 
 export default {
     name: 'general',
-    data() { 
-      return {
-        save: false, //actionbar
-        plus: false, //actionbar
-      }
-    },
     components: {
       myActionBar
     },

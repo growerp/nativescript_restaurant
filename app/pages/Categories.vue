@@ -1,7 +1,7 @@
 <template lang="html">
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="plus" 
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="categories"/>
     </ActionBar>
     <StackLayout paddingTop="5">
@@ -32,9 +32,6 @@ export default {
     return {
       itemList: [],
     }
-  },
-  created() {
-    this.plus = true
   },
   methods: {
     onLoaded () {

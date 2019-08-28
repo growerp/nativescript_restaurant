@@ -1,7 +1,7 @@
 <template lang="html">
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="plus" 
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
     </ActionBar>
     <StackLayout paddingTop="5">
