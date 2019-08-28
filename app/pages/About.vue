@@ -1,6 +1,6 @@
 <template lang="html">
   <Page>
-    <ActionBar>
+    <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :openDrawer="openDrawer" header="about" :onHeaderTap="onHeaderTapSetUp"/>
     </ActionBar>
     <ScrollView>

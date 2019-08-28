@@ -75,7 +75,6 @@ export default {
     methods: {
         tabChange(args) {
             this.currentTab = args.value
-            this.createBanner()
         },
         onHeaderTap() {
           this.$navigateTo(this.$routes.Home)

@@ -160,7 +160,6 @@ export default {
     methods: {
         tabChange(args) {
             this.currentTab = args.value
-            this.createBanner()
         },
         refresh() {
           if (this.currentTab == 1) {

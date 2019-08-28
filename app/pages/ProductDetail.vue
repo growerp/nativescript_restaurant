@@ -1,15 +1,8 @@
 <template>
-<Page>
-    <ActionBar>
-        <GridLayout width="100%" columns="auto, *, auto" paddingRight="10">
-          <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
-          <StackLayout orientation="horizontal" @tap="$navigateTo($routes.SetUp)" col="1"
-              horizontalAlignment="center">
-            <Label class="title" :text="$t('productDetail')"/>
-            <Image src="~/assets/images/go-back-arrow.png" height="15"/>
-          </StackLayout>
-          <Image src="~/assets/images/save.png" height="20" @tap="onSaveTap" col="2"/>
-        </GridLayout>
+  <Page>
+    <ActionBar><NavigationButton visibility="collapsed"/>
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" save="true"
+          :onActionTap="onSaveTap" :openDrawer="openDrawer" header="productDetail"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
         <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
@@ -24,7 +17,7 @@
         <RadDataForm ref="itemForm" :source="item" height="100%"
             :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
     </StackLayout>
-</Page>
+  </Page>
 </template>
 
 <script>

@@ -1,13 +1,13 @@
 <template>
-    <page>
-	<StackLayout class="p-20" backgroundColor="white" paddingTop="40">
-        <label :text="header" horizontalAlignment="center" class="h3"/>
-        <RadDataForm :source="user", :metadata="userMetaData"
-            @propertyCommitted="onCommitted"/>
-        <Button class="button" :text="actionText" @tap="submit"/>
-        <Button class="button" :text="$t('cancel')" @tap="$modal.close()"/>
-	</StackLayout>
-</page>
+  <page>
+    <StackLayout class="p-20" backgroundColor="white" paddingTop="40">
+          <label :text="header" horizontalAlignment="center" class="h3"/>
+          <RadDataForm :source="user", :metadata="userMetaData"
+              @propertyCommitted="onCommitted"/>
+          <Button class="button" :text="actionText" @tap="submit"/>
+          <Button class="button" :text="$t('cancel')" @tap="$modal.close()"/>
+    </StackLayout>
+  </page>
 </template>
 
 <script>
