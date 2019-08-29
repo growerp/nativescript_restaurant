@@ -74,13 +74,14 @@ export default {
                 this.$navigateTo(this.$routes.Organization,{props:{startTab: 2}})
         },
         onDeleteTap() {
-            prompt({
-                title: this.$t('deleteSmall') + this.roleTypeId + ' ' +
-                  this.item.firstName + ' ' + this.item.lastName + "?",
-                okButtonText: "Ok",
+            confirm({
+                title: this.$t('confirmDeletion'),
+                message: this.$t('confirmDeletionMsg') + this.roleTypeId + ' ' +
+                    this.item.firstName + ' ' + this.item.lastName + "?",
+                okButtonText: this.$t('ok'),
                 cancelButtonText: this.$t('cancel')
             }).then (data => {
-                if (data.result == true) {
+                if (data == true) {
                     this.$backendService.deleteUser(this.item.partyId)
                     this.list.splice(this.index,1)}
                 this.$navigateBack()})

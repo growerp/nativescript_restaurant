@@ -59,17 +59,17 @@ export default {
             this.editedUser = JSON.parse(data.object.editedObject)
         },
         submit() {
-            if (!this.editedUser.firstName)
-              this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
-            else if (!this.editedUser.lastName)
-              this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
-            else if (this.roleTypeId === 'Customer' && !this.editedUser.externalId)
-              this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
-            else if (!this.editedUser.email)
-              this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
-            else if (!this.editedUser.groupDescription)
-              this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
-            else {
+            if (!this.editedUser.firstName) {
+                this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedUser.lastName){
+                this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (this.roleTypeId === 'Customer' && !this.editedUser.externalId){
+                this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedUser.email){
+                this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedUser.groupDescription){
+                this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
+            } else {
                 const platformModule = require("tns-core-modules/platform");
                 this.editedUser.locale = platformModule.device.language
                 this.editedUser.roleTypeId = this.roleTypeId
