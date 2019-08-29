@@ -43,6 +43,8 @@ export default {
     company: 'บริษัท',
     companyEmplCust: 'บริษัท และ ข้อมูลพนักงาน',
     connError: 'ข้อผิดพลาดการเชื่อมต่ออินเทอร์เน็ตหรือเซิร์ฟเวอร์',
+    confirmDeletion: 'ยืนยันการลบข้อมูล',
+    confirmDeletionMsg: 'คุณแน่ใจ ที่จะลบ ',
     confirmPassword: 'ยืนยันรหัสผ่าน',
     continue: 'ทำต่อไป',
     copyFromGal: 'แกลเลอรี',
