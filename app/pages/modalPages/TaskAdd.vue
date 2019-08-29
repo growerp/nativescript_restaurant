@@ -42,8 +42,7 @@ export default {
                 this.$backendService.createTask(this.editedItem).then( result => {
                     this.editedItem.workEffortId = result.data.workEffortId
                     this.editedItem.image = global.noImage
-                    this.editedItem.fullName = this.$store.getters.user.firstName +
-                        + ' ' + this.$store.getters.user.lastName
+                    this.editedItem.fullName = this.$store.getters.user.firstName + ' ' + this.$store.getters.user.lastName
                     this.editedItem.statusId = this.$t('WeApproved')
                     this.$modal.close(this.editedItem)
                   })}
