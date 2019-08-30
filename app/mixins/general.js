@@ -72,7 +72,7 @@ export default {
           androidBannerId: "ca-app-pub-3940256099942544/6300978111", // add your own this is test
           // Android automatically adds the connected device as test device with testing:true, iOS does not
           // iosTestDeviceIds: ["yourTestDeviceUDIDs", "canBeAddedHere"],
-          margins: { bottom: platformModule.isIOS? location : 0 },
+          margins: { bottom: platformModule.isIOS ? location : 0 },
           keywords: ["restaurant", "food", "drinks"] // add keywords for ad targeting
         }).then(
           () => { console.log("admob createBanner done")},
@@ -86,7 +86,7 @@ export default {
             setTimeout(() => {
               this.createBanner(bottom) }, 10)
           }
-          if (platformModule.isAndroid) this.createBanner() // enable for android for now
+          if (platformModule.isAndroid) this.createBanner(bottom) // enable for android for now
         }
       }
   }
