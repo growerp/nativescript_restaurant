@@ -39,7 +39,7 @@ export default {
                         errorMessage: "Please provide a valid email address."}}]},
                   { name: 'groupDescription', displayName: this.$t('securityGroup'),
                       valuesProvider: this.$store.getters.userGroupValues, index: 5,
-                      editor: 'List', ignore: this.roleTypeId !== 'Employee' },
+                      editor: 'Picker', ignore: this.roleTypeId !== 'Employee' },
                 ],
             },
             editedUser: {},

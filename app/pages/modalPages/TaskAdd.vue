@@ -10,8 +10,10 @@
 </template>
 
 <script>
+import general from '~/mixins/general'
 export default {
     name: 'TaskAdd',
+    mixins: [general],
     data() {
         return {
             item: { workEffortName: '',
@@ -25,7 +27,7 @@ export default {
                       { name: 'description', editor: 'MultilineText', index: 1},
                       { name: 'priority', editor: 'Number', index: 2},
                       { name: 'partyId', displayName: this.$t('assignTo'), index: 3,
-                        editor: 'List', valuesProvider: this.$store.getters.userNames},
+                        editor: 'Picker', valuesProvider: this.$store.getters.userNames},
                   ]
             },
             editedItem: {},
@@ -36,17 +38,17 @@ export default {
             this.editedItem = JSON.parse(data.object.editedObject)
         },
         submit() {
-            if (this.editedItem != '') {
-                this.editedItem.partyId = this.$store.getters.
-                    userByFirstLastName(this.editedItem.partyId)
-                this.$backendService.createTask(this.editedItem).then( result => {
-                    this.editedItem.workEffortId = result.data.workEffortId
-                    this.editedItem.image = global.noImage
-                    this.editedItem.fullName = this.$store.getters.user.firstName + ' ' + this.$store.getters.user.lastName
-                    this.editedItem.statusId = this.$t('WeApproved')
-                    this.$modal.close(this.editedItem)
-                  })}
-            else this.$modal.close()
+            if (this.editedItem) {
+                if (!this.editedItem.workEffortName) this.note(this.$t('titleIsRequired'))
+                else {
+                    this.editedItem.partyId = this.$store.getters.
+                        userByFirstLastName(this.editedItem.partyId)
+                    this.$backendService.createTask(this.editedItem).then( result => {
+                        this.editedItem.workEffortId = result.data.workEffortId
+                        this.editedItem.image = global.noImage
+                        this.editedItem.fullName = this.$store.getters.user.firstName + ' ' + this.$store.getters.user.lastName
+                        this.editedItem.statusId = this.$t('WeApproved')
+                        this.$modal.close(this.editedItem)})}}
         }
     }
 }

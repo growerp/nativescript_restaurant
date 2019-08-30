@@ -18,15 +18,14 @@
                       <Button class="button" :text="$t('useCamera')"
                           @tap="takePicture('company', item.partyId)" col="2" row="1"/>
                   </GridLayout>
-                  <RadDataForm ref="itemForm" :source="itemComp"
+                  <RadDataForm :source="itemComp"
                       :metadata="itemMetaComp" @propertyCommitted="onItemCommitted"/>
               </StackLayout>
             </TabViewItem>
 
             <TabViewItem :title="$t('employee') + ' max:' + subscribedUsers()">
                 <StackLayout>
-                    <RadListView ref="listView"
-                          for="user in users"
+                    <RadListView for="user in users"
                           @itemTap="onItemTap" @loaded="onLoadedUsers">
                         <v-template>
                             <GridLayout columns="50, *, auto" rows="*" class="item"
@@ -46,9 +45,8 @@
 
             <TabViewItem :title="$t('customer')">
                 <StackLayout>
-                    <RadListView ref="listView"
-                        for="user in customers"
-                        @itemTap="onItemTap" @loaded="onLoadedCustomers">
+                    <RadListView for="user in customers"
+                          @itemTap="onItemTap" @loaded="onLoadedCustomers">
                         <v-template>
                             <GridLayout columns="50, *, auto" rows="*" class="item"
                                 paddingRight="5" paddingLeft="5">
@@ -78,7 +76,7 @@
                       <Button class="button" :text="$t('useCamera')"
                           @tap="takePicture('user', item.partyId)" col="2" row="1"/>
                   </GridLayout>
-                  <RadDataForm ref="itemForm" :source="item"
+                  <RadDataForm :source="item"
                       :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
                   <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"/>
               </StackLayout>
@@ -94,8 +92,6 @@ import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import UserAdd from './modalPages/UserAdd'
 import passwordUpdate from './modalPages/PasswordUpdate'
-import { stringify } from 'querystring';
-var platformModule = require("tns-core-modules/platform");
 
 export default {
     name: 'organization',
@@ -105,7 +101,6 @@ export default {
     },
     data () {
         return {
-            text: this.$t('companyEmplCust'),
             currentTab: 0,
             users: [],
             customers: [],
@@ -114,15 +109,13 @@ export default {
             editedItem: {},
             itemMeta: {
                 propertyAnnotations:[
-                    { name: 'partyId', 
-ignore: true},
-                    { name: 'externalId', 
-ignore: true},
+                    { name: 'partyId', ignore: true},
+                    { name: 'externalId', ignore: true},
                     { name: 'firstName', required: true, displayName: this.$t('firstName'), index: 0},
                     { name: 'lastName', required: true, displayName: this.$t('lastName'), index: 1},
                     { name: 'username', displayName: this.$t('loginName'),
                         required: true, index: 2, ignore: this.roleTypeId==='Customer'},
-                    { name: 'email', required: true, displayName: this.$t('emailAddress'),
+                    { name: 'email', required: true, displayName: this.$t('email'),
                         editor: "Email", index: 4},
                     { name: 'image', ignore: true},
                     { name: 'userId', ignore: true},
@@ -186,13 +179,13 @@ ignore: true},
             this.$backendService.getUserList('Employee')
             .then (result => { 
               this.users = result.data.users
-              console.log('====users: ' + JSON(stringify( this.users)))
           })}
         },
         onLoadedCustomers() {
           if (!this.customers.length) {
             this.$backendService.getUserList('Customer')
-            .then (result => { this.customers = result.data.users})}
+            .then (result => { this.customers = result.data.users
+          })}
         },
         onItemTap (args) {
           if (this.currentTab === 1) { // employees

@@ -18,8 +18,8 @@
                     :visibility="item.subscribed?'hidden':'visible'"/>
                   <Image src="~/assets/images/S.png"  row="1" col="0" class="thumbnail"
                     :visibility="item.subscribed?'visible':'hidden'"/>
-                  <Label :text="item.priceFormatted + '/' + $t('month')" row="0" col="2" class="h3" verticalAlignment="center"/>
-                  <Label :text="item.localizedDescription" class="p" textWrap="true" row="1" col="1" 
+                  <Label :text="item.priceFormatted + '/' + $t('month')" row="0" col="2" class="h3"/>
+                  <Label :text="item.localizedDescription" class="h4" textWrap="true" row="1" col="1" 
                     paddingLeft="10" colSpan="2"/>
               </GridLayout>
             </v-template>
