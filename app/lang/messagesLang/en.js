@@ -10,6 +10,7 @@ export default {
     addNote: 'Add a Note',
     addPreparationArea: 'Add preparation area',
     addPrepLoc: 'Add PrepLoctn  ', //short of: Add preparation location
+    addProduct: 'Add Product',
     addRequest: 'Add request  ',
     addTable: 'Add Table   ',
     addTableArea: 'Add TabArea  ', //short of: add table area
@@ -72,6 +73,7 @@ export default {
     enterEmail: 'Enter the email address you used to register for GrowERP-restaurant to reset your password.',
     enterCustInfo: 'Enter customer information',
     enterCurrency: 'Please select currency!',
+    enterPrice: 'enter price?',
     enterNewOrder: 'Enter a new order',
     enterRestaurantName: 'Enter a restaurant name!',
     existing: 'Existing ',
@@ -122,6 +124,7 @@ export default {
     notHaveAccount: 'Not have an account',
     noItemsOnOrderAddSome: 'No items on the order, go back and add some?',
     oldPasswordIsRequired:  'Old password is required!',
+    nameIsRequired: 'Name is required!',
     noOrdersTo: 'No orders to',
     noOrdersToPrepare: 'No orders to prepare for the ',
     nowQuantity: ' now quantity ',
@@ -169,6 +172,7 @@ export default {
     save: 'SAVE  ',
     saveOrder: 'Save Order',
     securityGroup: 'Users Group',
+    selectCategory: 'Select category?',
     selectExistOrNew: 'Select an existing, or cancel for new',
     selectTableLocation: 'Select table location.',
     serve: 'Serve',
@@ -192,6 +196,7 @@ export default {
     taskstoothers:'Tasks To Others',
     title: 'Title',
     tobeBilled: 'To be Billed',
+    titleIsRequired: 'Title is required',
     tobeServed: 'To be Served',
     totalAmount: 'Total Amount',
     upgradeDetailIos: 'Payment will be charged to your Apple ID account at the confirmation of purchase.' + 

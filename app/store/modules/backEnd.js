@@ -99,6 +99,7 @@ const getters = {
                 return state.categoriesAndProducts[record]}}},
         categories: state => {
             let categories = []
+            categories.push(' ')
             for(let i=1;i<= state.categoriesAndProducts.length;i++) {
                 categories.push(i + '-' + state.categoriesAndProducts[i-1].name)}
             return categories},
@@ -125,8 +126,9 @@ const getters = {
             return state.userGroups },
         userGroupValues: state => {
           let values = []
+          values.push(' ')
           for(let i=0;i < state.userGroups.length;i++)
-            values[i] = state.userGroups[i].description
+            values.push(state.userGroups[i].description)
           return values },
         prepAreasAndCategories: state => {
             return state.prepAreasAndCategories },
@@ -134,8 +136,9 @@ const getters = {
           return state.user},
         users: state => {
           return state.users},
-        userNames: state => { // ignore own name
+        userNames: state => {
           var names = []
+          names.push(' ')
           for(let i=0;i < state.users.length;i++)
               names.push(state.users[i].firstName + ' ' + state.users[i].lastName)
           return names},

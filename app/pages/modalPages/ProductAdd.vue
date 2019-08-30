@@ -10,8 +10,10 @@
 </template>
 
 <script>
+import general from '~/mixins/general'
 export default {
     name: 'ProductAdd',
+    mixins: [general],
     data() {
         return {
             item: { name: '',
@@ -23,7 +25,7 @@ export default {
                       { name: 'name', required: true, index: 0},
                       { name: 'price', required: true, index: 1},
                       { name: 'categoryName', required: true, index: 2,
-                        editor: 'List',
+                        editor: 'Picker',
                         valuesProvider: this.$store.getters.categories
                       }]
             },
@@ -35,20 +37,24 @@ export default {
             this.editedItem = JSON.parse(data.object.editedObject)
         },
         submit() {
-            if (this.editedItem != '') {
-                let catId = this.$store.getters.categoryByDesc(
-                    this.editedItem.categoryName).productCategoryId
-                this.$backendService.createProduct(
-                      this.editedItem.name,
-                      this.editedItem.price,
-                      catId )
-                .then( result => {
-                    this.editedItem['productId'] = result.data.productId
-                    this.editedItem['image'] = global.noImage
-                    this.editedItem['productCategoryId'] = catId
-                    this.$modal.close(this.editedItem)
-                  })}
-            else this.$modal.close()
+            if (this.editedItem) {
+                if (!this.editedItem.name) this.note(this.$t('nameIsRequired'))
+                else if (!this.editedItem.price) this.note(this.$t('enterPrice'))
+                else if (!this.editedItem.categoryName) this.note(this.$t('selectCategory'))
+                else {
+                    let catId = this.$store.getters.categoryByDesc(
+                        this.editedItem.categoryName).productCategoryId
+                    this.$backendService.createProduct(
+                        this.editedItem.name,
+                        this.editedItem.price,
+                        catId )
+                    .then( result => {
+                        this.editedItem.productId = result.data.productId
+                        this.editedItem.image = global.noImage
+                        this.editedItem.categoryName = this.editedItem.categoryName.substring(2)
+                        this.editedItem.productCategoryId = catId
+                        this.$modal.close(this.editedItem)
+                  })}}
         }
     }
 }

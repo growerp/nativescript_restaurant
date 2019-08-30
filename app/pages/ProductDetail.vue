@@ -45,7 +45,7 @@ export default {
                     { name: 'categoryName', required: true, index: 2,
                       editor: 'Label'},
                     { name: 'newCategoryName', displayName: 'New Category',
-                      index: 3, editor: 'List',
+                      index: 3, editor: 'Picker',
                       valuesProvider: this.$store.getters.categories }
                 ],
             },
