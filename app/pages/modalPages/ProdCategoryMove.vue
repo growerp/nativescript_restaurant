@@ -1,18 +1,18 @@
 <template>
-    <page>
-	<StackLayout class="p-20" backgroundColor="white" paddingTop="40">
-    <Button text="Cancel" @tap="cancelMove()" class="button"/>
-    <Label :text="$t('moveProdCat')" textWrap="true"/>
-    <RadListView ref="listView" for="item in items" @itemTap="onItemTap">
-        <v-template>
-            <GridLayout columns="50, *, auto" rows="*" class="item"
-                paddingRight="5" paddingLeft="5">
-                <label :text="item.name" class="button" col="1"/>
-            </GridLayout>
-        </v-template>
-    </RadListView>
-	</StackLayout>
-</page>
+    <page><ModalStack dismissEnabled="true" class="modal-container">
+        <StackLayout class="p-20" backgroundColor="white" paddingTop="40">
+            <Button text="Cancel" @tap="cancelMove()" class="button"/>
+            <Label :text="$t('moveProdCat')" textWrap="true"/>
+            <RadListView ref="listView" for="item in items" @itemTap="onItemTap">
+                <v-template>
+                    <GridLayout columns="50, *, auto" rows="*" class="item"
+                        paddingRight="5" paddingLeft="5">
+                        <label :text="item.name" class="button" col="1"/>
+                    </GridLayout>
+                </v-template>
+            </RadListView>
+        </StackLayout></ModalStack>
+    </page>
 </template>
 
 <script>

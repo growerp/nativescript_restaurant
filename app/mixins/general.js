@@ -10,7 +10,13 @@ export default {
     components: {
       myActionBar
     },
-    methods: {
+    data () {
+      return {
+        true: true,
+        false: false,
+      }
+    },
+  methods: {
       onHeaderTapSetUp() {
         this.$navigateTo(this.$routes.SetUp)
       },

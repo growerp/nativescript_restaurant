@@ -1,7 +1,7 @@
 <template lang="html">
   <Page @loaded="pageLoaded(50)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapHome" :save="save" :plus="plus" 
+      <myActionBar :onHeaderTap="onHeaderTapHome" :save="save" :plus="true" 
           :onActionTap="onAddTap" :openDrawer="openDrawer" header="tasksMeOthers"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" paddingTop="10"
@@ -63,9 +63,6 @@ export default {
       myItemList: [],
       otherItemList: [],
     }
-  },
-  created() {
-    this.plus = true // show button at header
   },
   methods: {
       tabChange(args) {
