@@ -4,7 +4,7 @@
             <label :text="$t('addProduct')" class="h2" horizontalAlignment="center"/>
             <RadDataForm ref="addItem" :source="item" :metadata="itemMeta"
                 @propertyCommitted="onCommitted"/>
-            <Button class="button" :text="$t('addProduct')" @tap="submit" />
+            <Button class="button" :text="$t('addProduct')" @tap="submit()" />
             <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
         </StackLayout></ModalStack>
     </page>

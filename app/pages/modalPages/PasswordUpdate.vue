@@ -1,12 +1,12 @@
 <template>
-    <page>
+    <page><ModalStack dismissEnabled="true" class="modal-container">
 	    <StackLayout class="p-20" backgroundColor="white" paddingTop="40">
          <label :text="header"/>
-         <RadDataForm :source="user", :metadata="userMetaData"
+         <RadDataForm :source="user" :metadata="userMetaData"
             @propertyCommitted="onCommitted"/>
          <Button class="button" :text="actionText" @tap="submit" />
          <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
-	    </StackLayout>
+	    </StackLayout></ModalStack>
     </page>
 </template>
 

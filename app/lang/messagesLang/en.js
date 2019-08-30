@@ -13,7 +13,7 @@ export default {
     addProduct: 'Add Product',
     addRequest: 'Add request  ',
     addTable: 'Add Table   ',
-    addTableArea: 'Add TabArea  ', //short of: add table area
+    addTableArea: 'Add Table Area  ', //short of: add table area
     addTask: 'Add a Task',
     allOrders: 'All Orders',
     alreadySubscribed: 'You are already subscribed!',

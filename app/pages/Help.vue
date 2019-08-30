@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
-          header="help" :onActionTap="onAddTap" plus="plus"/>
+          header="help" :onActionTap="onAddTap" :plus="true"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" paddingTop="10"
         @selectedIndexChange="tabChange">
@@ -67,7 +67,6 @@ export default {
     }
   },
   created() {
-    this.plus = true
     this.$backendService.getRequestList(false).then( result => {
         this.faqList = result.data.requests})
         this.faqList.sort(function (a, b) {
