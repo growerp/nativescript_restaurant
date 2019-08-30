@@ -13,6 +13,7 @@ import messages from '~/lang/messages'
 import dateTimeFormats from './lang/dateTimeFormats'
 import numberFormats from './lang/numberFormats'
 import Pager from 'nativescript-accordion/vue'
+import { ModalStack, overrideModalViewMethod, VueWindowedModal } from "nativescript-windowed-modal"
 
 Vue.use(RadListView)
 Vue.use(RadChart)
@@ -27,6 +28,10 @@ Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer')
 const backendService = new BackendService()
 Vue.prototype.$backendService = backendService
 Vue.prototype.$routes = routes
+// modal view on IOS
+overrideModalViewMethod()
+Vue.registerElement("ModalStack", () => ModalStack)
+Vue.use(VueWindowedModal)
 
 var purchase = require("nativescript-purchase");
 const platformModule = require("tns-core-modules/platform");
