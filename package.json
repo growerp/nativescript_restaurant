@@ -34,6 +34,7 @@
     "nativescript-ui-listview": "7.0.0",
     "nativescript-ui-sidedrawer": "7.0.0",
     "nativescript-vue": "^2.0.0",
+    "nativescript-windowed-modal": "^6.0.0",
     "net": "^1.0.2",
     "source-map-support": "^0.5.10",
     "tns-core-modules": "~6.0.0",
