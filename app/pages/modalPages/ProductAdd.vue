@@ -1,12 +1,12 @@
 <template>
-    <page>
-        <StackLayout class="p-20" backgroundColor="white" paddingTop="40"  width="80%" height="80%">
+    <page><ModalStack dismissEnabled="true" class="modal-container">
+        <StackLayout class="p-20" backgroundColor="white">
             <label :text="$t('addProduct')" class="h2" horizontalAlignment="center"/>
             <RadDataForm ref="addItem" :source="item" :metadata="itemMeta"
                 @propertyCommitted="onCommitted"/>
             <Button class="button" :text="$t('addProduct')" @tap="submit" />
             <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
-        </StackLayout>
+        </StackLayout></ModalStack>
     </page>
 </template>
 
@@ -63,4 +63,8 @@ export default {
 </script>
 
 <style>
+.modal-container {
+  padding: 25;
+  padding-bottom: 10;
+}
 </style>
