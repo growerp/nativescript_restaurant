@@ -1,5 +1,5 @@
 <template lang="html">
-  <Page>
+  <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapSetUp" plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
@@ -51,7 +51,12 @@ export default {
       }
     },
     onAddTap() { //get new item and insert sorted into list
-        this.$showModal(ProductAdd).then (result => {
+        this.$showModal(ProductAdd, {   props: {},
+              fullscreen: false,
+              animated: true,
+              stretched: false,
+              dimAmount: 0.5})
+        .then (result => {
           let inserted = false
           for (let i=0; i < this.itemList.length; i++) {
             if (this.itemList[i].name.toUpperCase() > result.name.toUpperCase()) {
