@@ -83,13 +83,17 @@ axios.interceptors.response.use(
 //            trace.error("Error in service communication:" + error.response.data.errors);
 //            alert(this.getErrorMessage(error))
 
-            var nstoasts = require("nativescript-toasts");
-            var options = {
-              text: 'Server error: ' + error.response.data.errors,
-              duration : nstoasts.DURATION.LONG,
-              position : nstoasts.POSITION.TOP //optional
-            }
-            nstoasts.show(options)
+            var toast = new Toasty({
+                text: 'Server error: ' + error.response.data.errors,
+                duration: ToastDuration.LONG,
+                position: ToastPosition.TOP,
+                ios: {
+                    // anchorView: args.object.ios
+                    anchorView: topmost().currentPage.actionBar.ios,
+                    cornerRadius: 25
+                }
+            });
+            toast.show();
             //this.$navigateTo(this.routes.Login)
         }
     )
