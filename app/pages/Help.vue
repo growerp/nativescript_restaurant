@@ -13,11 +13,11 @@
               allowMultiple="true"
               for="item of faqList" childItems="notes"  height="100%">
               <v-template name="title">
-                <Label backgroundColor="rgb(211, 215, 207)"
+                <Label backgroundColor="rgb(211, 215, 207)" margin="5,0"
                     :text="item.requestName" class="h2"/>
               </v-template>
               <v-template name="content">
-                  <HtmlView :html="item.text"
+                  <HtmlView :html="item.text"  margin="5,0"
                       @tap="addNote('faq',item.requestId)"/>
               </v-template>
             </Accordion>

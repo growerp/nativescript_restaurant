@@ -4,6 +4,8 @@ import { time } from 'tns-core-modules/profiling/profiling';
 var admob = require("nativescript-admob")
 const platformModule = require("tns-core-modules/platform");
 import myActionBar from '../components/actionBar'
+import { ToastDuration, ToastPosition, Toasty } from 'nativescript-toasty';
+import { topmost } from 'tns-core-modules/ui/frame';
 
 export default {
     name: 'general',
@@ -20,17 +22,21 @@ export default {
       onHeaderTapSetUp() {
         this.$navigateTo(this.$routes.SetUp)
       },
-      onHeaderTapHome() {
+      onHeaderTapHome() {-
         this.$navigateTo(this.$routes.Home)
       },
       note(text) {
-        var nstoasts = require("nativescript-toasts");
-        var options = {
+        const toast = new Toasty({
           text: text,
-          duration : nstoasts.DURATION.LONG,
-          position : nstoasts.POSITION.TOP //optional
-        }
-        nstoasts.show(options)
+          duration: ToastDuration.LONG,
+          position: ToastPosition.TOP,
+          ios: {
+            // anchorView: args.object.ios
+            // anchorView: topmost().currentPage.actionBar.ios,
+            cornerRadius: 15
+          }
+        });
+        toast.show();
       },
       hideKeyboard() {
         if (platformModule.isAndroid) {
