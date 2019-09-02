@@ -1,89 +1,87 @@
 <template lang="html">
-    <Page @loaded="pageLoaded()">
-        <ActionBar><NavigationButton visibility="collapsed"/>
-          <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="save" :plus="plus" 
-            :onActionTap="onActionTap" :openDrawer="openDrawer" header="companyEmplCust"/>
-        </ActionBar>
+  <Page @loaded="pageLoaded()">
+    <ActionBar><NavigationButton visibility="collapsed"/>
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="save" :plus="plus" 
+        :onActionTap="onActionTap" :openDrawer="openDrawer" header="companyEmplCust"/>
+    </ActionBar>
 
-        <TabView :selectedIndex="currentTab" paddingTop="10"
-            @selectedIndexChange="tabChange">
+    <TabView :selectedIndex="currentTab" paddingTop="10"
+        @selectedIndexChange="tabChange">
+      <TabViewItem :title="$t('company')">
+        <StackLayout>
+          <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
+            <Image ref="itemForm" :src="itemImage" width="100" height="100"
+                col="0" row="0" rowSpan="2"/>
+            <Button class="button" :text="$t('copyFromGal')"
+                @tap="selectPicture('company', item.partyId)" col=2 row="0"/>
+            <Button class="button" :text="$t('useCamera')"
+                @tap="takePicture('company', item.partyId)" col="2" row="1"/>
+          </GridLayout>
+          <RadDataForm :source="itemComp"
+              :metadata="itemMetaComp" @propertyCommitted="onItemCommitted"/>
+        </StackLayout>
+      </TabViewItem>
 
-            <TabViewItem :title="$t('company')">
-              <StackLayout>
-                  <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
-                      <Image ref="itemForm" :src="itemImage" width="100" height="100"
-                          col="0" row="0" rowSpan="2"/>
-                      <Button class="button" :text="$t('copyFromGal')"
-                          @tap="selectPicture('company', item.partyId)" col=2 row="0"/>
-                      <Button class="button" :text="$t('useCamera')"
-                          @tap="takePicture('company', item.partyId)" col="2" row="1"/>
-                  </GridLayout>
-                  <RadDataForm :source="itemComp"
-                      :metadata="itemMetaComp" @propertyCommitted="onItemCommitted"/>
-              </StackLayout>
-            </TabViewItem>
-
-            <TabViewItem :title="$t('employee') + ' max:' + subscribedUsers()">
-                <StackLayout>
-                    <RadListView for="user in users"
-                          @itemTap="onItemTap" @loaded="onLoadedUsers">
-                        <v-template>
-                            <GridLayout columns="50, *, auto" rows="*" class="item"
-                                  paddingRight="5" paddingLeft="5">
-                                <Image :src="user.image" col="0" class="thumbnail"/>
-                                <StackLayout col="1" paddingLeft="10">
-                                    <label :text="user.firstName + ' ' + user.lastName"
-                                      class="h2"/>
-                                    <label :text="user.email" class="p"/>
-                                </StackLayout>
-                                <label :text="user.groupDescription" col="2"/>
-                            </GridLayout>
-                        </v-template>
-                    </RadListView>
+      <TabViewItem :title="$t('employee') + ' max:' + subscribedUsers()">
+        <StackLayout>
+          <RadListView for="user in users"
+                @itemTap="onItemTap" @loaded="onLoadedUsers">
+            <v-template>
+              <GridLayout columns="50, *, auto" rows="*" class="item"
+                    paddingRight="5" paddingLeft="5">
+                <Image :src="user.image" col="0" class="thumbnail"/>
+                <StackLayout col="1" paddingLeft="10">
+                    <label :text="user.firstName + ' ' + user.lastName"
+                      class="h2"/>
+                    <label :text="user.email" class="p"/>
                 </StackLayout>
-            </TabViewItem>
+                <label :text="user.groupDescription" col="2"/>
+              </GridLayout>
+            </v-template>
+          </RadListView>
+        </StackLayout>
+      </TabViewItem>
 
-            <TabViewItem :title="$t('customer')">
-                <StackLayout>
-                    <RadListView for="user in customers"
-                          @itemTap="onItemTap" @loaded="onLoadedCustomers">
-                        <v-template>
-                            <GridLayout columns="50, *, auto" rows="*" class="item"
-                                paddingRight="5" paddingLeft="5">
-                                <Image :src="user.image"
-                                    col="0" class="thumbnail"/>
-                                <StackLayout col="1" paddingLeft="10">
-                                    <label :text="user.firstName + ' ' + user.lastName"
-                                        class="h2"/>
-                                    <label :text="user.email" class="p"/>
-                                </StackLayout>
-                                <StackLayout col="2">
-                                  <label :text="user.externalId"/>
-                                </StackLayout>
-                            </GridLayout>
-                        </v-template>
-                    </RadListView>
+      <TabViewItem :title="$t('customer')">
+        <StackLayout>
+          <RadListView for="user in customers"
+                @itemTap="onItemTap" @loaded="onLoadedCustomers">
+            <v-template>
+              <GridLayout columns="50, *, auto" rows="*" class="item"
+                  paddingRight="5" paddingLeft="5">
+                <Image :src="user.image"
+                    col="0" class="thumbnail"/>
+                <StackLayout col="1" paddingLeft="10">
+                    <label :text="user.firstName + ' ' + user.lastName"
+                        class="h2"/>
+                    <label :text="user.email" class="p"/>
                 </StackLayout>
-            </TabViewItem>
+                <StackLayout col="2">
+                  <label :text="user.externalId"/>
+                </StackLayout>
+              </GridLayout>
+            </v-template>
+          </RadListView>
+        </StackLayout>
+      </TabViewItem>
 
-            <TabViewItem :title="$t('myInformation')">
-              <StackLayout>
-                  <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
-                      <Image ref="itemForm" :src="itemImage" width="100" height="100"
-                          col="0" row="0" rowSpan="2"/>
-                      <Button class="button" :text="$t('copyFromGal')"
-                          @tap="selectPicture('user', item.partyId)" col=2 row="0"/>
-                      <Button class="button" :text="$t('useCamera')"
-                          @tap="takePicture('user', item.partyId)" col="2" row="1"/>
-                  </GridLayout>
-                  <RadDataForm :source="item"
-                      :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-                  <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"/>
-              </StackLayout>
-            </TabViewItem>
-
-        </TabView>
-    </Page>
+      <TabViewItem :title="$t('myInformation')">
+        <StackLayout>
+          <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
+            <Image ref="itemForm" :src="itemImage" width="100" height="100"
+                col="0" row="0" rowSpan="2"/>
+            <Button class="button" :text="$t('copyFromGal')"
+                @tap="selectPicture('user', item.partyId)" col=2 row="0"/>
+            <Button class="button" :text="$t('useCamera')"
+                @tap="takePicture('user', item.partyId)" col="2" row="1"/>
+          </GridLayout>
+          <RadDataForm :source="item"
+              :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
+          <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"/>
+        </StackLayout>
+      </TabViewItem>
+    </TabView>
+   </Page>
 </template>
 
 <script>

@@ -1,34 +1,34 @@
 <template>
   <Page @loaded="pageLoaded(0)">
-      <ActionBar><NavigationButton visibility="collapsed"/>
-        <myActionBar :openDrawer="openDrawer" header="upgrade" :onHeaderTap="onHeaderTapSetUp"/>
-      </ActionBar>
-      <StackLayout paddingTop="5">
-        <Label class="h2" :text="$t('monthlySubscriptions')" horizontalAlignment="center"/>
-        <Label class="h3" :text="$t('freeTrial')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
-        <Label class="h3" :text="$t('chargedNotCancel')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
-        <Label class="h3" :text="$t('emailDetails')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
-        <RadListView ref="listView" for="item in itemList" @itemTap="onItemTap"
-             @loaded="onLoaded" :height="ios?'35%':'60%'">
-            <v-template>
-              <GridLayout columns="50, *, auto" rows="auto, 40" class="item" padding="10,20,10,20">
-                  <Label :text="item.localizedTitle" class="h3" row="0" col="0" 
-                    paddingLeft="10" colSpan="2"/>
-                  <Image src="~/assets/images/U.png"  row="1" col="0" class="thumbnail"
-                    :visibility="item.subscribed?'hidden':'visible'"/>
-                  <Image src="~/assets/images/S.png"  row="1" col="0" class="thumbnail"
-                    :visibility="item.subscribed?'visible':'hidden'"/>
-                  <Label :text="item.priceFormatted + '/' + $t('month')" row="0" col="2" class="h3"/>
-                  <Label :text="item.localizedDescription" class="h4" textWrap="true" row="1" col="1" 
-                    paddingLeft="10" colSpan="2"/>
-              </GridLayout>
-            </v-template>
-        </RadListView>
-        <Label class="h5" :text="$t('upgradeDetailIos')" horizontalAlignment="center" 
-          textWrap="true" :visibility="ios?'visible':'collapse'" padding="30"/>
-        <Button class="button" :text="$t('upgradeMoreDetail')" horizontalAlignment="center"
-          textWrap="true" @tap="$navigateTo($routes.About)"  padding="15"/>
-      </StackLayout>
+    <ActionBar><NavigationButton visibility="collapsed"/>
+      <myActionBar :openDrawer="openDrawer" header="upgrade" :onHeaderTap="onHeaderTapSetUp"/>
+    </ActionBar>
+    <StackLayout paddingTop="5">
+      <Label class="h2" :text="$t('monthlySubscriptions')" horizontalAlignment="center"/>
+      <Label class="h3" :text="$t('freeTrial')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
+      <Label class="h3" :text="$t('chargedNotCancel')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
+      <Label class="h3" :text="$t('emailDetails')" horizontalAlignment="center" :visibility="android?'visible':'collapse'"/>
+      <RadListView ref="listView" for="item in itemList" @itemTap="onItemTap"
+            @loaded="onLoaded" :height="ios?'35%':'60%'">
+        <v-template>
+          <GridLayout columns="50, *, auto" rows="auto, 40" class="item" padding="10,20,10,20">
+              <Label :text="item.localizedTitle" class="h3" row="0" col="0" 
+                paddingLeft="10" colSpan="2"/>
+              <Image src="~/assets/images/U.png"  row="1" col="0" class="thumbnail"
+                :visibility="item.subscribed?'hidden':'visible'"/>
+              <Image src="~/assets/images/S.png"  row="1" col="0" class="thumbnail"
+                :visibility="item.subscribed?'visible':'hidden'"/>
+              <Label :text="item.priceFormatted + '/' + $t('month')" row="0" col="2" class="h3"/>
+              <Label :text="item.localizedDescription" class="h4" textWrap="true" row="1" col="1" 
+                paddingLeft="10" colSpan="2"/>
+          </GridLayout>
+        </v-template>
+      </RadListView>
+      <Label class="h5" :text="$t('upgradeDetailIos')" horizontalAlignment="center" 
+        textWrap="true" :visibility="ios?'visible':'collapse'" padding="30"/>
+      <Button class="button" :text="$t('upgradeMoreDetail')" horizontalAlignment="center"
+        textWrap="true" @tap="$navigateTo($routes.About)"  padding="15"/>
+    </StackLayout>
   </Page>
 </template>
 

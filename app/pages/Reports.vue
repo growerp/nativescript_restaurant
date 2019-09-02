@@ -1,5 +1,5 @@
 <template lang="html">
-  <Page @loaded="pageLoaded(0)">
+  <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
           header="reports"/>
@@ -114,15 +114,15 @@ export default {
   created() {
     this.$backendService.getOrdersItemsPartySpot(this.open, this.startDate).then( result => {
       this.ordersAndItems = result.data.ordersAndItems
-      console.log('====orders and items: ' + JSON.stringify(this.ordersAndItems))
+      // console.log('====orders and items: ' + JSON.stringify(this.ordersAndItems))
     })
     this.$backendService.reportSales('day').then( result => {
       this.daySales = result.data.periods
-      console.log('====daysales: ' + JSON.stringify(this.daySales))
+      // console.log('====daysales: ' + JSON.stringify(this.daySales))
     })
     this.$backendService.reportSales('week').then( result => {
       this.weekSales = result.data.periods
-      console.log('====weeksales: ' + JSON.stringify(this.weekSales))
+      // console.log('====weeksales: ' + JSON.stringify(this.weekSales))
     })
   },
   methods: {
