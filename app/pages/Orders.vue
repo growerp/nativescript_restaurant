@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded(50)">
+  <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
           header="orders"/>

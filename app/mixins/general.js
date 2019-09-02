@@ -69,7 +69,7 @@ export default {
       hideBanner() {
         admob.hideBanner()
       },
-      createBanner(location=50) {
+      createBanner(location) {
         const platformModule = require("tns-core-modules/platform")
         admob.createBanner({
           testing: TNS_ENV === 'production'?  false : true,
@@ -81,18 +81,16 @@ export default {
           margins: { bottom: platformModule.isIOS ? location : 0 },
           keywords: ["restaurant", "food", "drinks"] // add keywords for ad targeting
         }).then(
-          () => { console.log("admob createBanner done")},
+          () => { // console.log("admob createBanner done location: " + location)
+          },
           error => {
             console.log("admob createBanner error: " + error);
         })
       },
-      pageLoaded(bottom) {
+      pageLoaded(location=50) {
         if (!this.isSubscribed('noAdds')) {
-          if (platformModule.isIOS) {
             setTimeout(() => {
-              this.createBanner(bottom) }, 10)
-          }
-          if (platformModule.isAndroid) this.createBanner(bottom) // enable for android for now
+              this.createBanner(location) }, 1)
         }
       }
   }
