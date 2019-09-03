@@ -1,5 +1,5 @@
 <template>
-    <Page>
+  <Page @loaded="pageLoaded(0)">
         <ActionBar>
             <GridLayout width="100%" columns="auto, auto, *">
                 <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
