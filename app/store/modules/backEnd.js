@@ -50,8 +50,7 @@ const state = {
         apiKey(state, value) {
             state.apiKey = value
             if (value) appSettings.setString('apiKey', value)
-            else appSettings.remove('apiKey')
-            console.log (' store:' + appSettings.getString('apiKey')) },
+            else appSettings.remove('apiKey')},
         moquiToken(state, value) {
             state.moquiToken = value },
         user(state, value) {

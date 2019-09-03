@@ -5,7 +5,6 @@ var admob = require("nativescript-admob")
 const platformModule = require("tns-core-modules/platform");
 import myActionBar from '../components/actionBar'
 import { ToastDuration, ToastPosition, Toasty } from 'nativescript-toasty';
-import { topmost } from 'tns-core-modules/ui/frame';
 
 export default {
     name: 'general',
@@ -87,11 +86,9 @@ export default {
           margins: { bottom: platformModule.isIOS ? location : 0 },
           keywords: ["restaurant", "food", "drinks"] // add keywords for ad targeting
         }).then(
-          () => { // console.log("admob createBanner done location: " + location)
-          },
-          error => {
-            console.log("admob createBanner error: " + error);
-        })
+          function() { console.log("admob createBanner done location: " + location) },
+          function(error) { console.log("admob createBanner error: " + error) }
+        ) 
       },
       pageLoaded(location=50) {
         if (!this.isSubscribed('noAdds')) {
