@@ -4,11 +4,10 @@
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
           header="help" :onActionTap="onAddTap" :plus="true"/>
     </ActionBar>
-    <TabView :selectedIndex="currentTab" paddingTop="10"
-        @selectedIndexChange="tabChange">
+    <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
 
         <TabViewItem :title="$t('FAQ')">
-          <GridLayout columns="*,*" rows="auto,*">
+          <GridLayout columns="*,*" rows="auto,*" padding="10">
             <Accordion row="1" col="0" colSpan="3" ref="accordionFAQ"
               allowMultiple="true"
               for="item of faqList" childItems="notes"  height="100%">
@@ -25,7 +24,7 @@
         </TabViewItem>
 
         <TabViewItem :title="$t('myQuestions')">
-          <GridLayout columns="*,*" rows="auto,*">
+          <GridLayout columns="*,*" rows="auto,*" padding="10">
             <Accordion row="1" col="0" colSpan="3" allowMultiple="true"  height="100%"
                 for="item of questionList" childItems="notes"  ref="accordionQuest">
               <v-template name="title">
