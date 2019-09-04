@@ -59,6 +59,9 @@ export default {
             this.editedUser = JSON.parse(data.object.editedObject)
         },
         submit() {
+            if(this.roleTypeId !== 'Customer'){
+              this.editedUser.groupDescription = 'Customer';
+            }
             if (!this.editedUser.firstName) {
                 this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
             } else if (!this.editedUser.lastName){
