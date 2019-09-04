@@ -21,7 +21,7 @@ export default {
       onHeaderTapSetUp() {
         this.$navigateTo(this.$routes.SetUp)
       },
-      onHeaderTapHome() {-
+      onHeaderTapHome() {
         this.$navigateTo(this.$routes.Home)
       },
       note(text) {
