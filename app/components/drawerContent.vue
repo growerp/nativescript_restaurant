@@ -27,7 +27,7 @@ export default {
     return {
       // define our pages, making sure the component matches that defined in /app/router/index.js
       pages: [
-        { title: this.$t("operationalMenuTitle"), show: true},
+        { title: this.$t("operationalMenuTitle"), show: 'admin'},
         { name: 'Home', title: this.$t('dashBoard'), component: this.$routes.Home, action: '', show: 'employee'},
         { name: 'Orders', title: this.$t('orders'), component: this.$routes.Orders, action: '', show: 'employee'},
         { name: 'Prepare', title: this.$t('preparation'), component: this.$routes.Prepare, action: '', show: 'employee'},

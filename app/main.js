@@ -34,28 +34,17 @@ Vue.registerElement("ModalStack", () => ModalStack)
 Vue.use(VueWindowedModal)
 
 var purchase = require("nativescript-purchase");
-const platformModule = require("tns-core-modules/platform");
-if (process.env.NODE_ENV === 'production') {
-  global.initPurchase = purchase.init(["10010","10011","10003"])
-  global.subscriptions = [
-    { func: "noAdds", productIdentifyer: "10010"},
-    { func: "users03", productIdentifyer: "10011"},
-    { func: "users10", productIdentifyer: "10003"}]
-} else {
-  global.initPurchase = purchase.init(["android.test.purchased","android.test.canceled","android.test.item_unavailable"])
-  global.subscriptions = [
-    { func: "noAdds", productIdentifyer: "android.test.purchased"},
-    { func: "users03", productIdentifyer: "android.test.purchased"},
-    { func: "users10", productIdentifyer: ""}]
-}
+global.initPurchase = purchase.init(["10010","10011","10003"])
+global.subscriptions = [
+  { func: "noAdds", productIdentifyer: "10010"},
+  { func: "users03", productIdentifyer: "10011"},
+  { func: "users10", productIdentifyer: "10003"}]
 
+const platformModule = require("tns-core-modules/platform")
 let locale;
-  if (platformModule.isAndroid) {
-    locale = java.util.Locale.getDefault().getLanguage();
-  }
-  if (platformModule.isIOS) {
-    locale = NSLocale.preferredLanguages.firstObject;
-  }
+if (platformModule.isAndroid) locale = java.util.Locale.getDefault().getLanguage();
+if (platformModule.isIOS) locale = NSLocale.preferredLanguages.firstObject;
+
 
   // global variables
   global.noImage = '~/assets/images/addImage.png'
