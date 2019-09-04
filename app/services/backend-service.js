@@ -89,7 +89,7 @@ axios.interceptors.response.use(
                 position: ToastPosition.TOP,
                 ios: {
                     // anchorView: args.object.ios
-                    anchorView: topmost().currentPage.actionBar.ios,
+                    // anchorView: topmost().currentPage.actionBar.ios,
                     cornerRadius: 25
                 }
             });
