@@ -377,11 +377,10 @@ export default class BackendService {
           restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Employee', full: false}),
           restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Customer', full: false}),
           restPost.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
-          restGet.get('s1/growerp/GetActiveSubscriptions'),
         ])
         .then(axios.spread(function (GetUserGroups, GetAreasAndSpots, GetCategoriesAndProducts,
               GetPrepAreasAndCategories, GetUsersInStore, GetCustomersInStore,
-              GetOrdersItemsPartySpot, GetActiveSubscriptions) {
+              GetOrdersItemsPartySpot) {
             store.commit("userGroups", GetUserGroups.data.userGroups)
             store.commit("areasAndSpots", GetAreasAndSpots.data.areasAndSpots)
             store.commit("categoriesAndProducts", GetCategoriesAndProducts.data.categoriesAndProducts)
@@ -389,7 +388,6 @@ export default class BackendService {
             store.commit("users", GetUsersInStore.data.users)
             store.commit("customerProvider", GetCustomersInStore.data.users)
             store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
-            store.commit("activeSubscriptions", GetActiveSubscriptions.data.subscriptions)
         }))
   }
   async createSubscription(id,desc) {

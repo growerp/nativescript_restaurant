@@ -155,10 +155,15 @@
                       console.log('===checkApiKey is fine')
                       this.$backendService.getUser()
                       .then ( result => {
-                          console.log('getting user information')
+                          console.log('received user information')
                           this.$store.commit("user", result.data.user)
-                          this.$backendService.initData()
-                          this.$navigateTo(this.$routes.Home, {clearHistory: true})
+                          this.$backendService.getActiveSubscriptions()
+                          .then( activeSubscriptions => {
+                            console.log(' received active subscriptions') // not show adds at home screen
+                            this.$store.commit("activeSubscriptions", activeSubscriptions.data.subscriptions)
+                            this.$backendService.initData()
+                            this.$navigateTo(this.$routes.Home, {clearHistory: true})
+                          })
                       })
                     } else this.serverProblem()
                   })
@@ -233,7 +238,10 @@
                       this.$backendService.saveToken()
                       this.$store.commit('user',result.data.user)
                       this.$backendService.initData()
-                      this.$navigateTo(this.$routes.Home, {clearHistory: true})
+                      this.$backendService.getActiveSubscriptions()
+                      .then( activeSubscriptions => { // need to check if adds are required present on home screen
+                        this.$store.commit("activeSubscriptions", activeSubscriptions.data.subscriptions)
+                        this.$navigateTo(this.$routes.Home, {clearHistory: true})})
                   } else {
                       this.note(this.$t('accountNotFound'))
                   }
@@ -337,13 +345,13 @@
             },
 
             serverProblem(message) {
-                prompt({
+                confirm({
                     title: this.$t('serverProblem'),
                     message: message ? message : this.$t('serverNotAvailable'),
                     okButtonText: this.$t('retry'),
                     cancelButtonText: this.$t('exit')
                 }).then (data => {
-                  if (data.result) this.$navigateTo(this.$routes.Login)
+                  if (data) this.$navigateTo(this.$routes.Login)
                   else exit() 
               });
             },

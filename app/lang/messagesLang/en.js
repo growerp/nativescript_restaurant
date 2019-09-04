@@ -77,6 +77,7 @@ export default {
     enterNewOrder: 'Enter a new order',
     enterRestaurantName: 'Enter a restaurant name!',
     existing: 'Existing ',
+    exit: 'Exit',
     externalId: 'Customer id/telno',
     FAQ: 'Frequently Asked questions(FAQ)',
     firstName: 'First Name',
@@ -91,6 +92,7 @@ export default {
     isReadyToServeFrom: ' is now ready to serve from ',
     isServedFrom: ' is served from ',
     items: ' item(s)', // order items
+    justBought: 'Just bought ',
     kitchen: 'kitchen',
     lastName: 'Last Name',
     listofTasks: 'List of my tasks',
@@ -164,6 +166,7 @@ export default {
     reports: 'Reports',
     restaurant: 'Restaurant',
     restName: 'Restaurant Name',
+    retry: 'Retry',
     sales: 'Sales',
     selectCurrency: 'Select currency!',
     salesPerDay: 'Sales last 7 days',

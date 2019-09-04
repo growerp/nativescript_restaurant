@@ -79,8 +79,8 @@ const getters = {
         isSubActive: state => playStoreId => {
           let isActive = false
           for (let i=0;i<state.activeSubscriptions.length;i++) {
-            if (state.activeSubscriptions[i] === playStoreId)
-              isActive = true; break}
+            if (state.activeSubscriptions[i] === playStoreId) {
+              isActive = true; break }}
           return isActive
         },
         openOrdersByAreaSpot: state => (areaId, spotId) => {
