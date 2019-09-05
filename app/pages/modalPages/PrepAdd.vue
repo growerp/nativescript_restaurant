@@ -32,8 +32,10 @@ export default {
             if (this.editedItem != '') {
                 this.$backendService.createPreparationArea(this.editedItem)
                 .then( result => {
-                  this.editedItem['preparationAreaId'] = result.data.preparationAreaId
-                  this.editedItem['image'] = global.noImage
+                  this.$backendService.getPrepAreasAndCategories()
+                  this.editedItem.preparationAreaId = result.data.preparationAreaId
+                  this.editedItem.nbrOfCatg = 0
+                  this.editedItem.image = global.noImage
                   this.$modal.close(this.editedItem)
                 })}
             else this.$modal.close()

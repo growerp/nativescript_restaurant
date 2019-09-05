@@ -34,10 +34,10 @@ export default {
     methods: {
       onItemTap(args) {
         this.$backendService.movePreparationAreaCategory(
-            this.prepId, args.item.preparationAreaId, this.catId).then(() => {
-            this.$backendService.getPrepAreasAndCategories()
-            this.$modal.close(this.catId)
-        })
+            this.prepId, args.item.preparationAreaId, this.catId)
+        .then(() => {
+          this.$backendService.getPrepAreasAndCategories()
+          this.$modal.close(this.catId)})
       },
       cancelMove() {
           this.$modal.close()

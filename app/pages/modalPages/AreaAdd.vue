@@ -37,8 +37,10 @@ export default {
             if (this.editedItem != '') {
                 this.$backendService.createAccommodationArea(this.editedItem)
                 .then( result => {
+                  this.$backendService.getAreasAndSpots()
                   this.editedItem.accommodationAreaId = result.data.accommodationAreaId
                   this.editedItem.image = global.noImage
+                  this.editedItem.nbrOfSpots = this.editedItem.nbrOfSpots
                   this.$modal.close(this.editedItem)
                 })}
             else this.$modal.close()

@@ -147,7 +147,7 @@ export default {
     passwordNotMatch: 'Your passwords do not match.',
     passwordRequirement: 'Password not valid: Same as previous, Should contain at least 8 characters having at least 1 letter, 1 number and 1 special character',
     passwordWrong: 'password and/or login name is wrong',
-    preparation: 'Order Preparation Area',
+    preparation: 'Preparation Area',
     preparationAreaDetail: 'Preparation area detail',
     prepLoc: 'Preparation locations like kitchen and bar',
     prepare: 'Prepare',

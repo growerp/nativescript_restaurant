@@ -53,6 +53,7 @@ export default {
                 propertyAnnotations: [
                     { name: 'preparationAreaId', ignore: true},
                     { name: 'image', ignore: true},
+                    { name: 'nbrOfCatg', ignore: true},
                     { name: 'description', required: true, index: 0}]},
         }
     },
@@ -75,13 +76,14 @@ export default {
       onSaveTap() {
         if (this.editedItem) {
           this.$backendService.updatePreparationArea(this.editedItem)
+          .then(() => {
+            this.$backendService.getPrepAreasAndCategories()})
           this.list.splice(this.index,1,this.editedItem)
         }
         this.hideKeyboard()
         this.$navigateBack()
       },
       onCatTap(args) {
-        console.log('===========args' + args.index)
         this.$showModal(PrepCategoryMove, {
             props: {  prepId: this.item.preparationAreaId,
                       catId: this.categoryList[args.index].productCategoryId }})
@@ -103,6 +105,7 @@ export default {
                 if (data) {
                     this.$backendService.deletePreparationArea(
                         this.item.preparationAreaId)
+                    .then(() => {this.$backendService.getPrepAreasAndCategories()})
                     this.list.splice(this.index,1)}
                 this.$navigateBack()
             })
