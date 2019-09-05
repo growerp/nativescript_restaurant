@@ -74,12 +74,12 @@ export default {
           this.$navigateBack()
         },
         onDeleteTap() {
-          prompt({
+          confirm({
               title: this.$t('delProduct') + this.item.name + "?",
-              okButtonText: "Ok",
+              okButtonText: this.$t('ok'),
               cancelButtonText: this.$t('cancel')
           }).then (data => {
-            if (data.result == true) {
+            if (data) {
               this.$backendService.deleteProduct(this.item.productId)
               this.list.splice(this.index,1)
               this.$navigateBack()}

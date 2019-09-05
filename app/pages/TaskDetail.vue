@@ -91,12 +91,12 @@ export default {
           this.$navigateBack()
         },
         onDeleteTap() {
-          prompt({
+          confirm({
               title: this.$t('deleteTask') + this.item.workEffortName + "?",
-              okButtonText: "Ok",
+              okButtonText: this.$t('ok'),
               cancelButtonText: this.$t('cancel')
           }).then (data => {
-            if (data.result == true) {
+            if (data) {
               this.$backendService.deleteTask(this.item.workEffortId)
               this.list.splice(this.index,1)}
             this.$navigateBack()

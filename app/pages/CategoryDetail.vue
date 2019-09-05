@@ -87,12 +87,12 @@ export default {
           if (this.productList.length !== 0) {
             this.note(this.$t('cannotDelCatProd'))
           } else {
-            prompt({
+            confirm({
               title: this.$t('deleteCategory') + this.item.categoryName + "?",
-              okButtonText: "Ok",
+              okButtonText: this.$t('ok'),
               cancelButtonText: this.$t('cancel')
             }).then (data => {
-              if (data.result == true) {
+              if (data) {
                 this.$backendService.deleteCategory(this.item.productCategoryId)
                 this.list.splice(this.index,1)}
               this.$navigateBack()

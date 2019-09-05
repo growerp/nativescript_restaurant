@@ -94,12 +94,12 @@ export default {
           if (this.categoryList.length) {
             this.note(this.$t('cannotDelPrep'))
           } else {
-            prompt({
+            confirm({
                 title: this.$t('delPrepArea') + this.item.description + "'?",
-                okButtonText: "Ok",
+                okButtonText: this.$t('ok'),
                 cancelButtonText: this.$t('cancel')
             }).then (data => {
-                if (data.result == true) {
+                if (data) {
                     this.$backendService.deletePreparationArea(
                         this.item.preparationAreaId)
                     this.list.splice(this.index,1)}

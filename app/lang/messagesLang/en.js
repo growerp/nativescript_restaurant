@@ -130,7 +130,7 @@ export default {
     noOrdersTo: 'No orders to',
     noOrdersToPrepare: 'No orders to prepare for the ',
     nowQuantity: ' now quantity ',
-    ok: 'Ok',
+    ok: 'OK',
     operationalMenuTitle: '__________Operational__________',
     order: 'Order',
     orderExist: 'Order exist for this table',

@@ -81,7 +81,7 @@ export default {
                 okButtonText: this.$t('ok'),
                 cancelButtonText: this.$t('cancel')
             }).then (data => {
-                if (data == true) {
+                if (data) {
                     this.$backendService.deleteUser(this.item.partyId)
                     this.list.splice(this.index,1)}
                 this.$navigateBack()})
