@@ -97,14 +97,15 @@ const getters = {
             if (state.categoriesAndProducts[record].productCategoryId === id) {
                 return state.categoriesAndProducts[record]}}},
         categories: state => {
+          console.log('===catprod' + JSON.stringify(state.categoriesAndProducts))
             let categories = []
             categories.push(' ')
-            for(let i=1;i<= state.categoriesAndProducts.length;i++) {
-                categories.push(i + '-' + state.categoriesAndProducts[i-1].name)}
+            for(let i=0;i < state.categoriesAndProducts.length;i++) {
+                categories.push(state.categoriesAndProducts[i].name)}
             return categories},
         categoryByDesc: (state) => (desc) => {
             for (let record = 0; record < state.categoriesAndProducts.length;record++) {
-              if ((record+1) + '-' + state.categoriesAndProducts[record].name === desc) {
+              if (state.categoriesAndProducts[record].name === desc) {
                 return state.categoriesAndProducts[record]}}},
         areas: state => {
           let areas = []

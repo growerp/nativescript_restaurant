@@ -1,7 +1,7 @@
 <template>
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" save="true"
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="areaDetail"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
@@ -36,12 +36,13 @@
 </template>
 
 <script>
+import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import SpotAdd from './modalPages/SpotAdd'
 export default {
     name: 'AccomodationAreaDetail',
-    mixins: [ imageSelector, general ],
+    mixins: [ imageSelector, general, sideDrawer],
     props: {
         list: Array,
         index: Number,

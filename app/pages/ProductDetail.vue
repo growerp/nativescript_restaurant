@@ -1,7 +1,7 @@
 <template>
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" save="true"
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="productDetail"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
@@ -21,11 +21,12 @@
 </template>
 
 <script>
+import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 export default {
     name: 'ProductDetail',
-    mixins: [ imageSelector, general ],
+    mixins: [ imageSelector, general, sideDrawer],
     props: {
         list: Array,
         index: Number,
@@ -43,9 +44,7 @@ export default {
                         editor: 'Decimal'},
                     { name: 'productCategoryId', ignore: true},
                     { name: 'categoryName', required: true, index: 2,
-                      editor: 'Label'},
-                    { name: 'newCategoryName', displayName: 'New Category',
-                      index: 3, editor: 'Picker',
+                      editor: 'Picker',
                       valuesProvider: this.$store.getters.categories }
                 ],
             },
@@ -53,38 +52,37 @@ export default {
         }
     },
     created() {
-        this.item['newCategoryName'] = ''
-        this.$backendService.downloadImage('medium', 'product', this.item.productId)
-        .then(result => { this.itemImage = result.data.imageFile})
+      this.$backendService.downloadImage('medium', 'product', this.item.productId)
+      .then(result => { this.itemImage = result.data.imageFile})
     },
     methods: {
-        onItemCommitted(data) {
-            this.editedItem = JSON.parse(data.object.editedObject)
-        },
-        onSaveTap() {
-          if (this.editedItem) {
-            if(this.editedItem.newCategoryName) {
-              let newProductCategory = this.$store.getters.categoryByDesc(this.editedItem.newCategoryName)
-              if (newProductCategory.productCategoryId !== this.item.productCategoryId) {
-                this.editedItem.productCategoryId = newProductCategory.productCategoryId}}
-              this.$backendService.updateProduct(this.editedItem)
-              this.list.splice(this.index,1,this.editedItem)
-          }
-          this.hideKeyboard()
-          this.$navigateBack()
-        },
-        onDeleteTap() {
-          confirm({
-              title: this.$t('delProduct') + this.item.name + "?",
-              okButtonText: this.$t('ok'),
-              cancelButtonText: this.$t('cancel')
-          }).then (data => {
-            if (data) {
-              this.$backendService.deleteProduct(this.item.productId)
-              this.list.splice(this.index,1)
-              this.$navigateBack()}
-          })
-        },
-      }
+      onItemCommitted(data) {
+          this.editedItem = JSON.parse(data.object.editedObject)
+      },
+      onSaveTap() {
+        if (this.editedItem) {
+          if(this.editedItem.newCategoryName) {
+            let newProductCategory = this.$store.getters.categoryByDesc(this.editedItem.newCategoryName)
+            if (newProductCategory.productCategoryId !== this.item.productCategoryId) {
+              this.editedItem.productCategoryId = newProductCategory.productCategoryId}}
+            this.$backendService.updateProduct(this.editedItem)
+            this.list.splice(this.index,1,this.editedItem)
+        }
+        this.hideKeyboard()
+        this.$navigateBack()
+      },
+      onDeleteTap() {
+        confirm({
+            title: this.$t('delProduct') + this.item.name + "?",
+            okButtonText: this.$t('ok'),
+            cancelButtonText: this.$t('cancel')
+        }).then (data => {
+          if (data) {
+            this.$backendService.deleteProduct(this.item.productId)
+            this.list.splice(this.index,1)
+            this.$navigateBack()}
+        })
+      },
+    }
   }
 </script>

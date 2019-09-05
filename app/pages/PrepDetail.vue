@@ -1,7 +1,7 @@
 <template>
 <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" save="true"
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="preparationAreaDetail"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
@@ -32,13 +32,14 @@
 </template>
 
 <script>
+import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import PrepCategoryMove from './modalPages/PrepCategoryMove'
 
 export default {
     name: 'PrepDetail',
-    mixins: [ imageSelector, general ],
+    mixins: [ imageSelector, general, sideDrawer],
     props: {
         list: Array,
         index: Number

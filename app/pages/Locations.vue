@@ -1,7 +1,7 @@
 <template lang="html">
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-        <myActionBar :onHeaderTap="onHeaderTapSetUp" plus="true" 
+        <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="locations"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" paddingTop="10"
