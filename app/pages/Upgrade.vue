@@ -138,14 +138,16 @@ export default {
                 localizedDescription: 'Be able to add 10 more employees logins',
                 priceFormatted: "THB 1500"},
                 ]
-            console.log('processing subscriptions: ' + JSON.stringify(this.$store.getters.activeSubscriptions))
-            for (let i=0;i<this.itemList.length;i++) {
-              if (this.$store.getters.isSubActive(this.itemList[i].productIdentifier)) {
-                  console.log('subscribed: true')
-                  this.itemList[i].subscribed = true
-              } else {
-                  this.itemList[i].subscribed = false
-              }
+            this.getSubscriptions()
+          }
+        },
+        getSubscriptions() {
+          for (let i=0;i<this.itemList.length;i++) {
+            if (this.$store.getters.isSubActive(this.itemList[i].productIdentifier)) {
+                console.log('subscribed: true')
+                this.itemList[i].subscribed = true
+            } else {
+                this.itemList[i].subscribed = false
             }
           }
         },
