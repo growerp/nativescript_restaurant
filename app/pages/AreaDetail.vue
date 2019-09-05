@@ -79,7 +79,7 @@ export default {
       onDeleteTap() {
             prompt({
                 title: "Delete area '" + this.item.description + "' and related tables?",
-                okButtonText: "Ok",
+                okButtonText: this.$t('ok'),
                 cancelButtonText: this.$t('cancel')
             }).then (data => {
                 if (data.result == true) {
@@ -119,12 +119,12 @@ export default {
       },
       onSpotDelete(table) {
         const title = this.$t('deleteTable') + table.spotNumber + '?'
-            prompt({
+            confirm({
                 title: title,
-                okButtonText: "Ok",
+                okButtonText: this.$t('ok'),
                 cancelButtonText: this.$t('cancel')
             }).then (data => {
-                if (data.result == true) {
+                if (data) {
                     this.$backendService.deleteAccommodationSpot(
                         this.item.accommodationAreaId, table.accommodationSpotId)
                     for (let i=0;i<this.tables.length;i++) {
