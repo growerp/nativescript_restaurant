@@ -97,7 +97,6 @@ const getters = {
             if (state.categoriesAndProducts[record].productCategoryId === id) {
                 return state.categoriesAndProducts[record]}}},
         categories: state => {
-          console.log('===catprod' + JSON.stringify(state.categoriesAndProducts))
             let categories = []
             categories.push(' ')
             for(let i=0;i < state.categoriesAndProducts.length;i++) {
@@ -122,6 +121,14 @@ const getters = {
                 return state.areasAndSpots[record]}}},
         areasAndSpots: state => {
             return state.areasAndSpots },
+        areasAndSpotCount: state => {
+          let areas = []
+          for (let i = 0; i < state.areasAndSpots.length;i++) {
+            areas.push({accommodationAreaId: state.areasAndSpots[i].accommodationAreaId,
+                        description: state.areasAndSpots[i].description,
+                        image: state.areasAndSpots[i].image,
+                        nbrOfSpots: state.areasAndSpots[i].spots.length})}
+          return areas },
         userGroups: state => {
             return state.userGroups },
         userGroupValues: state => {
@@ -132,6 +139,14 @@ const getters = {
           return values },
         prepAreasAndCategories: state => {
             return state.prepAreasAndCategories },
+        prepAreasAndCatgCount: state => {
+          let areas = []
+          for (let i = 0; i < state.prepAreasAndCategories.length;i++) {
+            areas.push({preparationAreaId: state.prepAreasAndCategories[i].preparationAreaId,
+                        description: state.prepAreasAndCategories[i].description,
+                        image: state.prepAreasAndCategories[i].image,
+                        nbrOfCatg: state.prepAreasAndCategories[i].categories.length})}
+          return areas },
         user: state => {
           return state.user},
         users: state => {
