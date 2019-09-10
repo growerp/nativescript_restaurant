@@ -90,6 +90,7 @@ export default {
     inside: 'Inside',
     isNowPaid: ' is now paid and complete',
     isReadyToServeFrom: ' is now ready to serve from ',
+    isRequired: ' is Required',
     isServedFrom: ' is served from ',
     items: ' item(s)', // order items
     justBought: 'Just bought ',
@@ -193,6 +194,7 @@ export default {
     table: 'Table: ',
     takeOrder: 'Take Order',
     taking: 'Taking',
+    tapToMove: ' (tap to move)',
     taskDetail: 'Task detail information',
     tasks: 'Tasks',
     tasksMeOthers: 'Tasks for me and given to others',

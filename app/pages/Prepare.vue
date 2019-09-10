@@ -57,7 +57,7 @@ export default {
     data () {
         return {
             currentTab: 0,
-            prepAreasAndCategories: this.$store.getters.prepAreasAndCategories,
+            prepAreasAndCategories: this.$store.getters.prepAreasAndCategories(),
             prepOrders: [{},[{}]],
           }
     },
