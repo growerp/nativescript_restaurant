@@ -1,21 +1,21 @@
 <template>
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true"
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="productDetail"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
-        <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
-            <Image  :src="itemImage" width="100"
-                height="100" col="0" row="0" rowSpan="2"/>
-            <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
-                @tap="selectPicture('product', item.productId)"/>
-            <Button class="button" :text="$t('useCamera')"  col="2" row="1"
-                @tap="takePicture('product', item.productId)"/>
-        </GridLayout>
-        <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
-        <RadDataForm ref="itemForm" :source="item" height="100%"
-            :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
+      <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
+        <Image  :src="itemImage" width="100"
+            height="100" col="0" row="0" rowSpan="2"/>
+        <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
+            @tap="selectPicture('product', item.productId)"/>
+        <Button class="button" :text="$t('useCamera')"  col="2" row="1"
+            @tap="takePicture('product', item.productId)"/>
+      </GridLayout>
+      <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
+      <RadDataForm :source="item"
+          :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
     </StackLayout>
   </Page>
 </template>
@@ -28,47 +28,57 @@ export default {
     name: 'ProductDetail',
     mixins: [ imageSelector, general, sideDrawer],
     props: {
-        list: Array,
-        index: Number,
+      index: Number,
     },
     data() {
-        return {
-            editedItem: {},
-            item: this.list[this.index],
-            itemMeta: {
-                propertyAnnotations: [
-                    { name: 'productId', ignore: true},
-                    { name: 'image', ignore: true},
-                    { name: 'productName', required: true, index: 0},
-                    { name: 'price', required: true, index: 1,
-                        editor: 'Decimal'},
-                    { name: 'productCategoryId', ignore: true},
-                    { name: 'categoryName', required: true, index: 2,
-                      editor: 'Picker',
-                      valuesProvider: this.$store.getters.categories }
-                ],
-            },
-            itemImage: '',
-        }
+      return {
+        item: Object.assign({}, this.$store.getters.products[this.index]),
+        editedItem: {},
+        itemMeta: {
+          propertyAnnotations: [
+              { name: 'productId', ignore: true},
+              { name: 'image', ignore: true},
+              { name: 'name', required: true, index: 0},
+              { name: 'price', required: true, index: 1,
+                  editor: 'Decimal'},
+              { name: 'productCategoryId', ignore: true},
+              { name: 'categoryName', required: true, index: 2,
+                editor: 'Picker',
+                valuesProvider: this.$store.getters.categories(false) }
+          ],
+        },
+      }
     },
     created() {
+      console.log("this item: " + JSON.stringify(this.item))
       this.$backendService.downloadImage('medium', 'product', this.item.productId)
-      .then(result => { this.itemImage = result.data.imageFile})
+      .then(result => { this.itemImage = result.data.imageFile })
     },
     methods: {
       onItemCommitted(data) {
           this.editedItem = JSON.parse(data.object.editedObject)
       },
       onSaveTap() {
-        if (this.editedItem) {
-          if(this.editedItem.newCategoryName) {
-            let newProductCategory = this.$store.getters.categoryByDesc(this.editedItem.newCategoryName)
+        if (this.editedItem.productId) {
+          if(this.editedItem.categoryName) {
+            let newProductCategory = this.$store.getters.categoryAndProductsByDesc(
+                this.editedItem.categoryName)
             if (newProductCategory.productCategoryId !== this.item.productCategoryId) {
-              this.editedItem.productCategoryId = newProductCategory.productCategoryId}}
-            this.$backendService.updateProduct(this.editedItem)
-            this.list.splice(this.index,1,this.editedItem)
+              this.editedItem.productCategoryId = newProductCategory.productCategoryId
+            }
+          }
+          this.$backendService.updateProduct(this.editedItem)
+          // update $store
+          this.$store.commit('categoryAndProduct', {
+            oldProductCategoryId: this.item.productCategoryId,
+            productCategoryId: this.editedItem.productCategoryId,
+            products: [{
+              productId: this.editedItem.productId,
+              image: this.editedItem.image,
+              name: this.editedItem.name,
+              price: this.editedItem.price }]
+          })
         }
-        this.hideKeyboard()
         this.$navigateBack()
       },
       onDeleteTap() {
@@ -79,8 +89,12 @@ export default {
         }).then (data => {
           if (data) {
             this.$backendService.deleteProduct(this.item.productId)
-            this.list.splice(this.index,1)
-            this.$navigateBack()}
+            this.$store.commit('categoryAndProduct', {
+                oldProductCategoryId: this.item.productCategoryId,
+                products: [{productId: this.item.productId}]
+            })
+          }
+          this.$navigateBack()
         })
       },
     }

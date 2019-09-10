@@ -1,34 +1,34 @@
 <template>
-<Page>
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true"
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="preparationAreaDetail"/>
     </ActionBar>
-    <StackLayout @longPress="onDeleteTap">
-        <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
-            <Image ref="prepForm" :src="itemImage" width="100"
-                height="100" col="0" row="0" rowSpan="2"/>
-            <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
-                @tap="selectPicture('prep', item.preparationAreaId)"/>
-            <Button class="button" :text="$t('useCamera')"  col="2" row="1"
-                @tap="takePicture('prep', item.preparationAreaId)"/>
-        </GridLayout>
-        <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
-        <RadDataForm ref="itemForm" :source="list[index]"
-            :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-        <Label :text="$t('categoriesPrepared')" class="h3" paddingLeft="20"/>
-        <RadListView for="cat in categoryList" @loaded="onLoaded"
-              @itemTap="onCatTap">
-            <v-template>
-                <GridLayout columns="50, *, auto" rows="*" class="item"
-                    paddingRight="5" paddingLeft="10" paddingTop="10">
-                    <Image :src="cat.image"  col="0" class="thumbnail"/>
-                    <label :text="cat.categoryName" class="h2" col="1"/>
-                </GridLayout>
-            </v-template>
-        </RadListView>
+    <StackLayout @longPress="onDeleteTap" padding="10">
+      <GridLayout width="100%" columns="100,30,*" rows="50,50">
+        <Image ref="prepForm" :src="itemImage" width="100"
+            height="100" col="0" row="0" rowSpan="2"/>
+        <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
+            @tap="selectPicture('prep', item.preparationAreaId)"/>
+        <Button class="button" :text="$t('useCamera')"  col="2" row="1"
+            @tap="takePicture('prep', item.preparationAreaId)"/>
+      </GridLayout>
+      <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
+      <RadDataForm ref="itemForm" :source="list[index]"
+          :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
+      <Label :text="$t('categoriesPrepared')" class="h3" horizontalAlignment="center"/>
+      <RadListView for="cat in categoryList" @itemTap="onCatTap" height="50%">
+        <v-template>
+          <GridLayout columns="50, *, auto" rows="*" padding="10">
+            <Image :src="cat.image"  col="0" class="thumbnail"/>
+            <label :text="cat.categoryName" class="h2" col="1"/>
+          </GridLayout>
+        </v-template>
+      </RadListView>
+      <Button class="button" :text="$t('addCategory')"
+          @tap="$navigateTo($routes.Categories)"/>
     </StackLayout>
-</Page>
+  </Page>
 </template>
 
 <script>
@@ -47,7 +47,7 @@ export default {
     data() {
         return {
             item: this.list[this.index],
-            categoryList: [],
+            categoryList: this.$store.getters.prepAreasAndCategories(this.list[this.index].preparationAreaId).categories,
             editedItem: {},
             itemMeta: {
                 propertyAnnotations: [
@@ -64,12 +64,6 @@ export default {
             .then(result => { this.itemImage = result.data.imageFile })}
     },
     methods: {
-      onLoaded() {
-        if (!this.categoryList.length) {
-          this.$backendService.getCategoryList(this.item.preparationAreaId)
-          .then(result => { this.categoryList = result.data.categories })
-        }
-      },
       onItemCommitted(data) {
           this.editedItem = JSON.parse(data.object.editedObject)
       },
@@ -88,9 +82,7 @@ export default {
             props: {  prepId: this.item.preparationAreaId,
                       catId: this.categoryList[args.index].productCategoryId }})
         .then (result => {
-          for (let i=0; i < this.item.categories.length; i++) {
-            if (this.categoryList[i].productCategoryId == result) {
-              this.categoryList.splice(i,1); break}}
+            this.categoryList = this.$store.getters.prepAreasAndCategories(this.list[this.index].preparationAreaId).categories
          })
      },
      onDeleteTap() {

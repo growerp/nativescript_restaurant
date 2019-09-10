@@ -1,10 +1,10 @@
 
 import * as app from 'tns-core-modules/application';
 import { time } from 'tns-core-modules/profiling/profiling';
-var admob = require("nativescript-admob")
-const platformModule = require("tns-core-modules/platform");
 import myActionBar from '../components/actionBar'
 import { ToastDuration, ToastPosition, Toasty } from 'nativescript-toasty';
+const admob = require("nativescript-admob")
+const platformModule = require("tns-core-modules/platform");
 
 export default {
     name: 'general',
