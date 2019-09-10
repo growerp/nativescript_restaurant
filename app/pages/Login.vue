@@ -165,7 +165,10 @@
                             this.$navigateTo(this.$routes.Home, {clearHistory: true})
                           })
                       })
-                    } else this.serverProblem()
+                    } else { // server key wrong so delete it and login again
+                      this.$store.commit('apiKey', '') //clear old key
+                      this.processing = false
+                    }
                   })
                   .catch( error => {
                     console.log('====Api key invalid, catch error:' + JSON.stringify(error))
@@ -441,14 +444,14 @@
 
               // add users and todo tasks only test
               let user1 = {firstName: 'Peter', lastName: 'Coster',
-                  email: 'test3@hansbakker.com',roleTypeId: 'Employee'}
+                  email: 'test3@hansbakker.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
               this.$backendService.createUser(user1).then( result => {
                 let item = { workEffortName:'This a first task',
                           partyId: result.data.user.partyId,priority: '5'}
                 this.$backendService.createTask(item)})
 
               let user2 = {firstName: 'Kevin', lastName: 'Junker',
-                  email: 'test4@hansbakker.com',roleTypeId: 'Employee'}
+                  email: 'test4@hansbakker.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
               this.$backendService.createUser(user2).then( result => {
                 let item2 = { workEffortName:'This a second task',
                           partyId: result.data.user.partyId , priority: '5'}

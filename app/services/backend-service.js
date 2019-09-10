@@ -4,12 +4,12 @@ import store from '../store'
 let log = false
 if (TNS_ENV === 'production') log = false
 
+let testUrl = 'http://10.0.2.2:8080/rest/'
+let prodUrl = 'https://mobile.growerp.com/rest/' 
+
 const restPost = axios.create({
       baseURL: TNS_ENV === 'production' ?
-        'https://mobile.growerp.com/rest/'
-//          'http://10.0.2.2:8080/rest/'
-        : 'http://10.0.2.2:8080/rest/',
-//        : 'http://192.168.1.18:8080/rest/',
+        prodUrl : testUrl,
       headers:
         {   'Content-Type': 'application/json;charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
@@ -24,10 +24,7 @@ const restPost = axios.create({
 
 const restGet = axios.create({
       baseURL: TNS_ENV === 'production' ?
-        'https://mobile.growerp.com/rest/'
-//      'http://10.0.2.2:8080/rest/'
-        : 'http://10.0.2.2:8080/rest/',
-//        : 'http://192.168.1.18:8080/rest/',
+      prodUrl : testUrl,
       headers:
         {   'Content-Type': 'application/json;charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
@@ -37,6 +34,11 @@ const restGet = axios.create({
         },
     withCredentials: true,
     timeout: 5000, // 5 seconds
+})
+
+const axiosSimple = axios.create({
+    baseURL: TNS_ENV === 'production' ?
+    prodUrl : testUrl,
 })
 
 axios.interceptors.request.use(function (config) {
@@ -133,7 +135,7 @@ export default class BackendService {
         return await restGet.get('s1/growerp/CheckApiKey',
                         { errorHandle: false})}
     async ping() {
-        return await restGet.get('s1/growerp/Ping',
+        return await axiosSimple.get('s1/growerp/Ping',
                         { errorHandle: false})}
     async getUserGroups() {
         return await restGet.get('s1/growerp/GetUserGroups')}
@@ -325,7 +327,8 @@ export default class BackendService {
     async updateCategory(item) {
             return await restPost.post('s1/growerp/UpdateProductCategory',
                 {   productCategoryId: item.productCategoryId,
-                    categoryName: item.categoryName})}
+                    categoryName: item.name,
+                    preparationAreaId: item.preparationAreaId})}
     async deleteCategory(id) {
         return await restPost.post('s1/growerp/DeleteProductCategory',
             {   productCategoryId: id})}
