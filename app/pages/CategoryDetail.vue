@@ -72,8 +72,8 @@
       },
       onMoveProduct(args) {
         this.$showModal(ProdCategoryMove,
-          { props: {prodId: prodId, catId: this.item.productCategoryId,
-                    name: name}})
+          { props: {prodId: args.item.productId, catId: this.item.productCategoryId,
+                    name: args.item.name}})
         .then(() => {
  //         setTimeout(() => {
             this.productList = this.$store.getters.categoryAndProductsById(
