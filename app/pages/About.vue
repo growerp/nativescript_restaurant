@@ -1,7 +1,7 @@
 <template lang="html">
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" header="about" :onHeaderTap="onHeaderTapSetUp"/>
+      <myActionBar :openDrawer="openDrawer" :header="versionText" :onHeaderTap="onHeaderTapSetUp"/>
     </ActionBar>
     <ScrollView>
       <StackLayout padding="10">
@@ -19,11 +19,16 @@ export default {
   name: 'About',
   data() {
     return {
+      versionText: this.version(),
       text: this.policy()
     }
   },
   mixins: [sideDrawer, general],
   methods: {
+    version() {
+      var appversion = require("nativescript-appversion")
+      return "About version: " + appversion.getVersionNameSync() + "/" + appversion.getVersionCodeSync()
+    },
     policy() {
         return `
 
