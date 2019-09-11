@@ -18,11 +18,9 @@
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label class="title" :text="$t('products') + $t('tapToMove')"/>
       <RadListView ref="listView" for="item in productList" height="30%" 
-          @itemTap="onMoveProduct(item.productId, item.name)">
+          @itemTap="onMoveProduct">
         <v-template>
-          <GridLayout columns="50, *, auto" rows="*"
-              paddingRight="10" 
-                @tap="onMoveProduct(item.productId, item.name)">
+          <GridLayout columns="50, *, auto" rows="*" paddingRight="10">
               <Image :src="item.image"  col="0" height="20"/>
               <label :text="item.name" class="h3" col="1"/>
               <label :text="item.price" class="h3" col="2"/>
@@ -72,7 +70,7 @@
       onItemCommitted(data) {
         this.editedItem = JSON.parse(data.object.editedObject)
       },
-      onMoveProduct(prodId, name) {
+      onMoveProduct(args) {
         this.$showModal(ProdCategoryMove,
           { props: {prodId: prodId, catId: this.item.productCategoryId,
                     name: name}})

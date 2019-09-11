@@ -6,7 +6,7 @@
           horizontalAlignment="center"/>
       <RadListView for="item in items" @itemTap="onItemTap" height="50%">
         <v-template>
-          <GridLayout columns="50, *, auto" rows="*" class="item">
+          <GridLayout columns="50, *, auto" rows="*">
             <Image :src="item.image" col="0"/>
             <Label :text="item.name" class="button" col="1"/>
           </GridLayout>

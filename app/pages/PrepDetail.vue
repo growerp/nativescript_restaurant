@@ -1,7 +1,7 @@
 <template>
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" back="true"
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="preparationAreaDetail"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap" padding="10">
@@ -17,11 +17,11 @@
       <RadDataForm ref="itemForm" :source="list[index]"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label :text="$t('categoriesPrepared')" class="h3" horizontalAlignment="center"/>
-      <RadListView for="cat in categoryList" @itemTap="onCatTap" height="50%">
+      <RadListView for="cat in categoryList" @itemTap="onMoveTap" height="50%">
         <v-template>
-          <GridLayout columns="50, *, auto" rows="*" padding="10">
-            <Image :src="cat.image"  col="0" class="thumbnail"/>
-            <label :text="cat.categoryName" class="h2" col="1"/>
+          <GridLayout columns="50, *, auto" rows="*" paddingRight="10">
+            <Image :src="cat.image" col="0" height="30"/>
+            <label :text="cat.categoryName" class="h3" col="1"/>
           </GridLayout>
         </v-template>
       </RadListView>
@@ -77,15 +77,17 @@ export default {
         this.hideKeyboard()
         this.$navigateBack()
       },
-      onCatTap(args) {
+      onMoveTap(args) {
+        console.log(" ====categories: "+ JSON.stringify(this.categoryList[args.index]))
         this.$showModal(PrepCategoryMove, {
             props: {  prepId: this.item.preparationAreaId,
-                      catId: this.categoryList[args.index].productCategoryId }})
+                      catId: this.categoryList[args.index].productCategoryId,
+                      name: this.categoryList[args.index].categoryName }})
         .then (result => {
             this.categoryList = this.$store.getters.prepAreasAndCategories(this.list[this.index].preparationAreaId).categories
          })
-     },
-     onDeleteTap() {
+      },
+      onDeleteTap() {
           if (this.categoryList.length) {
             this.note(this.$t('cannotDelPrep'))
           } else {

@@ -6,15 +6,15 @@
     </ActionBar>
     <StackLayout padding="10">
       <RadListView for="item in itemList" @itemTap="onItemTap">
-          <v-template name="header">
+        <v-template name="header">
           <GridLayout columns="50, *, *, auto" rows="*">
             <StackLayout col="1">
               <label text="Product Name"/>
               <label text="Category Name"/>
             </StackLayout>
             <label text="Price" col="3"/>
-            </GridLayout>
-          </v-template>
+          </GridLayout>
+        </v-template>
         <v-template>
           <GridLayout columns="50, *, *, auto" rows="*">
             <Image :src="item.image"  col="0" height="50"/>
