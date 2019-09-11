@@ -1,4 +1,4 @@
-const log = true 
+const log = false 
 const state = {
   apiKey: '',
   dashBoard: [],
