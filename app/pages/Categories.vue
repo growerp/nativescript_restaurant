@@ -7,18 +7,22 @@
     <StackLayout padding="10">
       <RadListView for="item in itemList" @itemTap="onItemTap" height="100%">
           <v-template name="header">
-            <GridLayout columns="50, 10, *, auto, 10, 80" rows="*" padding="5">
-              <label text="Category Name" col="2"/>
+            <GridLayout columns="50, 10, *, auto" rows="*" padding="5">
+              <StackLayout col="2">
+                <label text="categoryName"/>
+                <label text="prepareArea"/>
+              </StackLayout>
               <label text="nbrOfProducts" col="3"/>
-              <label text="prepArea" col="5"/>
             </GridLayout>
           </v-template>
           <v-template>
-            <GridLayout columns="50, 10, *, auto, 10, 80" rows="*" padding="5">
+            <GridLayout columns="50, 10, *, auto, 10, auto" rows="*" padding="5">
               <Image :src="item.image"  col="0" height="50"/>
-              <Label :text="item.name" class="h2" col="2"/>
-              <Label :text="item.nbrOfProducts" class="h2" col="3"/>
-              <Label :text="item.description" class="h2" col="5"/>
+              <StackLayout col="2">
+                <Label :text="item.name" class="h2"/>
+                <Label :text="item.description" class="h3"/>
+              </StackLayout>
+              <Label :text="item.nbrOfProducts" class="h3" col="3"/>
             </GridLayout>
           </v-template>
           <v-template name="footer">

@@ -22,7 +22,7 @@
           propertyAnnotations: [
               { name: 'categoryName', required: true, index: 0},
               { name: 'description', required: true, index: 1,
-                  displayName: this.$t('preparationArea'),
+                  displayName: this.$t('preparation'),
                   editor: 'Picker', valuesProvider: this.$store.getters.prepAreas()},
           ]
         },
