@@ -78,7 +78,8 @@ const mutations = { //synchronous
         } else { // modify
           let product = state.products[prodFileIndex]
           if (value.oldProductCategoryId && value.productCategoryId) { // category
-            if (log) console.log("===product file cat modify: " + value.products[0].name)
+            if (log) console.log("===product file: category modify for product: " + 
+                state.products[prodFileIndex].name)
             product.productCategoryId = value.productCategoryId
             product.categoryName = state.categoriesAndProducts.find(
                 o => o.productCategoryId === value.productCategoryId).name
@@ -257,6 +258,8 @@ const getters = {
       })}
     return categories 
   },
+  categoryAndProductsByDesc: (state) => (desc) => {
+    return state.categoriesAndProducts.find(o => o.name === desc)},
   categoryAndProductsById: state => id => {
     if (log) console.log('====requested categoryId:' + id + 
         'result: ' + JSON.stringify(state.categoriesAndProducts.find(
@@ -264,14 +267,19 @@ const getters = {
     return state.categoriesAndProducts.find(o => o.productCategoryId === id)
   },
   categories: state => (blank=true) => {
-      let categories = []
-      if (blank) categories.push(' ')
-      for(let i=0;i < state.categoriesAndProducts.length;i++) {
-          categories.push(state.categoriesAndProducts[i].name)}
-      return categories
+    let categories = []
+    if (blank) categories.push(' ')
+    for(let i=0;i < state.categoriesAndProducts.length;i++) {
+        categories.push(state.categoriesAndProducts[i].name)}
+    return categories
   },
-  categoryAndProductsByDesc: (state) => (desc) => {
-    return state.categoriesAndProducts.find(o => o.name === desc)},
+  categoriesMinusOne: state => (catId) => {
+    let categories = [' ']
+    for(let i=0;i < state.categoriesAndProducts.length;i++) {
+      if (state.categoriesAndProducts[i].productCategoryId != catId)
+        categories.push(state.categoriesAndProducts[i].name)}
+    return categories
+  },
   areas: state => {
     let areas = []
     for(let i=1;i<= state.areasAndSpots.length;i++) {

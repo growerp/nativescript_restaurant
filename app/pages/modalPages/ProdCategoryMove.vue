@@ -4,15 +4,12 @@
       <Label :text="name" horizontalAlignment="center" class="h2"/>
       <Label :text="$t('moveProdCat')" textWrap="true" class="h3"
           horizontalAlignment="center"/>
-      <RadListView for="item in items" @itemTap="onItemTap" height="50%">
-        <v-template>
-          <GridLayout columns="50, *, auto" rows="*">
-            <Image :src="item.image" col="0"/>
-            <Label :text="item.name" class="h2" col="1"/>
-          </GridLayout>
-        </v-template>
-      </RadListView>
-      <Button :text="$t('cancel')" @tap="$modal.close()" class="button"/>
+      <RadDataForm :source="item" :metadata="itemMeta"
+          @propertyCommitted="onCommitted"/>
+      <GridLayout columns="*,*" rows="auto">
+        <Button class="button" :text="$t('selectCategory')" @tap="submit" col="1"/>
+        <Button :text="$t('cancel')" @tap="$modal.close()" class="button" col="0"/>
+      </GridLayout>
     </StackLayout></ModalStack>
   </page>
 </template>
@@ -27,27 +24,33 @@
     },
     data() {
       return {
-          items: []
+        item: { name: ''},
+        itemMeta: {
+          propertyAnnotations: [
+              { name: 'name', required: true, index: 1,
+                  displayName: '',
+                  editor: 'Picker', 
+                  valuesProvider: this.$store.getters.categoriesMinusOne(this.catId)},
+        ]},
       }
     },
-    created() {
-      let itemsAll = this.$store.getters.categoriesAndProducts
-      for (let i=0; i < itemsAll.length; i++) {
-        if (itemsAll[i].productCategoryId != this.catId) {
-          this.items.push(itemsAll[i])}}
-    },
     methods: {
-      onItemTap(args) {
-        let param = {}
-        param.productId = this.prodId
-        param.productCategoryId = args.item.productCategoryId
-        this.$backendService.updateProduct(param)
-        this.$store.commit('categoryAndProduct',{ 
-              oldProductCategoryId: this.catId,
-              productCategoryId: args.item.productCategoryId,
-              products: [{productId: this.prodId}],
-              })
-        this.$modal.close() // to delete from list
+      onCommitted(data) {
+        this.editedItem = JSON.parse(data.object.editedObject)},
+      submit() {
+        if (this.editedItem) {
+          let param = {}
+          param.productId = this.prodId
+          param.productCategoryId = this.$store.getters.categoryAndProductsByDesc(
+              this.editedItem.name).productCategoryId
+          this.$backendService.updateProduct(param)
+          this.$store.commit('categoryAndProduct',{ 
+                oldProductCategoryId: this.catId,
+                productCategoryId: param.productCategoryId,
+                products: [{productId: this.prodId}],
+                })
+          this.$modal.close() // to delete from list
+        }
       },
     },
   }

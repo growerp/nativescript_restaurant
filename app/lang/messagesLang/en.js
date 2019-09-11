@@ -176,7 +176,7 @@ export default {
     save: 'SAVE  ',
     saveOrder: 'Save Order',
     securityGroup: 'Users Group',
-    selectCategory: 'Select category?',
+    selectCategory: 'Select category',
     selectExistOrNew: 'Select an existing, or cancel for new',
     selectTableLocation: 'Select table location.',
     serve: 'Serve',
