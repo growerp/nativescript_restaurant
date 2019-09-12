@@ -4,8 +4,10 @@
       <label :text="$t('addProduct')" class="h2" horizontalAlignment="center"/>
       <RadDataForm ref="addItem" :source="item" :metadata="itemMeta"
           @propertyCommitted="onCommitted"/>
-      <Button class="button" :text="$t('addProduct')" @tap="submit()" />
-      <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
+      <GridLayout columns="*,*" rows="auto">
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
+        <Button class="button" :text="$t('addProduct')" @tap="submit" col="1"/>
+      </GridLayout>
     </StackLayout></ModalStack>
   </page>
 </template>
@@ -46,6 +48,10 @@
           else if (!this.editedItem.price) this.note(this.$t('enterPrice'))
           else if (!this.editedItem.categoryName) this.note(this.$t('selectCategory'))
           else {
+            const platformModule = require("tns-core-modules/platform")
+            if (platformModule.isIOS) { // returns an index instead of value so change
+              let values = this.$store.getters.categories()
+              this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
             let productCategoryId = this.$store.getters.categoryAndProductsByDesc(
                 this.editedItem.categoryName).productCategoryId
             this.$backendService.createProduct(
