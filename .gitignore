@@ -9,6 +9,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+mochawesome-report/
 
 # hidden files
 .cloud/

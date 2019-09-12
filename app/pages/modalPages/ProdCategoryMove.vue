@@ -4,7 +4,7 @@
       <Label :text="name" horizontalAlignment="center" class="h2"/>
       <Label :text="$t('moveProdCat')" textWrap="true" class="h3"
           horizontalAlignment="center"/>
-      <RadDataForm :source="item" :metadata="itemMeta"
+      <RadDataForm :source="item" :metadata="itemMeta" height="150"
           @propertyCommitted="onCommitted"/>
       <GridLayout columns="*,*" rows="auto">
         <Button class="button" :text="$t('selectCategory')" @tap="submit" col="1"/>
@@ -27,10 +27,8 @@
         item: { name: ''},
         itemMeta: {
           propertyAnnotations: [
-              { name: 'name', required: true, index: 1,
-                  displayName: '',
-                  editor: 'Picker', 
-                  valuesProvider: this.$store.getters.categoriesMinusOne(this.catId)},
+              { name: 'name', displayName: '', editor: 'Picker', 
+                valuesProvider: this.$store.getters.categoriesMinusOne(this.catId)},
         ]},
       }
     },
@@ -41,8 +39,13 @@
         if (this.editedItem) {
           let param = {}
           param.productId = this.prodId
-          param.productCategoryId = this.$store.getters.categoryAndProductsByDesc(
+          const platformModule = require("tns-core-modules/platform")
+          if (platformModule.isAndroid) // returns a string
+            param.productCategoryId = this.$store.getters.categoryAndProductsByDesc(
               this.editedItem.name).productCategoryId
+          if (platformModule.isIOS) // returns a number
+            param.productCategoryId = this.$store.getters.categoryAndProducts[
+              this.editedItem.name].productCategoryId
           this.$backendService.updateProduct(param)
           this.$store.commit('categoryAndProduct',{ 
                 oldProductCategoryId: this.catId,
