@@ -21,9 +21,9 @@
           @itemTap="onMoveProduct">
         <v-template>
           <GridLayout columns="50, *, auto" rows="*" paddingRight="10">
-              <Image :src="item.image"  col="0" height="20"/>
-              <label :text="item.name" class="h3" col="1"/>
-              <label :text="item.price" class="h3" col="2"/>
+              <Image :src="item.image"  col="0" height="50"/>
+              <label :text="item.name" class="h2" col="1"/>
+              <label :text="item.price" class="h2" col="2"/>
             </GridLayout>
         </v-template>
       </RadListView>
@@ -62,6 +62,7 @@
       }
     },
     created() {
+      console.log("====category: " + JSON.stringify(this.item))
       this.$backendService.downloadImage('medium', 'category',
           this.item.productCategoryId)
       .then(result => { this.itemImage = result.data.imageFile})
