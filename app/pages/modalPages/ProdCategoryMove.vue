@@ -40,12 +40,11 @@
           let param = {}
           param.productId = this.prodId
           const platformModule = require("tns-core-modules/platform")
-          if (platformModule.isAndroid) // returns a string
-            param.productCategoryId = this.$store.getters.categoryAndProductsByDesc(
+          if (platformModule.isIOS) { // returns an index instead of value so change
+            let values = this.$store.getters.categoriesMinusOne(this.catId)
+            this.editedItem.name = values[parseInt(this.editedItem.name,10)]}
+          param.productCategoryId = this.$store.getters.categoryAndProductsByDesc(
               this.editedItem.name).productCategoryId
-          if (platformModule.isIOS) // returns a number
-            param.productCategoryId = this.$store.getters.categoryAndProducts[
-              this.editedItem.name].productCategoryId
           this.$backendService.updateProduct(param)
           this.$store.commit('categoryAndProduct',{ 
                 oldProductCategoryId: this.catId,

@@ -84,7 +84,6 @@
       },
       onSaveTap() {
         if (this.editedItem.productCategoryId) {
-          console.log('====this edited Item:' + JSON.stringify(this.editedItem))
           delete this.editedItem.nbrOfProducts
           if (this.editedItem.description != this.item.description) { //preparation area changed
             this.editedItem.preparationId = this.$store.prepAreasByDesc(
