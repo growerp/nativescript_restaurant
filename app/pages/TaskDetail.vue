@@ -24,6 +24,7 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
+const priority = [1,2,3,4,5]
 export default {
     name: 'TaskDetail',
     mixins: [ imageSelector,general, sideDrawer ],
@@ -43,15 +44,15 @@ export default {
                         required: true, index: 0},
                     { name: 'description', editor: 'MultilineText', index: 2},
                     { name: 'priority', editor: 'Picker', index: 3,
-                        valuesProvider: [1,2,3,4,5]},
+                        valuesProvider: priority},
                     { name: 'userPartyId', ignore: true},
                     { name: 'fullName', displayName: this.$t('assignedTo'),
                       index: 4, editor: 'Picker',
                       valuesProvider: this.$store.getters.userNames },
                     { name: 'statusId', index: 5, editor: 'Picker',
-                      valuesProvider:
-                      [this.$t('WeApproved'), this.$t('WeCompleted'),
-                        this.$t('WeCancelled')]}
+                      valuesProvider:  [this.$t('WeApproved'), this.$t('WeCompleted'),
+                        this.$t('WeCancelled')]
+ }
                 ],
             },
             itemImage: '',
@@ -71,21 +72,39 @@ export default {
             this.editedItem = JSON.parse(data.object.editedObject)
         },
         onSaveTap() {
-          if (this.editedItem.length) {
-            switch(this.editedItem.statusId) {
-              case this.$t('WeApproved'): this.editedItem.statusId = 'WeApproved';break
-              case this.$t('WeCancelled'): this.editedItem.statusId = 'WeCancelled';break
-              case this.$t('WeCompleted'): this.editedItem.statusId = 'WeCompleted';break}
-            this.editedItem.partyId = this.$store.getters.
-                userByFirstLastName(this.editedItem.fullName)
-            this.$backendService.updateTask(this.editedItem)
-            let priority = this.list[this.index].priority
-            this.list.splice(this.index,1,this.editedItem)
-            if (priority !== this.editedItem.priority) { // re-sort if priority changed
-              this.list.sort(function (a, b) {
-                return (a.priority + a.workEffortName.toLowerCase())
-                  .localeCompare(b.priority + b.workEffortName.toLowerCase())
-              })
+          if (this.editedItem) {
+            if (!this.editedItem.workEffortName) this.note(this.$t('titleIsRequired'))
+            else {
+              // usernames
+              const platformModule = require("tns-core-modules/platform")
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                let values = this.$store.getters.userNames
+                this.editedItem.fullName = values[parseInt(this.editedItem.fullName,10)]}
+              this.editedItem.partyId = this.$store.getters.
+                  userByFirstLastName(this.editedItem.fullName)
+              // status
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                let status = [this.$t('WeApproved'), this.$t('WeCompleted'),
+                        this.$t('WeCancelled')]
+                this.editedItem.statusId = status[parseInt(this.editedItem.statusId,10)]}
+              switch(this.editedItem.statusId) {
+                case this.$t('WeApproved'): this.editedItem.statusId = 'WeApproved';break
+                case this.$t('WeCancelled'): this.editedItem.statusId = 'WeCancelled';break
+                case this.$t('WeCompleted'): this.editedItem.statusId = 'WeCompleted';break}
+              // priority
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                this.editedItem.priority = priority[parseInt(this.editedItem.priority,10)]}
+              // update remote and local
+              console.log("====update task: " + JSON.stringify(this.editedItem))
+              this.$backendService.updateTask(this.editedItem)
+              this.list.splice(this.index,1,this.editedItem)
+              if (this.list.length > 1 && 
+                  this.list[this.index].priority !== this.editedItem.priority) { // re-sort if priority changed
+                this.list.sort(function (a, b) {
+                  return (a.priority + a.workEffortName.toLowerCase())
+                      .localeCompare(b.priority + b.workEffortName.toLowerCase())
+                })
+              }
             }
             this.hideKeyboard()
           }

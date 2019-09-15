@@ -25,78 +25,85 @@ import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 export default {
-    name: 'ProductDetail',
-    mixins: [ imageSelector, general, sideDrawer],
-    props: {
-      index: Number,
-    },
-    data() {
-      return {
-        item: Object.assign({}, this.$store.getters.products[this.index]),
-        editedItem: {},
-        itemMeta: {
-          propertyAnnotations: [
-              { name: 'productId', ignore: true},
-              { name: 'image', ignore: true},
-              { name: 'name', required: true, index: 0},
-              { name: 'price', required: true, index: 1,
-                  editor: 'Decimal'},
-              { name: 'productCategoryId', ignore: true},
-              { name: 'categoryName', required: true, index: 2,
-                editor: 'Picker',
-                valuesProvider: this.$store.getters.categories(false) }
-          ],
-        },
-      }
-    },
-    created() {
-      console.log("this item: " + JSON.stringify(this.item))
-      this.$backendService.downloadImage('medium', 'product', this.item.productId)
-      .then(result => { this.itemImage = result.data.imageFile })
-    },
-    methods: {
-      onItemCommitted(data) {
-          this.editedItem = JSON.parse(data.object.editedObject)
+  name: 'ProductDetail',
+  mixins: [ imageSelector, general, sideDrawer],
+  props: {
+    index: Number,
+  },
+  data() {
+    return {
+      item: Object.assign({}, this.$store.getters.products[this.index]),
+      editedItem: {},
+      itemMeta: {
+        propertyAnnotations: [
+            { name: 'productId', ignore: true},
+            { name: 'image', ignore: true},
+            { name: 'name', required: true, index: 0},
+            { name: 'price', required: true, index: 1,
+                editor: 'Decimal'},
+            { name: 'productCategoryId', ignore: true},
+            { name: 'categoryName', required: true, index: 2,
+              editor: 'Picker',
+              valuesProvider: this.$store.getters.categories(false) }
+        ],
       },
-      onSaveTap() {
-        if (this.editedItem.productId) {
-          if(this.editedItem.categoryName) {
-            let newProductCategory = this.$store.getters.categoryAndProductsByDesc(
-                this.editedItem.categoryName)
-            if (newProductCategory.productCategoryId !== this.item.productCategoryId) {
-              this.editedItem.productCategoryId = newProductCategory.productCategoryId
-            }
+    }
+  },
+  created() {
+    console.log("this item: " + JSON.stringify(this.item))
+    this.$backendService.downloadImage('medium', 'product', this.item.productId)
+    .then(result => { this.itemImage = result.data.imageFile })
+  },
+  methods: {
+    onItemCommitted(data) {
+        this.editedItem = JSON.parse(data.object.editedObject)
+    },
+    onSaveTap() {
+      if (this.editedItem.productId) {
+        let newProductCategory = {}
+        if (!this.editedItem.name) this.note(this.$t('nameIsRequired'))
+        else {
+          const platformModule = require("tns-core-modules/platform")
+          if (platformModule.isIOS) { // returns an index instead of value so change
+            let values = this.$store.getters.categories(false)
+            this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
+          newProductCategory = this.$store.getters.categoryAndProductsByDesc(
+              this.editedItem.categoryName)
+          if (newProductCategory.productCategoryId !== this.item.productCategoryId) {
+            this.editedItem.productCategoryId = newProductCategory.productCategoryId
           }
-          this.$backendService.updateProduct(this.editedItem)
-          // update $store
+        }
+        this.$backendService.updateProduct(this.editedItem)
+        let categoryAndProduct = {
+          productCategoryId: this.editedItem.productCategoryId,
+          products: [{
+            productId: this.editedItem.productId,
+            image: this.editedItem.image,
+            name: this.editedItem.name,
+            price: this.editedItem.price }]
+        }
+        if (newProductCategory.productCategoryId !== this.item.productCategoryId)
+          categoryAndProduct.oldCategoryid = this.item.productCategoryId
+        this.$store.commit('categoryAndProduct', categoryAndProduct)
+      }
+      this.$navigateBack()
+    },
+    onDeleteTap() {
+      confirm({
+          title: this.$t('delProduct') + this.item.name + "?",
+          okButtonText: this.$t('ok'),
+          cancelButtonText: this.$t('cancel')
+      }).then (data => {
+        if (data) {
+          this.$backendService.deleteProduct(this.item.productId)
           this.$store.commit('categoryAndProduct', {
-            oldProductCategoryId: this.item.productCategoryId,
-            productCategoryId: this.editedItem.productCategoryId,
-            products: [{
-              productId: this.editedItem.productId,
-              image: this.editedItem.image,
-              name: this.editedItem.name,
-              price: this.editedItem.price }]
+              oldProductCategoryId: this.item.productCategoryId,
+              products: [{productId: this.item.productId}]
           })
         }
         this.$navigateBack()
-      },
-      onDeleteTap() {
-        confirm({
-            title: this.$t('delProduct') + this.item.name + "?",
-            okButtonText: this.$t('ok'),
-            cancelButtonText: this.$t('cancel')
-        }).then (data => {
-          if (data) {
-            this.$backendService.deleteProduct(this.item.productId)
-            this.$store.commit('categoryAndProduct', {
-                oldProductCategoryId: this.item.productCategoryId,
-                products: [{productId: this.item.productId}]
-            })
-          }
-          this.$navigateBack()
-        })
-      },
-    }
+      })
+    },
   }
+}
 </script>

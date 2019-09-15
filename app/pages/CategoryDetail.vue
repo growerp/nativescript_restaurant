@@ -20,8 +20,8 @@
       <RadListView ref="listView" for="item in productList" height="30%" 
           @itemTap="onMoveProduct">
         <v-template>
-          <GridLayout columns="50, *, auto" rows="*" paddingRight="10">
-              <Image :src="item.image"  col="0" height="50"/>
+          <GridLayout columns="50, *, auto" rows="*" padding="10">
+              <Image :src="item.image"  col="0" height="30"/>
               <label :text="item.name" class="h2" col="1"/>
               <label :text="item.price" class="h2" col="2"/>
             </GridLayout>
@@ -84,14 +84,20 @@
       },
       onSaveTap() {
         if (this.editedItem.productCategoryId) {
-          delete this.editedItem.nbrOfProducts
-          if (this.editedItem.description != this.item.description) { //preparation area changed
-            this.editedItem.preparationId = this.$store.prepAreasByDesc(
-                this.editedItem.description).preparationAreaId }
-          this.$backendService.updateCategory(this.editedItem)
-          this.$store.commit('categoryAndProduct',this.editedItem)
-          this.hideKeyboard()
-        }
+          if (!this.editedItem.name) this.note(this.$t('nameIsRequired'))
+          else {
+            const platformModule = require("tns-core-modules/platform")
+            if (platformModule.isIOS) { // returns an index instead of value so change
+              let values = this.$store.getters.prepAreas
+              this.editedItem.name = values[parseInt(this.editedItem.name,10)]}
+            delete this.editedItem.nbrOfProducts
+            if (this.editedItem.description != this.item.description) { //preparation area changed
+              this.editedItem.preparationId = this.$store.prepAreasByDesc(
+                  this.editedItem.description).preparationAreaId }
+            this.$backendService.updateCategory(this.editedItem)
+            this.$store.commit('categoryAndProduct',this.editedItem)
+            this.hideKeyboard()
+        }}
         this.$navigateBack()
       },
       onDeleteTap() { //delete Item
@@ -99,7 +105,7 @@
           this.note(this.$t('cannotDelCatProd'))
         } else {
           confirm({
-            title: this.$t('deleteCategory') + this.item.categoryName + "?",
+            title: this.$t('deleteCategory') + this.item.name + "?",
             okButtonText: this.$t('ok'),
             cancelButtonText: this.$t('cancel')
           })

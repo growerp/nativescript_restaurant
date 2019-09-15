@@ -57,9 +57,6 @@ export default {
     onItemTap(args) {
       this.$navigateTo(this.$routes.CategoryDetail,
           { props: { index: args.index}})
-      .then (() => {
-        this.itemList = this.$store.getters.categoriesAndProductsCount
-      })
     },
   },
 }

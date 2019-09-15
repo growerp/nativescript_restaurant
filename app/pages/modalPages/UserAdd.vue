@@ -42,7 +42,7 @@ export default {
                       editor: 'Picker', ignore: this.roleTypeId !== 'Employee' },
                 ],
             },
-            editedUser: {},
+            editedItem: {},
             actionText: this.$t('add') + ' ' + this.$t(this.roleTypeId.toLowerCase()),
         };
     },
@@ -56,32 +56,35 @@ export default {
     },
     methods: {
         onCommitted(data) {
-            this.editedUser = JSON.parse(data.object.editedObject)
+            this.editedItem = JSON.parse(data.object.editedObject)
         },
         submit() {
-            if(this.roleTypeId !== 'Customer'){
-              this.editedUser.groupDescription = 'Customer';
-            }
-            if (!this.editedUser.firstName) {
+          if (this.editedItem) {
+            if (!this.editedItem.firstName) {
                 this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
-            } else if (!this.editedUser.lastName){
+            } else if (!this.editedItem.lastName){
                 this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
-            } else if (this.roleTypeId === 'Customer' && !this.editedUser.externalId){
+            } else if (this.roleTypeId === 'Customer' && !this.editedItem.externalId){
                 this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
-            } else if (!this.editedUser.email){
+            } else if (!this.editedItem.email){
                 this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
-            } else if (!this.editedUser.groupDescription && this.roleTypeId === 'Employee'){
+            } else if (!this.editedItem.groupDescription && this.roleTypeId === 'Employee'){
                 this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
             } else {
-                const platformModule = require("tns-core-modules/platform");
-                this.editedUser.locale = platformModule.device.language
-                this.editedUser.roleTypeId = this.roleTypeId
-                this.$backendService.createUser(this.editedUser)
-                .then( result => {
-                  this.editedUser.partyId = result.data.partyId
-                  this.editedUser.image = global.noImage
-                  this.$modal.close(this.editedUser)
-                })}
+              const platformModule = require("tns-core-modules/platform")
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                let values = this.$store.getters.userGroupValues
+                this.editedItem.groupDescription = 
+                    values[parseInt(this.editedItem.groupDescription,10)]}
+              this.editedItem.locale = platformModule.device.language
+              this.editedItem.roleTypeId = this.roleTypeId
+              this.$backendService.createUser(this.editedItem)
+              .then( result => {
+                this.editedItem.partyId = result.data.partyId
+                this.editedItem.image = global.noImage
+                this.$modal.close(this.editedItem)
+              })}
+          }  else this.$modal.close(this.editedItem)
         }
     }
 }

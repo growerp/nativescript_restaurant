@@ -72,7 +72,7 @@
                 <Button :text="isLoggingIn ? $t('login') : $t('signUp') " :isEnabled="!processing"
                     @tap="submit" class="btn btn-primary btn-rounded-sm"></Button>
                 <Label *v-show="isLoggingIn" :text="$t('forgotPassword')"
-                    class="login-label" @tap="forgotPassword()"></Label>
+                    class="login-label" @tap="forgotPassword"></Label>
             </StackLayout>
 
             <Label class="login-label sign-up-label" @tap="toggleForm">
