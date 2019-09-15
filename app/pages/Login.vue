@@ -250,12 +250,13 @@
                   }
                 })
                 .catch( error => {
-                    this.processing = false
-                    if (error.response.status == 401) {
-                      this.note(this.$t('passwordWrong'))
-                    } else {
-                      this.note('Login Error: ' + this.$backendService.getErrorMessage(error))
-                    }
+                  this.processing = false
+                  console.log("==login==error: " + JSON.stringify(error.response))
+                  if (error.response.data.errorCode == 400) {
+                    this.note(this.$t('passwordWrong'))
+                    this.user.password = ''
+                  } else this.note(this.$t('serverProblem') + ', ' + this.$t('retry'))
+                  this.$navigateTo(this.$routes.Login, {clearHistory: true})
                 })
             },
 
@@ -275,6 +276,7 @@
                     })
                     .catch( error => {
                         this.note(this.$t('sendPasswordError') + this.$backendService.getErrorMessage(error))
+                        thi.serverError()
                     })
                   } else {
                     if (data.result == true) {
@@ -325,7 +327,7 @@
                     if (error.response.data.errors.indexOf("Found issues with password") !== -1) {
                       this.alert(this.$t('passwordRequirement'))
                     } else {
-                      this.alert(this.$t('regError') + this.$backendService.getErrorMessage(error))
+                      this.serverError()
                     }
                   })
                 }
@@ -354,7 +356,7 @@
                     okButtonText: this.$t('retry'),
                     cancelButtonText: this.$t('exit')
                 }).then (data => {
-                  if (data) this.$navigateTo(this.$routes.Login)
+                  if (data) this.$navigateTo(this.$routes.Login, {clearHistory: true})
                   else exit() 
               });
             },
