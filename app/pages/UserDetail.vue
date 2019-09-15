@@ -1,8 +1,8 @@
 <template>
 <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-        <myActionBar :onHeaderTap="onHeaderTap" :save="true" 
-            :onActionTap="onSaveTap" :openDrawer="openDrawer" 
+        <myActionBar :onHeaderTap="onHeaderTap" :save="true" :back="true"
+            :onActionTap="onSaveTap"
             :header="this.$t(this.roleTypeId.toLowerCase()) + ' ' + this.$t('detailedInfo')"/>
     </ActionBar>
     <StackLayout @longPress="onDeleteTap">
@@ -56,6 +56,7 @@ export default {
                     { name: 'userGroupId', ignore: true},
                     { name: 'groupDescription', index: 6, displayName: this.$t('userGroup'),
                         valuesProvider: this.$store.getters.userGroupValues,
+                        ignore: this.roleTypeId == 'Customer',
                         editor: 'Picker', readOnly: this.$store.getters.user.userGroupId != 'GROWERP_M_ADMIN'},
                   ],
             },
@@ -91,11 +92,28 @@ export default {
         },
         onSaveTap() {
           if (this.editedItem && this.editedItem.partyId) {
-            this.$backendService.updateUser(this.editedItem)
-            this.list.splice(this.index,1,this.editedItem)
-            this.hideKeyboard()
-            if (this.$store.getters.user.partyId === this.list[this.index].partyId) {
-                this.$store.commit('username', this.editedItem.username) }
+            if (!this.editedItem.firstName) {
+                this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedItem.lastName){
+                this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (this.roleTypeId === 'Customer' && !this.editedItem.externalId){
+                this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedItem.email){
+                this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedItem.groupDescription && this.roleTypeId != 'Customer'){
+                this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
+            } else {
+              const platformModule = require("tns-core-modules/platform")
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                let values = this.$store.getters.userGroupValues
+                this.editedItem.groupDescription = 
+                    values[parseInt(this.editedItem.groupDescription,10)]}
+              this.$backendService.updateUser(this.editedItem)
+              this.list.splice(this.index,1,this.editedItem)
+              this.hideKeyboard()
+              if (this.$store.getters.user.partyId === this.list[this.index].partyId) {
+                  this.$store.commit('username', this.editedItem.username) }
+            }
           }
           this.$navigateBack()
         },

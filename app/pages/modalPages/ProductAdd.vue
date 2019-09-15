@@ -60,7 +60,8 @@
                 productCategoryId )
             .then( (result) => {
               this.$store.commit('categoryAndProduct', {
-                  productCategoryId: productCategoryId, 
+                  productCategoryId: productCategoryId,
+                  name: this.editedItem.categoryName, 
                   products: [{
                     productId: result.data.productId,
                     name: this.editedItem.name,

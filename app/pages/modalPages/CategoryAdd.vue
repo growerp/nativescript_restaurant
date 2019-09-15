@@ -37,14 +37,27 @@
           if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
           else if (!this.editedItem.description) this.note(this.$t('preparationArea') + this.$t('isRequired'))
           else {
+            let description = ''
+            const platformModule = require("tns-core-modules/platform")
+            if (platformModule.isIOS) { // returns an index instead of value so change
+              let values = this.$store.getters.prepAreas()
+              description = values[parseInt(this.editedItem.description,10)]
+            } else {
+              description = this.editedItem.description
+            }
             this.editedItem.preparationAreaId = 
-                this.$store.getters.prepAreasByDesc(this.editedItem.description).preparationAreaId
+                this.$store.getters.prepAreasByDesc(description).preparationAreaId
             this.$backendService.createCategory(this.editedItem)
-            .then(() => {
-              this.$backendService.getCategoriesAndProducts()
-              .then(() => {
-                this.$modal.close()
-            })})
+            .then((result) => {
+               this.$store.commit('categoryAndProduct', {
+                  productCategoryId: result.data.productCategoryId,
+                  name: this.editedItem.categoryName,
+                  image: global.noImage,
+                  preparationAreaId: this.editedItem.preparationAreaId,
+                  description: this.editedItem.description
+              })
+              this.$modal.close()
+            })
           }
         }
       }

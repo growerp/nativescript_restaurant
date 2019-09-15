@@ -50,16 +50,10 @@ export default {
   methods: {
     onAddTap() { //get new item and insert sorted into list
       this.$showModal(ProductAdd)
-//        .then (() => {
-//          itemList= this.$store.getters.products
-//        })
     },
     onItemTap(args) {
       this.$navigateTo(this.$routes.ProductDetail,
             { props: {  index: args.index}})
-//      .then (() => {
-//        this.itemList = this.$store.getters.products
-//      })      
     },
   },
 }
