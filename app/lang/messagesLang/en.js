@@ -194,6 +194,7 @@ export default {
     table: 'Table: ',
     takeOrder: 'Take Order',
     taking: 'Taking',
+    tapToDelete: ' (tap to delete)',
     tapToMove: ' (tap to move)',
     taskDetail: 'Task detail information',
     tasks: 'Tasks',
