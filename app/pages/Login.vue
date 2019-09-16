@@ -161,7 +161,7 @@
                           .then( activeSubscriptions => {
                             console.log(' received active subscriptions') // not show adds at home screen
                             this.$store.commit("activeSubscriptions", activeSubscriptions.data.subscriptions)
-                            this.$backendService.initData()
+                            //this.$backendService.initData()
                             this.$navigateTo(this.$routes.Home, {clearHistory: true})
                           })
                       })
@@ -240,7 +240,7 @@
                       this.$store.commit('moquiToken', result.data.moquiSessionToken)
                       this.$backendService.saveToken()
                       this.$store.commit('user',result.data.user)
-                      this.$backendService.initData()
+                      // this.$backendService.initData()
                       this.$backendService.getActiveSubscriptions()
                       .then( activeSubscriptions => { // need to check if adds are required present on home screen
                         this.$store.commit("activeSubscriptions", activeSubscriptions.data.subscriptions)

@@ -5,7 +5,7 @@
     </ActionBar>
     <StackLayout padding="20">
       <RadListView ref="listView" for="item in dashBoard" @itemTap="onItemTap"
-          itemReorder="true" @itemReordered="onItemReordered" layout="grid" itemHeight="120">
+          itemReorder="true" @itemReordered="onItemReordered" layout="grid">
         <v-template>
             <StackLayout orientation="vertical" padding="10">
               <Image :src="item.image" height="60"/>

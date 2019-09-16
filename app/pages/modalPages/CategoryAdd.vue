@@ -4,8 +4,10 @@
       <label :text="$t('addCategory')" class="h2" horizontalAlignment="center"/>
       <RadDataForm :source="item" :metadata="itemMeta"
           @propertyCommitted="onCommitted"/>
-      <Button class="button" :text="$t('addCategory')" @tap="submit" />
-      <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
+      <GridLayout columns="*,*" rows="auto">
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
+        <Button class="button" :text="$t('addCategory')" @tap="submit" col="1"/>
+      </GridLayout>
     </StackLayout></ModalStack>
   </page>
 </template>
@@ -14,10 +16,15 @@
   import general from '~/mixins/general'
   export default {
     name: 'CategoryAdd',
+    props: {
+      prepAreaDescription: String
+    },
     mixins: [general],
     data() {
       return {
-        item: { categoryName: '', description: '' },
+        item: { categoryName: '',
+                description: this.prepAreaDescription? this.prepAreaDescription : ''
+        },
         itemMeta: {
           propertyAnnotations: [
               { name: 'categoryName', required: true, index: 0},
@@ -28,6 +35,9 @@
         },
         editedItem: {},
       }
+    },
+    created() {
+      console.log("====descr:" + this.prepAreaDescription)
     },
     methods: {
       onCommitted(data) {
@@ -46,18 +56,14 @@
               description = this.editedItem.description
             }
             this.editedItem.preparationAreaId = 
-                this.$store.getters.prepAreasByDesc(description).preparationAreaId
+                this.$store.getters.preparationAreaByDesc(description).preparationAreaId
             this.$backendService.createCategory(this.editedItem)
             .then((result) => {
-               this.$store.commit('categoryAndProduct', {
-                  productCategoryId: result.data.productCategoryId,
-                  name: this.editedItem.categoryName,
-                  image: global.noImage,
-                  preparationAreaId: this.editedItem.preparationAreaId,
-                  description: this.editedItem.description
-              })
-              this.$modal.close()
+              this.editedItem.verb = 'add'
+              this.editedItem.preparationAreaId = result.data.preparationAreaId
+              this.$store.commit('productCategory', this.editedIem)
             })
+            this.$modal.close()
           }
         }
       }

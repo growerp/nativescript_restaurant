@@ -1,7 +1,7 @@
 <template>
   <page><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="90%" padding="20">
-      <Label :text="name" horizontalAlignment="center" class="h2"/>
+      <Label :text="item.name" horizontalAlignment="center" class="h2"/>
       <Label :text="$t('movePrepCat')" textWrap="true" class="h3"
           horizontalAlignment="center" padding="10"/>
       <RadListView for="item in items" @itemTap="onItemTap" height="50%">
@@ -21,31 +21,29 @@
 export default {
     name: 'PrepCategoryMove',
     props: {
-      prepId: String,
-      catId : String,
-      name: String
+      item: {}
     },
     data() {
       return {
-        itemsAll: this.$store.getters.prepAreasAndCategories(),
+        itemsAll: this.$store.getters.preparationAreas,
         items: [] // list without current one
       }
     },
     created() {
       for (let i=0; i < this.itemsAll.length; i++) {
-        if (this.itemsAll[i].preparationAreaId != this.prepId) {
+        if (this.itemsAll[i].preparationAreaId != this.item.preparationAreaId) {
           this.items.push(this.itemsAll[i])}}
     },
     methods: {
       onItemTap(args) {
-        console.log("===move: args" + args.item.description)
-        this.$backendService.movePreparationAreaCategory(
-            this.prepId, args.item.preparationAreaId, this.catId)
-        .then(() => {
-          this.$backendService.getPrepAreasAndCategories()
-          .then(() => {
-            this.$modal.close(this.catId)
-          })})
+        this.$backendService.updateCategory( {
+          productCategoryId: this.item.productCategoryId,
+          preparationAreaId: args.item.preparationAreaId})
+        let newItem = Object.assign({},this.item)
+        newItem.verb = 'update'
+        newItem.preparationAreaId = args.item.preparationAreaId
+        this.$store.commit('productCategory', newItem)
+        this.$modal.close()
       },
    },
 }

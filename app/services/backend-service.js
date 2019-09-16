@@ -162,13 +162,6 @@ export default class BackendService {
             {   username: item.username, oldPassword: item.oldPassword,
                 newPassword: item.newPassword},
             {   errorHandle: false })}
-    // ===============table data for valuesProvider===============
-    async getAreasAndSpots() {
-        await restGet.get('s1/growerp/GetAreasAndSpots').then( result => {
-          store.commit("areasAndSpots", result.data.areasAndSpots)})}
-    async getPrepAreasAndCategories() {
-        await restPost.post('s1/growerp/GetPrepAreasAndCategories').then( result => {
-            store.commit("prepAreasAndCategories", result.data.prepAreasAndCategories)})}
     // ================get/update user, user liste================
     async getUser(id=null) {
         return await restPost.post('s1/growerp/GetUser',
@@ -213,9 +206,8 @@ export default class BackendService {
         return await restPost.post('s1/growerp/DownloadImage',
             {   size: size, type: type, id: id })}
     // ================(preparation Area)) ===============
-    async getPreparationArea(id) {
-        return await restPost.post('s1/growerp/GetPrepAreasAndCategories',
-            { preparationAreaId: id })}
+    async getPreparationAreas() {
+        return await restget.get('s1/growerp/GetPreparationAreas')}
     async createPreparationArea(item) {
         return await restPost.post('s1/growerp/CreatePreparationArea',
             {   description: item.description})}
@@ -226,34 +218,9 @@ export default class BackendService {
     async deletePreparationArea(id) {
         return await restPost.post('s1/growerp/DeletePreparationArea',
             {   preparationAreaId: id})}
-    async getPreparationAreaList(image=true) {
-        return await restPost.post('s1/growerp/GetPreparationAreaList',
-            {   image: image    })}
-    async movePreparationAreaCategory(prepId,newPrepId,catId) {
-      return await restPost.post('s1/growerp/MovePreparationAreaCategory',
-            {   preparationAreaId: prepId, newPreparationAreaId: newPrepId,
-              productCategoryId: catId })}
-    // ================ table (AccommodationSpot) ===============
-    async GetAccommodationSpot(id) {
-        return await restPost.post('s1/growerp/GetAccommodationSpot',
-            { accommodationSpotId: id })}
-    async createAccommodationSpot(areaId,spotNumber) {
-        return await restPost.post('s1/growerp/CreateAccommodationSpot',
-            {   accommodationAreaId: areaId, spotNumber: spotNumber})}
-    async updateAccommodationSpot(accommodationSpot) {
-        return await restPost.post('s1/growerp/UpdateAccommodationSpot',
-            {   accommodationSpotId: accommodationSpot.accommodationSpotId,
-                description: accommodationSpot.description})}
-    async deleteAccommodationSpot(areaId, spotId) {
-        return await restPost.post('s1/growerp/DeleteAccommodationSpot',
-            {   accommodationAreaId: areaId, accommodationSpotId: spotId})}
-    async getAccommodationSpotList(id) {
-        return await restPost.post('s1/growerp/GetAccommodationSpotList',
-            { accommodationAreaId: id })}
     // ================ table Area (AccommodationArea) ===============
-    async getAccommodationArea(id) {
-        return await restPost.post('s1/growerp/GetAccommodationArea',
-            { accommodationAreaId: id })}
+    async getAccommodationAreas() {
+        return await restPost.post('s1/growerp/GetAccommodationAreaList')}
     async createAccommodationArea(accommodationArea) {
         return await restPost.post('s1/growerp/CreateAccommodationArea',
             {   description: accommodationArea.description,
@@ -266,9 +233,20 @@ export default class BackendService {
     async deleteAccommodationArea(id) {
         return await restPost.post('s1/growerp/DeleteAccommodationArea',
             {   accommodationAreaId: id})}
-    async getAccommodationAreaList(image=true) {
-        return await restPost.post('s1/growerp/GetAccommodationAreaList',
-            {   image: image })}
+    // ================ table (AccommodationSpot) ===============
+    async getAccommodationSpots() {
+        return await restPost.post('s1/growerp/GetAccommodationSpots')}
+    async createAccommodationSpot(areaId,spotNumber) {
+        return await restPost.post('s1/growerp/CreateAccommodationSpot',
+            {   accommodationAreaId: areaId, spotNumber: spotNumber})}
+    async updateAccommodationSpot(accommodationSpot) {
+        return await restPost.post('s1/growerp/UpdateAccommodationSpot',
+            {   accommodationSpotId: accommodationSpot.accommodationSpotId,
+                description: accommodationSpot.description})}
+    async deleteAccommodationSpot(areaId, spotId) {
+        return await restPost.post('s1/growerp/DeleteAccommodationSpot',
+            {   accommodationAreaId: areaId, accommodationSpotId: spotId})}
+    //==================
     parseLocale(locale) {
         var lang = ""
         var localeUnderscoreIndex = locale.indexOf('_')
@@ -373,24 +351,29 @@ export default class BackendService {
     // ======================initial data load when app starts==================
     initData() {
         axios.all([
-          restGet.get('s1/growerp/GetUserGroups'),
-          restGet.get('s1/growerp/GetAreasAndSpots'),
+            restGet.get('s1/growerp/GetPreparationAreas'),
+            restGet.get('s1/growerp/GetAccommodationAreas'),
+            restGet.get('s1/growerp/GetAccommodationSpots'),
+            restGet.get('s1/growerp/GetProductCategories'),
+            restGet.get('s1/growerp/GetUserGroups'),
           restGet.get('s1/growerp/GetCategoriesAndProducts'),
-          restPost.post('s1/growerp/GetPrepAreasAndCategories'),
           restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Employee', full: false}),
           restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Customer', full: false}),
           restPost.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
         ])
-        .then(axios.spread(function (GetUserGroups, GetAreasAndSpots, GetCategoriesAndProducts,
-              GetPrepAreasAndCategories, GetUsersInStore, GetCustomersInStore,
+        .then(axios.spread(function ( GetPreparationAreas,GetAccommodationAreas,GetAccommodationSpots,
+            GetProductCategories, GetUserGroups, GetCategoriesAndProducts,
+              GetUsersInStore, GetCustomersInStore,
               GetOrdersItemsPartySpot) {
-            store.commit("userGroups", GetUserGroups.data.userGroups)
-            store.commit("areasAndSpots", GetAreasAndSpots.data.areasAndSpots)
-            store.commit("categoriesAndProducts", GetCategoriesAndProducts.data.categoriesAndProducts)
-            store.commit("prepAreasAndCategories", GetPrepAreasAndCategories.data.prepAreasAndCategories)
-            store.commit("users", GetUsersInStore.data.users)
-            store.commit("customerProvider", GetCustomersInStore.data.users)
-            store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
+                store.commit("preparationAreas", GetPreparationAreas.data.preparationAreas)
+                store.commit("accommodationAreas", GetAccommodationAreas.data.accommodationAreas)
+                store.commit("accommodationSpots", GetAccommodationSpots.data.accommodationSpots)
+                store.commit("productCategories", GetProductCategories.data.productCategories)
+                store.commit("userGroups", GetUserGroups.data.userGroups)
+                store.commit("categoriesAndProducts", GetCategoriesAndProducts.data.categoriesAndProducts)
+                store.commit("users", GetUsersInStore.data.users)
+                store.commit("customerProvider", GetCustomersInStore.data.users)
+                store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
         }))
   }
   async createSubscription(id,desc) {

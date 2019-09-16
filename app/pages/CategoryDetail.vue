@@ -121,7 +121,7 @@
         }
       },
       addProduct() {
-        this.$showModal(ProductAdd, {   props: {categoryName: this.item.name}})
+        this.$showModal(ProductAdd, { props: {categoryName: this.item.name}})
         .then(() => {
           this.productList = this.$store.getters.categoryAndProductsById(
             this.list[this.index].productCategoryId).products

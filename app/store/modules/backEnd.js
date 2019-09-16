@@ -24,10 +24,9 @@ const state = {
     img: ''
   },
   userGroups:[],
+  categoriesAndProducts: [],
   areasAndSpots:[],
   products: [],
-  categoriesAndProducts: [],
-  prepAreasAndCategories: [],
   dashboard: [],
   customerProvider: [],
   openOrders: [],
@@ -37,9 +36,7 @@ const appSettings = require("tns-core-modules/application-settings")
 
 const mutations = { //synchronous
   activeSubscriptions(state, value) {
-      state.activeSubscriptions = value },
-  areasAndSpots(state, value) {
-    state.areasAndSpots = value 
+    state.activeSubscriptions = value 
   },
   apiKey(state, value) {
     state.apiKey = value
@@ -88,7 +85,7 @@ const mutations = { //synchronous
           if (log) console.log("===products file: product delete: " +  
               state.products[prodFileIndex].name)
           state.products.splice(prodFileIndex,1)// delete
-        } else { // modify
+        } else { // update
           product.productCategoryId = value.productCategoryId
           product.categoryName = state.categoriesAndProducts.find(
               o => o.productCategoryId === value.productCategoryId).name
@@ -98,8 +95,8 @@ const mutations = { //synchronous
               value.products[0].price : state.products[prodFileIndex].price
           product.image = value.products[0].image?
               value.products[0].image : state.products[prodFileIndex].image
-          if (log) console.log("===products file: product modify: " + product.name)
-          state.products.splice(prodFileIndex,1, product) // modify
+          if (log) console.log("===products file: product update: " + product.name)
+          state.products.splice(prodFileIndex,1, product) // update
         }
       } else { //add
         if (log) console.log("===products file: add product: " + value.products[0].name)
@@ -159,7 +156,7 @@ const mutations = { //synchronous
           JSON.stringify(value))
       } 
     }
-    if (value.productCategoryId) { ///add/mod/modify
+    if (value.productCategoryId) { ///add/update/delete
       catIndex = state.categoriesAndProducts.findIndex(
         o => o.productCategoryId === value.productCategoryId)
       if (catIndex != -1) {
@@ -206,9 +203,6 @@ const mutations = { //synchronous
   openOrders(state, value) {
     state.openOrders = value 
   },
-  prepAreasAndCategories(state, value) {
-    state.prepAreasAndCategories = value
-  },
   userGroups(state, value) {
     state.userGroups = value 
   },
@@ -225,34 +219,6 @@ const mutations = { //synchronous
   },
 }
 const getters = {
-  areas: state => {
-    let areas = []
-    for(let i=1;i<= state.areasAndSpots.length;i++) {
-        areas.push(i + '-' + state.areasAndSpots[i-1].description)}
-    return areas
-  },
-  areaById: (state) => (id) => {
-      for (let record = 0; record < state.areasAndSpots.length;record++) {
-        if (state.areasAndSpots[record].accommodationAreaId == id) {
-          return state.areasAndSpots[record]}}
-  },
-  areaByDesc: (state) => (desc) => {
-      for (let record = 0; record < state.areasAndSpots.length;record++) {
-        if ((record+1) + '-' + state.areasAndSpots[record].description === desc) {
-          return state.areasAndSpots[record]}}
-  },
-  areasAndSpots: state => {
-      return state.areasAndSpots
-  },
-  areasAndSpotCount: state => {
-    let areas = []
-    for (let i = 0; i < state.areasAndSpots.length;i++) {
-      areas.push({accommodationAreaId: state.areasAndSpots[i].accommodationAreaId,
-                  description: state.areasAndSpots[i].description,
-                  image: state.areasAndSpots[i].image,
-                  nbrOfSpots: state.areasAndSpots[i].spots.length})}
-    return areas
-  },
   activeSubscriptions: state => {
       return state.activeSubscriptions
   },
@@ -317,29 +283,6 @@ const getters = {
           state.openOrders[i].accommodationSpotId === spotId)
         openOrders.push(state.openOrders[i])}
     return openOrders
-  },
-  prepAreasAndCategories: state => id =>{
-    if (id) return state.prepAreasAndCategories.find(o => o.preparationAreaId === id)
-    else return state.prepAreasAndCategories
-  },
-  prepAreasAndCatgCount: state => {
-    let areas = []
-    for (let i = 0; i < state.prepAreasAndCategories.length;i++) {
-      areas.push({preparationAreaId: state.prepAreasAndCategories[i].preparationAreaId,
-                  description: state.prepAreasAndCategories[i].description,
-                  image: state.prepAreasAndCategories[i].image,
-                  nbrOfCatg: state.prepAreasAndCategories[i].categories.length})}
-    return areas
-  },
-  prepAreas: state => (blank=true) => {
-    let areas = []
-    if (blank) areas.push(' ')
-    for (let i = 0; i < state.prepAreasAndCategories.length;i++) {
-      areas.push(state.prepAreasAndCategories[i].description)}
-    return areas
-  },
-  prepAreasByDesc: state => desc => {
-    return state.prepAreasAndCategories.find(o => o.description === desc)
   },
   products: state => {
     return state.products

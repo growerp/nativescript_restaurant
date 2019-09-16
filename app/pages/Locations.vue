@@ -7,7 +7,7 @@
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('preparation')">
         <StackLayout>
-          <RadListView for="prep in preps" @itemTap="onItemTap">
+          <RadListView for="item in preps" @itemTap="onItemTap">
             <v-template name="header">
               <GridLayout columns="80, *, auto" rows="*" padding="10">
                   <label text="Preparation Area Name" col="1"/>
@@ -16,10 +16,10 @@
             </v-template>
             <v-template>
               <GridLayout columns="50, *, auto" rows="*" padding="10">
-                <Image :src="prep.image" col="0" class="thumbnail"/>
-                <label :text="prep.description" class="h2" col="1" paddingLeft="10"/>
-                <label :text="prep.nbrOfCatg" class="h2" col="2"
-                      :visibility="prep.nbrOfCatg?'visible':'hidden'"/>
+                <Image :src="item.image" col="0" class="thumbnail"/>
+                <label :text="item.description" class="h2" col="1" paddingLeft="10"/>
+                <label :text="item.nbrOfCatg" class="h2" col="2"
+                      :visibility="item.nbrOfCatg>0?'visible':'hidden'"/>
               </GridLayout>
             </v-template>
           </RadListView>
@@ -27,7 +27,7 @@
       </TabViewItem>
       <TabViewItem :title="$t('tableAreas')">
         <StackLayout>
-            <RadListView for="area in areas"  @itemTap="onItemTap">
+            <RadListView for="item in areas"  @itemTap="onItemTap">
             <v-template name="header">
               <GridLayout columns="80, *, auto" rows="*" padding="10">
                   <label text="Table Area Name" col="1"/>
@@ -36,10 +36,10 @@
             </v-template>
               <v-template>
                 <GridLayout columns="50, *, auto" rows="*"  padding="10">
-                  <Image :src="area.image" col="0" class="thumbnail"/>
-                  <label :text="area.description" class="h2" col="1" paddingLeft="10"/>
-                  <label :text="area.nbrOfSpots" class="h2" col="2" 
-                      :visibility="area.nbrOfSpots?'visible':'hidden'"/>
+                  <Image :src="item.image" col="0" class="thumbnail"/>
+                  <label :text="item.description" class="h2" col="1" paddingLeft="10"/>
+                  <label :text="item.nbrOfSpots" class="h2" col="2" 
+                      :visibility="item.nbrOfSpots>0?'visible':'hidden'"/>
                 </GridLayout>
               </v-template>
             </RadListView>
@@ -64,8 +64,8 @@ export default {
   data () {
     return {
       currentTab: 0,
-      areas: this.$store.getters.areasAndSpotCount,
-      preps: this.$store.getters.prepAreasAndCatgCount,
+      areas: this.$store.getters.accommodationAreas,
+      preps: this.$store.getters.preparationAreas,
     }
   },
   created() {
@@ -78,32 +78,17 @@ export default {
     onItemTap(args) {
       if (this.currentTab == 0) {
         this.$navigateTo(this.$routes.PrepDetail,
-            { props: {  list: this.preps,
-                        index: args.index}})}
+            { props: {  item: args.item}})}
       if (this.currentTab == 1) {
         this.$navigateTo(this.$routes.AreaDetail,
-            { props: { list: this.areas,
-                      index: args.index}})}
+            { props: { item: args.item}})}
     },
     onAddTap() {
       if (this.currentTab == 0) {
-        this.$showModal(PrepAdd).then (result => {
-          let inserted = false
-          for (let i=0; i < this.preps.length; i++) {
-            if (this.preps[i].description.toUpperCase() >
-                result.description.toUpperCase()) {
-              this.preps.splice(i,0,result); inserted = true; break }}
-          if(!inserted) this.preps.push(result);
-        })
+        this.$showModal(PrepAdd)
       }
       if (this.currentTab == 1) {
-        this.$showModal(AreaAdd).then (result => {
-          let inserted = false
-          for (let i=0; i < this.areas.length; i++) {
-            if (this.areas[i].description.toUpperCase() >
-                result.description.toUpperCase()) {
-              this.areas.splice(i,0,result); inserted = true; break }}
-          if(!inserted) this.areas.push(result)})
+        this.$showModal(AreaAdd)
       }
     },
   }
