@@ -7,7 +7,7 @@
   "nativescript": {
     "id": "com.growerp.restaurant",
     "tns-ios": {
-      "version": "6.0.2"
+      "version": "6.1.0"
     },
     "tns-android": {
       "version": "6.1.0"
@@ -23,7 +23,7 @@
     "nativescript-drop-down": "^5.0.4",
     "nativescript-exit": "^1.0.1",
     "nativescript-http-formdata": "^1.7.0",
-    "nativescript-imagepicker": "^7.0.0",
+    "nativescript-imagepicker": "^7.1.0",
     "nativescript-printer": "^1.4.0",
     "nativescript-purchase": "^2.0.13",
     "nativescript-socket.io": "^0.11.1",
@@ -32,13 +32,13 @@
     "nativescript-ui-calendar": "^5.0.0",
     "nativescript-ui-chart": "^6.0.0",
     "nativescript-ui-dataform": "^5.1.0",
-    "nativescript-ui-listview": "^7.0.4",
+    "nativescript-ui-listview": "^7.0.5",
     "nativescript-ui-sidedrawer": "^7.0.1",
     "nativescript-vue": "^2.4.0",
     "nativescript-windowed-modal": "^6.0.0",
     "net": "^1.0.2",
     "source-map-support": "^0.5.10",
-    "tns-core-modules": "^6.1.0",
+    "tns-core-modules": "^6.1.1",
     "typescript": "^3.2.2",
     "vue-i18n": "^8.8.0",
     "vuex": "^3.0.1"
@@ -54,7 +54,7 @@
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "lazy": "1.0.11",
-    "nativescript-dev-webpack": "~1.1.0",
+    "nativescript-dev-webpack": "~1.2.0",
     "nativescript-vue-template-compiler": "^2.0.0",
     "nativescript-worker-loader": "~0.9.0",
     "node-sass": "^4.12.0",
