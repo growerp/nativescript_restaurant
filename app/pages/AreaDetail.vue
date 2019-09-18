@@ -17,7 +17,7 @@
       <RadDataForm :source="Object.assign({},item)"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label class="title" :text="$t('tableNumbers') + $t('tapToDelete')"/>
-      <RadListView for="table in tableMatrix" height="50%">
+      <RadListView for="table in tableMatrix" height="40%">
         <v-template>
           <GridLayout columns="*, *, *, *" rows="*" class="item">
             <label :text="table[0]?table[0].spotNumber:''" class="h2"

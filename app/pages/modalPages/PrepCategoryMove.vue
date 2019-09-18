@@ -4,15 +4,12 @@
       <Label :text="item.name" horizontalAlignment="center" class="h2"/>
       <Label :text="$t('movePrepCat')" textWrap="true" class="h3"
           horizontalAlignment="center" padding="10"/>
-      <RadListView for="item in items" @itemTap="onItemTap" height="50%">
-        <v-template>
-          <GridLayout columns="50, *, auto" rows="*">
-            <Image :src="item.image"  col="0" class="thumbnail"/>
-            <label :text="item.description" class="h2" col="1"/>
-          </GridLayout>
-        </v-template>
-      </RadListView>
-      <Button :text="$t('cancel')" @tap="$modal.close()" class="button"/>
+      <RadDataForm :source="prep" :metadata="prepMeta" height="150"
+          @propertyCommitted="onCommitted"/>
+      <GridLayout columns="*,*" rows="auto">
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
+        <Button class="button" :text="$t('selectPreparationArea')" @tap="submit" col="1"/>
+      </GridLayout>
     </StackLayout></ModalStack>
   </page>
 </template>
@@ -25,25 +22,42 @@ export default {
     },
     data() {
       return {
-        itemsAll: this.$store.getters.preparationAreas,
-        items: [] // list without current one
+        prep: { name: ''},
+        prepMeta: {
+          propertyAnnotations: [
+            { name: 'name', displayName: '', editor: 'Picker', 
+              valuesProvider: 
+                this.$store.getters.preparationAreasDescMinusOne(
+                    this.item.preparationAreaId)
+            },
+        ]},
       }
     },
-    created() {
-      for (let i=0; i < this.itemsAll.length; i++) {
-        if (this.itemsAll[i].preparationAreaId != this.item.preparationAreaId) {
-          this.items.push(this.itemsAll[i])}}
-    },
     methods: {
-      onItemTap(args) {
-        this.$backendService.updateCategory( {
-          productCategoryId: this.item.productCategoryId,
-          preparationAreaId: args.item.preparationAreaId})
-        let newItem = Object.assign({},this.item)
-        newItem.verb = 'update'
-        newItem.preparationAreaId = args.item.preparationAreaId
-        this.$store.commit('productCategory', newItem)
-        this.$modal.close()
+      onCommitted(data) {
+        this.editedItem = JSON.parse(data.object.editedObject)},
+      submit() {
+        if (this.editedItem) {
+          const platformModule = require("tns-core-modules/platform")
+          if (platformModule.isIOS) { // returns an index instead of value so change
+            let values = this.$store.getters.preparationAreasDescMinusOne(
+                  this.item.preparationAreaId)
+            this.editedItem.name = values[parseInt(this.editedItem.name,10)]
+          }
+          console.log("====prep selected:" + this.editedItem.name)
+          let preparationAreaId = this.$store.getters.preparationAreaByDesc(
+              this.editedItem.name).preparationAreaId
+          this.$backendService.updateCategory({
+            productCategoryId: this.item.productCategoryId,
+            preparationAreaId: preparationAreaId})
+          let productCategory = Object.assign({},
+            this.$store.getters.productCategoryById(this.item.productCategoryId))
+          productCategory.preparationAreaId = preparationAreaId
+          productCategory.description = this.editedItem.name
+          productCategory.verb = "update"
+          this.$store.commit('productCategory', productCategory)
+          this.$modal.close()
+        }
       },
    },
 }

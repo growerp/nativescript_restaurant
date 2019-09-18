@@ -179,6 +179,7 @@ export default {
     selectCategory: 'Select category',
     selectExistOrNew: 'Select an existing, or cancel for new',
     selectTableLocation: 'Select table location.',
+    selectPreparationArea: 'Select Preparation Area',
     serve: 'Serve',
     served : 'served',
     serverNotAvailable: 'Internet connection or server not available.',
