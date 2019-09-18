@@ -151,14 +151,24 @@ const getters = {
   preparationAreas: state => {
     return state.preparationAreas
   },
-  preparationAreasByDesc: state => desc => {
+  preparationAreaByDesc: state => desc => {
     return state.preparationAreas.find(o => o.description === desc)
+  },
+  preparationAreasDescMinusOne: state => prepId => {
+    let prepAreas = [" "]
+    for(let i=0;i<state.preparationAreas.length;i++)
+      if (state.preparationAreas[i].preparationAreaId != prepId)
+        prepAreas.push(state.preparationAreas[i].description)
+    return prepAreas
   },
   productCategories: state => {
     return state.productCategories
   },
+  productCategoryById: state => id => {
+    return state.productCategories.find(o => o.productCategoryId === id)
+  },
   productCategoriesByPrepId: state => prepId => {
-    return state.productCategories.filter(o => o.preparationAreaId == prepId)
+    return state.productCategories.filter(o => o.preparationAreaId === prepId)
   }
 }
 // export this module.
