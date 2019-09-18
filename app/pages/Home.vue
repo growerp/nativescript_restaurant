@@ -4,13 +4,14 @@
       <myActionBar :openDrawer="openDrawer" header="dashBoard"/>
     </ActionBar>
     <StackLayout padding="20">
-      <RadListView ref="listView" for="item in dashBoard" @itemTap="onItemTap"
-          itemReorder="true" @itemReordered="onItemReordered" layout="grid">
+      <RadListView for="item in dashBoard" @itemTap="onItemTap"
+          itemReorder="true" @itemReordered="onItemReordered" 
+          layout="grid" itemHeight="120"><!--itemHeight for ios -->
         <v-template>
-            <StackLayout orientation="vertical" padding="10">
-              <Image :src="item.image" height="60"/>
-              <Label :text="item.title" horizontalAlignment="center" class="h3"/>
-            </StackLayout>
+          <StackLayout orientation="vertical" padding="10">
+            <Image :src="item.image" height="60"/>
+            <Label :text="item.title" horizontalAlignment="center" class="h3"/>
+          </StackLayout>
         </v-template>
       </RadListView>
     </StackLayout>
