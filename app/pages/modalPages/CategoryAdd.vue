@@ -1,8 +1,8 @@
 <template>
   <page><ModalStack dismissEnabled="true" class="modal-container">
-    <StackLayout class="p-20" backgroundColor="white" paddingTop="40" width="90%">
+    <StackLayout class="p-20" backgroundColor="white" padding="10" width="90%">
       <label :text="$t('addCategory')" class="h2" horizontalAlignment="center"/>
-      <RadDataForm :source="item" :metadata="itemMeta"
+      <RadDataForm :source="item" :metadata="itemMeta" height="30%"
           @propertyCommitted="onCommitted"/>
       <GridLayout columns="*,*" rows="auto">
         <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
@@ -29,15 +29,13 @@
           propertyAnnotations: [
               { name: 'categoryName', required: true, index: 0},
               { name: 'description', required: true, index: 1,
+                  readOnly: this.prepAreaDescription? true : false,
                   displayName: this.$t('preparation'),
-                  editor: 'Picker', valuesProvider: this.$store.getters.prepAreas()},
+                  editor: 'Picker', valuesProvider: this.$store.getters.preparationAreasDesc()},
           ]
         },
         editedItem: {},
       }
-    },
-    created() {
-      console.log("====descr:" + this.prepAreaDescription)
     },
     methods: {
       onCommitted(data) {
@@ -57,11 +55,12 @@
             }
             this.editedItem.preparationAreaId = 
                 this.$store.getters.preparationAreaByDesc(description).preparationAreaId
+            console.log("===== add category edited item:" + JSON.stringify(this.editedItem))
             this.$backendService.createCategory(this.editedItem)
             .then((result) => {
               this.editedItem.verb = 'add'
-              this.editedItem.preparationAreaId = result.data.preparationAreaId
-              this.$store.commit('productCategory', this.editedIem)
+              this.editedItem.productCategoryId = result.data.productCategoryId
+              this.$store.commit('productCategory', this.editedItem)
             })
             this.$modal.close()
           }

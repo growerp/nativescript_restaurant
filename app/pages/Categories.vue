@@ -19,7 +19,7 @@
             <GridLayout columns="50, 10, *, auto, 10, auto" rows="*" padding="5">
               <Image :src="item.image"  col="0" height="50"/>
               <StackLayout col="2">
-                <Label :text="item.name" class="h2"/>
+                <Label :text="item.categoryName" class="h2"/>
                 <Label :text="item.description" class="h3"/>
               </StackLayout>
               <Label :text="item.nbrOfProducts" class="h3" col="3"/>
@@ -44,19 +44,17 @@ export default {
   mixins: [ sideDrawer, general],
   data () {
     return {
-      itemList: this.$store.getters.categoriesAndProductsCount,
+      itemList: this.$store.getters.productCategories,
     }
   },
   methods: {
     onAddTap() { //get new item and insert sorted into list
       this.$showModal(CategoryAdd)
-      .then (() => {
-        this.itemList = this.$store.getters.categoriesAndProductsCount
-      })
+        this.itemList = this.$store.getters.productCategories
     },
     onItemTap(args) {
       this.$navigateTo(this.$routes.CategoryDetail,
-          { props: { index: args.index}})
+          { props: { item: args.item}})
     },
   },
 }

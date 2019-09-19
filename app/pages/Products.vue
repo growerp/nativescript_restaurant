@@ -53,7 +53,7 @@ export default {
     },
     onItemTap(args) {
       this.$navigateTo(this.$routes.ProductDetail,
-            { props: {  index: args.index}})
+            { props: {  item: Object.assign({},args.item)}})
     },
   },
 }

@@ -8,7 +8,7 @@
           @propertyCommitted="onCommitted"/>
       <GridLayout columns="*,*" rows="auto">
         <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
-        <Button class="button" :text="$t('selectPreparationArea')" @tap="submit" col="1"/>
+        <Button class="button" :text="$t('selectArea')" @tap="submit" col="1"/>
       </GridLayout>
     </StackLayout></ModalStack>
   </page>
@@ -52,6 +52,7 @@ export default {
             preparationAreaId: preparationAreaId})
           let productCategory = Object.assign({},
             this.$store.getters.productCategoryById(this.item.productCategoryId))
+  console.log(" in prepctmove prodcat: " + JSON.stringify(productCategory))
           productCategory.preparationAreaId = preparationAreaId
           productCategory.description = this.editedItem.name
           productCategory.verb = "update"

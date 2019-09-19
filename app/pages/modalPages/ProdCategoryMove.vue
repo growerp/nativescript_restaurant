@@ -1,7 +1,7 @@
 <template>
   <page><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="90%" padding="20">
-      <Label :text="name" horizontalAlignment="center" class="h2"/>
+      <Label :text="categoryName" horizontalAlignment="center" class="h2"/>
       <Label :text="$t('moveProdCat')" textWrap="true" class="h3"
           horizontalAlignment="center"/>
       <RadDataForm :source="item" :metadata="itemMeta" height="150"
@@ -20,14 +20,14 @@
     props: {
       prodId: String,
       catId: String,
-      name: String,
+      categoryName: String,
     },
     data() {
       return {
-        item: { name: ''},
+        item: { categoryName: ''},
         itemMeta: {
           propertyAnnotations: [
-              { name: 'name', displayName: '', editor: 'Picker', 
+              { name: 'categoryName', displayName: '', editor: 'Picker', 
                 valuesProvider: this.$store.getters.categoriesMinusOne(this.catId)},
         ]},
       }
@@ -42,9 +42,9 @@
           const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
             let values = this.$store.getters.categoriesMinusOne(this.catId)
-            this.editedItem.name = values[parseInt(this.editedItem.name,10)]}
+            this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
           param.productCategoryId = this.$store.getters.categoryAndProductsByDesc(
-              this.editedItem.name).productCategoryId
+              this.editedItem.categoryName).productCategoryId
           this.$backendService.updateProduct(param)
           this.$store.commit('categoryAndProduct',{ 
                 oldProductCategoryId: this.catId,

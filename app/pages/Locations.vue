@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
         <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
-            :onActionTap="onAddTap" :openDrawer="openDrawer" header="locations"/>
+            :onActionTap="onAddTap" :openDrawer="openDrawer" :header="$t('locations')"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('preparation')">
@@ -10,8 +10,8 @@
           <RadListView for="item in preps" @itemTap="onItemTap">
             <v-template name="header">
               <GridLayout columns="80, *, auto" rows="*" padding="10">
-                  <label text="Preparation Area Name" col="1"/>
-                  <label text="Nbr of Catgs" col="2"/>
+                  <label text="Area Name" col="1" class="p"/>
+                  <label text="Categories" col="2" class="p"/>
               </GridLayout>
             </v-template>
             <v-template>
@@ -30,8 +30,8 @@
             <RadListView for="item in areas"  @itemTap="onItemTap">
             <v-template name="header">
               <GridLayout columns="80, *, auto" rows="*" padding="10">
-                  <label text="Table Area Name" col="1"/>
-                  <label text="Nbr of Tables" col="2"/>
+                  <label text="Area Name" col="1" class="p"/>
+                  <label text="Tables" col="2" class="p"/>
               </GridLayout>
             </v-template>
               <v-template>

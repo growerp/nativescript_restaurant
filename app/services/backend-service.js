@@ -351,26 +351,25 @@ export default class BackendService {
     // ======================initial data load when app starts==================
     initData() {
         axios.all([
-            restGet.get('s1/growerp/GetPreparationAreas'),
-            restGet.get('s1/growerp/GetAccommodationAreas'),
-            restGet.get('s1/growerp/GetAccommodationSpots'),
-            restGet.get('s1/growerp/GetProductCategories'),
-            restGet.get('s1/growerp/GetUserGroups'),
-          restGet.get('s1/growerp/GetCategoriesAndProducts'),
+          restGet.get('s1/growerp/GetPreparationAreas'),
+          restGet.get('s1/growerp/GetAccommodationAreas'),
+          restGet.get('s1/growerp/GetAccommodationSpots'),
+          restGet.get('s1/growerp/GetProductCategories'),
+          restGet.get('s1/growerp/GetProducts'),
+          restGet.get('s1/growerp/GetUserGroups'),
           restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Employee', full: false}),
           restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Customer', full: false}),
           restPost.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
         ])
         .then(axios.spread(function ( GetPreparationAreas,GetAccommodationAreas,GetAccommodationSpots,
-            GetProductCategories, GetUserGroups, GetCategoriesAndProducts,
-              GetUsersInStore, GetCustomersInStore,
+          GetProductCategories, GetProducts, GetUserGroups, GetUsersInStore, GetCustomersInStore,
               GetOrdersItemsPartySpot) {
                 store.commit("preparationAreas", GetPreparationAreas.data.preparationAreas)
                 store.commit("accommodationAreas", GetAccommodationAreas.data.accommodationAreas)
                 store.commit("accommodationSpots", GetAccommodationSpots.data.accommodationSpots)
                 store.commit("productCategories", GetProductCategories.data.productCategories)
+                store.commit("products", GetProducts.data.products)
                 store.commit("userGroups", GetUserGroups.data.userGroups)
-                store.commit("categoriesAndProducts", GetCategoriesAndProducts.data.categoriesAndProducts)
                 store.commit("users", GetUsersInStore.data.users)
                 store.commit("customerProvider", GetCustomersInStore.data.users)
                 store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
