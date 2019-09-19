@@ -4,8 +4,9 @@
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="preparationAreaDetail"/>
     </ActionBar>
-    <StackLayout @longPress="onDeleteTap" padding="10" height="100%">
-      <GridLayout width="100%" columns="100,30,*" rows="50,50">
+    <StackLayout padding="10" height="100%">
+      <GridLayout width="100%" columns="100,30,*" rows="50,50"
+          @longPress="onDeleteTap" >
         <Image ref="prepForm" :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
         <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
@@ -13,15 +14,17 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('prep', item.preparationAreaId)"/>
       </GridLayout>
-      <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
+      <Label :text="$t('longToDelete')" horizontalAlignment="center" 
+        @longPress="onDeleteTap" class="p"/>
       <RadDataForm ref="itemForm" :source="Object.assign({},item)"
+          @longPress="onDeleteTap" 
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label :text="$t('categoriesPrepared')" class="h3" horizontalAlignment="center"/>
-      <RadListView for="cat in categoryList" @itemTap="onMoveTap" height="50%">
+      <RadListView for="cat in categoryList" @itemTap="onMoveTap"  height="50%">
         <v-template>
-          <GridLayout columns="50, *, auto" rows="*" padding="10">
+          <GridLayout columns="50, *, auto" rows="*"  padding="10">
             <Image :src="cat.image" col="0" height="40"/>
-            <label :text="cat.name" class="h2" col="1"/>
+            <label :text="cat.categoryName" class="h2" col="1"/>
           </GridLayout>
         </v-template>
       </RadListView>
@@ -70,33 +73,35 @@ export default {
     },
     onSaveTap() {
       if (this.editedItem) {
-        this.$backendService.updatePreparationArea(this.editedItem)
-        this.editedItem.verb = 'update'
-        this.$store.commit('preparationArea', this.editedItem)
+        if (!this.editedItem.description) this.note(this.$t('nameIsRequired'))
+        else {
+          this.$backendService.updatePreparationArea(this.editedItem)
+          this.editedItem.verb = 'update'
+          this.$store.commit('preparationArea', this.editedItem)
+        }
       }
       this.hideKeyboard()
       this.$navigateBack()
     },
     onDeleteTap() {
-        if (this.categoryList.length) {
-          this.note(this.$t('cannotDelPrep'))
-        } else {
-          confirm({
-              title: this.$t('delPrepArea') + this.item.description + "'?",
-              okButtonText: this.$t('ok'),
-              cancelButtonText: this.$t('cancel')
-          }).then (data => {
-              if (data) {
-                  this.$backendService.deletePreparationArea(
-                      this.item.preparationAreaId)
-                  this.$store.commit('preparationArea', {
-                        verb: 'delete',
-                        preparationAreaId: this.item.preparationAreaId
-                  })
-              }
-              this.$navigateBack()
-          })
-        }
+      if (this.categoryList.length) {
+        this.note(this.$t('cannotDelPrep'))
+      } else {
+        confirm({
+            title: this.$t('delPrepArea') + this.item.description + "'?",
+            okButtonText: this.$t('ok'),
+            cancelButtonText: this.$t('cancel')
+        }).then (data => {
+          if (data) {
+            this.$backendService.deletePreparationArea(
+                this.item.preparationAreaId)
+            this.$store.commit('preparationArea', {
+                  verb: 'delete',
+                  preparationAreaId: this.item.preparationAreaId})
+          }
+          this.$navigateBack()
+        })
+      }
     },
     onMoveTap(args) {
       this.$showModal(PrepCategoryMove, { props: {  item: args.item}})

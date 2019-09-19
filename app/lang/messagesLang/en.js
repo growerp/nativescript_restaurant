@@ -3,6 +3,7 @@ export default {
     accountCannotPay: 'Sorry,your account is not eligible to make payments!',
     accountNotFound: 'Unfortunately we could not find your account or there was a server error',
     add: 'CREATE   ',
+    addArea: 'Add Area  ', //short of: add table/prep area
     addAreas: 'Add Table Areas',
     addCategory: 'Add Category',
     added: ' added.',
@@ -13,7 +14,6 @@ export default {
     addProduct: 'Add Product',
     addRequest: 'Add request  ',
     addTable: 'Add Table   ',
-    addTableArea: 'Add Table Area  ', //short of: add table area
     addTask: 'Add a Task',
     allOrders: 'All Orders',
     alreadySubscribed: 'You are already subscribed!',
@@ -35,7 +35,7 @@ export default {
     categoryDetail: 'Category Detail Information',
     categories: 'Categories',
     category: 'Category',
-    categoriesPrepared: 'Menu categories prepared here...(tap to move)',
+    categoriesPrepared: 'Menu categories prepared here.(tap to move)',
     change: 'Change',
     changePasswordFor: 'Change Password for:',
     chargedNotCancel: 'You are only charged when you not cancel',
@@ -101,7 +101,7 @@ export default {
     listofTable: 'List table location and numbers',
     listOfProducts :'List of products',
     listOfSales: 'List of sales',
-    locations: 'Prepare Locations & Table areas',
+    locations: 'Locations',
     longToDelete: 'Press long to delete...',
     logout: 'Logout',
     login: 'Login',
@@ -179,7 +179,7 @@ export default {
     selectCategory: 'Select category',
     selectExistOrNew: 'Select an existing, or cancel for new',
     selectTableLocation: 'Select table location.',
-    selectPreparationArea: 'Select Preparation Area',
+    selectArea: 'Select Area', // preparation or table area
     serve: 'Serve',
     served : 'served',
     serverNotAvailable: 'Internet connection or server not available.',

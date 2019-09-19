@@ -31,8 +31,9 @@
               { name: 'name', required: true, index: 0},
               { name: 'price', required: true, index: 1},
               { name: 'categoryName', required: true, index: 2,
+                readOnly: this.categoryName? true : false,
                 editor: 'Picker',
-                valuesProvider: this.$store.getters.categories()
+                valuesProvider: this.$store.getters.productCategoriesDesc()
               }]
         },
         editedItem: {},
@@ -50,23 +51,22 @@
           else {
             const platformModule = require("tns-core-modules/platform")
             if (platformModule.isIOS) { // returns an index instead of value so change
-              let values = this.$store.getters.categories()
+              let values = this.$store.getters.productCategoriesDesc()
               this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
-            let productCategoryId = this.$store.getters.categoryAndProductsByDesc(
+            let productCategoryId = this.$store.getters.productCategoryByDesc(
                 this.editedItem.categoryName).productCategoryId
             this.$backendService.createProduct(
                 this.editedItem.name,
                 this.editedItem.price,
                 productCategoryId )
             .then( (result) => {
-              this.$store.commit('categoryAndProduct', {
+              this.$store.commit('product', {
+                  productId: result.data.productId,
+                  name: this.editedItem.name,
+                  image: global.noImage,
+                  price: this.editedItem.price,
                   productCategoryId: productCategoryId,
-                  name: this.editedItem.categoryName, 
-                  products: [{
-                    productId: result.data.productId,
-                    name: this.editedItem.name,
-                    image: global.noImage,
-                    price: this.editedItem.price }]
+                  categoryName: this.editedItem.categoryName, 
               })
               this.$modal.close()
             })

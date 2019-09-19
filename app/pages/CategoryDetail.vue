@@ -42,27 +42,24 @@
     name: 'CategoryDetail',
     mixins: [ imageSelector,general, sideDrawer ],
     props: {
-      index: Number,
+      item: Object,
     },
     data() {
       return {
-        item: this.$store.getters.categoriesAndProductsCount[this.index],
-        list: this.$store.getters.categoriesAndProductsCount,
-        productList: this.$store.getters.categoriesAndProducts[this.index].products,
+        productList: this.$store.getters.productsByCatg(this.item.productCategoryId),
         editedItem: {},
         itemMeta: {
           propertyAnnotations: [
               { name: 'productCategoryId', ignore: true},
               { name: 'image', ignore: true},
-              { name: 'name', required: true, index: 0},
+              { name: 'categoryName', required: true, index: 0},
               { name: 'preparationAreaId', ignore: true},
               { name: 'description', required: true, index: 1, displayName: this.$t('preparation'),
-                editor: 'Picker', valuesProvider: this.$store.getters.prepAreas(false)},
+                editor: 'Picker', valuesProvider: this.$store.getters.preparationAreasDesc(false)},
               { name: 'nbrOfProducts', ignore: true}]},
       }
     },
     created() {
-      console.log("====category: " + JSON.stringify(this.item))
       this.$backendService.downloadImage('medium', 'category',
           this.item.productCategoryId)
       .then(result => { this.itemImage = result.data.imageFile})
@@ -74,28 +71,25 @@
       onMoveProduct(args) {
         this.$showModal(ProdCategoryMove,
           { props: {prodId: args.item.productId, catId: this.item.productCategoryId,
-                    name: args.item.name}})
+                    name: args.item.categoryName}})
         .then(() => {
- //         setTimeout(() => {
-            this.productList = this.$store.getters.categoryAndProductsById(
-                this.list[this.index].productCategoryId).products
- //          }, 100)
-      })
+            this.productList = this.$store.getters.productsByCatg(this.item.productCategoryId)
+        })
       },
       onSaveTap() {
         if (this.editedItem.productCategoryId) {
-          if (!this.editedItem.name) this.note(this.$t('nameIsRequired'))
+          if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
           else {
             const platformModule = require("tns-core-modules/platform")
             if (platformModule.isIOS) { // returns an index instead of value so change
               let values = this.$store.getters.prepAreas
-              this.editedItem.name = values[parseInt(this.editedItem.name,10)]}
+              this.editedItem.caegoryName = values[parseInt(this.editedItem.categoryName,10)]}
             delete this.editedItem.nbrOfProducts
             if (this.editedItem.description != this.item.description) { //preparation area changed
               this.editedItem.preparationId = this.$store.prepAreasByDesc(
                   this.editedItem.description).preparationAreaId }
             this.$backendService.updateCategory(this.editedItem)
-            this.$store.commit('categoryAndProduct',this.editedItem)
+            this.$store.commit('productCategory',this.editedItem)
             this.hideKeyboard()
         }}
         this.$navigateBack()
@@ -105,7 +99,7 @@
           this.note(this.$t('cannotDelCatProd'))
         } else {
           confirm({
-            title: this.$t('deleteCategory') + this.item.name + "?",
+            title: this.$t('deleteCategory') + this.item.categoryName + "?",
             okButtonText: this.$t('ok'),
             cancelButtonText: this.$t('cancel')
           })
@@ -113,18 +107,18 @@
             if (data) {
               this.$backendService.deleteCategory(
                 this.item.productCategoryId)
-              this.$store.commit('categoryAndProduct', { 
-                oldProductCategoryId: this.item.productCategoryId })
+              this.$store.commit('productCategory', {
+                verb: 'delete', 
+                productCategoryId: this.item.productCategoryId })
             }
             this.$navigateBack()
           })
         }
       },
       addProduct() {
-        this.$showModal(ProductAdd, { props: {categoryName: this.item.name}})
+        this.$showModal(ProductAdd, { props: {categoryName: this.item.categoryName}})
         .then(() => {
-          this.productList = this.$store.getters.categoryAndProductsById(
-            this.list[this.index].productCategoryId).products
+          this.productList = this.$store.getters.productsByCatg(this.item.productCategoryId)
         })
       }
     }

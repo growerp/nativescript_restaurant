@@ -1,11 +1,13 @@
 <template>
   <page><ModalStack dismissEnabled="true" class="modal-container">
-    <StackLayout backgroundColor="white" paddingTop="40" width="90%">
+    <StackLayout backgroundColor="white" width="90%" padding="10">
       <label :text="$t('addPreparationArea')" class="h2" horizontalAlignment="center"/>
       <RadDataForm ref="addPrep" :source="item" :metadata="itemMeta"
           @propertyCommitted="onCommitted"/>
-      <Button class="button" :text="$t('addPreparationArea')" @tap="submit" />
-      <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
+      <GridLayout columns="*,*" rows="auto">
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
+        <Button class="button" :text="$t('addArea')" @tap="submit" col="1"/>
+      </GridLayout>
     </StackLayout></ModalStack>
   </page>
 </template>
