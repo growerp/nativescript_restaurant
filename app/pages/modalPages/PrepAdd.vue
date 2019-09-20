@@ -17,13 +17,13 @@ export default {
   name: 'PrepAdd',
   data() {
     return {
-        item: { description: '' },
-        itemMeta: {
-            propertyAnnotations: [
-                { name: 'description', required: true, index: 0},
-            ]
-        },
-        editedItem: {},
+      item: { description: '' },
+      itemMeta: {
+        propertyAnnotations: [
+            { name: 'description', required: true, index: 0},
+        ]
+      },
+      editedItem: {},
     }
   },
   methods: {
@@ -32,18 +32,18 @@ export default {
     },
     submit() {
       if (this.editedItem != '') {
-          this.$backendService.createPreparationArea(this.editedItem)
-          .then( result => {
-            this.$store.commit('preparationArea', {
-              verb: 'add',
-              preparationAreaId: result.data.preparationAreaId,
-              nbrOfCatg: 0,
-              description: this.editedItem.description,
-              image: global.noImage,
-            })
+        this.$backendService.createPreparationArea(this.editedItem)
+        .then( result => {
+          this.$store.commit('preparationArea', {
+            verb: 'add',
+            preparationAreaId: result.data.preparationAreaId,
+            nbrOfCatg: 0,
+            description: this.editedItem.description,
+            image: global.noImage,
           })
+          this.$modal.close()
+        })
       }
-      this.$modal.close()
     }
   }
 }

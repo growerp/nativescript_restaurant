@@ -4,7 +4,7 @@
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="categoryDetail"/>
     </ActionBar>
-    <StackLayout @longPress="onDeleteTap">
+    <StackLayout>
       <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
         <Image ref="areaForm" :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
@@ -13,21 +13,21 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('category', item.productCategoryId)"/>
       </GridLayout>
-      <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
       <RadDataForm ref="itemForm" :source="item"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label class="title" :text="$t('products') + $t('tapToMove')"/>
-      <RadListView ref="listView" for="item in productList" height="30%" 
-          @itemTap="onMoveProduct">
+      <RadListView ref="listView" for="item in productList" height="30%">
         <v-template>
-          <GridLayout columns="50, *, auto" rows="*" padding="10">
+          <GridLayout columns="50, *, auto" rows="*" padding="10"
+              @tap="onMoveItemTap(item)" @longPress="onDeleteItemTap(item)">
               <Image :src="item.image"  col="0" height="30"/>
               <label :text="item.name" class="h2" col="1"/>
               <label :text="item.price" class="h2" col="2"/>
             </GridLayout>
         </v-template>
       </RadListView>
-      <Button class="button" :text="$t('addProduct')" @tap="addProduct"/>
+      <Button class="button" :text="$t('addProduct')" @tap="addProduct" 
+                width="50%"/>
     </StackLayout>
   </Page>
 </template>
@@ -37,6 +37,7 @@
   import imageSelector from '~/mixins/imageSelector'
   import ProdCategoryMove from './modalPages/ProdCategoryMove'
   import ProductAdd from './modalPages/ProductAdd'
+  import Confirm from './modalPages/Confirm'
   import general from '~/mixins/general'
   export default {
     name: 'CategoryDetail',
@@ -68,12 +69,10 @@
       onItemCommitted(data) {
         this.editedItem = JSON.parse(data.object.editedObject)
       },
-      onMoveProduct(args) {
-        this.$showModal(ProdCategoryMove,
-          { props: {prodId: args.item.productId, catId: this.item.productCategoryId,
-                    name: args.item.categoryName}})
+      onMoveItemTap(item) {
+        this.$showModal(ProdCategoryMove, { props: {product: item}})
         .then(() => {
-            this.productList = this.$store.getters.productsByCatg(this.item.productCategoryId)
+          this.refresh()
         })
       },
       onSaveTap() {
@@ -83,7 +82,7 @@
             const platformModule = require("tns-core-modules/platform")
             if (platformModule.isIOS) { // returns an index instead of value so change
               let values = this.$store.getters.prepAreas
-              this.editedItem.caegoryName = values[parseInt(this.editedItem.categoryName,10)]}
+              this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
             delete this.editedItem.nbrOfProducts
             if (this.editedItem.description != this.item.description) { //preparation area changed
               this.editedItem.preparationId = this.$store.prepAreasByDesc(
@@ -94,32 +93,29 @@
         }}
         this.$navigateBack()
       },
-      onDeleteTap() { //delete Item
-        if (this.productList.length !== 0) {
-          this.note(this.$t('cannotDelCatProd'))
-        } else {
-          confirm({
-            title: this.$t('deleteCategory') + this.item.categoryName + "?",
-            okButtonText: this.$t('ok'),
-            cancelButtonText: this.$t('cancel')
-          })
-          .then (data => {
-            if (data) {
-              this.$backendService.deleteCategory(
-                this.item.productCategoryId)
-              this.$store.commit('productCategory', {
-                verb: 'delete', 
-                productCategoryId: this.item.productCategoryId })
-            }
-            this.$navigateBack()
-          })
-        }
+      onDeleteItemTap(item) {
+        this.$showModal(Confirm,{ props: {
+          message: this.$t('delProduct') + item.name + "?"}
+        })
+        .then (data => {
+          if (data) {
+            this.$backendService.deleteProduct(item.productId)
+            this.$store.commit('product', {
+                  verb: 'delete',
+                  productId: item.productId,
+                  productCategoryId: item.productCategoryId})
+            this.refresh()
+          }
+        })
       },
       addProduct() {
         this.$showModal(ProductAdd, { props: {categoryName: this.item.categoryName}})
         .then(() => {
-          this.productList = this.$store.getters.productsByCatg(this.item.productCategoryId)
+          this.refresh()
         })
+      },
+      refresh() {
+          this.productList = this.$store.getters.productsByCatg(this.item.productCategoryId)
       }
     }
   }

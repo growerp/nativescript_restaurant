@@ -1,41 +1,74 @@
 const log = true 
 const state = {
-  preparationAreas: [],
-  accommodationAreas: [],
-  accommodationSpots: [],
-  productCategories: [],
-  products: []
+  accommodationAreas: [{
+    accommodationAreaId: '',
+    description: '',
+    image: '',
+    nbrOfSpots: ''
+  }],
+  accommodationSpots: [{
+    accommodationSpotId: '',
+    spotNumber: '',
+    nbrOfSeats: '',
+    accommodationAreaId: '',
+    description: ''
+  }],
+  preparationAreas: [{
+    preparationAreaId: '',
+    description: '',
+    image: '',
+    nbrOfCatg: ''
+  }],
+  productCategories: [{
+    productCategoryId: '',
+    categoryName: '',
+    preparationAreaId: '',
+    description: '',
+    image: '',
+    nbrOfProducts: ''
+  }],
+  products: [{
+    productId: '',
+    name: '',
+    price: '',
+    productCategoryId: '',
+    categoryName: '',
+    image: '',
+  }]
 }
-const appSettings = require("tns-core-modules/application-settings")
 
 const mutations = {
   // accommodationArea and Spots
   accommodationArea(state, value) { // update
-    console.log("====store incoming:" + JSON.stringify(value))
+    if (log) console.log("====locCatProd incoming accomodation Area update:" +
+        JSON.stringify(value))
     let verb = value.verb; delete value.verb
     if (verb == 'add') {
       let i = 0
-      for (i=0; i<state.accommodationAreas.length;i++) 
+      for (i; i<state.accommodationAreas.length;i++) 
         if (value.description.toLowerCase() < 
-          state.accommodationAreas[i].description.toLowerCase()) break;
-      state.accommodationAreas.splice(i,0,value)
+              state.accommodationAreas[i].description.toLowerCase())
+          break;
       if (value.accommodationSpots) { //update spots
         state.accommodationSpots = 
             state.accommodationSpots.concat(value.accommodationSpots)
         state.accommodationSpots.sort(function (a, b) {
           return parseInt(a.spotNumber,10) - parseInt(b.spotNumber,10)})
+        delete value.accommodationSpots
+        state.accommodationAreas.splice(i,0,value)
       }
     } else {
       let index = state.accommodationAreas.findIndex(
         o => o.accommodationAreaId === value.accommodationAreaId)
-      if (index == -1) console.log("accommodation area not found:" + value.description)
-      else {
-        if (verb == 'delete')
+      if (index == -1) 
+        console.log("accommodation area not found:" + value.description)
+      else if (verb == 'delete')
           state.accommodationAreas.splice(index,1)
-        if (verb == 'update')
+      else  if (verb == 'update')
           state.accommodationAreas.splice(index,1,value)
-      }
     }
+    if(log) console.log("=====accomodation area action: " + verb + 
+      ' completed name: ' + value.name)
   },
   accommodationAreas(state, value) {
     if (value.length > 1) 
@@ -43,24 +76,44 @@ const mutations = {
         return a.description.toLowerCase().localeCompare(b.description.toLowerCase())})
     state.accommodationAreas = value 
   },
-  accommodationSpot(state, value) {
-    console.log("=====incoming value accomspot: " + JSON.stringify(value))
+  accommodationSpot(state, value) { //update spot
+    if (log) console.log("=====incoming value accomspot: " + JSON.stringify(value))
     let verb = value.verb; delete value.verb
     if (verb == 'add') {
       let i = 0
-      for (i=0; i<state.accommodationSpots.length;i++) 
+      for (i; i<state.accommodationSpots.length;i++) 
         if (parseInt(value.spotNumber,10) <
-            parseInt(state.accommodationSpots[i].spotNumber,10)) break;
+             parseInt(state.accommodationSpots[i].spotNumber,10))
+          break;
+      updateAccommodationSpotCount(value.accommodationAreaId, true)
       state.accommodationSpots.splice(i,0,value)
-      console.log("=====valuee added: " + state.accommodationSpots[i].spotNumber )
     } else {
+      console.log("get index")
       let index = state.accommodationSpots.findIndex(
         o => o.accommodationSpotId === value.accommodationSpotId)
-      if (index == -1) console.log("accommodation spot not found:" + value.spotNumber)
-      else {
-        if (verb == 'delete')
-          state.accommodationSpots.splice(index,1)
+        console.log("got index" + index)
+      if (index == -1) 
+        if (log) console.log("accommodation spot not found:" + value.accommodationSpotId)
+      else if (verb == 'delete') {
+        console.log("====deletiong......")
+        if (log) console.log(" delete spot number: " + 
+                state.accommodationSpots[index].spotNumber)
+        updateAccommodationSpotCount(value.accommodationAreaId, false)
+        state.accommodationSpots.splice(index,1)
       }
+    }
+    if(log) console.log("=====accommodationspot action: " + verb + 
+        ' completed name: ' + value.spotNumber)
+    // update count in the preparation area list
+    function updateAccommodationSpotCount( id, increment) {
+      if (log) console.log("==== update count in accom list for accomm id: " + id)
+      let accIndex = state.accommodationAreas.findIndex(
+        o => o.accommodationAreaId === id)
+      let accommodationArea = state.accommodationAreas[accIndex]
+      if (increment) accommodationArea.nbrOfSpots++
+      else accommodationArea.nbrOfSpots--
+      console,log("spotnr updated: " + accommodationArea.nbrOfSpots)
+      state.accommodationAreas.splice(accIndex,1,accommodationArea)
     }
   },
   accommodationSpots(state, value) {
@@ -70,24 +123,28 @@ const mutations = {
   },
   // ============PreparationArea 
   preparationArea(state, value) {
+    if (log) console.log("====locCatProd incoming preparationArea update:" +
+        JSON.stringify(value))
     let verb = value.verb; delete value.verb
     if (verb == 'add') {
       let i = 0
-      for (i=0; i<state.preparationAreas.length;i++) 
+      for (i; i<state.preparationAreas.length;i++) 
         if (value.description.toLowerCase() <
-           state.preparationAreas[i].description.toLowerCase()) break;
+                state.preparationAreas[i].description.toLowerCase())
+          break
       state.preparationAreas.splice(i,0,value);
     } else {
       let index = state.preparationAreas.findIndex(
         o => o.preparationAreaId === value.preparationAreaId)
-      if (index == -1) console.log("preparation area not found:" + value.preparationAreaId)
-      else {
-        if (verb == 'delete')
+      if (index == -1) 
+        console.log("preparation area not found:" + value.preparationAreaId)
+      else if (verb == 'delete')
           state.preparationAreas.splice(index,1)
-        if (verb == 'update')
+      else if (verb == 'update')
           state.preparationAreas.splice(index,1,value)
-      }
     }
+    if(log) console.log("=====preparation area action: " + verb +
+          ' completed name: ' + value.description)
   },
   preparationAreas(state, value) {
     if (value.length > 1) 
@@ -103,49 +160,47 @@ const mutations = {
     state.productCategories = value
   },
   productCategory(state, value) {
-    console.log("====locCatProd incoming category update:" +
+    if (log) console.log("====locCatProd incoming productCategory update:" +
         JSON.stringify(value))
     let verb = value.verb ; delete value.verb
     if (verb == 'add') {
-      console.log("=====verb = add!!!!")
       let i = 0
-      for (i=0; i<state.productCategories.length;i++) {
-        if (value.categoryName.toLowerCase() < state.productCategories[i].categoryName.toLowerCase()) 
+      for (i; i<state.productCategories.length;i++) // insert in order
+        if (value.categoryName.toLowerCase() < 
+                  state.productCategories[i].categoryName.toLowerCase())
           break;
-      }
       updatePreparationCategoryCount(value.preparationAreaId, true)
       state.productCategories.splice(i,0,value)
     } else {
       let index = state.productCategories.findIndex(
         o => o.productCategoryId === value.productCategoryId)
       if (index == -1)
-        console.log("productCategory not found:" + value.productCategoryId)
-      else {
-        if (verb == 'delete')
-          console.log("=====verb = delete!!!")
+        console.log("productCategoryId not found:" + value.productCategoryId)
+      else if (verb == 'delete') {          
+        updatePreparationCategoryCount(
+          state.productCategories[index].preparationAreaId, false)
+        state.productCategories.splice(index,1)
+      } else if (verb == 'update') {
+        // update count in preparation areas if required
+        if (state.productCategories[index].preparationAreaId !== 
+              value.preparationAreaId) {
+          if(log) console.log("====prepid changed!")
           updatePreparationCategoryCount(
-            state.productCategories[index].preparationAreaId, false)
-          state.productCategories.splice(index,1)
-            if (verb == 'update') {
-          console.log("====update value: " + JSON.stringify(value))
-          // update count in preparation areas if required
-          if (state.productCategories[index].preparationArea != 
-                value.preparationAreaId) {
-            updatePreparationCategoryCount(
-                state.productCategories[index].preparationAreaId, false)
-            updatePreparationCategoryCount(value.preparationAreaId, true)
-          }
-          state.productCategories.splice(index,1,value)
+              state.productCategories[index].preparationAreaId, false)
+          updatePreparationCategoryCount(value.preparationAreaId, true)
         }
+        state.productCategories.splice(index,1,value)
       }
     }
+    if(log) console.log("=====category update completed, action: " + 
+            verb + ' name:' + value.categoryName)
     // update count in the preparation area list
     function updatePreparationCategoryCount( id, increment) {
-      console.log("========update prep!!!!! with increment: " + increment)
       let prepIndex = state.preparationAreas.findIndex(
         o => o.preparationAreaId === id)
       let preparationArea = state.preparationAreas[prepIndex]
-      console.log("=======updating preparation area " + preparationArea.description)
+      if (log) console.log("==== update count in preparea list for preparea: " + 
+            preparationArea.description)
       if (increment) preparationArea.nbrOfCatg++
       else preparationArea.nbrOfCatg--
       state.preparationAreas.splice(prepIndex,1,preparationArea)
@@ -153,16 +208,14 @@ const mutations = {
   },
   //=========== product
   product(state, value) {
-    console.log("====locCatProd incoming product update:" +
+    if (log) console.log("====locCatProd incoming product update:" +
         JSON.stringify(value))
     let verb = value.verb ; delete value.verb
-    if (verb == 'add') {
-      console.log("=====verb = add!!!!")
+    if (verb === 'add') {
       let i = 0
-      for (i=0; i<state.products.length;i++) {
-        if (value.name.toLowerCase() < state.products[i].name.toLowerCase()) 
+      for (i; i<state.products.length;i++)
+        if (value.name.toLowerCase() < state.products[i].name.toLowerCase())
           break;
-      }
       updateCategoryProductCount(value.productCategoryId, true)
       state.products.splice(i,0,value)
     } else {
@@ -170,31 +223,27 @@ const mutations = {
         o => o.productId === value.productId)
       if (index == -1)
         console.log("product not found:" + value.productId)
-      else {
-        if (verb == 'delete')
-          console.log("=====verb = delete!!!")
+      else if (verb == 'delete') {
           updateCategoryProductCount(state.products[index].productCategoryId, false)
           state.products.splice(index,1)
-            if (verb == 'update') {
-          console.log("====update value: " + JSON.stringify(value))
-          if (state.products[index].productCategoryId != value.productCategoryId) {
-            updateCategoryProductCount(
-                state.products[index].productCategoryId, false)
-            updateCategoryProductCount(value.productCategoryId, true)
-          }
-          state.products.splice(index,1,value)
+      } else if (verb == 'update') {
+        if (state.products[index].productCategoryId != value.productCategoryId) {
+          if (log) console.log("==== productCategory change for product: " + value.name)
+          updateCategoryProductCount(
+              state.products[index].productCategoryId, false)
+          updateCategoryProductCount(value.productCategoryId, true)
         }
+        state.products.splice(index,1,value)
       }
     }
     // update count in the productCategory list
     function updateCategoryProductCount( id, increment) {
-      console.log("========update cat!!!!! with increment: " + increment)
+      if (log) console.log("==== update count in productCategory list")
       let catIndex = state.productCategories.findIndex(
         o => o.productCategoryId === id)
       let productCategory = state.productCategories[catIndex]
-      console.log("=======updating category " + productCategory.categoryName)
-      if (increment) productCategory.nbrOfProd++
-      else productCategory.nbrOfProd--
+      if (increment) productCategory.nbrOfProducts++
+      else productCategory.nbrOfProducts--
       state.productCategories.splice(catIndex,1,productCategory)
     }
   },
@@ -206,7 +255,7 @@ const mutations = {
   },
 }
 const getters = {
-  // accomodation related area related==========================================================
+  // accomodation related area related=========================================
   accommodationAreas: state => {
     return state.accommodationAreas
   },
@@ -216,18 +265,18 @@ const getters = {
   accommodationSpotsByAreaId: state => id => {
     return state.accommodationSpots.filter(o => o.accommodationAreaId === id)
   },
-  // preparation area related==========================================================
+  // preparation area related==================================================
   preparationAreas: state => {
     return state.preparationAreas
   },
   preparationAreaByDesc: state => desc => {
     return state.preparationAreas.find(o => o.description === desc)
   },
-  preparationAreasDescMinusOne: state => prepId => {
-    let prepAreas = [" "]
+  preparationAreasMinusOne: state => prepId => {
+    let prepAreas = []
     for(let i=0;i<state.preparationAreas.length;i++)
       if (state.preparationAreas[i].preparationAreaId != prepId)
-        prepAreas.push(state.preparationAreas[i].description)
+        prepAreas.push(state.preparationAreas[i])
     return prepAreas
   },
   preparationAreasDesc: state => (blank=true) => {
@@ -237,7 +286,7 @@ const getters = {
         prepAreas.push(state.preparationAreas[i].description)
     return prepAreas
   },
-  // productCategory related==========================================================
+  // productCategory related===================================================
   productCategories: state => {
     return state.productCategories
   },
@@ -256,6 +305,13 @@ const getters = {
     for(let i=0;i<state.productCategories.length;i++)
         categories.push(state.productCategories[i].categoryName)
     return categories
+  },
+  productCategoriesMinusOne: state => catId => {
+    let prodCats = []
+    for(let i=0;i<state.productCategories.length;i++)
+      if (state.productCategories[i].productCategoryId != catId)
+        prodCats.push(state.productCategories[i])
+    return prodCats
   },
   // product related==========================================================
   products: state => {

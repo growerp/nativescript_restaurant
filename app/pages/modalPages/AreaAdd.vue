@@ -4,8 +4,10 @@
       <label :text="$t('addTableArea')" class="h2" horizontalAlignment="center"/>
       <RadDataForm :source="item" :metadata="itemMeta"
           @propertyCommitted="onCommitted"/>
-      <Button class="button" :text="$t('addArea')" @tap="submit" />
-      <Button class="button" :text="$t('cancel')" @tap="$modal.close()" />
+      <GridLayout columns="*,*" rows="auto">
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
+        <Button class="button" :text="$t('addArea')" @tap="submit" col="1"/>
+      </GridLayout>
     </StackLayout></ModalStack>
   </page>
 </template>
@@ -23,7 +25,8 @@ export default {
       itemMeta: {
         propertyAnnotations: [
           { name: 'description', required: true, index: 0},
-          { name: 'nbrOfSpots', required: false, index: 1},
+          { name: 'nbrOfSpots', required: false, index: 1,
+              editor: 'Number' },
         ]
       },
       editedItem: {},
@@ -38,15 +41,15 @@ export default {
         this.$backendService.createAccommodationArea(this.editedItem)
         .then((result) => {
           this.$store.commit('accommodationArea', {
-              verb: 'add',
-              description: this.editedItem.description,
-              accommodationAreaId: result.data.accommodationAreaId,
-              accommodationSpots: result.data.accommodationSpots,
-              image: global.noImage,
-              nbrOfSpots: this.editedItem.nbrOfSpots})
+            verb: 'add',
+            description: this.editedItem.description,
+            accommodationAreaId: result.data.accommodationAreaId,
+            accommodationSpots: result.data.accommodationSpots,
+            image: global.noImage,
+            nbrOfSpots: this.editedItem.nbrOfSpots})
+          this.$modal.close()
         })
       }
-      this.$modal.close()
     }
   }
 }

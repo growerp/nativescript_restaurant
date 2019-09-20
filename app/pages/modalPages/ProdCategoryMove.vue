@@ -1,15 +1,24 @@
 <template>
   <page><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="90%" padding="20">
-      <Label :text="categoryName" horizontalAlignment="center" class="h2"/>
+      <Label :text="product.categoryName" horizontalAlignment="center" class="h2"/>
       <Label :text="$t('moveProdCat')" textWrap="true" class="h3"
           horizontalAlignment="center"/>
-      <RadDataForm :source="item" :metadata="itemMeta" height="150"
-          @propertyCommitted="onCommitted"/>
-      <GridLayout columns="*,*" rows="auto">
-        <Button class="button" :text="$t('selectCategory')" @tap="submit" col="1"/>
-        <Button :text="$t('cancel')" @tap="$modal.close()" class="button" col="0"/>
-      </GridLayout>
+      <RadListView for="item in items" height="50%"><!-- @itemTap not work on IOS -->
+        <v-template>
+          <GridLayout columns="50, *, *, auto" rows="*" pading="10"
+                @tap="onItemTap(item)">
+            <Image :src="item.image"  col="0" height="50"/>
+            <StackLayout col="1" paddingLeft="5">
+              <label :text="item.name" class="h2"/>
+              <label :text="item.categoryName" class="p"/>
+            </StackLayout>
+            <Label :text="item.price" class="p" col="3"/>
+          </GridLayout>
+        </v-template>
+      </RadListView>
+      <Button :text="$t('cancel')" @tap="$modal.close()" 
+          class="button" width="50%"/>
     </StackLayout></ModalStack>
   </page>
 </template>
@@ -18,45 +27,33 @@
   export default {
     name: 'ProdCategoryMove',
     props: {
-      prodId: String,
-      catId: String,
-      categoryName: String,
+      product: Object,
     },
     data() {
       return {
-        item: { categoryName: ''},
-        itemMeta: {
-          propertyAnnotations: [
-              { name: 'categoryName', displayName: '', editor: 'Picker', 
-                valuesProvider: this.$store.getters.categoriesMinusOne(this.catId)},
-        ]},
+        items: this.$store.getters.productCategoriesMinusOne(
+          this.product.productId)
       }
     },
     methods: {
-      onCommitted(data) {
-        this.editedItem = JSON.parse(data.object.editedObject)},
-      submit() {
-        if (this.editedItem) {
-          let param = {}
-          param.productId = this.prodId
-          const platformModule = require("tns-core-modules/platform")
-          if (platformModule.isIOS) { // returns an index instead of value so change
-            let values = this.$store.getters.categoriesMinusOne(this.catId)
-            this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
-          param.productCategoryId = this.$store.getters.categoryAndProductsByDesc(
-              this.editedItem.categoryName).productCategoryId
-          this.$backendService.updateProduct(param)
-          this.$store.commit('categoryAndProduct',{ 
-                oldProductCategoryId: this.catId,
-                productCategoryId: param.productCategoryId,
-                products: [{productId: this.prodId}],
-                })
-          this.$modal.close() // to delete from list
-        }
+      onItemTap(catgItem) {
+        this.$backendService.updateProduct({
+          productId: this.product.productId,
+          productCategoryId: catgItem.productCAtegoryId })
+        console.log("====update product: " + this.product.name + " old catg:" + this.product.categoryName + " new: " + catgItem.categoryName)
+        this.$store.commit('product', {
+          verb: 'update',
+          productId: this.product.productId,
+          name: this.product.name,
+          price: this.product.price,
+          image: this.product.image,
+          productCategoryId: catgItem.productCategoryId,
+          categoryName: catgItem.categoryName
+        })
+        this.$modal.close()
       },
     },
   }
-
 </script>
 
 <style>

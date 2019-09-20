@@ -280,9 +280,9 @@ export default class BackendService {
     async getProductList(productCategoryId=null) {
           return await restPost.post('s1/growerp/GetProductList',
             { productCategoryId: productCategoryId})}
-    async createProduct(name, price, categoryId) {
+    async createProduct(item) {
           return await restPost.post('s1/growerp/CreateProduct',
-            {   productCategoryId: categoryId, productName: name, price: price})}
+            {   productCategoryId: item.productCategoryId, productName: item.name, price: item.price})}
     async updateProduct(item) {
           return await restPost.post('s1/growerp/UpdateProduct',
             {   productId: item.productId, productCategoryId: item.productCategoryId,

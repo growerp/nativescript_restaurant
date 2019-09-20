@@ -7,7 +7,7 @@
       <StackLayout padding="20">
         <RadListView for="item in dashBoard" @itemTap="onItemTap"
             itemReorder="true" @itemReordered="onItemReordered"
-            layout="grid" itemHeight="110"><!--itemHeight for ios -->
+            layout="grid" itemHeight="100"><!--itemHeight for ios -->
           <v-template>
             <StackLayout orientation="vertical" padding="10">
               <Image :src="item.image" height="60"/>
