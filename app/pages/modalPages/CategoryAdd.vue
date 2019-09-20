@@ -23,15 +23,22 @@
     data() {
       return {
         item: { categoryName: '',
-                description: this.prepAreaDescription? this.prepAreaDescription : ''
+                description:  '',
+                description1: this.prepAreaDescription
         },
         itemMeta: {
           propertyAnnotations: [
               { name: 'categoryName', required: true, index: 0},
-              { name: 'description', required: true, index: 1,
-                  readOnly: this.prepAreaDescription? true : false,
-                  displayName: this.$t('preparation'),
-                  editor: 'Picker', valuesProvider: this.$store.getters.preparationAreasDesc()},
+              { name: 'description', index: 2, 
+                ignore: this.prepAreaDescription? true : false,
+                displayName: this.$t('preparation'), index: 2, 
+                editor: 'Picker', 
+                valuesProvider: this.$store.getters.preparationAreasDesc() 
+              },
+              { name: 'description1', index: 1, 
+                ignore: this.prepAreaDescription? false : true,
+                readOnly: true,  
+                displayName: this.$t('preparation'), index: 1 },
           ]
         },
         editedItem: {},
@@ -42,25 +49,32 @@
           this.editedItem = JSON.parse(data.object.editedObject)},
       submit() {
         if (this.editedItem) {
+          delete this.editedItem.description1
+          if (this.prepAreaDescription) {
+            this.editedItem.description = this.prepAreaDescription
+          }
           if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
-          else if (!this.editedItem.description) this.note(this.$t('preparationArea') + this.$t('isRequired'))
+          else if (!this.editedItem.description)  
+              this.note(this.$t('preparationArea') + this.$t('isRequired'))
           else {
-            let description = ''
             const platformModule = require("tns-core-modules/platform")
             if (platformModule.isIOS) { // returns an index instead of value so change
-              let values = this.$store.getters.prepAreas()
-              description = values[parseInt(this.editedItem.description,10)]
-            } else {
-              description = this.editedItem.description
+              let values = this.$store.getters.preparationAreasDesc()
+              this.editedItem.description = values[parseInt(this.editedItem.description,10)]
             }
             this.editedItem.preparationAreaId = 
-                this.$store.getters.preparationAreaByDesc(description).preparationAreaId
-            console.log("===== add category edited item:" + JSON.stringify(this.editedItem))
+                this.$store.getters.preparationAreaByDesc(this.editedItem.description).preparationAreaId
             this.$backendService.createCategory(this.editedItem)
             .then((result) => {
-              this.editedItem.verb = 'add'
-              this.editedItem.productCategoryId = result.data.productCategoryId
-              this.$store.commit('productCategory', this.editedItem)
+              this.$store.commit('productCategory', {
+                verb: 'add',
+                productCategoryId: result.data.productCategoryId,
+                image: global.noImage,
+                categoryName: this.editedItem.categoryName,
+                preparationAreaId: this.editedItem.preparationAreaId,
+                description: this.editedItem.description,
+                nbrOfProducts: '0'
+              })
             })
             this.$modal.close()
           }

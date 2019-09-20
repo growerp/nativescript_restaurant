@@ -5,7 +5,7 @@
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
     </ActionBar>
     <StackLayout padding="10">
-      <RadListView for="item in itemList" @itemTap="onItemTap">
+      <RadListView for="item in itemList">
         <v-template name="header">
           <GridLayout columns="50, *, *, auto" rows="*">
             <StackLayout col="1">
@@ -16,7 +16,9 @@
           </GridLayout>
         </v-template>
         <v-template>
-          <GridLayout columns="50, *, *, auto" rows="*">
+          <GridLayout columns="50, *, *, auto" rows="*"
+                @tap="$navigateTo($routes.ProductDetail,{props: {item: Object.assign({},item)}})"
+                @longPress="onDeleteTap(item)">
             <Image :src="item.image"  col="0" height="50"/>
             <StackLayout col="1" paddingLeft="5">
               <label :text="item.name" class="h2"/>
@@ -36,6 +38,7 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import ProductAdd from './modalPages/ProductAdd'
+import Confirm from './modalPages/Confirm'
 import general from '~/mixins/general'
 
 export default {
@@ -46,16 +49,24 @@ export default {
       itemList: this.$store.getters.products
     }
   },
-  
   methods: {
     onAddTap() { //get new item and insert sorted into list
       this.$showModal(ProductAdd)
     },
-    onItemTap(args) {
-      this.$navigateTo(this.$routes.ProductDetail,
-            { props: {  item: Object.assign({},args.item)}})
-    },
-  },
+    onDeleteTap(item) {
+      this.$showModal(Confirm,{ props: {
+          message: this.$t('delProduct') + item.name + "?"}
+      })
+      .then (data => {
+        if (data) {
+          this.$backendService.deleteProduct(item.productId)
+          this.$store.commit('product', {
+            verb: 'delete',
+            productId: item.productId })
+        }
+      })
+    }
+  }
 }
 </script>
 

@@ -5,8 +5,7 @@
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="preparationAreaDetail"/>
     </ActionBar>
     <StackLayout padding="10" height="100%">
-      <GridLayout width="100%" columns="100,30,*" rows="50,50"
-          @longPress="onDeleteTap" >
+      <GridLayout width="100%" columns="100,30,*" rows="50,50">
         <Image ref="prepForm" :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
         <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
@@ -14,22 +13,21 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('prep', item.preparationAreaId)"/>
       </GridLayout>
-      <Label :text="$t('longToDelete')" horizontalAlignment="center" 
-        @longPress="onDeleteTap" class="p"/>
       <RadDataForm ref="itemForm" :source="Object.assign({},item)"
-          @longPress="onDeleteTap" 
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label :text="$t('categoriesPrepared')" class="h3" horizontalAlignment="center"/>
-      <RadListView for="cat in categoryList" @itemTap="onMoveTap"  height="50%">
+      <RadListView for="item in categoryList"  height="50%">
         <v-template>
-          <GridLayout columns="50, *, auto" rows="*"  padding="10">
-            <Image :src="cat.image" col="0" height="40"/>
-            <label :text="cat.categoryName" class="h2" col="1"/>
+          <GridLayout columns="50, *, auto" rows="*"  padding="10"
+              @tap="onMoveItemTap(item)" @longPress="onDeleteItemTap(item)">
+            <Image :src="item.image" col="0" height="40"/>
+            <label :text="item.categoryName" class="h2" col="1"/>
+            <label :text="item.nbrOfProducts" class="h2" col="2"/>
           </GridLayout>
         </v-template>
       </RadListView>
-      <Button class="button" :text="$t('addCategory')"
-          @tap="addCategory"/>
+      <Button class="button" :text="$t('addCategory')" 
+          @tap="onAddCategoryTap" width="50%"/>
     </StackLayout>
   </Page>
 </template>
@@ -40,6 +38,7 @@ import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import PrepCategoryMove from './modalPages/PrepCategoryMove'
 import CategoryAdd from './modalPages/CategoryAdd'
+import Confirm from './modalPages/Confirm'
   
 export default {
   name: 'PrepDetail',
@@ -48,24 +47,23 @@ export default {
       item: Object,
   },
   data() {
-      return {
-          categoryList: this.$store.getters.productCategoriesByPrepId(
-              this.item.preparationAreaId),
-          editedItem: {},
-          itemMeta: {
-              propertyAnnotations: [
-                  { name: 'preparationAreaId', ignore: true},
-                  { name: 'image', ignore: true},
-                  { name: 'nbrOfCatg', ignore: true},
-                  { name: 'description', required: true, index: 0}]},
-      }
+    return {
+      categoryList: this.$store.getters.productCategoriesByPrepId(
+          this.item.preparationAreaId),
+      editedItem: {},
+      itemMeta: {
+        propertyAnnotations: [
+          { name: 'preparationAreaId', ignore: true},
+          { name: 'image', ignore: true},
+          { name: 'nbrOfCatg', ignore: true},
+          { name: 'description', required: true, index: 0}]},
+    }
   },
   created() {
       if (!this.itemImage.length) {
         this.$backendService.downloadImage('medium', 'prep',
           this.item.preparationAreaId)
           .then(result => { this.itemImage = result.data.imageFile })}
-
 },
   methods: {
     onItemCommitted(data) {
@@ -83,34 +81,41 @@ export default {
       this.hideKeyboard()
       this.$navigateBack()
     },
-    onDeleteTap() {
-      if (this.categoryList.length) {
-        this.note(this.$t('cannotDelPrep'))
+    onMoveItemTap(item) {
+      this.$showModal(PrepCategoryMove, { props: { productCategory: item }})
+      .then(() => {
+        this.refresh()
+      })
+    },
+    onDeleteItemTap(item) {
+      if (item.nbrOfProducts != "0") {
+        this.note(this.$t('cannotDelCatProd'))
       } else {
-        confirm({
-            title: this.$t('delPrepArea') + this.item.description + "'?",
-            okButtonText: this.$t('ok'),
-            cancelButtonText: this.$t('cancel')
-        }).then (data => {
+        this.$showModal(Confirm,{ props: {
+          message: this.$t('deleteCategory') + item.categoryName + "?"}
+        })
+        .then (data => {
           if (data) {
-            this.$backendService.deletePreparationArea(
-                this.item.preparationAreaId)
-            this.$store.commit('preparationArea', {
-                  verb: 'delete',
-                  preparationAreaId: this.item.preparationAreaId})
+            this.$backendService.deleteCategory(
+              item.productCategoryId)
+            this.$store.commit('productCategory', {
+              verb: 'delete', 
+              productCategoryId: item.productCategoryId })
+            this.refresh()
           }
-          this.$navigateBack()
         })
       }
     },
-    onMoveTap(args) {
-      this.$showModal(PrepCategoryMove, { props: {  item: args.item}})
-      .then(() =>{
-        this.categoryList = this.$store.getters.productCategoriesByPrepId(
-              this.item.preparationAreaId)})
+    onAddCategoryTap() {
+      this.$showModal(CategoryAdd,
+             { props: {prepAreaDescription: this.item.description}})
+      .then(() => { 
+        this.refresh()
+      })
     },
-    addCategory() {
-      this.$showModal(CategoryAdd, { props: {prepAreaDescription: this.item.description}})
+    refresh() {
+        this.categoryList = this.$store.getters.productCategoriesByPrepId(
+          this.item.preparationAreaId)
     }
   }
 }

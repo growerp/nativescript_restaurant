@@ -15,7 +15,7 @@
 <script>
 export default {
   props: {
-    accommodationAreaId: String
+    accomodationArea: Object
   },
   data() {
     return {
@@ -37,14 +37,16 @@ export default {
     submit() {
       if (this.editedItem != '') {
         this.$backendService.createAccommodationSpot(
-            this.accommodationAreaId,
+            this.item.accommodationAreaId,
             this.editedItem.spotNumber)
         .then((result) => {
           this.$store.commit('accommodationSpot',{
             verb: "add",
-            accommodationAreaId: this.accommodationAreaId,
+            accommodationAreaId: this.item.accommodationAreaId,
+            descripion: this.item.description,
             accommodationSpotId: result.data.accommodationSpotId,
-            spotNumber: this.editedItem.spotNumber
+            spotNumber: this.editedItem.spotNumber,
+            image: global.noImage
           })
           this.$modal.close()
         })

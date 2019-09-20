@@ -4,7 +4,7 @@
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="productDetail"/>
     </ActionBar>
-    <StackLayout @longPress="onDeleteTap">
+    <StackLayout>
       <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
         <Image  :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
@@ -13,7 +13,6 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('product', item.productId)"/>
       </GridLayout>
-      <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
       <RadDataForm :source="item"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
     </StackLayout>
@@ -58,17 +57,17 @@ export default {
     },
     onSaveTap() {
       if (this.editedItem) {
-        if (!this.editedItem.name) 
-          this.note(this.$t('nameIsRequired'))
-        else if (!this.editedItem.price)
-          this.note(this.$t('enterPrice'))
+        if (!this.editedItem.name) this.note(this.$t('nameIsRequired'))
+        else if (!this.editedItem.price) this.note(this.$t('enterPrice'))
         else {
           const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
             let values = this.$store.getters.productCategoriesDesc(false)
-            this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
-          this.editedItem.productCategoryId = this.$store.getters.productCategoryByDesc(
-              this.editedItem.categoryName).productCategoryId
+            this.editedItem.categoryName = 
+                    values[parseInt(this.editedItem.categoryName,10)]}
+          this.editedItem.productCategoryId = 
+              this.$store.getters.productCategoryByDesc(
+                  this.editedItem.categoryName).productCategoryId
           this.$backendService.updateProduct(this.editedItem)
           this.editedItem.verb = 'update'
           this.$store.commit('product', this.editedItem)
@@ -76,21 +75,6 @@ export default {
       }
       this.hideKeyboard()
       this.$navigateBack()
-    },
-    onDeleteTap() {
-      confirm({
-          title: this.$t('delProduct') + this.item.name + "?",
-          okButtonText: this.$t('ok'),
-          cancelButtonText: this.$t('cancel')
-      }).then (data => {
-        if (data) {
-          this.$backendService.deleteProduct(this.item.productId)
-          this.$store.commit('product', {
-                verb: 'delete',
-                productId: this.item.productId})
-        }
-        this.$navigateBack()
-      })
     },
   }
 }

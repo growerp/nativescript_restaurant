@@ -5,7 +5,7 @@
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="categories"/>
     </ActionBar>
     <StackLayout padding="10">
-      <RadListView for="item in itemList" @itemTap="onItemTap" height="100%">
+      <RadListView for="item in itemList" height="100%">
           <v-template name="header">
             <GridLayout columns="50, 10, *, auto" rows="*" padding="5">
               <StackLayout col="2">
@@ -16,7 +16,9 @@
             </GridLayout>
           </v-template>
           <v-template>
-            <GridLayout columns="50, 10, *, auto, 10, auto" rows="*" padding="5">
+            <GridLayout columns="50, 10, *, auto, 10, auto" rows="*" 
+                @tap="$navigateTo($routes.CategoryDetail,{props: {item: item}})"
+                @longPress="onDeleteTap(item)">
               <Image :src="item.image"  col="0" height="50"/>
               <StackLayout col="2">
                 <Label :text="item.categoryName" class="h2"/>
@@ -52,9 +54,25 @@ export default {
       this.$showModal(CategoryAdd)
         this.itemList = this.$store.getters.productCategories
     },
-    onItemTap(args) {
-      this.$navigateTo(this.$routes.CategoryDetail,
-          { props: { item: args.item}})
+    onDeleteTap(item) { //delete Item
+      if (item.nbrOfProducts != "0") {
+        this.note(this.$t('cannotDelCatProd'))
+      } else {
+        confirm({
+          title: this.$t('deleteCategory') + item.categoryName + "?",
+          okButtonText: this.$t('ok'),
+          cancelButtonText: this.$t('cancel')
+        })
+        .then (data => {
+          if (data) {
+            this.$backendService.deleteCategory(
+              item.productCategoryId)
+            this.$store.commit('productCategory', {
+              verb: 'delete', 
+              productCategoryId: item.productCategoryId })
+          }
+        })
+      }
     },
   },
 }
