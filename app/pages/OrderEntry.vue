@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page @loaded="pageLoaded()">
     <ActionBar>
         <GridLayout width="100%" columns="auto, auto, *">
             <Label class="title" text="BACK" col="0" @tap="$navigateBack"/>
@@ -8,7 +8,7 @@
         </GridLayout>
     </ActionBar>
 
-    <GridLayout columns="auto,auto,*" rows="*,auto">
+    <GridLayout columns="auto,auto,*" rows="*,auto,50">
       <Accordion row="0" col="0" colSpan="3" height="100%"
           ref="accordion" allowMultiple="true"
           for="item of categoriesAndProducts" childItems="products">

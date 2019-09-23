@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page @loaded="pageLoaded()">
     <ActionBar>
         <GridLayout width="100%" columns="auto, auto, *">
             <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
@@ -9,7 +9,7 @@
     </ActionBar>
 
     <StackLayout>
-      <GridLayout columns="auto,auto,*" rows="*,auto">
+      <GridLayout columns="auto,auto,*" rows="*,auto,50">
         <RadListView ref="listView" for="item in orderItems"
               row="0" colSpan="3"
               @itemTap="onItemDeleteTap" height="80%"
