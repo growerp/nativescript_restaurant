@@ -2,18 +2,16 @@
   <page><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="70%" padding="20">
       <label :text="message" class="h3" horizontalAlignment="center"
-        padding="20" color="red" textWrap="true"/>
-      <GridLayout columns="*,*" rows="auto">
-        <Button class="button" :text="$t('cancel')" @tap="$modal.close(false)" col="0"/>
-        <Button class="button" :text="$t('ok')" @tap="$modal.close(true)" col="1"/>
-      </GridLayout>
+            padding="20" color="green" textWrap="true"/>
+      <Button class="button" :text="$t('ok')" @tap="$modal.close()"
+            width="50%" horizontalAlignment="center"/>
     </StackLayout></ModalStack>
   </page>
 </template>
 
 <script>
 export default {
-  name: 'Confirm',
+  name: 'Alert',
   props: {
     message: String
   },

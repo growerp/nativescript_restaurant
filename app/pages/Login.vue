@@ -1,93 +1,94 @@
 <template>
-    <Page actionBarHidden="true">
-        <FlexboxLayout class="page">
-            <StackLayout class="form">
-                <Image class="logo" src="~/assets/images/growerp.png"/>
-                <!-- Label class="header"> {{ $t("login" )}} {{ $t("restaurant") }} </Label-->
+  <Page actionBarHidden="true">
+    <FlexboxLayout class="page">
+      <StackLayout class="form">
+        <Image class="logo" src="~/assets/images/growerp.png"/>
+        <!-- Label class="header"> {{ $t("login" )}} {{ $t("restaurant") }} </Label-->
 
-                <GridLayout rows="auto, auto, auto, auto, auto" columns="*,*" width="100%">
-                    <StackLayout row="0" col="0" colSpan="2"  v-show="isLoggingIn" class="input-field">
-                        <TextField class="input" :hint="$t('usrNameEmail')" :isEnabled="!processing"
-                            autocorrect="false"
-                            autocapitalizationType="none" v-model="user.name"
-                            returnKeyType="next" @returnPress="focusPassword"></TextField>
-                        <StackLayout class="hr-light"></StackLayout>
-                    </StackLayout>
+        <GridLayout rows="auto, auto, auto, auto, auto" columns="*,*" width="100%">
+          <StackLayout row="0" col="0" colSpan="2"  v-show="isLoggingIn" class="input-field">
+            <TextField class="input" :hint="$t('usrNameEmail')" :isEnabled="!processing"
+                autocorrect="false"
+                autocapitalizationType="none" v-model="user.name"
+                returnKeyType="next" @returnPress="focusPassword"></TextField>
+            <StackLayout class="hr-light"></StackLayout>
+          </StackLayout>
 
-                    <StackLayout row="0" col="0" v-show="!isLoggingIn" class="input-field">
-                        <TextField class="input" :hint="$t('restName')" :isEnabled="!processing"
-                            autocorrect="false"
-                            autocapitalizationType="none" v-model="company.name"
-                            returnKeyType="next" @returnPress="focusPassword"></TextField>
-                        <StackLayout class="hr-light"></StackLayout>
-                    </StackLayout>
+          <StackLayout row="0" col="0" v-show="!isLoggingIn" class="input-field">
+            <TextField class="input" :hint="$t('restName')" :isEnabled="!processing"
+                autocorrect="false"
+                autocapitalizationType="none" v-model="company.name"
+                returnKeyType="next" @returnPress="focusPassword"></TextField>
+            <StackLayout class="hr-light"></StackLayout>
+          </StackLayout>
 
-                    <StackLayout row="0" col="1"  v-show="!isLoggingIn" class="input-field">
-                        <DropDown :items="currencyUomIds" :hint="$t('currency')" :isEnabled="!processing" class="selectionCurrency"
-                        @selectedIndexChanged="dropDownSelectedIndexChanged"/>
-                    </StackLayout>
+          <StackLayout row="0" col="1"  v-show="!isLoggingIn" class="input-field">
+            <DropDown :items="currencyUomIds" :hint="$t('currency')" :isEnabled="!processing" class="selectionCurrency"
+              @selectedIndexChanged="dropDownSelectedIndexChanged"/>
+          </StackLayout>
 
-                    <StackLayout row="1" col="0" v-show="!isLoggingIn" class="input-field">
-                        <TextField class="input" :hint="$t('firstName')" :isEnabled="!processing"
-                            autocorrect="false"
-                            autocapitalizationType="none" v-model="user.firstName"
-                            returnKeyType="next"></TextField>
-                        <StackLayout class="hr-light"></StackLayout>
-                    </StackLayout>
+          <StackLayout row="1" col="0" v-show="!isLoggingIn" class="input-field">
+            <TextField class="input" :hint="$t('firstName')" :isEnabled="!processing"
+                  autocorrect="false"
+                  autocapitalizationType="none" v-model="user.firstName"
+                  returnKeyType="next"></TextField>
+            <StackLayout class="hr-light"/>
+          </StackLayout>
 
-                    <StackLayout row="1" col="1" v-show="!isLoggingIn" class="input-field">
-                        <TextField class="input" :hint="$t('lastName')" :isEnabled="!processing"
-                            autocorrect="false"
-                            autocapitalizationType="none" v-model="user.lastName"
-                            returnKeyType="next"></TextField>
-                        <StackLayout class="hr-light"></StackLayout>
-                    </StackLayout>
+          <StackLayout row="1" col="1" v-show="!isLoggingIn" class="input-field">
+            <TextField class="input" :hint="$t('lastName')" :isEnabled="!processing"
+                autocorrect="false"
+                autocapitalizationType="none" v-model="user.lastName"
+                returnKeyType="next"></TextField>
+            <StackLayout class="hr-light"></StackLayout>
+          </StackLayout>
 
-                    <StackLayout row="2" col="0" colSpan="2" v-show="!isLoggingIn" class="input-field">
-                        <TextField class="input" :hint="$t('email')" :isEnabled="!processing"
-                            keyboardType="email" autocorrect="false"
-                            autocapitalizationType="none" v-model="user.email"
-                            returnKeyType="next"></TextField>
-                        <StackLayout class="hr-light"></StackLayout>
-                    </StackLayout>
+          <StackLayout row="2" col="0" colSpan="2" v-show="!isLoggingIn" class="input-field">
+            <TextField class="input" :hint="$t('email')" :isEnabled="!processing"
+                keyboardType="email" autocorrect="false"
+                autocapitalizationType="none" v-model="user.email"
+                returnKeyType="next"></TextField>
+            <StackLayout class="hr-light"></StackLayout>
+          </StackLayout>
 
-                   <StackLayout row="3" col="0" colSpan="2" class="input-field">
-                        <TextField class="input" ref="password" :isEnabled="!processing"
-                            :hint="$t('password')" secure="true" v-model="user.password"
-                            :returnKeyType="isLoggingIn ? 'done' : 'next'"
-                            @returnPress="focusConfirmPassword"></TextField>
-                        <StackLayout class="hr-light"></StackLayout>
-                    </StackLayout>
+          <StackLayout row="3" col="0" colSpan="2" class="input-field">
+            <TextField class="input" ref="password" :isEnabled="!processing"
+                :hint="$t('password')" secure="true" v-model="user.password"
+                :returnKeyType="isLoggingIn ? 'done' : 'next'"
+                @returnPress="focusConfirmPassword"></TextField>
+            <StackLayout class="hr-light"></StackLayout>
+          </StackLayout>
 
-                    <StackLayout row="4" col="0" colSpan="2" v-show="!isLoggingIn" class="input-field">
-                        <TextField class="input" ref="confirmPassword" :isEnabled="!processing"
-                            :hint="$t('confirmPassword')" secure="true" v-model="user.confirmPassword"
-                            returnKeyType="done"></TextField>
-                        <StackLayout class="hr-light"></StackLayout>
-                    </StackLayout>
+          <StackLayout row="4" col="0" colSpan="2" v-show="!isLoggingIn" class="input-field">
+            <TextField class="input" ref="confirmPassword" :isEnabled="!processing"
+                :hint="$t('confirmPassword')" secure="true" v-model="user.confirmPassword"
+                returnKeyType="done"></TextField>
+            <StackLayout class="hr-light"></StackLayout>
+          </StackLayout>
 
-                    <ActivityIndicator col="0" colSpan="2" :busy="processing"/>
-                </GridLayout>
+          <ActivityIndicator col="0" colSpan="2" :busy="processing"/>
+        </GridLayout>
 
-                <Button :text="isLoggingIn ? $t('login') : $t('signUp') " :isEnabled="!processing"
-                    @tap="submit" class="btn btn-primary btn-rounded-sm"></Button>
-                <Label *v-show="isLoggingIn" :text="$t('forgotPassword')"
-                    class="login-label" @tap="forgotPassword"></Label>
-            </StackLayout>
+        <Button :text="isLoggingIn ? $t('login') : $t('signUp') " :isEnabled="!processing"
+            @tap="submit" class="btn btn-primary btn-rounded-sm"></Button>
+        <Label *v-show="isLoggingIn" :text="$t('forgotPassword')"
+            class="login-label" @tap="forgotPassword"></Label>
+      </StackLayout>
 
-            <Label class="login-label sign-up-label" @tap="toggleForm">
-                <FormattedString>
-                    <Span :text="isLoggingIn ? $t('notHaveAccount') : $t('backtoLogin') "></Span>
-                    <Span :text="isLoggingIn ? $t('signUp') : ''" class="bold"></Span>
-                </FormattedString>
-            </Label>
-        </FlexboxLayout>
-    </Page>
+      <Label class="login-label sign-up-label" @tap="toggleForm">
+        <FormattedString>
+          <Span :text="isLoggingIn ? $t('notHaveAccount') : $t('backtoLogin') "></Span>
+          <Span :text="isLoggingIn ? $t('signUp') : ''" class="bold"></Span>
+        </FormattedString>
+      </Label>
+    </FlexboxLayout>
+  </Page>
 </template>
 
 <script>
   import general from '~/mixins/general'
   import Confirm from './modalPages/Confirm'
+  import Alert from './modalPages/Alert'
   import { images } from '~/assets/imagesBase64'
   import PasswordUpdate from './modalPages/PasswordUpdate'
   import { ValueList } from "nativescript-drop-down";
@@ -343,11 +344,9 @@
                 }
             },
             alert(message) {
-            return alert({
-              title: 'GrowERP ' + this.$t('message'),
-              okButtonText: "OK",
-              message: message
-              });
+              this.$showModal(Alert,{ props: {
+                    message: message}
+              })
             },
 
             serverProblem(message) {
@@ -371,7 +370,8 @@
                   this.$backendService.createCategory(item).then( result => {
                     this.$backendService.uploadImage('small', images.foodImageSmall, 'category', result.data.productCategoryId)
                     this.$backendService.uploadImage('medium', images.foodImageMedium, 'category', result.data.productCategoryId)
-                    this.$backendService.createProduct('macaroni', '6.20', result.data.productCategoryId).then( result => {
+                    this.$backendService.createProduct({ name: 'macaroni', price: 6.20, productCategoryId: result.data.productCategoryId})
+                    .then( result => {
                       this.$backendService.uploadImage('small', images.macaroniImageSmall, 'product', result.data.productId)
                       this.$backendService.uploadImage('medium', images.macaroniImageMedium, 'product', result.data.productId)
                 })})})
@@ -383,7 +383,8 @@
                   this.$backendService.createCategory(item).then( result => {
                     this.$backendService.uploadImage('small', images.drinksImageSmall, 'category', result.data.productCategoryId)
                     this.$backendService.uploadImage('medium', images.drinksImageMedium, 'category', result.data.productCategoryId)
-                    this.$backendService.createProduct(this.$t('cola'), '80', result.data.productCategoryId).then( result => {
+                    this.$backendService.createProduct({ name: this.$t('cola'), price: 80, productCategoryId: result.data.productCategoryId})
+                    .then( result => {
                       this.$backendService.uploadImage('small', images.colaImageSmall, 'product', result.data.productId)
                       this.$backendService.uploadImage('medium', images.colaImageMedium, 'product', result.data.productId)
                 })})})
@@ -403,15 +404,17 @@
                 this.$backendService.uploadImage('small', images.kitchenImageSmall, 'prep', result.data.preparationAreaId)
                 this.$backendService.uploadImage('medium', images.kitchenImageMedium, 'prep', result.data.preparationAreaId)
                 item.categoryName = 'Food' ; item.preparationAreaId = result.data.preparationAreaId
-                this.$backendService.createCategory(item).then( result => {
+                this.$backendService.createCategory(item)
+                .then( result => {
                   this.$backendService.uploadImage('small', images.foodImageSmall, 'category', result.data.productCategoryId)
                   this.$backendService.uploadImage('medium', images.foodImageMedium, 'category', result.data.productCategoryId)
-                  this.$backendService.createProduct('macaroni', '6.20', result.data.productCategoryId).then( result => {
+                  this.$backendService.createProduct({ name: 'macaroni', price: 6.20, productCategoryId: result.data.productCategoryId})
+                  .then( result => {
                     this.$backendService.uploadImage('small', images.macaroniImageSmall, 'product', result.data.productId)
                     this.$backendService.uploadImage('medium', images.macaroniImageMedium, 'product', result.data.productId)})
-                  this.$backendService.createProduct('french fries', '2.99', result.data.productCategoryId)
-                  this.$backendService.createProduct('Tomjamkuhn', '3.99', result.data.productCategoryId)
-                  this.$backendService.createProduct('Cheese plate', '4.99', result.data.productCategoryId)})
+                  this.$backendService.createProduct({name: 'french fries', price: 2.99, productCategoryId: result.data.productCategoryId})
+                  this.$backendService.createProduct({name: 'Tomjamkuhn', price: 3.99, productCategoryId: result.data.productCategoryId})
+                  this.$backendService.createProduct({name: 'Cheese plate', price: 4.99, productCategoryId: result.data.productCategoryId})})
               })
               item.description = "Bar"
               this.$backendService.createPreparationArea(item).then( result => {
@@ -421,18 +424,20 @@
                 this.$backendService.createCategory(item).then( result => {
                   this.$backendService.uploadImage('small', images.drinksImageSmall, 'category', result.data.productCategoryId)
                   this.$backendService.uploadImage('medium', images.drinksImageMedium, 'category', result.data.productCategoryId)
-                  this.$backendService.createProduct('cola', '5.99', result.data.productCategoryId).then( result => {
+                    this.$backendService.createProduct({ name: this.$t('cola'), price: 80, productCategoryId: result.data.productCategoryId})
+                  .then( result => {
                     this.$backendService.uploadImage('small', images.colaImageSmall, 'product', result.data.productId)
                     this.$backendService.uploadImage('medium', images.colaImageMedium, 'product', result.data.productId)})
-                  this.$backendService.createProduct('fanta', '6.99', result.data.productCategoryId)
-                  this.$backendService.createProduct('Pepsi', '7.99', result.data.productCategoryId)
-                  this.$backendService.createProduct('Smoothy', '8.99', result.data.productCategoryId)})
-                  item.categoryName = 'Beers and Liquor'
-                  this.$backendService.createCategory(item).then( result => {
-                    this.$backendService.createProduct('Best Beer', '11.99', result.data.productCategoryId)
-                    this.$backendService.createProduct('Wiskey', '21.99', result.data.productCategoryId)
-                    this.$backendService.createProduct('Red Wine', '31.99', result.data.productCategoryId)
-                    this.$backendService.createProduct('White wine', '41.99', result.data.productCategoryId)})
+                  this.$backendService.createProduct({name: 'fanta', price: 6.99, productCategoryId: result.data.productCategoryId})
+                  this.$backendService.createProduct({name: 'Pepsi', price: 7.99, productCategoryId: result.data.productCategoryId})
+                  this.$backendService.createProduct({name: 'Smoothy', price: 8.99, productCategoryId: result.data.productCategoryId})})
+                item.categoryName = 'Beers and Liquor'
+                this.$backendService.createCategory(item)
+                .then( result => {
+                  this.$backendService.createProduct({name: 'Best Beer', price: 11.99, productCategoryId: result.data.productCategoryId})
+                  this.$backendService.createProduct({name: 'Wiskey', price: 21.99, productCategoryId: result.data.productCategoryId})
+                  this.$backendService.createProduct({name: 'Red Wine', price: 31.99, productCategoryId: result.data.productCategoryId})
+                  this.$backendService.createProduct({name: 'White wine', price: 41.99, productCategoryId: result.data.productCategoryId})})
               })
               let area = { description: 'Inside', nbrOfSpots: '10'}
               this.$backendService.createAccommodationArea(area).then( result => {
