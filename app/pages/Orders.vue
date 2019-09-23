@@ -221,7 +221,7 @@ export default {
       let record = 0
       while (record < tables.length) {
         let tableRecord = []
-        for (let count = 0; count < 4 ; count++) {
+        for (let count = 0; count < 6 ; count++) {
             let table = {}
             if (tables[record]) {
                 table = tables[record++]

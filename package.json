@@ -2,7 +2,7 @@
   "name": "GrowERP-Restaurant",
   "version": "1.0.0",
   "description": "GrowERP for the restaurant and bar business.",
-  "author": "Hans Bakker",
+  "author": "AntWebsystems co.,Ltd",
   "license": "MIT",
   "nativescript": {
     "id": "com.growerp.restaurant",
