@@ -13,24 +13,28 @@
           <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
             @propertyCommitted="onHeaderCommitted"/>
           <label :text="$t('tables')" paddingLeft="15"/>
-          <RadListView ref="listView" for="table in tableMatrix">
+          <RadListView for="table in tableMatrix">
             <v-template>
-              <StackLayout>
-                <GridLayout columns="*, *, *, *, *, *" rows="30" class="item">
-                  <label :text="table[0]?table[0].spotNumber:''" class="h3"
-                      col="0" horizontalAlignment="center" @tap="onSpotSelect(table[0])"/>
-                  <label :text="table[1]?table[1].spotNumber:''" class="h3"
-                      col="1" horizontalAlignment="center" @tap="onSpotSelect(table[1])"/>
-                  <label :text="table[2]?table[2].spotNumber:''" class="h3"
-                      col="2" horizontalAlignment="center" @tap="onSpotSelect(table[2])"/>
-                  <label :text="table[3]?table[3].spotNumber:''" class="h3"
-                      col="3" horizontalAlignment="center" @tap="onSpotSelect(table[3])"/>
-                  <label :text="table[4]?table[4].spotNumber:''" class="h3"
-                      col="4" horizontalAlignment="center" @tap="onSpotSelect(table[4])"/>
-                  <label :text="table[5]?table[5].spotNumber:''" class="h3"
-                      col="5" horizontalAlignment="center" @tap="onSpotSelect(table[5])"/>
+                <GridLayout columns="*, *, *, *, *, *" rows="*">
+                  <label :text="table[0]?table[0].spotNumber:''" class="h2"
+                      col="0" horizontalAlignment="center" 
+                      @tap="onSpotSelect(table[0])"/>
+                  <label :text="table[1]?table[1].spotNumber:''" class="h2"
+                      col="1" horizontalAlignment="center"
+                      @tap="onSpotSelect(table[1])"/>
+                  <label :text="table[2]?table[2].spotNumber:''" class="h2"
+                      col="2" horizontalAlignment="center"
+                      @tap="onSpotSelect(table[2])"/>
+                  <label :text="table[3]?table[3].spotNumber:''" class="h2"
+                      col="3" horizontalAlignment="center"
+                      @tap="onSpotSelect(table[3])"/>
+                  <label :text="table[4]?table[4].spotNumber:''" class="h2"
+                      col="4" horizontalAlignment="center"
+                      @tap="onSpotSelect(table[4])"/>
+                  <label :text="table[5]?table[5].spotNumber:''" class="h2"
+                      col="5" horizontalAlignment="center"
+                      @tap="onSpotSelect(table[5])"/>
                 </GridLayout>
-              </StackLayout>
             </v-template>
           </RadListView>
         </StackLayout>
@@ -134,85 +138,95 @@ export default {
                 propertyAnnotations:[
                     { name: 'areaDescription', displayName: this.$t('areaName'),
                         editor: 'SegmentedEditor', index: 3,
-                        valuesProvider:  this.$store.getters.areas},
+                        valuesProvider:  this.$store.getters.accommodationAreasDesc(false)},
                 ]
             },
             areaId: '',
             areaDescription: '',
-            tableMatrix: this.makeTableMatix(this.$store.getters.areasAndSpots[0].spots),
+            tableMatrix: this.makeTableMatix(
+                    this.$store.getters.accommodationAreas[0].accommodationAreaId),
             servOrders: [[]],
             billOrders: [[]],
           }
     },
     created() {
-      if (this.$store.getters.areasAndSpots.length == 0) {
+      if (this.$store.getters.accommodationAreas.length == 0) {
         this.note(this.$t('noAreasTables'))
         this.$navigateTo(this.$routes.Locations, {props: {startTab: 1}})
-      }
+      } else {
         this.currentTab = this.startTab
-        this.areaId = this.$store.getters.areasAndSpots[0].accommodationAreaId,
-        this.areaDescription = this.$store.getters.areasAndSpots[0].description,
+        this.areaId = this.$store.getters.accommodationAreas[0].accommodationAreaId,
         this.$backendService.getOrdersAndItems('serv').then( result => {
             this.servOrders = result.data.ordersAndItems})
         this.$backendService.getOrdersAndItems('bill').then( result => {
             this.billOrders = result.data.ordersAndItems})
+      }
     },
     methods: {
-        tabChange(args) {
-            this.currentTab = args.value
-        },
-        refresh() {
+      tabChange(args) {
+          this.currentTab = args.value
+      },
+      onHeaderCommitted(data) {
+        console.log('committed object:' + data.object.editedObject)
+        this.areaDescription = JSON.parse(data.object.editedObject).areaDescription
+        this.areaId = this.$store.getters.accommodationAreaByDesc(
+            JSON.parse(data.object.editedObject).areaDescription).accommodationAreaId
+        this.tableMatrix = this.makeTableMatix(this.areaId)
+        this.editedOrderHeader = JSON.parse(data.object.editedObject)
+      },
+      refresh() {
+        if (this.currentTab == 1) {
+            this.$backendService.getOrdersAndItems('serv').then( result => {
+                this.servOrders = result.data.ordersAndItems})}
+        if (this.currentTab == 2) {
+            this.$backendService.getOrdersAndItems('bill').then( result => {
+                this.billOrders = result.data.ordersAndItems})}
+      },
+      setDone(item) {
           if (this.currentTab == 1) {
-              this.$backendService.getOrdersAndItems('serv').then( result => {
-                  this.servOrders = result.data.ordersAndItems})}
-          if (this.currentTab == 2) {
-              this.$backendService.getOrdersAndItems('bill').then( result => {
-                  this.billOrders = result.data.ordersAndItems})}
-        },
-        setDone(item) {
+            for (let i=0; i < this.servOrders.length; i++) {
+              if (this.servOrders[i].orderId == item.orderId) {
+                this.servOrders.splice(i,1)
+                break}}
+          }
+          let newStat = 'bill'
+          let partId = item.orderPartSeqId
+          if (this.currentTab === 2) {
+            newStat = 'completed'
+            partId = null
+            for (let i=0; i < this.billOrders.length; i++) {
+              if (this.billOrders[i].orderId == item.orderId) {
+                this.billOrders.splice(i,1); break}}
+          }
+          this.$backendService.changeOrderPartStatus(item.orderId, partId, newStat)
+          .then(() => {
             if (this.currentTab == 1) {
-              for (let i=0; i < this.servOrders.length; i++) {
-                if (this.servOrders[i].orderId == item.orderId) {
-                  this.servOrders.splice(i,1)
-                  break}}
-            }
-            let newStat = 'bill'
-            let partId = item.orderPartSeqId
-            if (this.currentTab === 2) {
-              newStat = 'completed'
-              partId = null
-              for (let i=0; i < this.billOrders.length; i++) {
-                if (this.billOrders[i].orderId == item.orderId) {
-                  this.billOrders.splice(i,1); break}}
-            }
-            this.$backendService.changeOrderPartStatus(item.orderId, partId, newStat)
-            .then(() => {
-              if (this.currentTab == 1) {
-                this.note(this.$t('table') + ' ' + item.description + '-' +
-                    item.spotNumber + this.$t('isServedFrom') + item.prepDescription)}
-              if (this.currentTab == 2) {
-                this.note(this.$t('table') + ' ' + item.description + '-' +
-                        item.spotNumber + this.$t('isNowPaid'))
-                this.$backendService.getOrdersItemsPartySpot()} //update store
-            })
-        },
-        print(item) {
-          this.$navigateTo(this.$routes.OrderPrint, { props: { orderId: item.orderId}})
-        },
-        makeTableMatix(tables) { // same as in locations tablearea
-          if (!tables) return
-          let tableMatrix = []
-          let record = 0
-          while (record < tables.length) {
-              let tableRecord = []
-              for (let count = 0; count < 6 ; count++) {
-                  let table = {}
-                  if (tables[record]) {
-                      table = tables[record++]
-                      tableRecord.push(table)
-                  } else break }
-              tableMatrix.push(tableRecord) }
-          return tableMatrix
+              this.note(this.$t('table') + ' ' + item.description + '-' +
+                  item.spotNumber + this.$t('isServedFrom') + item.prepDescription)}
+            if (this.currentTab == 2) {
+              this.note(this.$t('table') + ' ' + item.description + '-' +
+                      item.spotNumber + this.$t('isNowPaid'))
+              this.$backendService.getOrdersItemsPartySpot()} //update store
+          })
+      },
+      print(item) {
+        this.$navigateTo(this.$routes.OrderPrint, { props: { orderId: item.orderId}})
+      },
+      makeTableMatix(areaId) { // same as in locations tablearea
+        let tables = this.$store.getters.
+                accommodationSpotsByAreaId(areaId)
+        let tableMatrix = []
+        let record = 0
+        while (record < tables.length) {
+          let tableRecord = []
+          for (let count = 0; count < 4 ; count++) {
+              let table = {}
+              if (tables[record]) {
+                  table = tables[record++]
+                  tableRecord.push(table)
+              } else { break}}
+          tableMatrix.push(tableRecord)}
+        return tableMatrix
       },
       onSpotSelect(table) {
         let openOrders = this.$store.getters.openOrdersByAreaSpot(table.accommodationAreaId, table.accommodationSpotId)
@@ -242,18 +256,6 @@ export default {
         } else {
           this.$navigateTo(this.$routes.OrderData, itemProps)
         }
-      },
-      onHeaderCommitted(data) {
-        console.log('committed object:' + data.object.editedObject)
-        if (JSON.parse(data.object.editedObject).areaDescription) {
-            if (JSON.parse(data.object.editedObject).areaDescription != this.editedOrderHeader.areaDescription) {
-                  this.tableMatrix = this.makeTableMatix(this.$store.getters.areaByDesc(
-                      JSON.parse(data.object.editedObject).areaDescription).spots)
-                  this.areaDescription = JSON.parse(data.object.editedObject).areaDescription
-                  this.areaId = this.$store.getters.areaByDesc(
-                      JSON.parse(data.object.editedObject).areaDescription).accommodationAreaId
-        }}
-        this.editedOrderHeader = JSON.parse(data.object.editedObject)
       },
    }
 }
