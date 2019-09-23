@@ -87,6 +87,7 @@
 
 <script>
   import general from '~/mixins/general'
+  import Confirm from './modalPages/Confirm'
   import { images } from '~/assets/imagesBase64'
   import PasswordUpdate from './modalPages/PasswordUpdate'
   import { ValueList } from "nativescript-drop-down";
@@ -350,12 +351,10 @@
             },
 
             serverProblem(message) {
-                confirm({
-                    title: this.$t('serverProblem'),
-                    message: message ? message : this.$t('serverNotAvailable'),
-                    okButtonText: this.$t('retry'),
-                    cancelButtonText: this.$t('exit')
-                }).then (data => {
+              this.$showModal(Confirm,{ props: {
+                  message: this.$t('serverNotAvailable') }
+              })
+              .then (data => {
                   if (data) this.$navigateTo(this.$routes.Login, {clearHistory: true})
                   else exit() 
               });

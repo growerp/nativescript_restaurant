@@ -58,7 +58,7 @@
               this.note(this.$t('preparationArea') + this.$t('isRequired'))
           else {
             const platformModule = require("tns-core-modules/platform")
-            if (platformModule.isIOS) { // returns an index instead of value so change
+            if (platformModule.isIOS && !this.prepAreaDescription) { // returns an index instead of value so change
               let values = this.$store.getters.preparationAreasDesc()
               this.editedItem.description = values[parseInt(this.editedItem.description,10)]
             }

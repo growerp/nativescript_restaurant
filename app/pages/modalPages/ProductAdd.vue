@@ -63,7 +63,7 @@
           else if (!this.editedItem.categoryName) this.note(this.$t('selectCategory')) 
           else {
             const platformModule = require("tns-core-modules/platform")
-            if (platformModule.isIOS) { // returns an index instead of value so change
+            if (platformModule.isIOS && !this.categoryName) { // returns an index instead of value so change
               let values = this.$store.getters.productCategoriesDesc()
               this.editedItem.categoryName = values[parseInt(
                   this.editedItem.categoryName,10)]
