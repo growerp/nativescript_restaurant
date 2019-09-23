@@ -26,7 +26,6 @@ const state = {
   userGroups:[],
   dashboard: [],
   customerProvider: [],
-  openOrders: [],
   activeSubscriptions: [],
 }
 const appSettings = require("tns-core-modules/application-settings")
@@ -53,9 +52,6 @@ const mutations = { //synchronous
     state.customerProvider = value },
   moquiToken(state, value) {
       state.moquiToken = value 
-  },
-  openOrders(state, value) {
-    state.openOrders = value 
   },
   userGroups(state, value) {
     state.userGroups = value 
@@ -91,17 +87,6 @@ const getters = {
   },
   moquiToken: state => {
     return state.moquiToken
-  },
-  openOrders: state => {
-    return state.openOrders
-  },
-  openOrdersByAreaSpot: state => (areaId, spotId) => {
-    let openOrders = []
-    for (let i=0; i<state.openOrders.length;i++) {
-      if (state.openOrders[i].accommodationAreaId === areaId &&
-          state.openOrders[i].accommodationSpotId === spotId)
-        openOrders.push(state.openOrders[i])}
-    return openOrders
   },
   user: state => { 
     return state.user },
