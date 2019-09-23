@@ -178,10 +178,10 @@ export default {
     save: 'SAVE  ',
     saveOrder: 'Save Order',
     securityGroup: 'Users Group',
+    selectArea: 'Select Area', // preparation or table area
     selectCategory: 'Select category',
     selectExistOrNew: 'Select an existing, or cancel for new',
     selectTableLocation: 'Select table location.',
-    selectArea: 'Select Area', // preparation or table area
     serve: 'Serve',
     served : 'served',
     serverNotAvailable: 'Internet connection or server not available.',
