@@ -1,40 +1,48 @@
 <template>
   <Page @loaded="pageLoaded(0)">
-        <ActionBar>
-            <GridLayout width="100%" columns="auto, auto, *">
-                <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
-                <Label class="title" :text="header" col="1" @tap="onHeaderTap"/>
-                <Label class="title" :text="$t('totalAmount') + ': ' + getOrderTotal" col="2" />
-            </GridLayout>
-        </ActionBar>
+    <ActionBar>
+        <GridLayout width="100%" columns="auto, auto, *">
+            <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
+            <Label class="title" :text="header" col="1" @tap="onHeaderTap"/>
+            <Label class="title" :text="$t('totalAmount') + ': ' + getOrderTotal" col="2" />
+        </GridLayout>
+    </ActionBar>
 
-        <StackLayout>
-            <Button class="button" :text="$t('saveOrder')" @tap="saveOrder"
-                :visibility="orderItems.length? 'visible':'collapse'"/>
-            <RadListView ref="listView" for="item in orderItems"
-                  @itemTap="onItemDeleteTap"
-                  :visibility="orderItems.length? 'visible':'collapse'">
-                <v-template>
-                    <GridLayout columns="50, *, auto, auto, auto" rows="*" class="item">
-                        <Image :src="item.image"  col="0" class="thumbnail"/>
-                        <label :text="item.name" class="h2"
-                            col="1" paddingLeft="10"/>
-                        <label :text="item.quantity" class="h2" col="2"
-                            paddingRight="10"/>
-                        <label :text="item.price" class="h2" col="3"
-                            paddingRight="10"/>
-                        <label :text="Number(item.price) * Number(item.quantity)"
-                            class="h2" col="4" paddingRight="10"/>
-                    </GridLayout>
-                </v-template>
-            </RadListView>
-            <GridLayout columns="*" rows="*"
-                :visibility="orderItems.length? 'collapse':'visible'">
-              <Label class="message" col="0" row="0"
-                  :text="$t('noItemsOnOrderAddSome')"/>
+    <StackLayout>
+      <GridLayout columns="auto,auto,*" rows="*,auto">
+        <RadListView ref="listView" for="item in orderItems"
+              row="0" colSpan="3"
+              @itemTap="onItemDeleteTap" height="80%"
+              :visibility="orderItems.length? 'visible':'collapse'">
+          <v-template>
+            <GridLayout columns="50, *, auto, auto, auto" rows="*" class="item">
+              <Image :src="item.image"  col="0" class="thumbnail"/>
+              <label :text="item.name" class="h2"
+                  col="1" paddingLeft="10"/>
+              <label :text="item.quantity" class="h2" col="2"
+                  paddingRight="10"/>
+              <label :text="item.price" class="h2" col="3"
+                  paddingRight="10"/>
+              <label :text="Number(item.price) * Number(item.quantity)"
+                  class="h2" col="4" paddingRight="10"/>
             </GridLayout>
-        </StackLayout>
-    </Page>
+          </v-template>
+        </RadListView>
+        <GridLayout columns="*" rows="*" height="80%" row="0" colSpan="3"
+            :visibility="orderItems.length? 'collapse':'visible'">
+          <Label class="message" col="0" row="0"
+              :text="$t('noItemsOnOrderAddSome')"/>
+        </GridLayout>
+        <GridLayout columns="*,*" rows="auto" row="1" colSpan="3">
+          <Button class="button" :text="$t('cancel')" 
+            @tap="$navigateTo($routes.Orders)" col="0"/>
+          <Button class="button" :text="$t('saveOrder')" 
+              @tap="saveOrder" col="1"
+              :visibility="orderItems.length? 'visible':'hidden'"/>
+        </GridLayout>
+      </GridLayout>
+    </StackLayout>
+  </Page>
 </template>
 
 <script>
