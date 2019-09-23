@@ -1,3 +1,4 @@
+import store from '../../store'
 const log = true 
 const state = {
   accommodationAreas: [{
@@ -259,6 +260,16 @@ const getters = {
   accommodationAreas: state => {
     return state.accommodationAreas
   },
+  accommodationAreaByDesc: state => desc => {
+    return state.accommodationAreas.find(o => o.description === desc)
+  },
+  accommodationAreasDesc: state => (blank=true) => {
+    let areas = []
+    if (blank) areas.push(' ')
+    for(let i=0;i<state.accommodationAreas.length;i++)
+        areas.push(state.accommodationAreas[i].description)
+    return areas
+  },
   accommodationSpots: state => {
     return state.accommodationSpots
   },
@@ -289,6 +300,13 @@ const getters = {
   // productCategory related===================================================
   productCategories: state => {
     return state.productCategories
+  },
+  productCategoriesAndProducts: state => {
+  let catAndProd = state.productCategories
+  for (let i=0;i<catAndProd.length; i++)
+    catAndProd[i].products = store.getters.productsByCatg(
+      catAndProd[i].productCategoryId)
+  return catAndProd
   },
   productCategoryByDesc: state => desc => {
     return state.productCategories.find(o => o.categoryName === desc)

@@ -18,7 +18,7 @@
         <v-template name="title">
           <GridLayout columns="50, *" rows="*" class="item">
             <Image :src="item.image"  col="0" class="thumbnail"/>
-            <Label backgroundColor="rgb(211, 215, 207)" :text="item.name"
+            <Label backgroundColor="rgb(211, 215, 207)" :text="item.categoryName"
                 col="1" class="h2" paddingLeft="10"/>
           </GridLayout>
         </v-template>
@@ -48,11 +48,11 @@ export default {
 			return {
         header: this.$t('orderFor') + this.$t('table') + this.orderHeader.description +
             '-' + this.orderHeader.spotNumber,
-        categoriesAndProducts: this.$store.getters.categoriesAndProducts,
+        categoriesAndProducts:  this.$store.getters.productCategoriesAndProducts,
         orderItems: [],
         itemCount: 0,
       }
-		},
+    },
 		methods: {
       onHeaderTap() {
         this.$navigateTo(this.$routes.Home)
