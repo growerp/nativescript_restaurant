@@ -9,11 +9,12 @@
     </ActionBar>
 
     <GridLayout columns="auto,auto,*" rows="*,auto">
-      <Accordion row="0" col="0" colSpan="3" height="95%"
+      <Accordion row="0" col="0" colSpan="3" height="100%"
           ref="accordion" allowMultiple="true"
           for="item of categoriesAndProducts" childItems="products">
         <v-template name="title">
-          <GridLayout columns="50, *" rows="*" class="item">
+          <GridLayout columns="50, *" rows="*" class="item"
+            :visibility="item.nbrOfProducts!='0'?'visible':'hidden'">
             <Image :src="item.image"  col="0" class="thumbnail"/>
             <Label backgroundColor="rgb(211, 215, 207)" :text="item.categoryName"
                 col="1" class="h2" paddingLeft="10"/>

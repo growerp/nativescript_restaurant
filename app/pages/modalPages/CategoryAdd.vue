@@ -75,8 +75,8 @@
                 description: this.editedItem.description,
                 nbrOfProducts: '0'
               })
-            })
             this.$modal.close()
+            })
           }
         }
       }

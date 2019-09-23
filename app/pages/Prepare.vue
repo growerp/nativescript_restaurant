@@ -9,12 +9,12 @@
       <!-- create a list for every preparation area -->
       <TabViewItem v-for="(prep, index) in this.prepAreas"
           :key="index" :col="index" :title="prep.description">
-        <StackLayout>
+        <StackLayout padding="10">
           <Accordion row="1" col="0" colSpan="3" allowMultiple="false" height="80%"
                   for="item of prepOrders[index]"  childItems="items">
                   <!--:visibility="prepOrders[index]? 'visible' : 'collapse'"-->
             <v-template name="title">
-              <GridLayout columns="50,*,80" rows="*" paddingLeft="10">
+              <GridLayout columns="50,*,80" rows="*" paddingBottom="10">
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <Label :text="item.description + '-' +
                     item.spotNumber + '   ' + item.nbrOfItems + ' ' + $t('items')" 
@@ -68,7 +68,6 @@ export default {
       this.$backendService.getOrdersAndItems('prep',
             this.prepAreas[i].preparationAreaId)
       .then( result => {
-        console.log('=====oders and items for ' + this.prepAreas[i].description + JSON.stringify(result.data.ordersAndItems))
         this.prepOrders[i] = result.data.ordersAndItems
         this.currentTab = 100;this.currentTab = i
       })

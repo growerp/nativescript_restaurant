@@ -81,7 +81,7 @@
           else {
             const platformModule = require("tns-core-modules/platform")
             if (platformModule.isIOS) { // returns an index instead of value so change
-              let values = this.$store.getters.prepAreas
+              let values = this.$store.getters.preparationAreasDesc(false)}
               this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
             delete this.editedItem.nbrOfProducts
             if (this.editedItem.description != this.item.description) { //preparation area changed
@@ -90,7 +90,7 @@
             this.$backendService.updateCategory(this.editedItem)
             this.$store.commit('productCategory',this.editedItem)
             this.hideKeyboard()
-        }}
+        }
         this.$navigateBack()
       },
       onDeleteItemTap(item) {

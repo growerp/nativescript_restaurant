@@ -82,8 +82,8 @@
                 productCategoryId: this.editedItem.productCategoryId,
                 categoryName: this.editedItem.categoryName, 
               })
+              this.$modal.close()
             })
-            this.$modal.close()
           }
         }
       }
