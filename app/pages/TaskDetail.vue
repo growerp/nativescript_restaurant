@@ -24,6 +24,7 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
+import Confirm from './modalPages/Confirm'
 const priority = [1,2,3,4,5]
 export default {
     name: 'TaskDetail',
@@ -111,10 +112,8 @@ export default {
           this.$navigateBack()
         },
         onDeleteTap() {
-          confirm({
-              title: this.$t('deleteTask') + this.item.workEffortName + "?",
-              okButtonText: this.$t('ok'),
-              cancelButtonText: this.$t('cancel')
+          this.$showModal(Confirm,{ props: {
+              message: this.$t('deleteTask') + this.item.workEffortName + "?"}
           }).then (data => {
             if (data) {
               this.$backendService.deleteTask(this.item.workEffortId)

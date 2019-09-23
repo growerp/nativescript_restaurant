@@ -38,6 +38,7 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import CategoryAdd from './modalPages/CategoryAdd'
+import Confirm from './modalPages/Confirm'
 import general from '~/mixins/general'
 import ProductAdd from './modalPages/ProductAdd'
 
@@ -58,10 +59,8 @@ export default {
       if (item.nbrOfProducts != "0") {
         this.note(this.$t('cannotDelCatProd'))
       } else {
-        confirm({
-          title: this.$t('deleteCategory') + item.categoryName + "?",
-          okButtonText: this.$t('ok'),
-          cancelButtonText: this.$t('cancel')
+        this.$showModal(Confirm,{ props: {
+            message: this.$t('deleteCategory') + item.categoryName + "?"}
         })
         .then (data => {
           if (data) {
