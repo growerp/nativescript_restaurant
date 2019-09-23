@@ -98,7 +98,7 @@ export default {
     kitchen: 'kitchen',
     lastName: 'Last Name',
     listofTasks: 'List of my tasks',
-    listofOtherTask : 'List of tasks i gave to others',
+    listofOtherTask : 'List of tasks I gave to others',
     listofTable: 'List table location and numbers',
     listOfProducts :'List of products',
     listOfSales: 'List of sales',
