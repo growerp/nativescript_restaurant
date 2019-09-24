@@ -5,7 +5,7 @@
           :onActionTap="onSaveTap"
           :header="this.$t(this.roleTypeId.toLowerCase()) + ' ' + this.$t('detailedInfo')"/>
     </ActionBar>
-    <StackLayout @longPress="onDeleteTap">
+    <StackLayout>
       <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
         <Image ref="itemForm" :src="itemImage" width="100" height="100"
             col="0" row="0" rowSpan="2"/>
@@ -14,11 +14,16 @@
         <Button class="button" :text="$t('useCamera')"
             @tap="takePicture('user', item.partyId)" col="2" row="1"/>
       </GridLayout>
-      <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"/>
-      <RadDataForm ref="itemForm" :source="item"
+      <GridLayout rows="auto,*,50,50" @longPress="onDeleteTap">
+      <Label :text="$t('longToDelete')" horizontalAlignment="center" class="p"
+          row="0"/>
+      <RadDataForm ref="itemForm" :source="item" row="1"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"
-        :visibility="this.$store.getters.user.userGroupId==='GROWERP_M_ADMIN'?'visible':'hidden'"/>
+        width="50%" row="2"
+        :visibility=
+        "this.$store.getters.user.userGroupId==='GROWERP_M_ADMIN'?'visible':'hidden'"/>
+      </GridLayout>
     </StackLayout>
   </Page>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="areaDetail"/>
@@ -13,28 +13,32 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('area', item.accommodationAreaId)"/>
       </GridLayout>
-      <RadDataForm :source="Object.assign({},item)"
-          :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-      <Label class="title" :text="$t('tableNumbers') + $t('tapLongToDelete')"/>
-      <RadListView for="table in tableMatrix" height="50%">
-        <v-template>
-          <GridLayout columns="*, *, *, *" rows="*" class="item">
-            <label :text="table[0]?table[0].spotNumber:''" class="h2"
-                col="0" horizontalAlignment="center"
-                @longPress="deleteSpot(table[0])"/>
-            <label :text="table[1]?table[1].spotNumber:''" class="h2"
-                col="1" horizontalAlignment="center"
-                @longPress="deleteSpot(table[1])"/>
-            <label :text="table[2]?table[2].spotNumber:''" class="h2"
-                col="2" horizontalAlignment="center"
-                @longPress="deleteSpot(table[2])"/>
-            <label :text="table[3]?table[3].spotNumber:''" class="h2"
-                col="3" horizontalAlignment="center"
-                @longPress="deleteSpot(table[3])"/>
-          </GridLayout>
-        </v-template>
-      </RadListView>
-      <Button class="button" :text="$t('addTable')" @tap="addSpot" width="50%"/>
+      <GridLayout rows="auto,auto,*,50,50">
+        <RadDataForm :source="Object.assign({},item)" row="0"
+            :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
+        <Label class="title"  row="1"
+              :text="$t('tableNumbers') + $t('tapLongToDelete')"/>
+        <RadListView for="table in tableMatrix" row="2">
+          <v-template>
+            <GridLayout columns="*, *, *, *" rows="*" class="item">
+              <label :text="table[0]?table[0].spotNumber:''" class="h2"
+                  col="0" horizontalAlignment="center"
+                  @longPress="deleteSpot(table[0])"/>
+              <label :text="table[1]?table[1].spotNumber:''" class="h2"
+                  col="1" horizontalAlignment="center"
+                  @longPress="deleteSpot(table[1])"/>
+              <label :text="table[2]?table[2].spotNumber:''" class="h2"
+                  col="2" horizontalAlignment="center"
+                  @longPress="deleteSpot(table[2])"/>
+              <label :text="table[3]?table[3].spotNumber:''" class="h2"
+                  col="3" horizontalAlignment="center"
+                  @longPress="deleteSpot(table[3])"/>
+            </GridLayout>
+          </v-template>
+        </RadListView>
+        <Button class="button" :text="$t('addTable')" @tap="addSpot" 
+              row="3" width="50%"/>
+      </GridLayout>
   </StackLayout>
 </Page>
 </template>
