@@ -9,7 +9,7 @@
     </ActionBar>
 
     <StackLayout>
-      <GridLayout columns="auto,auto,*" rows="*,auto,this.isSubscribed('noAdds')?0:50">
+      <GridLayout columns="auto,auto,*" rows="*,auto,50">
         <RadListView ref="listView" for="item in orderItems"
               row="0" colSpan="3"
               @itemTap="onItemDeleteTap" height="80%"

@@ -10,7 +10,7 @@
         </StackLayout>
       </GridLayout>
     </ActionBar>
-    <GridLayout rows="*,50,this.isSubscribed('noAdds')?0:50">
+    <GridLayout rows="*,50,50">
       <RadDataForm :source="orderHeaderInfo" :metadata="orderHeaderInfoMeta"
           @propertyCommitted="onHeaderCommitted" row="0" height="80%"/>
       <Button class="button" :text="$t('continue')" @tap="goToEntry"
