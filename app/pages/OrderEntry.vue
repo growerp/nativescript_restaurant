@@ -8,7 +8,7 @@
         </GridLayout>
     </ActionBar>
 
-    <GridLayout rows="*,50,this.isSubscribed('noAdds')?0:50">
+    <GridLayout rows="*,50,50">
       <Accordion row="0" height="100%"
           ref="accordion" allowMultiple="true"
           for="item of categoriesAndProducts" childItems="products">
