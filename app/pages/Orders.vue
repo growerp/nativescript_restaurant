@@ -132,7 +132,6 @@ export default {
     return {
       text: 'Order Page',
       currentTab: 0,
-      editedOrderHeader: {},
       orderHeader: {
         areaDescription: '',
       },
@@ -144,7 +143,7 @@ export default {
           ]
       },
       areaId: '',
-      areaDescription: '',
+      areaDescription: this.$store.getters.accommodationAreas[0].description,
       tableMatrix: this.makeTableMatix(
               this.$store.getters.accommodationAreas[0].accommodationAreaId),
       servOrders: [[]],
@@ -169,12 +168,11 @@ export default {
         this.currentTab = args.value
     },
     onHeaderCommitted(data) {
-      console.log('committed object:' + data.object.editedObject)
-      this.areaDescription = JSON.parse(data.object.editedObject).areaDescription
+      let editedObject = JSON.parse(data.object.editedObject)
+      this.areaDescription = editedObject.areaDescription
       this.areaId = this.$store.getters.accommodationAreaByDesc(
-          JSON.parse(data.object.editedObject).areaDescription).accommodationAreaId
+          editedObject.areaDescription).accommodationAreaId
       this.tableMatrix = this.makeTableMatix(this.areaId)
-      this.editedOrderHeader = JSON.parse(data.object.editedObject)
     },
     refresh() {
       if (this.currentTab == 1) {
@@ -233,16 +231,11 @@ export default {
     onSpotSelect(table) {
       let openOrders = this.$store.getters.openOrdersByAreaSpot(
             table.accommodationAreaId, table.accommodationSpotId)
-      let externalId = this.editedOrderHeader.externalId?
-              this.editedOrderHeader.externalId:
-              this.editedOrderHeader.newExternalId
       let itemProps = { props: { orderHeader: {
           accommodationAreaId:  this.areaId,
           description:          this.areaDescription,
           accommodationSpotId:  table.accommodationSpotId,
           spotNumber:           table.spotNumber,
-          externalId:           externalId,
-          nbrOfGuests:          this.editedOrderHeader.nbrOfGuests,
       }}}
       if (openOrders.length > 0) {
         this.$showModal(AddToOrder, {props: { openOrders: openOrders,

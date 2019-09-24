@@ -1,13 +1,10 @@
 <template>
   <Page @loaded="pageLoaded(0)">
-    <ActionBar>
-        <GridLayout width="100%" columns="auto, auto, *">
-            <Label class="title" text="BACK" col="0" @tap="$navigateBack"/>
-            <Label class="title" :text="header" col="1" @tap="onHeaderTap"/>
-            <Label class="title" :text="itemCount + $t('items')" col="2" textAlignment = "center"/>
-        </GridLayout>
+    <ActionBar><NavigationButton visibility="collapsed"/>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
+          :openDrawer="openDrawer" 
+          :headerNoI18n="header"/>
     </ActionBar>
-
     <GridLayout rows="*,50,50">
       <Accordion row="0" height="100%"
           ref="accordion" allowMultiple="true"
@@ -16,7 +13,8 @@
           <GridLayout columns="50, *" rows="*" class="item"
             :visibility="item.nbrOfProducts!='0'?'visible':'hidden'">
             <Image :src="item.image"  col="0" class="thumbnail"/>
-            <Label backgroundColor="rgb(211, 215, 207)" :text="item.categoryName"
+            <Label backgroundColor="rgb(211, 215, 207)" 
+                :text="item.categoryName"
                 col="1" class="h2" paddingLeft="10"/>
           </GridLayout>
         </v-template>
@@ -43,26 +41,25 @@
 
 <script>
 import general from '~/mixins/general'
+import sideDrawer from '~/mixins/sideDrawer'
 
 export default {
     name: 'OrderEntry',
     props: {
         orderHeader: {}
     },
-    mixins: [ general ],
+    mixins: [ sideDrawer, general ],
     data() {
 			return {
-        header: this.$t('orderFor') + this.$t('table') + this.orderHeader.description +
+        header: this.$t('orderFor') + this.$t('table') + 
+            this.orderHeader.description +
             '-' + this.orderHeader.spotNumber,
         categoriesAndProducts:  this.$store.getters.productCategoriesAndProducts,
         orderItems: [],
         itemCount: 0,
       }
     },
-		methods: {
-      onHeaderTap() {
-        this.$navigateTo(this.$routes.Home)
-      },
+    methods: {
       getOrderitems() {
         let items = this.orderItems.length
         for (let i = 0; i < items; i++) {

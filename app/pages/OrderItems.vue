@@ -1,13 +1,12 @@
 <template>
   <Page @loaded="pageLoaded(0)">
-    <ActionBar>
-        <GridLayout width="100%" columns="auto, auto, *">
-            <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
-            <Label class="title" :text="header" col="1" @tap="onHeaderTap"/>
-            <Label class="title" :text="$t('totalAmount') + ': ' + getOrderTotal" col="2" />
-        </GridLayout>
+    <ActionBar><NavigationButton visibility="collapsed"/>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
+          :openDrawer="openDrawer" 
+          :header="this.$t('orderFor') + this.orderHeader.description +
+                    this.$t('table') + ' ' + this.orderHeader.spotNumber"
+          :text="$t('totalAmount') + ': ' + getOrderTotal" />
     </ActionBar>
-
     <StackLayout>
       <GridLayout columns="auto,auto,*" rows="*,auto,50">
         <RadListView ref="listView" for="item in orderItems"
@@ -49,52 +48,44 @@
 </template>
 
 <script>
+import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
-    export default {
-        name: 'OrderItems',
-        props: {
-            orderHeader: {},
-            orderItems: ''
-        },
-        mixins: [ general ],
-        computed: {
-            getOrderTotal: function () {
-                let items = this.orderItems.length; let quantities = 0; let totalPrice = 0.00
-                for (let i = 0; i < items; i++) {
-                    quantities += this.orderItems[i].quantity
-                    totalPrice += (this.orderItems[i].quantity * this.orderItems[i].price)}
-                return(totalPrice.toFixed(2))
-            }
-        },
-        data() {
-            return {
-                header: this.$t('orderFor') + this.orderHeader.description +
-                    this.$t('table') + ' ' + this.orderHeader.spotNumber,
-            }
-        },
-        methods: {
-          onHeaderTap() {
-            this.$navigateTo(this.$routes.Home)
-          },
-          saveOrder() {
-                this.$backendService.createSalesOrder(this.orderHeader, this.orderItems)
-                .then( result => {
-                    this.$backendService.getCustomersInStore()
-                    if (this.orderHeader.orderId) {
-                      this.note(this.$t('orderUpdated') + result.data.orderId +
-                        this.$t('appearPrepArea'))
-                    } else {
-                      this.note(this.$t('orderReceived') + result.data.orderId +
-                          this.$t('appearPrepArea'))
-                    }
-                })
-                this.$navigateTo(this.$routes.Home)
-          },
-          onItemDeleteTap(args) {
-              this.orderItems.splice(args.index,1)
-          },
-      }
+export default {
+  name: 'OrderItems',
+  props: {
+    orderHeader: {},
+    orderItems: ''
+  },
+  mixins: [ sideDrawer,general ],
+  computed: {
+    getOrderTotal: function () {
+      let items = this.orderItems.length; let quantities = 0; let totalPrice = 0.00
+      for (let i = 0; i < items; i++) {
+          quantities += this.orderItems[i].quantity
+          totalPrice += (this.orderItems[i].quantity * this.orderItems[i].price)}
+      return(totalPrice.toFixed(2))
     }
+  },
+  methods: {
+    saveOrder() {
+      this.$backendService.createSalesOrder(this.orderHeader, this.orderItems)
+      .then( result => {
+        this.$backendService.getCustomersInStore()
+        if (this.orderHeader.orderId) {
+          this.note(this.$t('orderUpdated') + result.data.orderId +
+            this.$t('appearPrepArea'))
+        } else {
+          this.note(this.$t('orderReceived') + result.data.orderId +
+              this.$t('appearPrepArea'))
+        }
+      })
+      this.$navigateTo(this.$routes.Home)
+    },
+    onItemDeleteTap(args) {
+      this.orderItems.splice(args.index,1)
+    },
+  }
+}
 </script>
 
 <style lang="css">
