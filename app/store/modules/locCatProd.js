@@ -89,13 +89,13 @@ const mutations = {
       updateAccommodationSpotCount(value.accommodationAreaId, true)
       state.accommodationSpots.splice(i,0,value)
     } else {
-      console.log("get index")
+      console.log("get index verb: " + verb)
       let index = state.accommodationSpots.findIndex(
         o => o.accommodationSpotId === value.accommodationSpotId)
         console.log("got index" + index)
       if (index == -1) 
         if (log) console.log("accommodation spot not found:" + value.accommodationSpotId)
-      else if (verb == 'delete') {
+      else if (verb == "delete") {
         console.log("====deletiong......")
         if (log) console.log(" delete spot number: " + 
                 state.accommodationSpots[index].spotNumber)
