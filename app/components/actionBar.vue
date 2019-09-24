@@ -8,7 +8,10 @@
         horizontalAlignment="center" col="2">
       <Image src="~/assets/images/go-back-arrow.png" height="20" 
           :visibility="onHeaderTap?'visible':'hidden'"/>
-      <Label class="title" :text="$t(header)"/>
+      <Label class="title" :text="$t(header)"
+          :visibility="header? 'visible': 'hidden'"/>
+      <Label class="title" :text="headerNoI18n"
+          :visibility="headerNoI18n? 'visible': 'hidden'"/>
     </StackLayout>
     <Image src="~/assets/images/plus.png" height="20" @tap="onActionTap" 
       col="4" :visibility="plus? 'visible': 'hidden'"/>
@@ -16,6 +19,8 @@
       col="4" :visibility="save? 'visible': 'hidden'"/>
     <Image src="~/assets/images/reload.png" height="20" @tap="onActionTap" 
       col="4" :visibility="reload? 'visible': 'hidden'"/>
+    <Label :text="text" col=4
+        :visibility="text? 'visible': 'hidden'"/>
   </GridLayout>
 </template>
 
@@ -31,6 +36,8 @@
       plus: {type: Boolean, default: false},
       reload: {type: Boolean, default: false},
       header: String,
+      headerNoI18n: String,
+      text: String, // topright corner
     },
 }
 </script>
