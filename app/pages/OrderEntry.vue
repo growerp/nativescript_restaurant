@@ -8,8 +8,8 @@
         </GridLayout>
     </ActionBar>
 
-    <GridLayout columns="auto,auto,*" rows="*,auto,50">
-      <Accordion row="0" col="0" colSpan="3" height="100%"
+    <GridLayout rows="*,50,this.isSubscribed('noAdds')?0:50">
+      <Accordion row="0" height="100%"
           ref="accordion" allowMultiple="true"
           for="item of categoriesAndProducts" childItems="products">
         <v-template name="title">
@@ -29,9 +29,14 @@
              </GridLayout>
         </v-template>
       </Accordion>
-      <Button class="button" row="1" col="0" text="Expand" @tap="expandAll"/>
-      <Button class="button" row="1" col="1" text="Collapse" @tap="collapseAll"/>
-      <Button class="button" row="1" col="2" text="Continue" @tap="goToItems()"/>
+      <GridLayout columns="auto,auto,*" row="1">
+        <Button class="button" col="0" text="Expand" 
+          width="25%" @tap="expandAll"/>
+        <Button class="button" col="1" text="Collapse" 
+          width="25%" @tap="collapseAll"/>
+        <Button class="button" col="2" text="Continue" 
+          width="50%" @tap="goToItems()"/>
+      </GridLayout>
     </GridLayout>
 </Page>
 </template>

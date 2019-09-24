@@ -242,7 +242,7 @@
                       this.$store.commit('moquiToken', result.data.moquiSessionToken)
                       this.$backendService.saveToken()
                       this.$store.commit('user',result.data.user)
-                      // this.$backendService.initData()
+                      // this.$backendService.initData() // done in home
                       this.$backendService.getActiveSubscriptions()
                       .then( activeSubscriptions => { // need to check if adds are required present on home screen
                         this.$store.commit("activeSubscriptions", activeSubscriptions.data.subscriptions)

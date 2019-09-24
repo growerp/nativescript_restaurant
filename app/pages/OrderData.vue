@@ -1,7 +1,7 @@
 <template lang="html">
   <Page @loaded="pageLoaded(0)">
     <ActionBar>
-      <GridLayout width="100%" columns="auto, *, auto">
+      <GridLayout columns="auto, *, auto">
         <Label class="title" text="BACK" col="0" @tap="$navigateBack"/>
         <StackLayout orientation="horizontal" @tap="$navigateTo($routes.Home)" col="1"
             horizontalAlignment="center">
@@ -10,11 +10,12 @@
         </StackLayout>
       </GridLayout>
     </ActionBar>
-        <StackLayout>
-          <RadDataForm :source="orderHeaderInfo" :metadata="orderHeaderInfoMeta"
-            @propertyCommitted="onHeaderCommitted"/>
-        <Button class="button" :text="$t('continue')" @tap="goToEntry"/>
-      </StackLayout>
+    <GridLayout rows="*,50,this.isSubscribed('noAdds')?0:50">
+      <RadDataForm :source="orderHeaderInfo" :metadata="orderHeaderInfoMeta"
+          @propertyCommitted="onHeaderCommitted" row="0" height="80%"/>
+      <Button class="button" :text="$t('continue')" @tap="goToEntry"
+        row="1" width="50%"/>
+    </GridLayout>
   </Page>
 </template>
 
