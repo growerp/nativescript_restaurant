@@ -5,38 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch on iOS",
-            "type": "nativescript",
-            "request": "launch",
-            "platform": "ios",
-            "appRoot": "${workspaceRoot}",
-            "sourceMaps": true,
-            "watch": true
-        },
-        {
-            "name": "Test on iOS",
-            "type": "nativescript",
-            "request": "launch",
-            "platform": "ios",
-            "appRoot": "${workspaceRoot}",
-            "sourceMaps": true,
-            "watch": false,
-            "stopOnEntry": true,
-            "launchTests": true,
-            "tnsArgs": [
-                "--justlaunch"
-            ]
-        },
-        {
-            "name": "Attach on iOS",
-            "type": "nativescript",
-            "request": "attach",
-            "platform": "ios",
-            "appRoot": "${workspaceRoot}",
-            "sourceMaps": true,
-            "watch": false
-        },
-        {
             "name": "Launch on Android",
             "type": "nativescript",
             "request": "launch",

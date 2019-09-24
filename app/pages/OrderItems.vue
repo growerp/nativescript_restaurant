@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded()">
+  <Page @loaded="pageLoaded(0)">
     <ActionBar>
         <GridLayout width="100%" columns="auto, auto, *">
             <Label class="title" :text="$t('back')" col="0" @tap="$navigateBack"/>
@@ -30,7 +30,7 @@
         </RadListView>
         <GridLayout columns="*" rows="*" height="80%" row="0" colSpan="3"
             :visibility="orderItems.length? 'collapse':'visible'">
-          <Label class="message" col="0" row="0"
+          <Label class="message" col="0" row="0" padding="20"
               :text="$t('noItemsOnOrderAddSome')"/>
         </GridLayout>
         <GridLayout columns="*,*" rows="auto" row="1" colSpan="3">
@@ -39,6 +39,9 @@
           <Button class="button" :text="$t('saveOrder')" 
               @tap="saveOrder" col="1"
               :visibility="orderItems.length? 'visible':'hidden'"/>
+          <Button class="button" :text="$t('goBack')" 
+              @tap="$navigateBack" col="1"
+              :visibility="orderItems.length? 'hidden':'visible'"/>
         </GridLayout>
       </GridLayout>
     </StackLayout>
