@@ -27,7 +27,7 @@ export default {
   },
   data () {
     return {
-      header: this.$t('orderExtraInformation') + ' ' + this.$t('orderFor') + 
+      header: this.$t('extraInformation') + ' ' + this.$t('orderFor') + 
           this.$t('table') + this.orderHeader.description +
           '-' + this.orderHeader.spotNumber,
       currentTab: 0,
