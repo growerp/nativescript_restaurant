@@ -15,12 +15,12 @@
 <script>
 export default {
   props: {
-    accomodationArea: Object
+    accommodationArea: Object
   },
   data() {
     return {
       item: {
-          spotNumber: '',
+        spotNumber: '',
       },
       editedItem: {},
       itemMeta: {
@@ -37,13 +37,13 @@ export default {
     submit() {
       if (this.editedItem != '') {
         this.$backendService.createAccommodationSpot(
-            this.item.accommodationAreaId,
+            this.accommodationArea.accommodationAreaId,
             this.editedItem.spotNumber)
         .then((result) => {
           this.$store.commit('accommodationSpot',{
             verb: "add",
-            accommodationAreaId: this.item.accommodationAreaId,
-            descripion: this.item.description,
+            accommodationAreaId: this.accommodationArea.accommodationAreaId,
+            descripion: this.accommodationArea.description,
             accommodationSpotId: result.data.accommodationSpotId,
             spotNumber: this.editedItem.spotNumber,
             image: global.noImage

@@ -3,7 +3,7 @@
     <ActionBar><NavigationButton visibility="collapsed"/>
         <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer"
-            :header="$t('locations')"/>
+            header="locations"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('preparation')">
@@ -78,6 +78,7 @@ export default {
   },
   created() {
      this.currentTab = this.startTab
+         console.log("====store accommares" + JSON.stringify(this.$store.getters.accommodationAreas))
   },
   methods: {
     tabChange(args) {
