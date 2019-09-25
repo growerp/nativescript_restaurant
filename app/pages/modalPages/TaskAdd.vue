@@ -47,7 +47,7 @@ export default {
           const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
             let values = this.$store.getters.userNames
-            this.editedItem.workEffortName = values[parseInt(this.editedItem.workEffortName,10)]}
+            this.editedItem.partyId = values[parseInt(this.editedItem.partyId,10)]}
           this.editedItem.partyId = this.$store.getters.userByFirstLastName(
               this.editedItem.partyId)
           this.$backendService.createTask(this.editedItem).then( result => {
