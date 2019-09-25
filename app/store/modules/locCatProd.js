@@ -61,8 +61,8 @@ const mutations = {
     } else {
       let index = state.accommodationAreas.findIndex(
         o => o.accommodationAreaId === value.accommodationAreaId)
-      if (index == -1) 
-        console.log("accommodation area not found:" + value.description)
+      if (index == -1) {
+        if (log) console.log("accommodation area not found:" + value.description)}
       else if (verb == 'delete')
           state.accommodationAreas.splice(index,1)
       else  if (verb == 'update')
@@ -89,16 +89,11 @@ const mutations = {
       updateAccommodationSpotCount(value.accommodationAreaId, true)
       state.accommodationSpots.splice(i,0,value)
     } else {
-      console.log("get index verb: " + verb)
       let index = state.accommodationSpots.findIndex(
         o => o.accommodationSpotId === value.accommodationSpotId)
-        console.log("got index" + index)
-      if (index == -1) 
-        if (log) console.log("accommodation spot not found:" + value.accommodationSpotId)
-      else if (verb == "delete") {
-        console.log("====deletiong......")
-        if (log) console.log(" delete spot number: " + 
-                state.accommodationSpots[index].spotNumber)
+      if (index == -1) {
+        if (log) console.log("===Acoomodation area not found:" + value.accommodationAreaId) }
+      else if (verb == 'delete') {
         updateAccommodationSpotCount(value.accommodationAreaId, false)
         state.accommodationSpots.splice(index,1)
       }
@@ -111,9 +106,9 @@ const mutations = {
       let accIndex = state.accommodationAreas.findIndex(
         o => o.accommodationAreaId === id)
       let accommodationArea = state.accommodationAreas[accIndex]
-      if (increment) accommodationArea.nbrOfSpots++
-      else accommodationArea.nbrOfSpots--
-      console,log("spotnr updated: " + accommodationArea.nbrOfSpots)
+      if (increment) state.accommodationAreas[accIndex].nbrOfSpots++
+      else state.accommodationAreas[accIndex].nbrOfSpots--
+      console.log("spotnr updated: " + accommodationArea.nbrOfSpots)
       state.accommodationAreas.splice(accIndex,1,accommodationArea)
     }
   },
@@ -137,8 +132,8 @@ const mutations = {
     } else {
       let index = state.preparationAreas.findIndex(
         o => o.preparationAreaId === value.preparationAreaId)
-      if (index == -1) 
-        console.log("preparation area not found:" + value.preparationAreaId)
+      if (index == -1) {
+        if (log) console.log("preparation area not found:" + value.preparationAreaId) }
       else if (verb == 'delete')
           state.preparationAreas.splice(index,1)
       else if (verb == 'update')
@@ -175,8 +170,8 @@ const mutations = {
     } else {
       let index = state.productCategories.findIndex(
         o => o.productCategoryId === value.productCategoryId)
-      if (index == -1)
-        console.log("productCategoryId not found:" + value.productCategoryId)
+      if (index == -1) {
+        if (log) console.log("productCategoryId not found:" + value.productCategoryId)}
       else if (verb == 'delete') {          
         updatePreparationCategoryCount(
           state.productCategories[index].preparationAreaId, false)
@@ -222,8 +217,8 @@ const mutations = {
     } else {
       let index = state.products.findIndex(
         o => o.productId === value.productId)
-      if (index == -1)
-        console.log("product not found:" + value.productId)
+      if (index == -1) {
+        if (log) console.log("product not found:" + value.productId) }
       else if (verb == 'delete') {
           updateCategoryProductCount(state.products[index].productCategoryId, false)
           state.products.splice(index,1)

@@ -29,9 +29,9 @@
     name: 'myActionBar',
     props: {
       back: {type: Boolean, default: false},
-      openDrawer: Function,
-      onHeaderTap: Function,
-      onActionTap: Function,
+      openDrawer: {Function, default: function(){}},
+      onHeaderTap: {Function, default: function(){}},
+      onActionTap: {Function, default: function(){}},
       save: {type: Boolean, default: false},
       plus: {type: Boolean, default: false},
       reload: {type: Boolean, default: false},

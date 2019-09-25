@@ -239,13 +239,9 @@ export default class BackendService {
     async createAccommodationSpot(areaId,spotNumber) {
         return await restPost.post('s1/growerp/CreateAccommodationSpot',
             {   accommodationAreaId: areaId, spotNumber: spotNumber})}
-    async updateAccommodationSpot(accommodationSpot) {
-        return await restPost.post('s1/growerp/UpdateAccommodationSpot',
-            {   accommodationSpotId: accommodationSpot.accommodationSpotId,
-                description: accommodationSpot.description})}
-    async deleteAccommodationSpot(areaId, spotId) {
+    async deleteAccommodationSpot(spotId) {
         return await restPost.post('s1/growerp/DeleteAccommodationSpot',
-            {   accommodationAreaId: areaId, accommodationSpotId: spotId})}
+            {   accommodationSpotId: spotId})}
     //==================
     parseLocale(locale) {
         var lang = ""

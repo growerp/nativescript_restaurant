@@ -104,7 +104,7 @@ export default {
       .then (data => {
         if (data) {
           this.$backendService.deleteAccommodationSpot(
-              this.item.accommodationAreaId, table.accommodationSpotId)
+              table.accommodationSpotId)
           .then(() => {
             this.$store.commit('accommodationSpot', {
                 verb: 'delete',
@@ -120,7 +120,7 @@ export default {
               accommodationSpotsByAreaId(this.item.accommodationAreaId)
       this.tableMatrix = []
       let record = 0
-      console.log("====tm: " + tables.length)
+      console.log("====number of tables: " + tables.length)
       while (record < tables.length) {
         let tableRecord = []
         for (let count = 0; count < 4 ; count++) {
