@@ -1,14 +1,26 @@
 #!/bin/bash
-set -x
+#set -x
 
 emu=$1
 ip=$2
-checkBranch=$(git branch | grep "localtest")
+testBranch=localtest
+checkExistBranch=$(git branch | grep "localtest")
 
 # Check if branch exists
-if [ ! -z "$checkBranch" ]; then
-    git branch -D  $checkBranch && git fetch --all
-    git checkout -b $checkBranch origin/restaurant
+if [ ! -z "$checkExistBranch" ]; then
+    git checkout $checkExistBranch
+    if git fetch --all; then
+        echo "Merge successfully"
+    else
+        exit
+    fi
+else
+    if git checkout -b $testBranch origin/restaurant; then
+        echo "Checkout new $testBranch branch successfully."
+    else
+        exit
+    fi
+
 fi
 
 if [ -z "$emu" ]; then
@@ -47,6 +59,7 @@ sed -i -e '/\"devDependencies\":/a\
     \"mocha-multi\": \"^1.0.1\",\
     \"mochawesome\": \"^3.1.2\",\
     \"nativescript-dev-appium\": \"^6.0.0\",\
+    \"nativescript-unit-test-runner\": \"^0.7.0\",\
     \"chai\": \"~4.1.2\",' package.json
 fi
 
