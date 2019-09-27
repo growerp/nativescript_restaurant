@@ -13,7 +13,7 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('category', item.productCategoryId)"/>
       </GridLayout>
-      <RadDataForm ref="itemForm" :source="item"
+      <RadDataForm ref="itemForm" :source="itemData"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label class="title" :text="$t('products') + $t('tapToMove')"/>
       <RadListView ref="listView" for="item in productList" height="30%">
@@ -39,6 +39,7 @@
   import ProductAdd from './modalPages/ProductAdd'
   import Confirm from './modalPages/Confirm'
   import general from '~/mixins/general'
+  const platformModule = require("tns-core-modules/platform")
   export default {
     name: 'CategoryDetail',
     mixins: [ imageSelector,general, sideDrawer ],
@@ -48,7 +49,9 @@
     data() {
       return {
         productList: this.$store.getters.productsByCatg(this.item.productCategoryId),
-        editedItem: {},
+        editedItem: null,
+        itemData: Object.assign({}, this.item),
+        prepAreas: this.$store.getters.preparationAreasDesc(false),
         itemMeta: {
           propertyAnnotations: [
               { name: 'productCategoryId', ignore: true},
@@ -64,6 +67,10 @@
       this.$backendService.downloadImage('medium', 'category',
           this.item.productCategoryId)
       .then(result => { this.itemImage = result.data.imageFile})
+      if (platformModule.isIOS) { // returns an index instead of value so change
+        this.itemData.description = this.prepAreas.findIndex(
+            o => o === this.itemData.description)
+      }
     },
     methods: {
       onItemCommitted(data) {
@@ -76,13 +83,11 @@
         })
       },
       onSaveTap() {
-        if (this.editedItem.productCategoryId) {
+        if (this.editedItem) {
           if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
           else {
-            const platformModule = require("tns-core-modules/platform")
-            if (platformModule.isIOS) { // returns an index instead of value so change
-              let values = this.$store.getters.preparationAreasDesc(false)}
-              this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]}
+            if (platformModule.isIOS) // returns an index instead of value so change
+              this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]
             delete this.editedItem.nbrOfProducts
             if (this.editedItem.description != this.item.description) { //preparation area changed
               this.editedItem.preparationId = this.$store.prepAreasByDesc(
@@ -90,6 +95,7 @@
             this.$backendService.updateCategory(this.editedItem)
             this.$store.commit('productCategory',this.editedItem)
             this.hideKeyboard()
+          }
         }
         this.$navigateBack()
       },
