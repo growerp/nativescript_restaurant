@@ -150,13 +150,11 @@ export default class BackendService {
                 companyName: company.name, currencyUomId: company.currency,
                 companyEmail: company.email? company.email : user.email,
                 partyClassificationId : 'AppRestaurant'},
-            {   headers: {moquiSessionToken: store.getters.moquiToken},
-                errorHandle: false })}
+            {   errorHandle: false })}
     async resetUserPassword(username) {
         return await restPost.post('s1/growerp/ResetPassword',
             {   username: username },
-            {   errorHandle: false,
-                headers: {moquiSessionToken: store.getters.moquiToken}})}
+            {   errorHandle: false })}
     async updatePassword(item) {
         return await restPost.post('s1/growerp/UpdatePassword',
             {   username: item.username, oldPassword: item.oldPassword,
