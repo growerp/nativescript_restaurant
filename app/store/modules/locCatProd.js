@@ -72,16 +72,14 @@ const mutations = {
       ' completed name: ' + value.name)
   },
   accommodationAreas(state, value) {
-    if (value.length > 1) 
-      value.sort(function (a, b) {
-        return a.description.toLowerCase().localeCompare(b.description.toLowerCase())})
+    if (value.length) 
     state.accommodationAreas = value 
   },
   accommodationSpot(state, value) { //update spot
     if (log) console.log("=====incoming value accomspot: " + JSON.stringify(value))
     let verb = value.verb; delete value.verb
     if (verb == 'add') {
-      let i = 0
+      let i = 0 // insert in sort order
       for (i; i<state.accommodationSpots.length;i++) 
         if (parseInt(value.spotNumber,10) <
              parseInt(state.accommodationSpots[i].spotNumber,10))
@@ -113,8 +111,6 @@ const mutations = {
     }
   },
   accommodationSpots(state, value) {
-    value.sort(function (a, b) {
-      return parseInt(a.spotNumber,10) - parseInt(b.spotNumber,10)})
     state.accommodationSpots = value 
   },
   // ============PreparationArea 
@@ -143,16 +139,10 @@ const mutations = {
           ' completed name: ' + value.description)
   },
   preparationAreas(state, value) {
-    if (value.length > 1) 
-      value.sort(function (a, b) {
-        return a.description.toLowerCase().localeCompare(b.description.toLowerCase())})
-      state.preparationAreas = value;
+    state.preparationAreas = value
   },
   //=========== productcategory
   productCategories(state, value) {
-    if (value.length > 1) 
-      value.sort(function (a, b) {
-        return a.categoryName.toLowerCase().localeCompare(b.categoryName.toLowerCase())})
     state.productCategories = value
   },
   productCategory(state, value) {
@@ -244,9 +234,6 @@ const mutations = {
     }
   },
   products(state, value) {
-    if (value.length > 1) 
-      value.sort(function (a, b) {
-        return a.name.toLowerCase().localeCompare(b.name.toLowerCase())})
     state.products = value
   },
 }

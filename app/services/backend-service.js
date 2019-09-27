@@ -369,7 +369,7 @@ export default class BackendService {
                 store.commit("users", GetUsersInStore.data.users)
                 store.commit("customerProvider", GetCustomersInStore.data.users)
                 store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
-        }))
+            }))
   }
   async createSubscription(id,desc) {
         return await restPost.post('s1/growerp/CreateSubscription', {
