@@ -126,7 +126,7 @@ describe("2. Start test create order on GrowERP-restaurant App", () => {
         const continueButton = await driver.findElementByClassName(driver.locators.button);
         await continueButton.click();
 
-        const orderTableLabel = await driver.findElementByText("Order for Table: Garden-"+TABLESCLECT, "contains");
+        const orderTableLabel = await driver.findElementByText("Order for Table: Inside-"+TABLESCLECT, "contains");
         assert.isTrue(await orderTableLabel.isDisplayed());
 
         const selectDrinksButtons = await driver.findElementByXPath("//*[@text = 'Drinks']");
