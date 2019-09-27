@@ -279,7 +279,6 @@
                     })
                     .catch( error => {
                         this.note(this.$t('sendPasswordError') + this.$backendService.getErrorMessage(error))
-                        thi.serverError()
                     })
                   } else {
                     if (data.result == true) {
@@ -330,7 +329,7 @@
                     if (error.response.data.errors.indexOf("Found issues with password") !== -1) {
                       this.alert(this.$t('passwordRequirement'))
                     } else {
-                      this.serverError()
+                      this.alert(this.$t('regError') + error.response.data.errors)
                     }
                   })
                 }
