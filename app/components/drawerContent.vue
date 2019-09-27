@@ -65,7 +65,7 @@ export default {
 //            exit() // exit caused update of apiKey to be ignored
         }
         // use the manual navigation method
-        this.$navigateTo(pageComponent)
+        this.$navigateTo(pageComponent, {props: { startTab: 1}}) // 0 not working for IOS?
         // and we probably want to close the drawer when changing pages
         this.closeDrawer()
     }

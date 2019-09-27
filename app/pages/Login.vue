@@ -147,8 +147,8 @@
                 if (!this.$store.getters.user.name) {
                   console.log('===using for the first time so show register screen')
                   this.processing = false
-                  this.toggleForm(); return}
-                if (this.$store.getters.apiKey) { // skip login when have api_key
+                  this.toggleForm()}
+                else if (this.$store.getters.apiKey) { // skip login when have api_key
                   console.log('===got old apiKey: ' + this.$store.getters.apiKey)
                   this.$backendService.saveKey() // save it in the API
                   this.$backendService.checkApiKey() // check if apiKey still valid
@@ -178,6 +178,7 @@
                     this.$navigateTo(this.$routes.Login, {clearHistory: true})
                   })
                 } else {
+                  console.log("=== No current ApiKey found")
                   this.processing = false // no api key so show login screen
                 }
               })

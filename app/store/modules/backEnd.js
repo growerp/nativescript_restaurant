@@ -35,6 +35,7 @@ const mutations = { //synchronous
     state.activeSubscriptions = value 
   },
   apiKey(state, value) {
+    console.log("===Set ApiKey into store and appsettings value: " + value)
     state.apiKey = value
     if (value) appSettings.setString('apiKey', value)
     else appSettings.remove('apiKey')

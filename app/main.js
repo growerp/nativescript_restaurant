@@ -63,7 +63,7 @@ Vue.config.silent = (TNS_ENV === 'production')
 
 // init values from application settings
 const appSettings = require("tns-core-modules/application-settings");
-console.log('===appsettings main: ' + appSettings.getString("apiKey"))
+console.log('===appsettings main apiKey: ' + appSettings.getString("apiKey"))
 store.commit('appSettings', {
     apiKey: appSettings.getString("apiKey"), // to avoid need for logging in
     username: appSettings.getString("username"), // when logging in already show username

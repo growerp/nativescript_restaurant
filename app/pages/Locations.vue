@@ -78,7 +78,6 @@ export default {
   },
   created() {
      this.currentTab = this.startTab
-         console.log("====store accommares" + JSON.stringify(this.$store.getters.accommodationAreas))
   },
   methods: {
     tabChange(args) {
