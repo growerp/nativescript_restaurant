@@ -50,8 +50,8 @@
       return {
         productList: this.$store.getters.productsByCatg(this.item.productCategoryId),
         editedItem: null,
-        itemData: Object.assign({}, this.item),
         prepAreas: this.$store.getters.preparationAreasDesc(false),
+        itemData: Object.assign({}, this.item),
         itemMeta: {
           propertyAnnotations: [
               { name: 'productCategoryId', ignore: true},
@@ -69,8 +69,7 @@
       .then(result => { this.itemImage = result.data.imageFile})
       if (platformModule.isIOS) { // returns an index instead of value so change
         this.itemData.description = this.prepAreas.findIndex(
-            o => o === this.itemData.description)
-      }
+            o => o === this.itemData.description)}
     },
     methods: {
       onItemCommitted(data) {
@@ -86,13 +85,12 @@
         if (this.editedItem) {
           if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
           else {
-            if (platformModule.isIOS) // returns an index instead of value so change
-              this.editedItem.categoryName = values[parseInt(this.editedItem.categoryName,10)]
-            delete this.editedItem.nbrOfProducts
-            if (this.editedItem.description != this.item.description) { //preparation area changed
-              this.editedItem.preparationId = this.$store.prepAreasByDesc(
-                  this.editedItem.description).preparationAreaId }
+            if (platformModule.isIOS) { // returns an index instead of value so change
+              this.editedItem.description = this.prepAreas[parseInt(this.editedItem.description,10)]}
+            this.editedItem.preparationAreaId = this.$store.getters.preparationAreaByDesc(
+                  this.editedItem.description).preparationAreaId 
             this.$backendService.updateCategory(this.editedItem)
+            this.editedItem.verb = 'update'
             this.$store.commit('productCategory',this.editedItem)
             this.hideKeyboard()
           }

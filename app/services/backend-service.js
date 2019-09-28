@@ -299,7 +299,7 @@ export default class BackendService {
     async updateCategory(item) {
             return await restPost.post('s1/growerp/UpdateProductCategory',
                 {   productCategoryId: item.productCategoryId,
-                    categoryName: item.name,
+                    categoryName: item.categoryName,
                     preparationAreaId: item.preparationAreaId})}
     async deleteCategory(id) {
         return await restPost.post('s1/growerp/DeleteProductCategory',
