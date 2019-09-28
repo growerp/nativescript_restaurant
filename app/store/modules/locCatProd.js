@@ -146,7 +146,7 @@ const mutations = {
     state.productCategories = value
   },
   productCategory(state, value) {
-    if (log) console.log("====locCatProd incoming productCategory update:" +
+    if (log) console.log("====locCatProd incoming productCategory action: " + value.verb + " data: " +
         JSON.stringify(value))
     let verb = value.verb ; delete value.verb
     if (verb == 'add') {
@@ -178,8 +178,8 @@ const mutations = {
         state.productCategories.splice(index,1,value)
       }
     }
-    if(log) console.log("=====category update completed, action: " + 
-            verb + ' name:' + value.categoryName)
+    if(log) console.log("===store==category update completed, action: " + 
+            verb + " name:" + value.categoryName)
     // update count in the preparation area list
     function updatePreparationCategoryCount( id, increment) {
       let prepIndex = state.preparationAreas.findIndex(
