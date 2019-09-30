@@ -25,7 +25,7 @@ export default {
       user: {
         firstName: '',
         lastName: '',
-        email: '',
+        emailAddress: '',
         externalId: '',
         groupDescription: ''
       },
@@ -35,7 +35,7 @@ export default {
           { name: 'lastName', index: 2},
           { name: 'externalId', displayName: this.$t('externalId'),
             ignore: this.roleTypeId !== 'Customer', index: 3},
-          { name: 'email', editor: 'Email', index: 4,
+          { name: 'emailAddress', editor: 'Email', index: 4,
             validators: [
               { name: "RegEx", params: {regEx: "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}\\@[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25})+.",
                 errorMessage: "Please provide a valid email address."}}]},
@@ -67,7 +67,7 @@ export default {
             this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
         } else if (this.roleTypeId === 'Customer' && !this.editedItem.externalId){
             this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
-        } else if (!this.editedItem.email){
+        } else if (!this.editedItem.emailAddress){
             this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
         } else if (!this.editedItem.groupDescription && this.roleTypeId === 'Employee'){
             this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))

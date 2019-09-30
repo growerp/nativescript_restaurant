@@ -159,13 +159,13 @@ export default class BackendService {
     async logout() {
         return await restGet.get('logout')}
     async register(user, company) {
-        return await restPost.post('s1/growerp/RegisterUserAndCompany',
-            {   username: user.name, emailAddress: user.email,
+        return await restPostNoApi.post('s1/growerp/RegisterUserAndCompany',
+            {   username: user.name, emailAddress: user.emailAddress,
                 newPassword: user.password, firstName: user.firstName,
                 lastName: user.lastName, locale: user.locale,
                 companyPartyId: company.id, // for existing companies
                 companyName: company.name, currencyUomId: company.currency,
-                companyEmail: company.email? company.email : user.email,
+                companyEmail: company.emailAddress? company.emailAddress : user.emailAddress,
                 partyClassificationId : 'AppRestaurant'},
             {   errorHandle: false })}
     async resetUserPassword(username) {
@@ -184,14 +184,14 @@ export default class BackendService {
     async createUser(user) { // roletypeid; Customer Employee
          return await restPost.post('s1/growerp/CreateUser',
             {   firstName: user.firstName, lastName: user.lastName,
-                emailAddress: user.email, locale: user.locale,
+                emailAddress: user.emailAddress, locale: user.locale,
                 roleTypeId: user.roleTypeId, externalId: user.externalId,
                 groupDescription: user.groupDescription})}
     async updateUser(user) {
         return await restPost.post('s1/growerp/UpdateUser',
             {   partyId: user.partyId, userId: user.loginId,
                 username: user.username, firstName: user.firstName,
-                lastName: user.lastName, emailAddress: user.email,
+                lastName: user.lastName, emailAddress: user.emailAddress,
                 groupDescription: user.groupDescription})}
     async deleteUser(partyId) {
         return await restPost.post('s1/growerp/DeleteUser',
