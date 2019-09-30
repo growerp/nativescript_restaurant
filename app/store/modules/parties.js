@@ -118,11 +118,19 @@ const getters = {
   currentEmployeeUserGroupId: state => {
     return state.currentEmployeeUserGroupId
   },
-  employees: state => {
-    return state.employees
+  customerProvider: state => {
+    let result = []
+    for(let i=0;i<state.customers.length;i++)
+      result.push(state.customers[i].externalId + ' ' + 
+                  state.customers[i].firstName + ' ' +
+                  state.customers[i].lastName)
+    return result
   },
   customers: state => {
     return state.customers
+  },
+  employees: state => {
+    return state.employees
   },
   userGroupsDesc: state => (blank = true) => {
     let values = []
