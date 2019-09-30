@@ -9,7 +9,7 @@
         class="drawer-item"
         :text="page.title"
         :key="i"
-        v-show="page.show==='employee' || (page.show==='admin' && $store.getters.user.userGroupId==='GROWERP_M_ADMIN')"
+        v-show="page.show==='employee' || (page.show==='admin' && $store.getters.currentEmployeeUserGroupId==='GROWERP_M_ADMIN')"
        />
 
       <Button class="drawer-close-button" @tap="closeDrawer()">{{ $t("closeDrawer") }}</Button>
@@ -20,6 +20,7 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import {exit} from 'nativescript-exit'
+const appSettings = require("tns-core-modules/application-settings")
 
 export default {
   mixins: [sideDrawer],
@@ -58,7 +59,7 @@ export default {
             console.log('logging out....')
 //            this.$backendService.logout()
 //            .then(() =>{
-              this.$store.commit('apiKey', '') //clear old key
+              appSettings.remove('apiKey')
               console.log('logged out')
               this.$navigateTo(this.$routes.Home, {clearHistory: true})
 //            })

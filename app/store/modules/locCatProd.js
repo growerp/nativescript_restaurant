@@ -315,6 +315,7 @@ const getters = {
   },
   // product related==========================================================
   products: state => {
+    console.log('====store products: ' + JSON.stringify(state.products))
     return state.products
   },
   productsByCatg: state => catgId => {

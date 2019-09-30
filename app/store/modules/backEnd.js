@@ -1,6 +1,6 @@
+import store from '../../store'
 const log = true 
 const state = {
-  apiKey: '',
   dashBoard: [],
   moquiToken: '',
   user: {
@@ -28,35 +28,14 @@ const state = {
   customerProvider: [],
   activeSubscriptions: [],
 }
-const appSettings = require("tns-core-modules/application-settings")
-
 const mutations = { //synchronous
   activeSubscriptions(state, value) {
     state.activeSubscriptions = value 
   },
-  apiKey(state, value) {
-    console.log("===Set ApiKey into store and appsettings value: " + value)
-    state.apiKey = value
-    if (value) appSettings.setString('apiKey', value)
-    else appSettings.remove('apiKey')
-  },
-  appSettings(state, value) {
-    state.apiKey = value.apiKey
-    state.company.name = value.companyname
-    state.user.name = value.username
-  },
-  company(state, value) {
-    state.company = value
-    appSettings.setString('companyname', value.name)
-  },
-  customerProvider(state, value) {
-    state.customerProvider = value },
   moquiToken(state, value) {
       state.moquiToken = value 
   },
-  userGroups(state, value) {
-    state.userGroups = value 
-  },
+/*
   user(state, value) {
       appSettings.setString('username', value.name)
       state.user = value
@@ -68,18 +47,15 @@ const mutations = { //synchronous
   users(state, value) {
       state.users = value
   },
-}
+*/}
 const getters = {
   activeSubscriptions: state => {
       return state.activeSubscriptions
   },
-  company: state => {
-    return state.company
-  },
-  customerProvider: state => {
+/*  customerProvider: state => {
     return state.customerProvider
   },
-  isSubActive: state => playStoreId => {
+*/  isSubActive: state => playStoreId => {
     let isActive = false
     for (let i=0;i<state.activeSubscriptions.length;i++) {
       if (state.activeSubscriptions[i] === playStoreId) {
@@ -89,7 +65,7 @@ const getters = {
   moquiToken: state => {
     return state.moquiToken
   },
-  user: state => { 
+/*  user: state => { 
     return state.user },
   userNames: state => {
     var names = []
@@ -107,20 +83,10 @@ const getters = {
   users: state => {
     return state.users
   },
-  apiKey: state => {
-      return state.apiKey
-  },
   userGroups: state => {
     return state.userGroups
   },
-  userGroupValues: state => {
-    let values = []
-    values.push(' ')
-    for(let i=0;i < state.userGroups.length;i++)
-      values.push(state.userGroups[i].description)
-    return values
-  },
-}
+*/}
 // export this module.
 export default {
   state,

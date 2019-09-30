@@ -1,7 +1,8 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" header="dashBoard"/>
+      <myActionBar :openDrawer="openDrawer" header="dashBoard"
+            :save="true" :onActionTap="backToDefault"/>
     </ActionBar>
     <StackLayout padding="20">
       <RadListView for="item in dashBoard" @itemTap="onItemTap"
@@ -33,10 +34,16 @@ export default {
         }
     },
     mixins: [sideDrawer, general],
+    beforeCreate() {
+      this.$backendService.initData()
+      this.$backendService.getAllPartyInfo()
+    },
     created() {
       this.hideKeyboard()
-      this.backToDefault()
-      this.$backendService.initData()
+//      if (appSettings.getString('dashBoard')) // need fixing
+//        this.dashBoard = appSettings.getString('dashBoard')
+//      else 
+        this.backToDefault()
     },
     methods: {
       onItemReordered(args) {
@@ -59,11 +66,12 @@ export default {
             pageName: 'Tasks', pageTab: 0},
           {id: 7, image: '~/assets/images/help.png', title: this.$t('help'),
                 pageName: 'Help', pageTab: 0},
-          this.$store.getters.user.userGroupId === 'GROWERP_M_ADMIN' ?
+          this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN' ?
             {id: 8, image: '~/assets/images/setup.png', title: this.$t('setup'),
                 pageName: 'SetUp', pageTab: 0}
           : {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),
-                pageName: 'MyInfo', pageTab: 0}]
+                pageName: 'MyInfo', pageTab: 0}
+      ]
       //  appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
       },
       onItemTap(args) {

@@ -16,7 +16,7 @@
       <RadDataForm ref="itemForm" :source="itemData"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label class="title" :text="$t('products') + $t('tapToMove')"/>
-      <RadListView ref="listView" for="item in productList" height="30%">
+      <RadListView ref="listView" for="item in productList" height="35%">
         <v-template>
           <GridLayout columns="50, *, auto" rows="*" padding="10"
               @tap="onMoveItemTap(item)" @longPress="onDeleteItemTap(item)">

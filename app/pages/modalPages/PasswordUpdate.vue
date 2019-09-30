@@ -36,7 +36,7 @@ export default {
       userMetaData: {
         propertyAnnotations:[
           { name: 'oldPassword', index: 0, editor: 'Password',
-            ignore: this.$store.getters.user.userGroupId === 'GROWERP_M_ADMIN' || this.oldPassword ? true : false},
+            ignore: this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN' || this.oldPassword ? true : false},
           { name: 'newPassword', index: 1, editor: 'Password'},
           { name: 'passwordVerify', index: 2 , editor: 'Password'},
         ],
@@ -52,7 +52,7 @@ export default {
       if (this.editedItem) {
         if (this.editedItem.newPassword !== this.editedItem.passwordVerify)
           this.note(this.$t('NewPasswordsAreNotTheSame'))
-        else if (!this.editedItem.oldPassword && this.$store.getters.user.userGroupId!=='GROWERP_M_ADMIN')
+        else if (!this.editedItem.oldPassword && this.$store.getters.currentEmployeeUserGroupId!=='GROWERP_M_ADMIN')
             this.note(this.$t('oldPasswordIsRequired'))
         else if (!this.editedItem.newPassword)
             this.note(this.$t('newPasswordIsRequired'))
