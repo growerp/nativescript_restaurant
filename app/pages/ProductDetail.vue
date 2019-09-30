@@ -23,6 +23,7 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
+const platformModule = require("tns-core-modules/platform")
 export default {
   name: 'ProductDetail',
   mixins: [ imageSelector, general, sideDrawer],
@@ -32,6 +33,8 @@ export default {
   data() {
     return {
       editedItem: {},
+      itemData: Object.assign({}, this.item),
+      categories: this.$store.getters.productCategoriesDesc(false),
       itemMeta: {
         propertyAnnotations: [
             { name: 'productId', ignore: true},
@@ -50,6 +53,9 @@ export default {
   created() {
     this.$backendService.downloadImage('medium', 'product', this.item.productId)
     .then(result => { this.itemImage = result.data.imageFile })
+    if (platformModule.isIOS) { // returns an index instead of value so change
+      this.itemData.categoryName = this.categories.findIndex(
+          o => o === this.itemData.categoryName)}
   },
   methods: {
     onItemCommitted(data) {
@@ -62,9 +68,8 @@ export default {
         else {
           const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
-            let values = this.$store.getters.productCategoriesDesc(false)
             this.editedItem.categoryName = 
-                    values[parseInt(this.editedItem.categoryName,10)]}
+                    categries[parseInt(this.editedItem.categoryName,10)]}
           this.editedItem.productCategoryId = 
               this.$store.getters.productCategoryByDesc(
                   this.editedItem.categoryName).productCategoryId

@@ -13,7 +13,7 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('prep', item.preparationAreaId)"/>
       </GridLayout>
-      <GridLayout rows="auto,auto,*,50,50">
+      <GridLayout rows="auto,auto,*,auto,50">
         <RadDataForm ref="itemForm" :source="Object.assign({},item)" row="0"
             :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
         <Label :text="$t('categoriesPrepared')" class="h3" row="1" 

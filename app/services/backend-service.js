@@ -8,18 +8,31 @@ let testUrl = 'http://10.0.2.2:8080/rest/'
 let prodUrl = 'https://mobile.growerp.com/rest/' 
 
 const restPost = axios.create({
-      baseURL: TNS_ENV === 'production' ?
-        prodUrl : testUrl,
-      headers:
-        {   'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-            'Access-Control-Allow-Credentials': true,
-            'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept',
-            'api_key': '',
-            'moquiSessionToken': ''
-        },
-    withCredentials: true,
-    timeout: 5000, // 5 seconds
+    baseURL: TNS_ENV === 'production' ?
+      prodUrl : testUrl,
+    headers:
+      {   'Content-Type': 'application/json;charset=UTF-8',
+          "Access-Control-Allow-Origin": "*",
+          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept',
+          'api_key': '',
+          'moquiSessionToken': ''
+      },
+  withCredentials: true,
+  timeout: 5000, // 5 seconds
+})
+const restPostNoApi = axios.create({
+    baseURL: TNS_ENV === 'production' ?
+      prodUrl : testUrl,
+    headers:
+      {   'Content-Type': 'application/json;charset=UTF-8',
+          "Access-Control-Allow-Origin": "*",
+          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept',
+          'moquiSessionToken': ''
+      },
+  withCredentials: true,
+  timeout: 5000, // 5 seconds
 })
 
 const restGet = axios.create({
@@ -120,16 +133,20 @@ export default class BackendService {
         return error.message + ": " + error.response.statusText + '; ' + msg
     }
     saveToken() {
-      restPost.defaults.headers['moquiSessionToken'] = store.getters.moquiToken }
-    saveKey() {
-      restGet.defaults.headers['api_key'] = store.getters.apiKey
-      restPost.defaults.headers['api_key'] = store.getters.apiKey}
+        restPost.defaults.headers['moquiSessionToken'] = store.getters.moquiToken
+        restPostNoApi.defaults.headers['moquiSessionToken'] = store.getters.moquiToken }
+    saveKey(apiKey) {
+      restGet.defaults.headers['api_key'] = apiKey
+      restPost.defaults.headers['api_key'] = apiKey}
+    removeKey() {
+        restGet.defaults.headers['api_key'] = null
+        restPost.defaults.headers['api_key'] = null}
 
     // ================getToken,login/out/register password forgot =============
     async getToken() {
-        return await restGet.get('moquiSessionToken')}
+        return await axiosSimple.get('moquiSessionToken')}
     async login(user) {
-        return await restPost.post('s1/growerp/LoginUser',
+        return await restPostNoApi.post('s1/growerp/LoginUser',
             { username: user.name, password: user.password })}
     async checkApiKey() {
         return await restGet.get('s1/growerp/CheckApiKey',
@@ -194,7 +211,7 @@ export default class BackendService {
         return await restGet.get('s1/growerp/GetCompany')}
     async updateCompany(company) {
         return await restPost.post('s1/growerp/UpdateCompany',
-            {   organizationName: company.name, emailAddress: company.email})}
+            {   organizationName: company.organizationName, emailAddress: company.emailAddress})}
     // ======================= images ==========================================
     async uploadImage(size, base64, type, id) {
         restPost.post('s1/growerp/UploadImage',
@@ -350,22 +367,15 @@ export default class BackendService {
           restGet.get('s1/growerp/GetAccommodationSpots'),
           restGet.get('s1/growerp/GetProductCategories'),
           restGet.get('s1/growerp/GetProducts'),
-          restGet.get('s1/growerp/GetUserGroups'),
-          restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Employee', full: false}),
-          restPost.post('s1/growerp/GetUserList',{roleTypeId: 'Customer', full: false}),
           restPost.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
         ])
         .then(axios.spread(function ( GetPreparationAreas,GetAccommodationAreas,GetAccommodationSpots,
-          GetProductCategories, GetProducts, GetUserGroups, GetUsersInStore, GetCustomersInStore,
-              GetOrdersItemsPartySpot) {
+          GetProductCategories, GetProducts, GetOrdersItemsPartySpot) {
                 store.commit("preparationAreas", GetPreparationAreas.data.preparationAreas)
                 store.commit("accommodationAreas", GetAccommodationAreas.data.accommodationAreas)
                 store.commit("accommodationSpots", GetAccommodationSpots.data.accommodationSpots)
                 store.commit("productCategories", GetProductCategories.data.productCategories)
                 store.commit("products", GetProducts.data.products)
-                store.commit("userGroups", GetUserGroups.data.userGroups)
-                store.commit("users", GetUsersInStore.data.users)
-                store.commit("customerProvider", GetCustomersInStore.data.users)
                 store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
             }))
   }
@@ -380,5 +390,14 @@ export default class BackendService {
   }
   async getCurrencyList() {
       return await restGet.get('s1/growerp/CurrencyList')
+  }
+  getAllPartyInfo() {
+      restGet.get('s1/growerp/GetAllPartyInfo')
+      .then((result) => {
+          store.commit('allPartyInfo', result.data)
+      })
+  }
+  async getCurrentEmployeeUserGroupId() {
+    return await restGet.get('s1/growerp/GetCurrentEmployeeUserGroupId')
   }
 }

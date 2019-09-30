@@ -5,6 +5,7 @@ import sideDrawer from './modules/sideDrawer'
 import backEnd from './modules/backEnd'
 import locCatProd from './modules/locCatProd'
 import orders from './modules/orders'
+import parties from './modules/parties'
 //import database from './modules/database'
 
 Vue.use(Vuex)
@@ -17,6 +18,7 @@ let store = new Vuex.Store({
     backEnd,
     locCatProd,
     orders,
+    parties,
   },
   strict: debug
 })

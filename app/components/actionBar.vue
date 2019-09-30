@@ -1,12 +1,12 @@
 <template>
   <GridLayout width="100%" columns="auto, 10, *, 10, auto, 10" rows="auto">
-    <Image src="~/assets/images/back.png" height="20" @tap="$navigateBack" 
+    <Image src="~/assets/images/go-back-arrow.png" height="20" @tap="$navigateBack" 
       col="0" :visibility="back? 'visible': 'hidden'"/>
     <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer" 
       col="0" :visibility="back? 'hidden':'visible'"/>
     <StackLayout orientation="horizontal" @tap="onHeaderTap" 
         horizontalAlignment="center" col="2">
-      <Image src="~/assets/images/go-back-arrow.png" height="20" 
+      <Image src="~/assets/images/go-up-arrow.png" height="20" 
           :visibility="onHeaderTap?'visible':'hidden'"/>
       <Label class="title" :text="$t(header)"
           :visibility="header? 'visible': 'hidden'"/>

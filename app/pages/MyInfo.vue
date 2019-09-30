@@ -32,6 +32,7 @@ import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import passwordUpdate from './modalPages/PasswordUpdate'
+const platformModule = require("tns-core-modules/platform");
 
 export default {
   name: 'MyInfo',
@@ -56,8 +57,8 @@ export default {
             { name: 'locale', ignore: true},
             { name: 'userGroupId', ignore: true},
             { name: 'groupDescription', displayName: this.$t('userGroup'), index: 5,
-                editor: 'Picker', valuesProvider: this.$store.getters.userGroupValues,
-                readOnly: this.$store.getters.user.userGroupId != 'GROWERP_M_ADMIN'},
+                editor: 'Picker', valuesProvider: this.$store.getters.userGroupsDesc(false),
+                readOnly: this.$store.getters.currentEmployeeUserGroupId != 'GROWERP_M_ADMIN'},
         ],
       },
     }
@@ -82,7 +83,7 @@ export default {
         else {
           const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
-              let values = this.$store.getters.userGroupValues
+              let values = this.$store.getters.userGroupsDesc(false)
               this.editedItem.groupDesciption = values[parseInt(this.editedItem.groupDescription,10)]}
           this.$backendService.updateUser(this.editedItem)
           this.note(this.$t('informationIsUpdated'))

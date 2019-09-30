@@ -46,9 +46,9 @@ if (platformModule.isAndroid) locale = java.util.Locale.getDefault().getLanguage
 if (platformModule.isIOS) locale = NSLocale.preferredLanguages.firstObject;
 
 
-  // global variables
-  global.noImage = '~/assets/images/addImage.png'
-  global.locale = locale
+// global variables
+global.noImage = '~/assets/images/addImage.png'
+global.locale = locale
 
 export const i18n = new VueI18n({
   fallbackLocale: 'en',
@@ -61,39 +61,30 @@ export const i18n = new VueI18n({
 // Prints Vue logs when --env.production is *NOT* set while building
 Vue.config.silent = (TNS_ENV === 'production')
 
-// init values from application settings
-const appSettings = require("tns-core-modules/application-settings");
-console.log('===appsettings main apiKey: ' + appSettings.getString("apiKey"))
-store.commit('appSettings', {
-    apiKey: appSettings.getString("apiKey"), // to avoid need for logging in
-    username: appSettings.getString("username"), // when logging in already show username
-    companyname: appSettings.getString("companyname"), // on the login screen show restaurant name
-})
-
 var application = require("tns-core-modules/application");
 application.on(application.discardedErrorEvent, function (args) {
-    console.log('====discarded error args: ' + JSON.stringify(args.error))
-    const error = args.error;
+  console.log('====discarded error args: ' + JSON.stringify(args.error))
+  const error = args.error;
 //    console.log("===Received discarded exception: ");
-    console.log('===message:' + error.message);
+  console.log('===message:' + error.message);
 //    console.log('===Stack trace:' + error.stackTrace);
 //    console.log('===nativeException:' + error.nativeException);
-    let start = error.stackTrace.indexOf("ReferenceError: ") + 16
-    if (start == 15) start = error.stackTrace.indexOf("java.lang.Exception: ") + 21
-    let end = error.stackTrace.indexOf("\n",start)
-    global.exceptionErrorMessage = error.stackTrace.substring(start,end)
-    console.log('==discarded ErrorEvent message: ' + global.exceptionErrorMessage)
+  let start = error.stackTrace.indexOf("ReferenceError: ") + 16
+  if (start == 15) start = error.stackTrace.indexOf("java.lang.Exception: ") + 21
+  let end = error.stackTrace.indexOf("\n",start)
+  global.exceptionErrorMessage = error.stackTrace.substring(start,end)
+  console.log('==discarded ErrorEvent message: ' + global.exceptionErrorMessage)
 });
 
 new Vue({
-    i18n,
-    store,
-    render (h) {
-        return h(
-            sideDrawer, [
-                h(drawerContent, { slot: 'drawerContent'}),
-                h(routes.Login, { slot: 'mainContent'})
-            ]
-        )
-    }
+  i18n,
+  store,
+  render (h) {
+    return h(
+      sideDrawer, [
+        h(drawerContent, { slot: 'drawerContent'}),
+        h(routes.Login, { slot: 'mainContent'})
+      ]
+    )
+  }
 }).$start()

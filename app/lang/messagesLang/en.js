@@ -50,6 +50,7 @@ export default {
     confirmPassword: 'Confirm password',
     continue: 'Continue',
     copyFromGal: 'Gallery',
+    create: 'Create ',
     currency: 'Currency',
     customer: 'Customer',
     customers: 'Customers',
