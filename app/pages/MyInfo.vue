@@ -66,7 +66,6 @@ export default {
     if (platformModule.isIOS) { // returns an index instead of value so change
       this.itemData.groupDescription = this.userGroups.findIndex(
           o => o === this.itemData.description)}
-    console.log("========item: " + JSON.stringify(this.item))
   },
   methods: {
     onItemCommitted(data) {
