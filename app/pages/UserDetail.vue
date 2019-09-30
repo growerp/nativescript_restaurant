@@ -100,7 +100,6 @@ export default {
         } else if (!this.editedItem.groupDescription && this.item.roleTypeId != 'Customer'){
             this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
         } else {
-          const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
             this.editedItem.groupDescription = 
                 this.userGroups[parseInt(this.editedItem.groupDescription,10)]}

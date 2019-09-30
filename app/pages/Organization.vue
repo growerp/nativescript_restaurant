@@ -33,7 +33,7 @@
                 <StackLayout col="1" paddingLeft="10">
                     <label :text="item.firstName + ' ' + item.lastName"
                       class="h2"/>
-                    <label :text="item.email" class="p"/>
+                    <label :text="item.emailAddress" class="p"/>
                 </StackLayout>
                 <label :text="item.groupDescription" col="2"/>
               </GridLayout>
@@ -54,7 +54,7 @@
                 <StackLayout col="1" paddingLeft="10">
                     <label :text="item.firstName + ' ' + item.lastName"
                         class="h2"/>
-                    <label :text="item.email" class="p"/>
+                    <label :text="item.emailAddress" class="p"/>
                 </StackLayout>
                 <StackLayout col="2">
                   <label :text="item.externalId"/>
@@ -114,7 +114,7 @@ export default {
           { name: 'lastName', required: true, displayName: this.$t('lastName'), index: 1},
           { name: 'username', displayName: this.$t('loginName'),
               required: true, index: 2, ignore: this.roleTypeId==='Customer'},
-          { name: 'email', required: true, displayName: this.$t('email'),
+          { name: 'emailAddress', required: true, displayName: this.$t('email'),
               editor: "Email", index: 4},
           { name: 'image', ignore: true},
           { name: 'userId', ignore: true},

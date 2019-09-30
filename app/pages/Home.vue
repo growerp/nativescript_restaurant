@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" header="dashBoard"
-            :save="true" :onActionTap="backToDefault"/>
+      <myActionBar :openDrawer="openDrawer" header="dashBoard"/>
+        <!--  :save="true" :onActionTap="backToDefault"/-->
     </ActionBar>
     <StackLayout padding="20">
       <RadListView for="item in dashBoard" @itemTap="onItemTap"

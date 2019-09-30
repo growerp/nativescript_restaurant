@@ -46,7 +46,7 @@
           <StackLayout row="2" col="0" colSpan="2" v-show="!isLoggingIn" class="input-field">
             <TextField class="input" :hint="$t('email')" :isEnabled="!processing"
                 keyboardType="email" autocorrect="false"
-                autocapitalizationType="none" v-model="user.email"
+                autocapitalizationType="none" v-model="user.emailAddress"
                 returnKeyType="next"></TextField>
             <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
@@ -104,7 +104,7 @@
           apiKey: '',
           user: (TNS_ENV === 'production')? {
             name: appSettings.getString('username'),
-            email: appSettings.getString('username'),
+            emailAddress: appSettings.getString('username'),
             password: '',
             confirmPassword: '',
             firstName: '',
@@ -114,7 +114,7 @@
           } : {
             name: appSettings.getString('username') ? 
                     appSettings.getString('username') : "admin@growerp.com",
-            email: "admin@growerp.com",
+            emailAddress: "admin@growerp.com",
             password: "qqqqqq9!",
             confirmPassword: "qqqqqq9!",
             firstName: 'Admin',
@@ -208,7 +208,7 @@
               this.company.currency = this.currencyUomIds.getValue(args.newIndex);
           },
           submit() {
-            if ((!this.user.name && !this.user.email) || !this.user.password) {
+            if ((!this.user.name && !this.user.emailAddress) || !this.user.password) {
                 this.note(this.$t('provideEmailPassword'))
                 return;
             }
@@ -216,7 +216,7 @@
             if (this.isLoggingIn) {
                 this.login();
             } else {
-                this.user.name = this.user.email //initially the same
+                this.user.name = this.user.emailAddress //initially the same
                 this.register();
             }
           },
@@ -268,7 +268,7 @@
               title: this.$t('forgotPassword'),
               message: this.$t('enterEmail'),
               inputType: "email",
-              defaultText: this.user.email,
+              defaultText: this.user.emailAddress,
               okButtonText: "Ok",
               cancelButtonText: this.$t('cancel')
             }).then (data => {
@@ -452,14 +452,14 @@
 
             // add users and todo tasks only test
             let user1 = {firstName: 'Peter', lastName: 'Coster',
-                email: 'test3@hansbakker.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
+                emailAddress: 'test3@hansbakker.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
             this.$backendService.createUser(user1).then( result => {
               let item = { workEffortName:'This a first task',
                         partyId: result.data.user.partyId,priority: '5'}
               this.$backendService.createTask(item)})
 
             let user2 = {firstName: 'Kevin', lastName: 'Junker',
-                email: 'test4@hansbakker.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
+                emailAddress: 'test4@hansbakker.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
             this.$backendService.createUser(user2).then( result => {
               let item2 = { workEffortName:'This a second task',
                         partyId: result.data.user.partyId , priority: '5'}
@@ -471,7 +471,7 @@
             this.$backendService.createTask(item3)
             // customer
             user2 = {firstName: 'Steven', lastName: 'Customer',
-                email: 'test5@hansbakker.com',roleTypeId: 'Customer',
+                emailAddress: 'test5@hansbakker.com',roleTypeId: 'Customer',
                 image: '~/assets/images/addImage.png', externalId: '99999'}
             this.$backendService.createUser(user2)
           }
