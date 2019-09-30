@@ -3,7 +3,7 @@
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTap" :save="true" :back="true"
           :onActionTap="onSaveTap"
-          :header="this.$t(this.item.roleTypeId.toLowerCase()) + ' ' + 
+          :headerNoI18n="$t(item.roleTypeId.toLowerCase()) + ' ' + 
               this.$t('detailedInfo')"/>
     </ActionBar>
     <StackLayout>

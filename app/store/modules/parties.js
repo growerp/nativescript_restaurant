@@ -76,7 +76,6 @@ const mutations = {
   allPartyInfo(state, value) {
     state.currentEmployeePartyId = value.currentEmployeePartyId
     state.employees = value.employees
-    console.log("====store " + JSON.stringify(state.employees))
     state.customers = value.customers
     state.company = value.company
     appSettings.setString('organizationName', value.company.organizationName)

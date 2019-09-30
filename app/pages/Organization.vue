@@ -1,8 +1,9 @@
 <template lang="html">
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="save" :plus="plus" 
-        :onActionTap="onActionTap" :openDrawer="openDrawer" header="companyEmplCust"/>
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :plus="true" 
+        :onActionTap="onActionTap" :openDrawer="openDrawer"
+        header="companyEmplCust"/>
     </ActionBar>
 
     <TabView :selectedIndex="currentTab" paddingTop="10"
@@ -109,6 +110,7 @@ export default {
       itemMeta: {
         propertyAnnotations:[
           { name: 'partyId', ignore: true},
+          { name: 'roleTypeId', ignore: true},
           { name: 'externalId', ignore: true},
           { name: 'firstName', required: true, displayName: this.$t('firstName'), index: 0},
           { name: 'lastName', required: true, displayName: this.$t('lastName'), index: 1},
@@ -144,13 +146,10 @@ export default {
   },
   created() {
     this.currentTab = this.startTab
-    if (!this.item.length) {
-      this.$backendService.downloadImage('medium', 'user', this.item.partyId)
-        .then(result => {this.itemImage = result.data.imageFile})
-    }
+    this.$backendService.downloadImage('medium', 'user', this.item.partyId)
+      .then(result => {this.itemImage = result.data.imageFile})
     this.$backendService.downloadImage('medium', 'company', this.itemComp.partyId)
-    .then(result => {
-          this.itemImage = result.data.imageFile })
+      .then(result => {this.itemImage = result.data.imageFile })
     if (platformModule.isIOS) { // returns an index instead of value so change
       this.item.description = this.userGroups.findIndex(
           o => o === this.item.description)}
@@ -175,7 +174,6 @@ export default {
       this.editedItem = JSON.parse(data.object.editedObject)
     },
     onItemTap (item) {
-      console.log("=======item: " + JSON.stringify(item))
       if (this.currentTab === 1) { // employees
         this.$navigateTo(this.$routes.UserDetail,
           { props: {  item: item, roleTypeId: 'Employee'}})}

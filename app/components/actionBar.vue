@@ -1,23 +1,23 @@
 <template>
   <GridLayout width="100%" columns="auto, 10, *, 10, auto, 10" rows="auto">
-    <Image src="~/assets/images/go-back-arrow.png" height="20" @tap="$navigateBack" 
-      col="0" :visibility="back? 'visible': 'hidden'"/>
-    <Image src="~/assets/images/menu.png" height="20" @tap="openDrawer" 
+    <Image src="~/assets/images/go-back-arrow.png" height="25"
+        @tap="$navigateBack" col="0" :visibility="back?'visible':'hidden'"/>
+    <Image src="~/assets/images/menu.png" height="25" @tap="openDrawer" 
       col="0" :visibility="back? 'hidden':'visible'"/>
     <StackLayout orientation="horizontal" @tap="onHeaderTap" 
         horizontalAlignment="center" col="2">
-      <Image src="~/assets/images/go-up-arrow.png" height="20" 
+      <Image src="~/assets/images/go-up-arrow.png" height="25" 
           :visibility="onHeaderTap?'visible':'hidden'"/>
       <Label class="title" :text="$t(header)"
           :visibility="header? 'visible': 'hidden'"/>
       <Label class="title" :text="headerNoI18n"
           :visibility="headerNoI18n? 'visible': 'hidden'"/>
     </StackLayout>
-    <Image src="~/assets/images/plus.png" height="20" @tap="onActionTap" 
+    <Image src="~/assets/images/plus.png" height="25" @tap="onActionTap" 
       col="4" :visibility="plus? 'visible': 'hidden'"/>
-    <Image src="~/assets/images/save.png" height="20" @tap="onActionTap" 
+    <Image src="~/assets/images/save.png" height="25" @tap="onActionTap" 
       col="4" :visibility="save? 'visible': 'hidden'"/>
-    <Image src="~/assets/images/reload.png" height="20" @tap="onActionTap" 
+    <Image src="~/assets/images/reload.png" height="25" @tap="onActionTap" 
       col="4" :visibility="reload? 'visible': 'hidden'"/>
     <Label :text="text" col=4
         :visibility="text? 'visible': 'hidden'"/>
