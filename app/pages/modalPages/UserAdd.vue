@@ -16,7 +16,7 @@ import general from '~/mixins/general'
 const platformModule = require("tns-core-modules/platform")
 export default {
   props: {
-    roleTypeId: ''
+    roleTypeId: String
   },
   mixins: [general],
   data() {
@@ -80,11 +80,15 @@ export default {
           this.editedItem.roleTypeId = this.roleTypeId
           this.$backendService.createUser(this.editedItem)
           .then( result => {
+            this.editedItem.verb= 'add'
             this.editedItem.partyId = result.data.partyId
             this.editedItem.image = global.noImage
-            this.$modal.close(this.editedItem)
+            if (this.roleTypeId == 'Customer')
+              this.$store.commit('customer', this.editedItem)
+            if (this.roleTypeId == 'Employee')
+              this.$store.commit('employee', this.editedItem)
           })}
-      }  else this.$modal.close(this.editedItem)
+      }  this.$modal.close()
     }
   }
 }

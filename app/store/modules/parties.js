@@ -58,7 +58,8 @@ const mutations = {
     if (verb === 'add') {
       let i = 0
       for (i; i<state.customers.length;i++)
-        if (value.name.toLowerCase() < state.customers[i].name.toLowerCase())
+        if ((value.lastName.toLowerCase()+value.firstName.toLowerCase()) < 
+          state.customers[i].lastName.toLowerCase()+state.customers[i].lastName.toLowerCase())
           break;
       state.customers.splice(i,0,value)
     } else {
