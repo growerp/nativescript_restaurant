@@ -16,9 +16,20 @@ describe("2. Start test create order on GrowERP-restaurant App", () => {
     });
 
     beforeEach(async function () {
-        console.log("Reset App before start new case!");
         await driver.resetApp();
         driver.wait(3000);
+
+        /* Login to the restaurant app
+        const backToLogin = await driver.findElementByXPath("//*[@text = 'Back to Login']");
+        await backToLogin.click();
+
+        var userNameLabelElement = "[@text='User Name/Email']";
+        const allFields = await driver.driver.waitForElementsByClassName(driver.locators.getElementByName("textfield"), 10000);
+        await allFields[1].click().sendKeys(password);
+        await allFields[0].click().sendKeys(username);
+        const logInButton = await driver.findElementByClassName(driver.locators.button);
+        await logInButton.click();
+        driver.wait(3000);*/
     });
 
     after(async function () {
@@ -116,6 +127,10 @@ describe("2. Start test create order on GrowERP-restaurant App", () => {
         driver.wait("2000");
         const orderMenuElement = await driver.findElementsByXPath("//android.widget.TextView");
         await orderMenuElement[2].click();
+        driver.wait("2000");
+        const selectTabTakeorder = await driver.findElementByXPath("//*[@text = 'TAKE ORDER']");
+        await selectTabTakeorder.click();
+        driver.wait("2000");
         const selectTable = await driver.findElementByXPath("//*[@text = '"+TABLESCLECT+"']");
         await selectTable.click();
         driver.wait("10000");
