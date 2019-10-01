@@ -37,6 +37,7 @@ export default {
   beforeCreate() {
     this.$backendService.initData()
     this.$backendService.getAllPartyInfo()
+    this.$backendService.getMyTasks()
   },
   created() {
     this.hideKeyboard()

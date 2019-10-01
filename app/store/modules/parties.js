@@ -116,6 +116,13 @@ const getters = {
   currentEmployee: state => {
     return state.employees.find(o => o.partyId === state.currentEmployeePartyId)
   },
+  currentEmployeeFullName: state => {
+    return store.getters.currentEmployee.lastName + ', ' +
+      store.getters.currentEmployee.firstName
+  },
+  currentEmployeePartyId: state => {
+    return  state.currentEmployeePartyId
+  },
   currentEmployeeUserGroupId: state => {
     return state.currentEmployeeUserGroupId
   },
@@ -129,6 +136,17 @@ const getters = {
   },
   customers: state => {
     return state.customers
+  },
+  employeeByDesc: state => desc => {
+    return state.employees.find(o => 
+      (o.lastName + ', ' + o.firstName) === desc)
+  },
+  employeeDesc: state => (blank = true) => {
+    let values = []
+    if (blank) values.push(' ')
+    for(let i=0;i < state.employees.length;i++)
+      values.push(state.employees[i].lastName + ', ' + state.employees[i].firstName)
+    return values
   },
   employees: state => {
     return state.employees

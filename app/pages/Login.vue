@@ -463,6 +463,7 @@
             this.$backendService.createUser(user2).then( result => {
               let item2 = { workEffortName:'This a second task',
                         partyId: result.data.user.partyId , priority: '5'}
+              console.log("====login default data: " + JSON.stringify(item2))
               this.$backendService.createTask(item2)})
 
             let item3 = { workEffortName:'This a third task for me', priority: '5'}
