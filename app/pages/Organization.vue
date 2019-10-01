@@ -1,7 +1,7 @@
 <template lang="html">
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :plus="true" 
+      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="save" :plus="plus" 
         :onActionTap="onActionTap" :openDrawer="openDrawer"
         header="companyEmplCust"/>
     </ActionBar>
@@ -103,6 +103,7 @@ export default {
   data () {
     return {
       currentTab: 0,
+      userGroups: this.$store.getters.userGroupsDesc(false),
       employees: this.$store.getters.employees,
       customers: this.$store.getters.customers,
       item: Object.assign({},this.$store.getters.currentEmployee),
@@ -112,8 +113,10 @@ export default {
           { name: 'partyId', ignore: true},
           { name: 'roleTypeId', ignore: true},
           { name: 'externalId', ignore: true},
-          { name: 'firstName', required: true, displayName: this.$t('firstName'), index: 0},
-          { name: 'lastName', required: true, displayName: this.$t('lastName'), index: 1},
+          { name: 'firstName', required: true, displayName: this.$t('firstName'),
+              index: 0},
+          { name: 'lastName', required: true, displayName: this.$t('lastName'),
+              index: 1},
           { name: 'username', displayName: this.$t('loginName'),
               required: true, index: 2, ignore: this.roleTypeId==='Customer'},
           { name: 'emailAddress', required: true, displayName: this.$t('email'),
@@ -128,6 +131,8 @@ export default {
           { name: 'newPassword', index: 7},
           { name: 'newPasswordVerify', index: 8},
         ],
+        save: false,
+        plus: false
       },
       itemComp: Object.assign({},this.$store.getters.company),
       itemMetaComp: {
@@ -151,8 +156,8 @@ export default {
     this.$backendService.downloadImage('medium', 'company', this.itemComp.partyId)
       .then(result => {this.itemImage = result.data.imageFile })
     if (platformModule.isIOS) { // returns an index instead of value so change
-      this.item.description = this.userGroups.findIndex(
-          o => o === this.item.description)}
+      this.item.groupDescription = this.userGroups.findIndex(
+          o => o === this.item.groupDescription)}
   },
   methods: {
     tabChange(args) {
@@ -174,22 +179,31 @@ export default {
       this.editedItem = JSON.parse(data.object.editedObject)
     },
     onItemTap (item) {
-      if (this.currentTab === 1) { // employees
         this.$navigateTo(this.$routes.UserDetail,
-          { props: {  item: item, roleTypeId: 'Employee'}})}
-      if (this.currentTab === 2) { //customer
-        this.$navigateTo(this.$routes.UserDetail,
-          { props: {  item: item, roleTypeId: 'Customer'}})}
+          { props: {  item: item}})
     },
     onActionTap() {
       switch(this.currentTab) {
         case 3: // logged in user
           if (this.editedItem) {
-            this.$backendService.updateUser(this.editedItem)
-            this.note(this.$t('informationIsUpdated'))
-            this.editedItem.verb = "update"
-            this.$store.commit('employee', this.editedItem)
-            this.hideKeyboard()}
+            if (!this.editedItem.firstName) {
+                this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedItem.lastName){
+                this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedItem.emailAddress){
+                this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
+            } else if (!this.editedItem.groupDescription) {
+                this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
+            } else {
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                this.editedItem.groupDescription = 
+                    this.userGroups[parseInt(this.editedItem.groupDescription,10)]}
+              this.$backendService.updateUser(this.editedItem)
+              this.note(this.$t('informationIsUpdated'))
+              this.editedItem.verb = "update"
+              this.$store.commit('employee', this.editedItem)
+              this.hideKeyboard()}
+          }
           break
         case 0: // company
           if (this.editedItem) {
