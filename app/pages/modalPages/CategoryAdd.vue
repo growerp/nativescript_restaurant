@@ -41,7 +41,7 @@
                 displayName: this.$t('preparation'), index: 1 },
           ]
         },
-        editedItem: {},
+        editedItem: null,
       }
     },
     methods: {

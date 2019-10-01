@@ -22,7 +22,7 @@ export default {
     area: 'Area',
     areaName: 'Area name',
     areaDetail: 'Table area detailed info',
-    assignedTo: 'AssignTo(not select for yourself)',
+    assignedTo: 'Assigned to',
     back: 'BACK',
     backtoLogin: 'Back to Login',
     backToDefault: 'BACK TO DEFAULT',

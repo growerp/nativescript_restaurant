@@ -323,17 +323,17 @@ export default class BackendService {
             {   productCategoryId: id})}
     //===============================tasks ====================================
     async getTaskList(my) {
-          return await restPost.post('s1/growerp/GetTaskList',{my: my})}
+        return await restPost.post('s1/growerp/GetTaskList',{my: my})}
     async getTask(id) {
           return await restPost.post('s1/growerp/GetTask', { workEffortId: id })}
     async createTask(item) {
           return await restPost.post('s1/growerp/CreateTask',
-            {   workEffortName: item.workEffortName,
-                description: item.description, partyId: item.partyId})}
+            {   workEffortName: item.workEffortName, priority: item.priority,
+                description: item.description, partyId: item.userPartyId})}
     async updateTask(item) {
           return await restPost.post('s1/growerp/UpdateTask',
             {   workEffortId: item.workEffortId, description: item.description,
-                workEffortName: item.workEffortName, partyId: item.partyId,
+                workEffortName: item.workEffortName, partyId: item.userPartyId,
                 statusId: item.statusId, priority: item.priority})}
     async deleteTask(id) {
           return await restPost.post('s1/growerp/DeleteTask', { workEffortId: id })}
@@ -397,6 +397,13 @@ export default class BackendService {
           store.commit('allPartyInfo', result.data)
       })
   }
+  getMyTasks() {
+      restGet.get('s1/growerp/GetMyTasks')
+      .then((result) => {
+        store.commit('tasks', result.data)
+      })
+  }
+
   async getCurrentEmployeeUserGroupId() {
     return await restGet.get('s1/growerp/GetCurrentEmployeeUserGroupId')
   }

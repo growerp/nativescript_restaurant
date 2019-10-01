@@ -6,6 +6,7 @@ import backEnd from './modules/backEnd'
 import locCatProd from './modules/locCatProd'
 import orders from './modules/orders'
 import parties from './modules/parties'
+import taskRequest from './modules/taskRequest'
 //import database from './modules/database'
 
 Vue.use(Vuex)
@@ -19,6 +20,7 @@ let store = new Vuex.Store({
     locCatProd,
     orders,
     parties,
+    taskRequest,
   },
   strict: debug
 })

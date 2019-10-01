@@ -22,7 +22,7 @@ export default {
     area: 'พื้นที่',
     areaName: 'ชื่อพื้นที่',
     areaDetail: 'ตารางข้อมูลรายละเอียด',
-    assignTo: 'กำหนดให้ (ไม่ได้เลือกเอง)',
+    assignedTo: 'กำหนดให้',
     back: 'กลับ',
     backtoLogin: 'กลับหน้าเข้าสู่ระบบ',
     backToDefault: 'กลับสู่หน้าหลัก',

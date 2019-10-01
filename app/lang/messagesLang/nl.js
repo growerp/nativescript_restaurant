@@ -22,7 +22,7 @@ export default {
     area: 'Lokatie',
     areaName: 'Lokatie naam',
     areaDetail: 'Tafel lokatie gedetailleerde info',
-    assignTo: 'Aan jezelf toewijzen',
+    assignedTo: 'Toegewezen aan',
     back: 'TERUG',
     backtoLogin: 'Terug naar de login',
     backToDefault: 'TERUG BEGIN',

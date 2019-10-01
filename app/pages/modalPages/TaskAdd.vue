@@ -21,45 +21,59 @@ export default {
     return {
       item: { workEffortName: '',
               description: '',
-              partyId: '',
+              userPartyId: '',
               priority: 5},
       itemMeta: {
         propertyAnnotations: [
-            { name: 'workEffortName', displayName: this.$t('title'),
-              required: true, index: 0},
-            { name: 'description', editor: 'MultilineText', index: 1},
-            { name: 'priority', editor: 'Number', index: 2},
-            { name: 'partyId', displayName: this.$t('assignTo'), index: 3,
-              editor: 'Picker', valuesProvider: this.$store.getters.userNames},
+          { name: 'workEffortName', displayName: this.$t('title'),
+            required: true, index: 0},
+          { name: 'description', editor: 'MultilineText', index: 1},
+          { name: 'priority', editor: 'Picker', index: 2,
+              valuesProvider: [1,2,3,4,5]},
+          { name: 'userPartyId', displayName: this.$t('assignedTo'),
+            editor: 'Picker',  index: 3,
+              valuesProvider: this.$store.getters.employeeDesc(true)},
         ]
       },
-      editedItem: {},
+      editedItem: null,
     };
   },
   methods: {
     onCommitted(data) {
-        this.editedItem = JSON.parse(data.object.editedObject)
+      this.editedItem = JSON.parse(data.object.editedObject)
     },
     submit() {
       if (this.editedItem) {
-        if (!this.editedItem.workEffortName) this.note(this.$t('titleIsRequired'))
+        if (!this.editedItem.workEffortName)this.note(this.$t('titleIsRequired'))
         else {
           const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
-            let values = this.$store.getters.userNames
-            this.editedItem.partyId = values[parseInt(this.editedItem.partyId,10)]}
-          this.editedItem.partyId = this.$store.getters.userByFirstLastName(
-              this.editedItem.partyId)
+            let prioValues = [1,2,3,4,5]
+            this.editedItem.priority = 
+                prioValues[parseInt(this.editedItem.priority,10)]
+            let values = this.$store.getters.employeeDesc(true)
+            this.editedItem.userPartyId = 
+                values[parseInt(this.editedItem.partyId,10)]
+          }
+          if (!this.editedItem.userPartyId) // default to self
+            this.editedItem.userPartyId = this.$store.getters.currentEmployeeFullName
+          this.editedItem.userFullName = this.editedItem.userPartyId
+          this.editedItem.userPartyId = this.$store.getters.employeeByDesc(
+              this.editedItem.userPartyId).partyId
+          console.log("==1==taskadd editedItem: " + JSON.stringify(this.editedItem))
           this.$backendService.createTask(this.editedItem).then( result => {
             this.editedItem.workEffortId = result.data.workEffortId
             this.editedItem.image = global.noImage
-            this.editedItem.fullName = this.$store.getters.user.firstName + ' ' + this.$store.getters.user.lastName
-            this.editedItem.statusId = this.$t('WeApproved')
-            this.$modal.close(this.editedItem)})}}
+            this.editedItem.verb = 'add'
+          console.log("==2==taskadd editedItem: " + JSON.stringify(this.editedItem))
+            this.$store.commit('task', this.editedItem)
+          })
+          this.$modal.close()
+        }
+      }
     }
   }
 }
-
 </script>
 
 <style>
