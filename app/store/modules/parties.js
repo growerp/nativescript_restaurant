@@ -59,7 +59,7 @@ const mutations = {
       let i = 0
       for (i; i<state.customers.length;i++)
         if ((value.lastName.toLowerCase()+value.firstName.toLowerCase()) < 
-          state.customers[i].lastName.toLowerCase()+state.customers[i].lastName.toLowerCase())
+          state.customers[i].lastName.toLowerCase()+state.customers[i].firstName.toLowerCase())
           break;
       state.customers.splice(i,0,value)
     } else {
@@ -93,7 +93,8 @@ const mutations = {
     if (verb === 'add') {
       let i = 0
       for (i; i<state.employees.length;i++)
-        if (value.name.toLowerCase() < state.employees[i].name.toLowerCase())
+        if ((value.lastName.toLowerCase()+value.firstName.toLowerCase()) < 
+          state.employees[i].lastName.toLowerCase()+state.employees[i].firstName.toLowerCase())
           break;
       state.employees.splice(i,0,value)
     } else {
