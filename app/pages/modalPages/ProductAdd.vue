@@ -14,6 +14,7 @@
 
 <script>
   import general from '~/mixins/general'
+  const platformModule = require("tns-core-modules/platform")
   export default {
     name: 'ProductAdd',
     mixins: [general],
@@ -26,7 +27,6 @@
           name: '',
           price: '',
           categoryName: '',
-          categoryName1: this.categoryName,
         },
         itemMeta: {
           propertyAnnotations: [
@@ -34,18 +34,12 @@
             { name: 'name', index: 0},
             { name: 'price', index: 1, editor: 'Decimal'},
             { name: 'categoryName', index: 3,
-              ignore: this.categoryName? true : false,
-              editor: 'Picker',
+              ignore: this.categoryName? true : false, editor: 'Picker',
               valuesProvider: this.$store.getters.productCategoriesDesc()
-            },
-            { name: 'categoryName1', index: 2,
-              ignore: this.categoryName? false : true,
-              readOnly: this.categoryName? true : false,
-              displayName: this.$t('name')
             },
           ]
         },
-        editedItem: {},
+        editedItem: null,
       }
     },
     methods: {
@@ -54,20 +48,17 @@
       },
       submit() {
         if (this.editedItem) {
-          delete this.editedItem.categoryName1
-          if (this.categoryName) {
-            this.editedItem.categoryName = this.categoryName
-          }
           if (!this.editedItem.name) this.note(this.$t('nameIsRequired'))
           else if (!this.editedItem.price) this.note(this.$t('enterPrice'))
-          else if (!this.editedItem.categoryName) this.note(this.$t('selectCategory')) 
+          else if (!this.editedItem.categoryName && !this.categoryName)
+               this.note(this.$t('selectCategory')) 
           else {
-            const platformModule = require("tns-core-modules/platform")
-            if (platformModule.isIOS) { // returns an index instead of value so change
-              let values = this.$store.getters.productCategoriesDesc()
-              this.editedItem.categoryName = values[parseInt(
-                  this.editedItem.categoryName,10)]
-            }
+            if(!this.categoryName) {
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                let values = this.$store.getters.productCategoriesDesc()
+                this.editedItem.categoryName = values[parseInt(
+                  this.editedItem.categoryName,10)]}}
+            else this.editedItem.categoryName = this.categoryName
             this.editedItem.productCategoryId =
                 this.$store.getters.productCategoryByDesc(
                     this.editedItem.categoryName).productCategoryId

@@ -14,6 +14,7 @@
 
 <script>
   import general from '~/mixins/general'
+  const platformModule = require("tns-core-modules/platform")
   export default {
     name: 'CategoryAdd',
     props: {
@@ -24,21 +25,15 @@
       return {
         item: { categoryName: '',
                 description:  '',
-                description1: this.prepAreaDescription
         },
         itemMeta: {
           propertyAnnotations: [
-              { name: 'categoryName', required: true, index: 0},
-              { name: 'description', index: 2, 
-                ignore: this.prepAreaDescription? true : false,
-                displayName: this.$t('preparation'), index: 2, 
-                editor: 'Picker', 
-                valuesProvider: this.$store.getters.preparationAreasDesc() 
-              },
-              { name: 'description1', index: 1, 
-                ignore: this.prepAreaDescription? false : true,
-                readOnly: true,  
-                displayName: this.$t('preparation'), index: 1 },
+            { name: 'categoryName', required: true, index: 0},
+            { name: 'description', index: 2,
+              ignore: this.prepAreaDescription? true : false,
+              displayName: this.$t('preparation'), index: 2, editor: 'Picker',
+              valuesProvider: this.$store.getters.preparationAreasDesc()
+            },
           ]
         },
         editedItem: null,
@@ -49,19 +44,17 @@
           this.editedItem = JSON.parse(data.object.editedObject)},
       submit() {
         if (this.editedItem) {
-          delete this.editedItem.description1
-          if (this.prepAreaDescription) {
-            this.editedItem.description = this.prepAreaDescription
-          }
-          if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
-          else if (!this.editedItem.description)  
+          if (!this.editedItem.categoryName)
+              this.note(this.$t('nameIsRequired'))
+          else if (!this.editedItem.description && !this.prepAreaDescription)
               this.note(this.$t('preparationArea') + this.$t('isRequired'))
           else {
-            const platformModule = require("tns-core-modules/platform")
-            if (platformModule.isIOS) { // returns an index instead of value so change
-              let values = this.$store.getters.preparationAreasDesc()
-              this.editedItem.description = values[parseInt(this.editedItem.description,10)]
-            }
+            if (!this.prepAreaDescription) {
+              if (platformModule.isIOS) { // returns an index instead of value so change
+                let values = this.$store.getters.preparationAreasDesc()
+                this.editedItem.description =
+                    values[parseInt(this.editedItem.description,10)]}}
+            else this.editedItem.description = this.prepAreaDescription
             this.editedItem.preparationAreaId = 
                 this.$store.getters.preparationAreaByDesc(this.editedItem.description).preparationAreaId
             this.$backendService.createCategory(this.editedItem)

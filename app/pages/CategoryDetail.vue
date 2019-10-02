@@ -119,7 +119,8 @@
         })
       },
       refresh() {
-          this.productList = this.$store.getters.productsByCatg(this.item.productCategoryId)
+          this.productList = this.$store.getters.productsByCatg(
+            this.item.productCategoryId)
       }
     }
   }
