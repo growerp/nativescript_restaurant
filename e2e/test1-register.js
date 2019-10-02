@@ -109,15 +109,13 @@ describe("1. Start test register, login and forgot your password functions on Gr
         await driver.driver.hideDeviceKeyboard("Done");
         const registButton = await driver.findElementByClassName(driver.locators.button);
         await registButton.click();
+        driver.wait("3000");
 
-        const errorDialog = await driver.findElementByText("Registration Error: Request failed with status code 400: Bad Request", "contains");
-        assert.isTrue(await errorDialog.isDisplayed());
-
+        const errorMessage = await driver.findElementByClassName(driver.locators.getElementByName("htmlview"));
+        assert.isTrue(await errorMessage.exists());
     });
 
     it("Check login to the restaurant app with valid data.", async function () {
-        // password = '!awstest12';
-        // username = 'testapp36018@gmail.com';
         console.log('========= Log-in username : ', username)
         console.log('========= Log-in password : ', password)
 
@@ -157,7 +155,7 @@ describe("1. Start test register, login and forgot your password functions on Gr
         await myInfo.click();
 
         const usernameLabel = await driver.driver.waitForElementsByClassName(driver.locators.getElementByName("textfield"), 10000);
-        const usernameText = await usernameLabel[0].text();
+        const usernameText = await usernameLabel[2].text();
         expect(usernameText).to.equal(username, "Not logged with the same user");
 
     });
