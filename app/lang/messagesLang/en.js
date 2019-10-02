@@ -62,6 +62,7 @@ export default {
     deleteTable: 'Delete table ',
     delPrepArea: 'Delete preparation area ',
     delProduct: 'Delete Product ',
+    delRequest: 'Delete Question ',
     dashBoard: 'Dashboard',
     dateStart: 'date start',
     detailedInfo: 'detailed information',

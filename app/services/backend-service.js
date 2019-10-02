@@ -338,8 +338,13 @@ export default class BackendService {
     async deleteTask(id) {
           return await restPost.post('s1/growerp/DeleteTask', { workEffortId: id })}
     //===============================requests ====================================
+    async getRequests(my) {
+            restGet.get('s1/growerp/GetRequests')
+            .then((result) => {
+                store.commit('requests', result.data)
+            })}
     async getRequestList(my) {
-          return await restPost.post('s1/growerp/GetRequestList', {my: my})}
+        return await restPost.post('s1/growerp/GetRequestList', {my: my})}
     async getRequest(id) {
           return await restPost.post('s1/growerp/GetRequest', { requestId: id })}
     async createRequest(item) {

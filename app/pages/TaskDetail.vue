@@ -104,7 +104,6 @@ export default {
               case this.$t('WeCompleted'): 
                   this.editedItem.statusId = 'WeCompleted';break}
             // update remote and local
-            console.log("====update task: " + JSON.stringify(this.editedItem))
             this.$backendService.updateTask(this.editedItem)
             this.editedItem.verb = 'update'
             this.$store.commit('task', this.editedItem)

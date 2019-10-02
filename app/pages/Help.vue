@@ -4,41 +4,36 @@
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
           header="help" :onActionTap="onAddTap" :plus="true"/>
     </ActionBar>
-    <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
-
+    <TabView :selectedIndex="currentTab" 
+            @selectedIndexChange="tabChange" id="tabViewId">
         <TabViewItem :title="$t('FAQ')">
           <GridLayout columns="*,*" rows="auto,*" padding="10">
             <Accordion row="1" col="0" colSpan="3" ref="accordionFAQ"
               allowMultiple="true"
-              for="item of faqList" childItems="notes"  height="100%">
+              for="item of faqs" childItems="notes"  height="100%">
               <v-template name="title">
                 <Label backgroundColor="rgb(211, 215, 207)" margin="5,0"
                     :text="item.requestName" class="h2"/>
               </v-template>
               <v-template name="content">
                   <HtmlView :html="item.text"  margin="5,0"
-                      @tap="addNote('faq',item.requestId)"/>
+                      @tap="addNote(item)"/>
               </v-template>
             </Accordion>
           </GridLayout>
         </TabViewItem>
-
         <TabViewItem :title="$t('myQuestions')">
           <GridLayout columns="*,*" rows="auto,*" padding="10">
-            <Accordion row="1" col="0" colSpan="3" allowMultiple="true"  height="100%"
-                for="item of questionList" childItems="notes"  ref="accordionQuest">
+            <Accordion row="1" col="0" colSpan="3" ref="accordionFAQ"
+                allowMultiple="true"
+                for="item of requests" childItems="notes"  height="100%">
               <v-template name="title">
-                <Label backgroundColor="rgb(211, 215, 207)"
+                <Label backgroundColor="rgb(211, 215, 207)" margin="5,0"
                     :text="item.requestName" class="h2"/>
               </v-template>
-              <v-template name="content" >
-                <GridLayout columns="50, *, auto" rows="*" class="item"
-                      paddingRight="5" paddingLeft="5">
-                  <HtmlView :html="item.text" col="1"
-                    @tap="addNote('question',item.requestId)"/>
-                  <Label :text="item.date" class="p" col="2"
-                    @tap="addNote('question',item.requestId)"/>
-               </GridLayout>
+              <v-template name="content">
+                  <HtmlView :html="item.text"  margin="5,0"
+                      @tap="addNote(item)"/>
               </v-template>
             </Accordion>
           </GridLayout>
@@ -52,6 +47,7 @@ import sideDrawer from '~/mixins/sideDrawer'
 import TaskAdd from './modalPages/TaskAdd'
 import RequestAdd from './modalPages/RequestAdd'
 import RequestNoteAdd from './modalPages/RequestNoteAdd'
+import Confirm from './modalPages/Confirm'
 import general from '~/mixins/general'
 export default {
   mixins: [ sideDrawer, general ],
@@ -61,40 +57,41 @@ export default {
   data () {
     return {
       currentTab: '',
-      faqList: [],
-      questionList: [],
+      faqs: this.$store.getters.faqsAndNotes,
+      requests: this.$store.getters.RequestAndNotes,
     }
   },
   created() {
-    this.$backendService.getRequestList(false).then( result => {
-        this.faqList = result.data.requests})
-        this.faqList.sort(function (a, b) {
-          return a.requestName.toLowerCase().localeCompare(b.requestName.toLowerCase())
-        });
-    this.$backendService.getRequestList(true).then( result => {
-        this.questionList = result.data.requests
-    })
+    this.currentTab = this.startTab
+    console.log("==== requests: " + JSON.stringify(this.$store.getters.RequestAndNotes))
   },
   methods: {
       tabChange(args) {
         this.currentTab = args.value
       },
       onAddTap() { //get new item and add to end
-        this.$showModal(RequestAdd).then (result => {
-          if (result) this.questionList.push(result)
-          })
+        this.$showModal(RequestAdd)
+        .then(() => {
+          this.currentTab = 1
+        })
+      this.requests = this.$store.getters.RequestAndNotes
       },
-      addNote(type,requestId) {
-        this.$showModal(RequestNoteAdd, { props: {requestId: requestId}})
-        .then (result => {
-          if (result && type ==='faq') {
-            for (let i=0; i < this.faqList.length; i++) {
-              if (this.faqList[i].requestId === result.requestId) {
-                this.faqList[i].notes.push(result); break }}}
-          if (result && type ==='question') {
-            for (let i=0; i < this.questionList.length; i++) {
-              if (this.questionList[i].requestId === result.requestId) {
-                this.questionList[i].notes.push(result); break  }}}
+      onDeleteTap(item) {
+        this.$showModal(Confirm,{ props: {
+            message: this.$t('delRequest') + item.requestName + "?"}
+        })
+        .then (data => {
+          if (data) {
+            this.$backendService.deleteRequest(item.requestId)
+            this.$store.commit('request', 
+                { verb: 'delete', requestId: item.requestId})
+          }
+        })
+      },
+      addNote(item) {
+        this.$showModal(RequestNoteAdd, { props: {requestId: item.requestId}})
+        .then(()=> {
+          this.requests = this.$store.getters.RequestAndNotes
         })
       },
   }
