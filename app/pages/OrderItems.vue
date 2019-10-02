@@ -70,7 +70,6 @@ export default {
     saveOrder() {
       this.$backendService.createSalesOrder(this.orderHeader, this.orderItems)
       .then( result => {
-        this.$backendService.getCustomersInStore()
         if (this.orderHeader.orderId) {
           this.note(this.$t('orderUpdated') + result.data.orderId +
             this.$t('appearPrepArea'))
