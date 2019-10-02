@@ -5,8 +5,10 @@
       <label :text="header" horizontalAlignment="center" class="h3"/>
       <RadDataForm :source="user" :metadata="userMetaData"
           @propertyCommitted="onCommitted"/>
-      <Button class="button" :text="actionText" @tap="submit"/>
-      <Button class="button" :text="$t('cancel')" @tap="$modal.close()"/>
+      <GridLayout columns="*,*" rows="auto">
+        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
+        <Button class="button" :text="actionText" @tap="submit" col="1"/>
+      </GridLayout>
     </StackLayout></ModalStack>
   </page>
 </template>

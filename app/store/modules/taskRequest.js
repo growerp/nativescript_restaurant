@@ -29,8 +29,13 @@ const state = {
     requestId: '',
     requestName: '',
   }],
+  faqs: [{
+    requestId: '',
+    requestName: '',
+  }],
   notes: [{
     requestId: '',
+    timeStamp: '',
     date: '', // 'dd-MM-yyyy'
     noteText: '',
     partyId: '',
@@ -39,6 +44,13 @@ const state = {
 }
 
 const mutations = {
+  note(state, value) {
+    if (log) console.log("====note incoming update:" + JSON.stringify(value))
+    let verb = value.verb ; delete value.verb
+    if (verb === 'add') {
+      state.notes.push(value)
+    }
+  },
   task( state, value) {
     if (log) console.log("====task incoming update:" + JSON.stringify(value))
     let verb = value.verb ; delete value.verb
@@ -72,8 +84,6 @@ const mutations = {
       }
     }
     function addToList(listToAdd) {
-      if (listToAdd == state.myTasks) console.log("adding to myTasks")
-      if (listToAdd == state.otherTasks) console.log("adding to otherTasks")
       let i = 0
       for (i; i<listToAdd.length;i++)
         if ((value.priority + value.workEffortName.toLowerCase()) < 
@@ -86,7 +96,7 @@ const mutations = {
     state.myTasks = value.myTasks
     state.otherTasks = value.otherTasks
   },
-  request( state, value) {
+  request(state, value) {
     if (log) console.log("====request incoming update:" + JSON.stringify(value))
     let verb = value.verb ; delete value.verb
     if (verb === 'add') {
@@ -95,28 +105,54 @@ const mutations = {
         if (value.requestName.toLowerCase() < state.requests[i].requestName.toLowerCase())
           break;
       state.requests.splice(i,0,value)
+      console.log("====pushing note: " + JSON.stringify(value.note))
+      if (value.note) state.notes.push(value.note)
     } else {
       let index = state.requests.findIndex(
-        o => o.requestId === value.request)
+        o => o.requestId === value.requestId)
       if (index == -1) {
-        if (log) console.log("party not found:" + value.requestId) }
+         console.log("request not found:" + value.requestId) }
       else if (verb == 'delete') {
-          state.requests.splice(index,1)
+        state.requests.splice(index,1)
       } else if (verb == 'update') {
         state.requests.splice(index,1,value)
       }
     }
   },
   requests(state, value) {
-      state.tasks = value 
-  },
-  notes(state, value) {
-      state.tasks = value 
+    state.requests = value.requests 
+    state.faqs = value.faqs 
+    state.notes = value.notes 
   },
 }
 const getters = {
   myTasks: state => {
     return state.myTasks
+  },
+  requests: state => {
+    return state.requests
+  },
+  faqs: state => {
+    return state.faqs
+  },
+  faqsAndNotes: state => {
+    let faqsAndNote = state.faqs
+    for (let i=0;i<faqsAndNote.length; i++){
+      faqsAndNote[i].notes = store.getters.noteByRequest(
+          faqsAndNote[i].requestId)
+        }
+    return faqsAndNote
+  },
+  RequestAndNotes: state => {
+    let ReqsAndNotes = state.requests
+    for (let i=0;i<ReqsAndNotes.length; i++){
+      ReqsAndNotes[i].notes = store.getters.noteByRequest(
+        ReqsAndNotes[i].requestId)
+        }
+    return ReqsAndNotes
+  },
+  noteByRequest: state => requestId => {
+      return state.notes.filter(o => o.requestId === requestId)
   },
   otherTasks: state => {
     return state.otherTasks
