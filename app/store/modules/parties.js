@@ -36,7 +36,7 @@ const state = {
     organizationName: '',
     currencyId: '',
     emailAddress: '',
-    img: '',
+    image: '',
   },
   userGroups:[{
     userGroupId: String,
@@ -44,12 +44,23 @@ const state = {
   }],
 }
 const mutations = {
-  currentEmployeeUserGroupId(state, value) {
-    console.log("====value: " + value)
-    state.currentEmployeeUserGroupId = value
+  allPartyInfo(state, value) {
+    state.currentEmployeePartyId = value.currentEmployeePartyId
+    state.employees = value.employees
+    state.customers = value.customers
+    state.company = value.company
+    appSettings.setString('organizationName', value.company.organizationName)
+    appSettings.setString('username', 
+      state.employees.find(o => o.partyId === state.currentEmployeePartyId).username)
+    state.currentEmployeeUserGroupId = 
+        state.employees.find(o => o.partyId === state.currentEmployeePartyId).userGroupId
+    state.userGroups = value.userGroups
   },
   company(state,value) {
     state.company = value
+  },
+  currentEmployeeUserGroupId(state, value) {
+    state.currentEmployeeUserGroupId = value
   },
   customer(state,value) {
     if (log) console.log("====party customer incoming update:" +
@@ -74,18 +85,6 @@ const mutations = {
       }
     }
   },
-  allPartyInfo(state, value) {
-    state.currentEmployeePartyId = value.currentEmployeePartyId
-    state.employees = value.employees
-    state.customers = value.customers
-    state.company = value.company
-    appSettings.setString('organizationName', value.company.organizationName)
-    appSettings.setString('username', 
-      state.employees.find(o => o.partyId === state.currentEmployeePartyId).username)
-    state.currentEmployeeUserGroupId = 
-        state.employees.find(o => o.partyId === state.currentEmployeePartyId).userGroupId
-    state.userGroups = value.userGroups
-  },
   employee(state,value) {
     if (log) console.log("====party employee incoming update:" +
         JSON.stringify(value))
@@ -108,7 +107,7 @@ const mutations = {
         state.employees.splice(index,1,value)
       }
     }
-  }
+  },
 }
 const getters = {
   company: state => {
@@ -127,6 +126,10 @@ const getters = {
   currentEmployeeUserGroupId: state => {
     return state.currentEmployeeUserGroupId
   },
+  customerById: state => id => {
+    let result = state.customers.find(o => o.partyId === id)
+    return typeof(result) != "undefined" ? result : -1
+  },
   customerProvider: state => {
     let result = []
     for(let i=0;i<state.customers.length;i++)
@@ -141,6 +144,10 @@ const getters = {
   employeeByDesc: state => desc => {
     return state.employees.find(o => 
       (o.lastName + ', ' + o.firstName) === desc)
+  },
+  employeeById: state => id => {
+    let result = state.employees.find(o => o.partyId === id)
+    return typeof(result) != "undefined" ? result : -1
   },
   employeeDesc: state => (blank = true) => {
     let values = []

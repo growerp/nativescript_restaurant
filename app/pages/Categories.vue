@@ -17,7 +17,8 @@
           </v-template>
           <v-template>
             <GridLayout columns="50, 10, *, auto, 10, auto" rows="*" 
-                @tap="$navigateTo($routes.CategoryDetail,{props: {item: item}})"
+                @tap="$navigateTo($routes.CategoryDetail,
+                      {props: {item: Object.assign({},item)}})"
                 @longPress="onDeleteTap(item)">
               <Image :src="item.image"  col="0" height="50"/>
               <StackLayout col="2">

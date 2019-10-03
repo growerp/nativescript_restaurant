@@ -32,8 +32,7 @@ export default {
   },
   data() {
     return {
-      editedItem: {},
-      itemData: Object.assign({}, this.item),
+      editedItem: null,
       categories: this.$store.getters.productCategoriesDesc(false),
       itemMeta: {
         propertyAnnotations: [
@@ -54,8 +53,8 @@ export default {
     this.$backendService.downloadImage('medium', 'product', this.item.productId)
     .then(result => { this.itemImage = result.data.imageFile })
     if (platformModule.isIOS) { // returns an index instead of value so change
-      this.itemData.categoryName = this.categories.findIndex(
-          o => o === this.itemData.categoryName)}
+      this.item.categoryName = this.categories.findIndex(
+          o => o === this.item.categoryName)}
   },
   methods: {
     onItemCommitted(data) {

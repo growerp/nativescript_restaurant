@@ -41,7 +41,7 @@ export default {
           { name: 'passwordVerify', index: 2 , editor: 'Password'},
         ],
       },
-      editedItem: {},
+      editedItem: null,
     };
   },
   methods: {

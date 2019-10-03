@@ -29,7 +29,7 @@ export default {
               editor: 'Number' },
         ]
       },
-      editedItem: {},
+      editedItem: null,
     };
   },
   methods: {

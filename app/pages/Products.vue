@@ -4,34 +4,35 @@
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
     </ActionBar>
-    <StackLayout padding="10">
-      <RadListView for="item in itemList">
+    <GridLayout rows="*, 50" padding="10">
+      <RadListView for="item in itemList" row="0">
         <v-template name="header">
-          <GridLayout columns="50, *, *, auto" rows="*">
+          <GridLayout columns="50, *, auto" rows="*">
             <StackLayout col="1">
-              <label text="Product Name"/>
-              <label text="Category Name"/>
+              <label text="Product Name" class="p"/>
+              <label text="Category Name" class="p"/>
             </StackLayout>
-            <label text="Price" col="3"/>
+            <label text="Price" col="3" class="p"/>
           </GridLayout>
         </v-template>
         <v-template>
-          <GridLayout columns="50, *, *, auto" rows="*"
-                @tap="$navigateTo($routes.ProductDetail,{props: {item: Object.assign({},item)}})"
+          <GridLayout columns="50, *, auto" rows="*"
+                @tap="$navigateTo($routes.ProductDetail,
+                        {props: {item: Object.assign({},item)}})"
                 @longPress="onDeleteTap(item)">
             <Image :src="item.image"  col="0" height="50"/>
             <StackLayout col="1" paddingLeft="5">
               <label :text="item.name" class="h2"/>
               <label :text="item.categoryName" class="p"/>
             </StackLayout>
-            <Label :text="item.price" class="p" col="3"/>
+            <Label :text="item.price" class="p" col="2"/>
           </GridLayout>
         </v-template>
         <v-template name="footer">
           <Label :text="'Total products: ' + itemList.length"/>
         </v-template>
       </RadListView>
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -46,7 +47,7 @@ export default {
   mixins: [ sideDrawer, general ],
   data () {
     return {
-      itemList: this.$store.getters.products
+      itemList: this.$store.getters.products,
     }
   },
   methods: {

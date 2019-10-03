@@ -30,7 +30,7 @@ export default {
           { name: 'date', ignore: true}
         ]
       },
-      editedItem: {},
+      editedItem: null,
     }
   },
   methods: {

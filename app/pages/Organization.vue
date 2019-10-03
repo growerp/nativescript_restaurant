@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="save" :plus="plus" 
@@ -9,23 +9,24 @@
     <TabView :selectedIndex="currentTab" paddingTop="10"
         @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('company')">
-        <StackLayout>
-          <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
+        <GridLayout rows="auto, *, 50">
+          <GridLayout width="100%" columns="100,30,*" rows="50,50"
+                padding="20" row="0">
             <Image ref="itemForm" :src="itemImage" width="100" height="100"
                 col="0" row="0" rowSpan="2"/>
             <Button class="button" :text="$t('copyFromGal')"
-                @tap="selectPicture('company', item.partyId)" col=2 row="0"/>
+                @tap="selectPicture('company', itemComp.partyId)" col=2 row="0"/>
             <Button class="button" :text="$t('useCamera')"
-                @tap="takePicture('company', item.partyId)" col="2" row="1"/>
+                @tap="takePicture('company', itemComp.partyId)" col="2" row="1"/>
           </GridLayout>
-          <RadDataForm :source="itemComp"
+          <RadDataForm :source="itemComp" row="1"
               :metadata="itemMetaComp" @propertyCommitted="onItemCommitted"/>
-        </StackLayout>
+        </GridLayout>
       </TabViewItem>
 
       <TabViewItem :title="$t('employee') + ' max:' + subscribedUsers()">
-        <StackLayout>
-          <RadListView for="item in employees">
+        <GridLayout rows="*, 50">
+          <RadListView for="item in employees" row="0">
             <v-template>
               <GridLayout columns="50, *, auto" rows="*" class="item"
                     paddingRight="5" paddingLeft="5"  @tap="onItemTap(item)"
@@ -40,12 +41,12 @@
               </GridLayout>
             </v-template>
           </RadListView>
-        </StackLayout>
+        </GridLayout>
       </TabViewItem>
 
       <TabViewItem :title="$t('customer')">
-        <StackLayout>
-          <RadListView for="item in customers">
+        <GridLayout rows="*, 50">
+          <RadListView for="item in customers" row="0">
             <v-template>
               <GridLayout columns="50, *, auto" rows="*" class="item"
                   paddingRight="5" paddingLeft="5"  @Tap="onItemTap(item)"
@@ -63,24 +64,25 @@
               </GridLayout>
             </v-template>
           </RadListView>
-        </StackLayout>
+        </GridLayout>
       </TabViewItem>
 
       <TabViewItem :title="$t('myInformation')">
-        <StackLayout>
-          <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
+        <GridLayout rows="auto, *, auto, 50">
+          <GridLayout width="100%" columns="100,30,*" rows="50,50" 
+                padding="20" row="0">
             <Image ref="itemForm" :src="itemImage" width="100" height="100"
                 col="0" row="0" rowSpan="2"/>
             <Button class="button" :text="$t('copyFromGal')"
-                @tap="selectPicture('item', item.partyId)" col=2 row="0"/>
+                @tap="selectPicture('user', item.partyId)" col=2 row="0"/>
             <Button class="button" :text="$t('useCamera')"
-                @tap="takePicture('item', item.partyId)" col="2" row="1"/>
+                @tap="takePicture('user', item.partyId)" col="2" row="1"/>
           </GridLayout>
-          <RadDataForm :source="item"
+          <RadDataForm :source="item" row="1"
               :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
           <Button class="button" :text="$t('updatePassword')" 
-              @tap="onPasswordTap"/>
-        </StackLayout>
+              @tap="onPasswordTap" row="2"/>
+        </GridLayout>
       </TabViewItem>
     </TabView>
    </Page>
@@ -209,7 +211,6 @@ export default {
           if (this.editedItem) {
             this.$backendService.updateCompany(this.editedItem)
             this.note(this.$t('informationIsUpdated'))
-            this.editedItem.verb = 'update'
             this.$store.commit('company', this.editedItem)
             this.hideKeyboard()}
           break
