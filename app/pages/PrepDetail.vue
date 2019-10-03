@@ -4,8 +4,9 @@
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
           :onActionTap="onSaveTap" :openDrawer="openDrawer" header="preparationAreaDetail"/>
     </ActionBar>
-    <StackLayout padding="10" height="100%">
-      <GridLayout width="100%" columns="100,30,*" rows="50,50,">
+    <GridLayout rows="auto, auto, auto,*, auto, 50">
+      <GridLayout width="100%" columns="100,30,*" rows="50,50,"
+              padding="20" row="0">
         <Image ref="prepForm" :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
         <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
@@ -13,25 +14,23 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('prep', item.preparationAreaId)"/>
       </GridLayout>
-      <GridLayout rows="auto,auto,*,auto,50">
-        <RadDataForm ref="itemForm" :source="Object.assign({},item)" row="0"
-            :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-        <Label :text="$t('categoriesPrepared')" class="h3" row="1" 
-          horizontalAlignment="center"/>
-        <RadListView for="item in categoryList"  row="2">
-          <v-template>
-            <GridLayout columns="50, *, auto" rows="*"  padding="10"
-                @tap="onMoveItemTap(item)" @longPress="onDeleteItemTap(item)">
-              <Image :src="item.image" col="0" height="40"/>
-              <label :text="item.categoryName" class="h2" col="1"/>
-              <label :text="item.nbrOfProducts" class="h2" col="2"/>
-            </GridLayout>
-          </v-template>
-        </RadListView>
-        <Button class="button" :text="$t('addCategory')" 
-            @tap="onAddCategoryTap" width="50%"  row="3"/>
-      </GridLayout>
-    </StackLayout>
+      <RadDataForm ref="itemForm" :source="Object.assign({},item)" row="1"
+          :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
+      <Label :text="$t('categoriesPrepared')" class="h3" row="2"
+          paddingLeft="15"/>
+      <RadListView for="item in categoryList"  row="3">
+        <v-template>
+          <GridLayout columns="50, *, auto" rows="*"  padding="10"
+              @tap="onMoveItemTap(item)" @longPress="onDeleteItemTap(item)">
+            <Image :src="item.image" col="0" height="40"/>
+            <label :text="item.categoryName" class="h2" col="1"/>
+            <label :text="item.nbrOfProducts" class="h2" col="2"/>
+          </GridLayout>
+        </v-template>
+      </RadListView>
+      <Button class="button" :text="$t('addCategory')" 
+          @tap="onAddCategoryTap" width="50%"  row="4"/>
+    </GridLayout>
   </Page>
 </template>
 
@@ -53,7 +52,7 @@ export default {
     return {
       categoryList: this.$store.getters.productCategoriesByPrepId(
           this.item.preparationAreaId),
-      editedItem: {},
+      editedItem: null,
       itemMeta: {
         propertyAnnotations: [
           { name: 'preparationAreaId', ignore: true},

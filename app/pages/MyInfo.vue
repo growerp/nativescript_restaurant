@@ -36,7 +36,6 @@ export default {
     return {
       userGroups: this.$store.getters.userGroupsDesc(false),
       item: Object.assign({},this.$store.getters.currentEmployee),
-      itemImage: '',
       editedItem: null,
       itemMeta: {
         propertyAnnotations:[

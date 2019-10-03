@@ -156,7 +156,13 @@ const getters = {
   },
   otherTasks: state => {
     return state.otherTasks
-  }
+  },
+  taskById: state => id => {
+    let result = state.myTasks.find(o => o.workEffortId === id)
+    if (typeof result === "undefined") 
+      result = state.otherTasks.find(o => o.workEffortId === id)
+    return typeof(result) != "undefined" ? result : -1
+  },
 }
 // export this module.
 export default {

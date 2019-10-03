@@ -2,10 +2,12 @@
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
-          :onActionTap="onSaveTap" :openDrawer="openDrawer" header="categoryDetail"/>
+          :onActionTap="onSaveTap" :openDrawer="openDrawer"
+          header="categoryDetail"/>
     </ActionBar>
-    <StackLayout>
-      <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
+    <GridLayout rows="auto, auto, auto, *, auto, 50">
+      <GridLayout width="100%" columns="100,30,*" rows="50,50"
+              padding="20" row="0">
         <Image ref="areaForm" :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
         <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
@@ -13,22 +15,23 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('category', item.productCategoryId)"/>
       </GridLayout>
-      <RadDataForm ref="itemForm" :source="itemData"
+      <RadDataForm ref="itemForm" :source="item" row="1"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-      <Label class="title" :text="$t('products') + $t('tapToMove')"/>
-      <RadListView ref="listView" for="item in productList" height="35%">
+      <Label class="h4" :text="$t('products') + $t('tapToMove')"
+          row="2" paddingLeft="20"/>
+      <RadListView ref="listView" for="item in productList" row="3">
         <v-template>
           <GridLayout columns="50, *, auto" rows="*" padding="10"
               @tap="onMoveItemTap(item)" @longPress="onDeleteItemTap(item)">
-              <Image :src="item.image"  col="0" height="30"/>
+              <Image :src="item.image"  col="0" height="40"/>
               <label :text="item.name" class="h2" col="1"/>
-              <label :text="item.price" class="h2" col="2"/>
+              <label :text="item.price" class="h3" col="2"/>
             </GridLayout>
         </v-template>
       </RadListView>
       <Button class="button" :text="$t('addProduct')" @tap="addProduct" 
-                width="50%"/>
-    </StackLayout>
+                row="4" width="50%"/>
+    </GridLayout>
   </Page>
 </template>
 
@@ -51,7 +54,6 @@
         productList: this.$store.getters.productsByCatg(this.item.productCategoryId),
         editedItem: null,
         prepAreas: this.$store.getters.preparationAreasDesc(false),
-        itemData: Object.assign({}, this.item),
         itemMeta: {
           propertyAnnotations: [
               { name: 'productCategoryId', ignore: true},
@@ -68,8 +70,8 @@
           this.item.productCategoryId)
       .then(result => { this.itemImage = result.data.imageFile})
       if (platformModule.isIOS) { // returns an index instead of value so change
-        this.itemData.description = this.prepAreas.findIndex(
-            o => o === this.itemData.description)}
+        this.item.description = this.prepAreas.findIndex(
+            o => o === this.item.description)}
     },
     methods: {
       onItemCommitted(data) {

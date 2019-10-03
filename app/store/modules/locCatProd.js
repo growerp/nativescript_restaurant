@@ -245,6 +245,10 @@ const getters = {
   accommodationAreaByDesc: state => desc => {
     return state.accommodationAreas.find(o => o.description === desc)
   },
+  accommodationAreaById: state => id => {
+    result = state.accommodationAreas.find(o => o.accommodationAreaId === id)
+    return typeof(result) != "undefined" ? result : -1
+  },
   accommodationAreasDesc: state => (blank=true) => {
     let areas = []
     if (blank) areas.push(' ')
@@ -264,6 +268,9 @@ const getters = {
   },
   preparationAreaByDesc: state => desc => {
     return state.preparationAreas.find(o => o.description === desc)
+  },
+  preparationAreaById: state => id => {
+    return state.preparationAreas.find(o => o.preparationAreaId === id)
   },
   preparationAreasMinusOne: state => prepId => {
     let prepAreas = []
@@ -291,10 +298,12 @@ const getters = {
   return catAndProd
   },
   productCategoryByDesc: state => desc => {
-    return state.productCategories.find(o => o.categoryName === desc)
+    result = state.productCategories.find(o => o.categoryName === desc)
+    return typeof(result) != "undefined" ? result : -1
   },
   productCategoryById: state => id => {
-    return state.productCategories.find(o => o.productCategoryId === id)
+    result = state.productCategories.find(o => o.productCategoryId === id)
+    return typeof(result) != "undefined" ? result : -1
   },
   productCategoriesByPrepId: state => prepId => {
     return state.productCategories.filter(o => o.preparationAreaId === prepId)
@@ -315,12 +324,14 @@ const getters = {
   },
   // product related==========================================================
   products: state => {
-    console.log('====store products: ' + JSON.stringify(state.products))
     return state.products
   },
   productsByCatg: state => catgId => {
     return state.products.filter(o => o.productCategoryId === catgId)
-  }
+  },
+  productById: state => id => {
+    return state.products.find(o => o.productId === id)
+  },
 }
 // export this module.
 export default {

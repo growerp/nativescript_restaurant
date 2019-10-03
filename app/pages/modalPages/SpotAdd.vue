@@ -22,7 +22,7 @@ export default {
       item: {
         spotNumber: '',
       },
-      editedItem: {},
+      editedItem: null,
       itemMeta: {
         propertyAnnotations: [
             { name: 'spotNumber', editor: 'Decimal'},

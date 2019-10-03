@@ -23,7 +23,7 @@ export default {
             { name: 'description', required: true, index: 0},
         ]
       },
-      editedItem: {},
+      editedItem: null,
     }
   },
   methods: {

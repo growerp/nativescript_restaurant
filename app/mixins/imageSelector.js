@@ -7,9 +7,9 @@ var imagepicker = require("nativescript-imagepicker");
 export default {
     name: 'imageSelector',
     data () {
-        return {
-            itemImage: '',
-        }
+      return {
+        itemImage: '',
+      }
     },
     methods: {
       takePicture(type, id) {
@@ -31,21 +31,22 @@ export default {
       selectPicture(type,id) {
         let localPath = null
         let context = imagepicker.create({mode: 'single'})
-        if (platformModule.device.os === "Android" && platformModule.device.sdkVersion >= 23) {
-            permissions.requestPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    "I need these permissions to read a picture from galery")
-            .then(function() {
-                    console.log("Permissions granted!");
-                    startSelection(context)})
-            .catch(function() {
-                    console.log("Uh oh, no permissions - plan B time?")})}
+        if (platformModule.device.os === "Android" && 
+                platformModule.device.sdkVersion >= 23) {
+          permissions.requestPermission(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                  "I need these permissions to read a picture from galery")
+          .then(function() {
+            console.log("Permissions granted!");
+            startSelection(context)})
+          .catch(function() {
+            console.log("Uh oh, no permissions - plan B time?")})}
         context.authorize()
-        .then(function() {
-            return context.present()})
+        .then(function() {return context.present()})
         .then((selection) => {
           console.log("Selection done: " + JSON.stringify(selection))
-          this.scaleUploadImage(type, id, selection[0])
-        }).catch(function(e) {
+          this.scaleUploadImage(type, id, selection[0])})
+        .catch(function(e) {
           console.log('====error picture selection:' + e)
         })
       },
@@ -76,9 +77,12 @@ export default {
                 var b3 = b.resizeMax(500);
                 var medium_image = b3.toImageSource();
                 base64Medium = medium_image.toBase64String("png")})
-            this.item.image = 'data:image/png;base64,' + base64Small
-            this.$backendService.uploadImage('small', base64Small, type, id)
-            this.$backendService.uploadImage('medium', base64Medium, type, id)
+            this.$backendService.uploadImage('small', 
+                base64Small, type, id)
+            this.$backendService.uploadImage('medium',
+                base64Medium, type, id)
+            this.$store.commit('image', { type: type, id: id,
+                image: 'data:image/png;base64,' + base64Small})
           } else console.log('Image could not be saved')
         })
       }
