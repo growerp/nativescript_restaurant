@@ -141,6 +141,11 @@ const getters = {
   customers: state => {
     return state.customers
   },
+  customersSearchName: state => name => {
+    return state.customers.filter( o =>
+      (o.firstName.toLowerCase().indexOf(name.toLowerCase()) > -1) ||
+      (o.lastName.toLowerCase().indexOf(name.toLowerCase()) > -1))
+  },
   employeeByDesc: state => desc => {
     return state.employees.find(o => 
       (o.lastName + ', ' + o.firstName) === desc)
@@ -158,6 +163,11 @@ const getters = {
   },
   employees: state => {
     return state.employees
+  },
+  employeesSearchName: state => name => {
+    return state.employees.filter( o =>
+      (o.firstName.toLowerCase().indexOf(name.toLowerCase()) > -1) ||
+      (o.lastName.toLowerCase().indexOf(name.toLowerCase()) > -1))
   },
   userGroupsDesc: state => (blank = true) => {
     let values = []

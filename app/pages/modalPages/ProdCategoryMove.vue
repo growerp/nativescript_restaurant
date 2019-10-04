@@ -11,9 +11,9 @@
             <Image :src="item.image"  col="0" height="50"/>
             <StackLayout col="1" paddingLeft="5">
               <label :text="item.name" class="h2"/>
-              <label :text="item.categoryName" class="p"/>
+              <label :text="item.categoryName" class="h3"/>
             </StackLayout>
-            <Label :text="item.price" class="p" col="3"/>
+            <Label :text="item.price" class="h3" col="3"/>
           </GridLayout>
         </v-template>
       </RadListView>

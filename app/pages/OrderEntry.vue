@@ -23,7 +23,7 @@
                paddingRight="5" paddingLeft="25" @tap="addToOrder(item, 1)">
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <label :text="item.name" class="h2" col="1"/>
-                <label :text="item.price" class="p" col="2"/>
+                <label :text="item.price" class="h3" col="2"/>
              </GridLayout>
         </v-template>
       </Accordion>

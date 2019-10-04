@@ -4,16 +4,22 @@
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="categories"/>
     </ActionBar>
-    <StackLayout padding="10">
-      <RadListView for="item in itemList" height="100%">
+    <GridLayout rows="*, 50" class="p-10">
+      <RadListView for="item in itemList" height="100%" row="0">
           <v-template name="header">
-            <GridLayout columns="50, 10, *, auto" rows="*" padding="5">
-              <StackLayout col="2">
-                <label text="categoryName"/>
-                <label text="prepareArea"/>
-              </StackLayout>
-              <label text="nbrOfProducts" col="3"/>
-            </GridLayout>
+            <StackLayout>
+              <GridLayout columns="60, *, auto" rows="*">
+                <StackLayout col="1">
+                  <label :text="$t('category') + ' ' + $t('name')"
+                      class="h3"/>
+                  <label :text="$t('preparation')"
+                      class="h3"/>
+                </StackLayout>
+                <label :text="$t('nbrOf') + $t('products')"
+                        col="2" class="h3"/>
+              </GridLayout>
+              <StackLayout class="hr-dark m-5"/>
+            </StackLayout>
           </v-template>
           <v-template>
             <GridLayout columns="50, 10, *, auto, 10, auto" rows="*" 
@@ -31,8 +37,8 @@
           <v-template name="footer">
             <Label :text="'Total categories: ' + itemList.length"/>
           </v-template>
-        </RadListView>
-      </StackLayout>
+      </RadListView>
+    </GridLayout>
   </Page>
 </template>
 
