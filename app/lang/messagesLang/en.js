@@ -162,6 +162,7 @@ export default {
     prepared : 'prepared',
     prepareOrders: 'Prepare Orders',
     prepLoc: 'Prep.Loc',
+    price: 'Price',
     print: 'Print',
     product: 'Product',
     products: 'Products',

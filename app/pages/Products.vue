@@ -4,16 +4,23 @@
       <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
             :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
     </ActionBar>
-    <GridLayout rows="*, 50" padding="10">
+    <GridLayout rows="*, 50" class="p-10">
       <RadListView for="item in itemList" row="0">
         <v-template name="header">
-          <GridLayout columns="50, *, auto" rows="*">
-            <StackLayout col="1">
-              <label text="Product Name" class="p"/>
-              <label text="Category Name" class="p"/>
-            </StackLayout>
-            <label text="Price" col="3" class="p"/>
-          </GridLayout>
+          <StackLayout>
+            <GridLayout columns="50, *, auto" rows="*">
+              <Image src="~/assets/images/search.png" 
+                width="30" col="0" @tap="searchTap"/>
+              <StackLayout col="1">
+                <label :text="$t('product') + ' ' + $t('name')"
+                    class="p"/>
+                <label :text="$t('category') + ' ' + $t('name')"
+                    class="p"/>
+              </StackLayout>
+              <label :text="$t('price')" col="2" class="p"/>
+            </GridLayout>
+            <StackLayout class="hr-dark m-5"/>
+        </StackLayout>
         </v-template>
         <v-template>
           <GridLayout columns="50, *, auto" rows="*"
@@ -21,7 +28,7 @@
                         {props: {item: Object.assign({},item)}})"
                 @longPress="onDeleteTap(item)">
             <Image :src="item.image"  col="0" height="50"/>
-            <StackLayout col="1" paddingLeft="5">
+            <StackLayout col="1" class="m-l-10">
               <label :text="item.name" class="h2"/>
               <label :text="item.categoryName" class="p"/>
             </StackLayout>
@@ -29,7 +36,7 @@
           </GridLayout>
         </v-template>
         <v-template name="footer">
-          <Label :text="'Total products: ' + itemList.length"/>
+          <Label :text="'Total products: ' + itemList.length" class="footnote"/>
         </v-template>
       </RadListView>
     </GridLayout>
@@ -40,6 +47,7 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import ProductAdd from './modalPages/ProductAdd'
 import Confirm from './modalPages/Confirm'
+import Search from './modalPages/Search'
 import general from '~/mixins/general'
 
 export default {
@@ -53,6 +61,15 @@ export default {
   methods: {
     onAddTap() { //get new item and insert sorted into list
       this.$showModal(ProductAdd)
+    },
+    searchTap(item) {
+      this.$showModal(Search,{ props: {
+          message: 'Search on products', item: {name: ''}}
+      })
+      .then (data => {
+        if (data) 
+          this.itemList = this.$store.getters.productsSearchName(data.name)
+      })
     },
     onDeleteTap(item) {
       this.$showModal(Confirm,{ props: {

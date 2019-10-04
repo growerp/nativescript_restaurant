@@ -332,6 +332,10 @@ const getters = {
   productById: state => id => {
     return state.products.find(o => o.productId === id)
   },
+  productsSearchName: state => name => {
+    return state.products.filter(
+        o => o.name.toLowerCase().indexOf(name.toLowerCase()) > -1)
+  }
 }
 // export this module.
 export default {
