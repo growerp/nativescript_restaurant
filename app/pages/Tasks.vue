@@ -15,11 +15,11 @@
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <StackLayout col="1">
                   <label :text="item.workEffortName" class="h2"/>
-                  <label :text="item.userFullName" class="p"/>
+                  <label :text="item.userFullName" class="h3"/>
                 </StackLayout>
                 <StackLayout col="2">
                   <label :text="item.priority" class="h2"/>
-                  <label :text="$t(item.statusId)" class="p"/>
+                  <label :text="$t(item.statusId)" class="h3"/>
                 </StackLayout>
               </GridLayout>
             </v-template>
@@ -34,11 +34,11 @@
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <StackLayout col="1">
                   <label :text="item.workEffortName" class="h2"/>
-                  <label :text="item.userFullName" class="p"/>
+                  <label :text="item.userFullName" class="h3"/>
                 </StackLayout>
                 <StackLayout col="2">
                   <label :text="item.priority" class="h2"/>
-                  <label :text="$t(item.statusId)" class="p"/>
+                  <label :text="$t(item.statusId)" class="h3"/>
                 </StackLayout>
               </GridLayout>
             </v-template>

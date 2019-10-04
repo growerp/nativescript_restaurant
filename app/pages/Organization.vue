@@ -6,12 +6,10 @@
         header="companyEmplCust"/>
     </ActionBar>
 
-    <TabView :selectedIndex="currentTab" paddingTop="10"
-        @selectedIndexChange="tabChange">
+    <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('company')">
-        <GridLayout rows="auto, *, 50">
-          <GridLayout width="100%" columns="100,30,*" rows="50,50"
-                padding="20" row="0">
+        <GridLayout rows="auto, *, 50" class="p-10">
+          <GridLayout width="100%" columns="100,30,*" rows="50,50" row="0">
             <Image ref="itemForm" :src="itemImage" width="100" height="100"
                 col="0" row="0" rowSpan="2"/>
             <Button class="button" :text="$t('copyFromGal')"
@@ -25,18 +23,34 @@
       </TabViewItem>
 
       <TabViewItem :title="$t('employee') + ' max:' + subscribedUsers()">
-        <GridLayout rows="*, 50">
+        <GridLayout rows="*, 50" class="p-10">
           <RadListView for="item in employees" row="0">
+            <v-template name="header">
+              <StackLayout>
+                <GridLayout columns="60, *, auto" rows="*">
+                  <Image src="~/assets/images/search.png"
+                    width="30" col="0" @tap="searchTap"/>
+                  <StackLayout col="1">
+                    <label :text="$t('employee') + ' ' + $t('name')"
+                        class="h3"/>
+                    <label :text="$t('email')"
+                        class="h3"/>
+                  </StackLayout>
+                  <label :text="$t('userGroup')" col="2" class="h3"/>
+                </GridLayout>
+                <StackLayout class="hr-dark m-5"/>
+              </StackLayout>
+            </v-template>
             <v-template>
               <GridLayout columns="50, *, auto" rows="*" class="item"
-                    paddingRight="5" paddingLeft="5"  @tap="onItemTap(item)"
+                    @tap="onItemTap(item)"
                     @longPress="onDeleteTap(item)">
                 <Image :src="item.image" col="0" class="thumbnail"/>
-                <StackLayout col="1" paddingLeft="10">
+                  <StackLayout col="1" class="m-l-10">
                     <label :text="item.firstName + ' ' + item.lastName"
                       class="h2"/>
-                    <label :text="item.emailAddress" class="p"/>
-                </StackLayout>
+                    <label :text="item.emailAddress" class="h3"/>
+                  </StackLayout>
                 <label :text="item.groupDescription" col="2"/>
               </GridLayout>
             </v-template>
@@ -45,18 +59,34 @@
       </TabViewItem>
 
       <TabViewItem :title="$t('customer')">
-        <GridLayout rows="*, 50">
+        <GridLayout rows="*, 50" class="p-10">
           <RadListView for="item in customers" row="0">
+            <v-template name="header">
+              <StackLayout>
+                <GridLayout columns="60, *, auto" rows="*">
+                  <Image src="~/assets/images/search.png" 
+                    width="30" col="0" @tap="searchTap"/>
+                  <StackLayout col="1">
+                    <label :text="$t('customer') + ' ' + $t('name')"
+                        class="h3"/>
+                    <label :text="$t('email')"
+                        class="h3"/>
+                  </StackLayout>
+                  <label :text="$t('externalId')" col="2" class="h3"/>
+                </GridLayout>
+                <StackLayout class="hr-dark m-5"/>
+              </StackLayout>
+            </v-template>
             <v-template>
               <GridLayout columns="50, *, auto" rows="*" class="item"
-                  paddingRight="5" paddingLeft="5"  @Tap="onItemTap(item)"
-                    @longPress="OnDeleteTap(item)">
+                  @Tap="onItemTap(item)"
+                    @longPress="onDeleteTap(item)">
                 <Image :src="item.image"
                     col="0" class="thumbnail"/>
-                <StackLayout col="1" paddingLeft="10">
-                    <label :text="item.firstName + ' ' + item.lastName"
-                        class="h2"/>
-                    <label :text="item.emailAddress" class="p"/>
+                <StackLayout col="1" class="m-l-10">
+                  <label :text="item.firstName + ' ' + item.lastName"
+                      class="h2"/>
+                  <label :text="item.emailAddress" class="h3"/>
                 </StackLayout>
                 <StackLayout col="2">
                   <label :text="item.externalId"/>
@@ -68,9 +98,8 @@
       </TabViewItem>
 
       <TabViewItem :title="$t('myInformation')">
-        <GridLayout rows="auto, *, auto, 50">
-          <GridLayout width="100%" columns="100,30,*" rows="50,50" 
-                padding="20" row="0">
+        <GridLayout rows="auto, *, auto, 50" class="p-10">
+          <GridLayout width="100%" columns="100,30,*" rows="50,50" row="0">
             <Image ref="itemForm" :src="itemImage" width="100" height="100"
                 col="0" row="0" rowSpan="2"/>
             <Button class="button" :text="$t('copyFromGal')"
@@ -94,6 +123,7 @@ import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import UserAdd from './modalPages/UserAdd'
 import Confirm from './modalPages/Confirm'
+import Search from './modalPages/Search'
 import passwordUpdate from './modalPages/PasswordUpdate'
 const platformModule = require("tns-core-modules/platform")
 export default {
@@ -133,8 +163,6 @@ export default {
           { name: 'newPassword', index: 7},
           { name: 'newPasswordVerify', index: 8},
         ],
-        save: false,
-        plus: false
       },
       itemComp: Object.assign({},this.$store.getters.company),
       itemMetaComp: {
@@ -149,6 +177,8 @@ export default {
               displayName: 'Currency (enter a request to change)'},
         ]
       },
+      save: false,
+      plus: false
     }
   },
   created() {
@@ -183,6 +213,25 @@ export default {
     onItemTap (item) {
         this.$navigateTo(this.$routes.UserDetail,
           { props: {  item: item}})
+    },
+    searchTap() {
+      if (this.currentTab == 1) {
+        this.$showModal(Search,{ props: {
+            message: 'employeeSearch', item: {name: ''}}
+        })
+        .then (data => {
+          if (data) 
+            this.employees = this.$store.getters.employeesSearchName(data.name)
+        })}
+      if (this.currentTab == 2) {
+        this.$showModal(Search,{ props: {
+            message: 'customerSearch', item: {name: ''}}
+        })
+        .then (data => {
+          if (data) 
+          console.log("searching with" + JSON.stringify(data))
+            this.customers = this.$store.getters.customersSearchName(data.name)
+        })}
     },
     onActionTap() {
       switch(this.currentTab) {
@@ -233,10 +282,14 @@ export default {
       }).then (data => {
         if (data) {
           this.$backendService.deleteUser(item.partyId)
-          this.editedItem.verb = 'delete'
-          this.$store.commit(eval(this.roleTypeId.toLowerCase), 
-              { partyId: item.partyId})
-      }})
+          if(this.currentTab == 2)
+            this.$store.commit('customer', 
+              {verb: 'delete', partyId: item.partyId})
+          if(this.currentTab == 1)
+            this.$store.commit('employee', 
+              {verb: 'delete', partyId: item.partyId})
+        }
+      })
     },
     onPasswordTap() {
       this.$showModal(passwordUpdate, {props: {username: this.item.username,

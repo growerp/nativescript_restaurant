@@ -7,21 +7,25 @@
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('preparation')">
-        <GridLayout rows="* ,50">
+        <GridLayout rows="* ,50" class="p-10">
           <RadListView for="item in preps" row="0"><!-- @itemTap not work on IOS -->
             <v-template name="header">
-              <GridLayout columns="80, *, auto" rows="*" padding="5">
-                  <label text="Area Name" col="1" class="p"/>
-                  <label text="Categories" col="2" class="p"/>
-              </GridLayout>
+              <StackLayout>
+                <GridLayout columns="60, *, auto" rows="*">
+                    <label :text="$t('area') + ' ' + $t('name')"
+                        col="1" class="h3"/>
+                    <label :text="$t('nbrOf') + $t('categories')"
+                        col="2" class="h3"/>
+                </GridLayout>
+                <StackLayout class="hr-dark m-5"/>
+              </StackLayout>
             </v-template>
             <v-template>
-              <GridLayout columns="50, *, auto" rows="*" padding="10"
+              <GridLayout columns="50, *, auto" rows="*"
                   @tap="$navigateTo($routes.PrepDetail,{props: {item: item}})"
                   @longPress="onPrepAreaDeleteTap(item)">
                 <Image :src="item.image" col="0" class="thumbnail"/>
-                <label :text="item.description" class="h2" col="1"
-                  paddingLeft="10"/>
+                <label :text="item.description" class="h2 m-l-10" col="1"/>
                 <label :text="item.nbrOfCatg" class="h2" col="2"
                       :visibility="item.nbrOfCatg>0?'visible':'hidden'"/>
               </GridLayout>
@@ -30,21 +34,25 @@
         </GridLayout>
       </TabViewItem>
       <TabViewItem :title="$t('tableAreas')">
-        <GridLayout rows="* ,50">
+        <GridLayout rows="* ,50" class="p-10">
           <RadListView for="item in areas" row="0">
             <v-template name="header">
-              <GridLayout columns="80, *, auto" rows="*" padding="5">
-                <label text="Area Name" col="1" class="p"/>
-                <label text="Tables" col="2" class="p"/>
-              </GridLayout>
+              <StackLayout>
+                <GridLayout columns="60, *, auto" rows="*">
+                  <label :text="$t('area') + ' ' + $t('name')"
+                      col="1" class="h3"/>
+                  <label :text="$t('nbrOf') + $t('tables')"
+                      col="2" class="h3"/>
+                </GridLayout>
+                <StackLayout class="hr-dark m-5"/>
+              </StackLayout>
             </v-template>
             <v-template>
-              <GridLayout columns="50, *, auto" rows="*"  padding="10"
+              <GridLayout columns="50, *, auto" rows="*"
                   @tap="$navigateTo($routes.AreaDetail,{props:{item:item}})"
                   @longPress="onAccomAreaDeleteTap(item)">
                 <Image :src="item.image" col="0" class="thumbnail"/>
-                <label :text="item.description" class="h2" col="1"
-                    paddingLeft="10"/>
+                <label :text="item.description" class="h2 m-l-10" col="1"/>
                 <label :text="item.nbrOfSpots" class="h2" col="2" 
                     :visibility="item.nbrOfSpots>0?'visible':'hidden'"/>
               </GridLayout>

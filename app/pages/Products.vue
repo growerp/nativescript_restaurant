@@ -8,19 +8,19 @@
       <RadListView for="item in itemList" row="0">
         <v-template name="header">
           <StackLayout>
-            <GridLayout columns="50, *, auto" rows="*">
+            <GridLayout columns="60, *, auto" rows="*">
               <Image src="~/assets/images/search.png" 
                 width="30" col="0" @tap="searchTap"/>
               <StackLayout col="1">
                 <label :text="$t('product') + ' ' + $t('name')"
-                    class="p"/>
+                    class="h3"/>
                 <label :text="$t('category') + ' ' + $t('name')"
-                    class="p"/>
+                    class="h3"/>
               </StackLayout>
-              <label :text="$t('price')" col="2" class="p"/>
-            </GridLayout>
-            <StackLayout class="hr-dark m-5"/>
-        </StackLayout>
+              <label :text="$t('price')" col="2" class="h3"/>
+             </GridLayout>
+             <StackLayout class="hr-dark m-5"/>
+          </StackLayout>
         </v-template>
         <v-template>
           <GridLayout columns="50, *, auto" rows="*"
@@ -30,9 +30,9 @@
             <Image :src="item.image"  col="0" height="50"/>
             <StackLayout col="1" class="m-l-10">
               <label :text="item.name" class="h2"/>
-              <label :text="item.categoryName" class="p"/>
+              <label :text="item.categoryName" class="h3"/>
             </StackLayout>
-            <Label :text="item.price" class="p" col="2"/>
+            <Label :text="item.price" class="h3" col="2"/>
           </GridLayout>
         </v-template>
         <v-template name="footer">
@@ -62,9 +62,9 @@ export default {
     onAddTap() { //get new item and insert sorted into list
       this.$showModal(ProductAdd)
     },
-    searchTap(item) {
+    searchTap() {
       this.$showModal(Search,{ props: {
-          message: 'Search on products', item: {name: ''}}
+          message: 'productSearch', item: {name: ''}}
       })
       .then (data => {
         if (data) 

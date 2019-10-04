@@ -20,7 +20,7 @@
                   verticalAlignment="center"/>
                 <StackLayout col="1">
                   <Label :text="item.table" padding="10" class="h3"/>
-                  <label :text="item.firstName + ' ' + item.lastName" class="p"/>
+                  <label :text="item.firstName + ' ' + item.lastName" class="h3"/>
                 </StackLayout>
                 <Label :text="item.nbrOfGuests" col="2" padding="10"/>
                 <Label :text="item.grandTotal" col="3" padding="10"/>

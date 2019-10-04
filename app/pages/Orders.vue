@@ -50,7 +50,7 @@
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <StackLayout col="2">
                   <Label :text="item.prepDescription" class="h2"/>
-                  <label :text="$t('quantity') + ': ' + item.totalQuantity" class="p"/>
+                  <label :text="$t('quantity') + ': ' + item.totalQuantity" class="h3"/>
                 </StackLayout>
                 <Label :text="item.description + '-' + item.spotNumber"
                     paddingRight="20" class="h2" col="3"/>
