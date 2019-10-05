@@ -88,8 +88,10 @@
           if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
           else {
             if (platformModule.isIOS) { // returns an index instead of value so change
-              this.editedItem.description = this.prepAreas[parseInt(this.editedItem.description,10)]}
-            this.editedItem.preparationAreaId = this.$store.getters.preparationAreaByDesc(
+              this.editedItem.description = 
+                  this.prepAreas[parseInt(this.editedItem.description,10)]}
+            this.editedItem.preparationAreaId =
+              this.$store.getters.preparationAreaByDesc(
                   this.editedItem.description).preparationAreaId 
             this.$backendService.updateCategory(this.editedItem)
             this.editedItem.verb = 'update'

@@ -68,13 +68,13 @@
                 verb: 'add',
                 productId: result.data.productId,
                 name: this.editedItem.name,
-                image: global.noImage,
                 price: this.editedItem.price,
+                image: global.noImage,
                 productCategoryId: this.editedItem.productCategoryId,
                 categoryName: this.editedItem.categoryName, 
               })
-            })
             this.$modal.close()
+            })
           }
         }
       }
