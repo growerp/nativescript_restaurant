@@ -258,7 +258,10 @@
             .catch( error => {
               this.processing = false
               console.log("==login==error: " + JSON.stringify(error.response))
-              this.note(JSON.stringify(error.response.data.errors))
+              if (error.response.data.errors)
+                this.note(JSON.stringify(error.response.data.errors))
+              else if (error.response.status == null)
+                this.serverProblem
               this.$navigateTo(this.$routes.Login, {clearHistory: true})
             })
           },

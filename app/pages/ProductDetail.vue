@@ -65,19 +65,18 @@ export default {
         if (!this.editedItem.name) this.note(this.$t('nameIsRequired'))
         else if (!this.editedItem.price) this.note(this.$t('enterPrice'))
         else {
-          const platformModule = require("tns-core-modules/platform")
           if (platformModule.isIOS) { // returns an index instead of value so change
             this.editedItem.categoryName = 
-                    categries[parseInt(this.editedItem.categoryName,10)]}
+                this.categories[parseInt(this.editedItem.categoryName,10)]}
           this.editedItem.productCategoryId = 
               this.$store.getters.productCategoryByDesc(
                   this.editedItem.categoryName).productCategoryId
           this.$backendService.updateProduct(this.editedItem)
           this.editedItem.verb = 'update'
           this.$store.commit('product', this.editedItem)
+          this.hideKeyboard()
           }
       }
-      this.hideKeyboard()
       this.$navigateBack()
     },
   }

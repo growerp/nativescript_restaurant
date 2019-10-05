@@ -246,7 +246,7 @@ const getters = {
     return state.accommodationAreas.find(o => o.description === desc)
   },
   accommodationAreaById: state => id => {
-    result = state.accommodationAreas.find(o => o.accommodationAreaId === id)
+    let result = state.accommodationAreas.find(o => o.accommodationAreaId === id)
     return typeof(result) != "undefined" ? result : -1
   },
   accommodationAreasDesc: state => (blank=true) => {
@@ -298,11 +298,11 @@ const getters = {
   return catAndProd
   },
   productCategoryByDesc: state => desc => {
-    result = state.productCategories.find(o => o.categoryName === desc)
+    let result = state.productCategories.find(o => o.categoryName === desc)
     return typeof(result) != "undefined" ? result : -1
   },
   productCategoryById: state => id => {
-    result = state.productCategories.find(o => o.productCategoryId === id)
+    let result = state.productCategories.find(o => o.productCategoryId === id)
     return typeof(result) != "undefined" ? result : -1
   },
   productCategoriesByPrepId: state => prepId => {
