@@ -4,8 +4,8 @@
       <label :text="message" class="h3" horizontalAlignment="center"
         padding="20" color="red" textWrap="true"/>
       <GridLayout columns="*,*" rows="auto">
-        <Button class="button" :text="$t('cancel')" @tap="$modal.close(false)" col="0"/>
-        <Button class="button" :text="$t('ok')" @tap="$modal.close(true)" col="1"/>
+        <Button class="button" :text="$t(cancel)" @tap="$modal.close(false)" col="0"/>
+        <Button class="button" :text="$t(ok)" @tap="$modal.close(true)" col="1"/>
       </GridLayout>
     </StackLayout></ModalStack>
   </page>
@@ -15,7 +15,9 @@
 export default {
   name: 'Confirm',
   props: {
-    message: String
+    message: String,
+    cancel: {type: String, default: 'cancel'},
+    ok:  {type: String, default: 'ok'}
   },
 }
 

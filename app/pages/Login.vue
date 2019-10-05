@@ -261,7 +261,7 @@
               if (error.response.data.errors)
                 this.note(JSON.stringify(error.response.data.errors))
               else if (error.response.status == null)
-                this.serverProblem
+                this.serverProblem()
               this.$navigateTo(this.$routes.Login, {clearHistory: true})
             })
           },
@@ -354,9 +354,11 @@
             })
           },
 
-          serverProblem(message) {
+          serverProblem(message=this.$t('connError')) {
             this.$showModal(Confirm,{ props: {
-                message: this.$t('serverNotAvailable') }
+                message: this.$t('serverNotAvailable'),
+                ok: 'retry',
+                cancel: 'exit' }
             })
             .then (data => {
                 if (data) this.$navigateTo(this.$routes.Login, {clearHistory: true})
