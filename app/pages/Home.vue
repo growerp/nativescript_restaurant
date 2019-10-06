@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" header="dashBoard"/>
-        <!--  :reload="true" :onActionTap="backToDefault"/-->
+      <myActionBar :openDrawer="openDrawer" header="dashBoard"
+        :reload="true" :onActionTap="backToDefault"/>
     </ActionBar>
     <StackLayout padding="20">
       <RadListView for="item in dashBoard" @itemTap="onItemTap"
@@ -42,10 +42,10 @@ export default {
   },
   created() {
     this.hideKeyboard()
-//      if (appSettings.getString('dashBoard')) // need fixing
-//        this.dashBoard = appSettings.getString('dashBoard')
-//      else 
-    this.backToDefault()
+      if (appSettings.getString('dashBoard'))
+        this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
+      else 
+        this.backToDefault()
   },
   methods: {
     onItemReordered(args) {
@@ -74,7 +74,8 @@ export default {
         : {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),
               pageName: 'MyInfo', pageTab: 0}
       ]
-      //  appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
+      appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
+      this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
     },
     onItemTap(args) {
       this.$navigateTo(eval("this.$routes." + args.item.pageName),

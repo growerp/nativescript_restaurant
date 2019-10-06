@@ -6,13 +6,13 @@
       <StackLayout orientation="horizontal" class="m-5"
         v-for="(page, i) in pages" 
         v-show="page.show==='employee' || (page.show==='admin' && 
-            $store.getters.currentEmployeeUserGroupId==='GROWERP_M_ADMIN')">
+            $store.getters.currentEmployeeUserGroupId==='GROWERP_M_ADMIN')"
+          :key="i">
         <Image :src="page.image" height="30"/>
         <Label
           @tap="menuAction(page.component, page.action)"
           class="h3 m-5"
           :text="page.title" textWrap="true"
-          :key="i"
         />
       </StackLayout>
       <Button class="drawer-close-button" 
