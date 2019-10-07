@@ -4,9 +4,9 @@
       <myActionBar :openDrawer="openDrawer" header="dashBoard"
         :reload="true" :onActionTap="backToDefault"/>
     </ActionBar>
-    <StackLayout padding="20">
+     <GridLayout rows="*, 50" class="p-10">
       <RadListView for="item in dashBoard" @itemTap="onItemTap"
-          itemReorder="true" @itemReordered="onItemReordered" 
+          itemReorder="true" @itemReordered="onItemReordered" row="0" 
           layout="grid" itemHeight="100"><!--itemHeight for ios -->
         <v-template>
           <StackLayout orientation="vertical" padding="10">
@@ -15,7 +15,7 @@
           </StackLayout>
         </v-template>
       </RadListView>
-    </StackLayout>
+     </GridLayout>
   </Page>
 </template>
 

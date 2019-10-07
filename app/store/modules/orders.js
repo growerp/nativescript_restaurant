@@ -24,15 +24,43 @@ const state = {
       quantity: '',
       image: ''
     }]
-}],
+  }],
+  ordersAndItemsByPrepAreas: [] //layout same as openorders
 }
 
 const mutations = {
   openOrders(state, value) {
     state.openOrders = value 
   },
+  ordersAndItemsByPrepAreas(state, value) {
+    state.ordersAndItemsByPrepAreas = value
+  },
+  ordersAndItemsByPrepArea(state,value) { // need orderId and prepId
+    let index = state.ordersAndItemsByPrepAreas.findIndex(
+      o => o.preparationAreaId === value.preparationAreaId &&
+      o.orderId === value.orderId)
+    state.ordersAndItemsByPrepAreas.splice(index,1)
+  }
 }
 const getters = {
+  preparationAreaOrdersById: state => id => {
+    return state.ordersAndItemsByPrepAreas.filter(
+      o => o.preparationAreaId === id && o.partStatusId === 'OrderOpen')
+  },
+  preparationAreaHasOrders: state => id => {
+    return state.ordersAndItemsByPrepAreas.filter(
+      o => o.preparationAreaId === id && o.partStatusId === 'OrderOpen').length 
+  },
+  serveOrders: state => {
+      state.ordersAndItemsByPrepAreas.filter(
+      o => o.partStatusId === 'OrderPlaced')
+      return state.ordersAndItemsByPrepAreas.filter(
+        o => o.partStatusId === 'OrderPlaced')
+    },
+  serveHasOrders: state => {
+    return state.ordersAndItemsByPrepAreas.filter(
+      o => o.partStatusId === 'orderPlaced').length
+  },
   openOrders: state => {
     return state.openOrders
   },

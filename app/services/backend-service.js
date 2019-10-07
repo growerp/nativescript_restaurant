@@ -233,6 +233,8 @@ export default class BackendService {
   async getOrder(orderId) {
     return await restPost.post('s1/growerp/GetOrder',
       { orderId: orderId})}
+  async GetOrdersAndItemsByPrepAreas() {
+    return await restGet.get('s1/growerp/GetOrdersAndItemsByPrepAreas')}
   async getOrdersAndItems(statusId, prepId = null) {
     return await restPost.post('s1/growerp/GetOrdersAndItems',
       { statusId: statusId, preparationAreaId: prepId})}
@@ -313,15 +315,17 @@ export default class BackendService {
       restGet.get('s1/growerp/GetAccommodationSpots'),
       restGet.get('s1/growerp/GetProductCategories'),
       restGet.get('s1/growerp/GetProducts'),
+      restGet.get('s1/growerp/GetOrdersAndItemsByPrepAreas'),
       restPost.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
     ])
     .then(axios.spread(function ( GetPreparationAreas,GetAccommodationAreas,GetAccommodationSpots,
-      GetProductCategories, GetProducts, GetOrdersItemsPartySpot) {
+      GetProductCategories, GetProducts, GetOrdersAndItemsByPrepAreas, GetOrdersItemsPartySpot) {
         store.commit("preparationAreas", GetPreparationAreas.data.preparationAreas)
         store.commit("accommodationAreas", GetAccommodationAreas.data.accommodationAreas)
         store.commit("accommodationSpots", GetAccommodationSpots.data.accommodationSpots)
         store.commit("productCategories", GetProductCategories.data.productCategories)
         store.commit("products", GetProducts.data.products)
+        store.commit("ordersAndItemsByPrepAreas", GetOrdersAndItemsByPrepAreas.data.ordersAndItemsByPrepAreas)
         store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
       }))
   }
