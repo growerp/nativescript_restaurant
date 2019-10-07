@@ -7,13 +7,13 @@
     <TabView :selectedIndex="currentTab" paddingTop="10"
         @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('takeOrder')">
-        <StackLayout>
+        <GridLayout rows="auto, auto, auto, *, 50" class="p-10">
           <Label class="h3" :text="$t('selectTableLocation')"
-                horizontalAlignment="center"/>
+                horizontalAlignment="center" row="0"/>
           <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
-            @propertyCommitted="onHeaderCommitted"/>
-          <label :text="$t('tables')" paddingLeft="15"/>
-          <RadListView for="table in tableMatrix">
+            @propertyCommitted="onHeaderCommitted" row="1"/>
+          <label :text="$t('tables')" paddingLeft="15" row="2"/>
+          <RadListView for="table in tableMatrix" row="3">
             <v-template>
               <GridLayout columns="*, *, *, *, *, *" rows="*">
                 <label :text="table[0]?table[0].spotNumber:''" class="h2"
@@ -37,11 +37,11 @@
               </GridLayout>
             </v-template>
           </RadListView>
-        </StackLayout>
+        </GridLayout>
       </TabViewItem>
       <TabViewItem :title="$t('serve')">
-        <StackLayout>
-          <Accordion row="1" col="0" colSpan="3" height="80%"
+        <GridLayout rows="*, auto, 50" class="p-10">
+          <Accordion row="0" height="100%"
               :visibility="servOrders.length ? 'visible':'collapse'"
                 ref="accordion" allowMultiple="false"
                 for="item of servOrders"  childItems="items">
@@ -67,18 +67,18 @@
               </GridLayout>
             </v-template>
           </Accordion>
-          <GridLayout columns="*" rows="*" height="80%"
+          <GridLayout columns="*" rows="*" height="100%" row="0"
                 :visibility="servOrders.length ? 'collapse':'visible'">
-              <Label class="message" col="0" row="0"
+              <Label class="message" row="0"
               :text="$t('noOrdersTo') + ' ' + $t('serve')"/>
           </GridLayout>
           <Button class="button" :text="$t('refresh')" @tap="refresh()"
-                  width="50%"/>
-        </StackLayout>
+                  width="50%" row="1"/>
+        </GridLayout>
       </TabViewItem>
       <TabViewItem :title="$t('bill')">
-        <StackLayout>
-          <Accordion row="1" col="0" colSpan="3" height="80%"
+        <GridLayout rows="*, auto, 50" class="p-10">
+          <Accordion row="0" height="80%"
                 ref="accordion" allowMultiple="false"
                 :visibility="billOrders.length ? 'visible':'collapse'"
                 for="item of billOrders"  childItems="items">
@@ -103,14 +103,14 @@
               </GridLayout>
             </v-template>
           </Accordion>
-          <GridLayout columns="*" rows="*" height="80%"
+          <GridLayout columns="*" rows="*" height="80%" row="0"
                 :visibility="billOrders.length ? 'collapse':'visible'">
             <Label class="message" col="0" row="0"
                 :text="$t('noOrdersTo') + ' ' + $t('bill')"/>
           </GridLayout>
           <Button class="button" :text="$t('refresh')" @tap="refresh()"
-                  width="50%"/>
-        </StackLayout>
+                  width="50%" row="1"/>
+        </GridLayout>
       </TabViewItem>
     </TabView>
   </Page>
@@ -146,7 +146,7 @@ export default {
       areaDescription: this.$store.getters.accommodationAreas[0].description,
       tableMatrix: this.makeTableMatix(
               this.$store.getters.accommodationAreas[0].accommodationAreaId),
-      servOrders: [[]],
+      servOrders: this.$store.getters.serveOrders,
       billOrders: [[]],
     }
   },
@@ -157,8 +157,6 @@ export default {
     } else {
       this.currentTab = this.startTab
       this.areaId = this.$store.getters.accommodationAreas[0].accommodationAreaId,
-      this.$backendService.getOrdersAndItems('serv').then( result => {
-          this.servOrders = result.data.ordersAndItems})
       this.$backendService.getOrdersAndItems('bill').then( result => {
           this.billOrders = result.data.ordersAndItems})
     }
