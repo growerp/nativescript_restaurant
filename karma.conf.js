@@ -1,9 +1,3 @@
-
-// just added these to the devDependencies for this test.....
-// should only add when testing?
-//    "clean-webpack-plugin": "^0.1.19",
-//    "css-loader": "^1.0.0"
-
 module.exports = function (config) {
   const options = {
 
