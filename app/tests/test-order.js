@@ -37,15 +37,15 @@ describe('#Order()', function () {
         });
     });
 
-    it('createOrder', async function () {
-            await backendService.getAllProductInfo().then(function(result) {
-                product = store.getters.products[0]; // Now can't get data from function initData()
-            });
-            orderItems.push(product)
-            orderItems.quantity = '1';
-            await backendService.createSalesOrder(ordertest, orderItems).then(function(result) {
-                orderId = result.data.orderId;
-            });
-            assert.equal(orderId, !null)
-    });
+    /*it('createOrder', async function () {
+        await backendService.getAllProductInfo().then(function(result) {
+            product = store.getters.products[0]; // Now can't get data from function initData()
+        });
+        orderItems.push(product)
+        orderItems.quantity = '1';
+        await backendService.createSalesOrder(ordertest, orderItems).then(function(result) {
+            orderId = result.data.orderId;
+        });
+        assert.equal(orderId, !null)
+    });*/
 });
