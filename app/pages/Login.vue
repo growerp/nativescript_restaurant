@@ -8,7 +8,7 @@
         <GridLayout rows="auto, auto, auto, auto, auto" columns="*,*" width="100%">
           <StackLayout row="0" col="0" colSpan="2"  v-show="isLoggingIn" class="input-field">
             <TextField class="input" :hint="$t('usrNameEmail')" :isEnabled="!processing"
-                autocorrect="false"
+                autocorrect="false" ref="username" 
                 autocapitalizationType="none" v-model="user.name"
                 returnKeyType="next" @returnPress="focusPassword"></TextField>
             <StackLayout class="hr-light"></StackLayout>
