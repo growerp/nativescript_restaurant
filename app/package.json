@@ -4,7 +4,7 @@
   },
   "main": "main",
   "discardUncaughtJsExceptions": true,
-  "name": "GrowERP-Restaurant",
+  "name": "growerp-restaurant",
   "version": "1.0.0",
   "repository": "ssh://awsadmin@antwebsystems.com:55555/GrowERP-Mobile"
 }

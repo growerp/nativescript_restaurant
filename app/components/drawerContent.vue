@@ -76,7 +76,7 @@ export default {
 //            .then(() =>{
               appSettings.remove('apiKey')
               console.log('logged out')
-              this.$navigateTo(this.$routes.Home, {clearHistory: true})
+              this.$navigateTo(this.$routes.Login, {clearHistory: true})
 //            })
 //            exit() // exit caused update of apiKey to be ignored
         }
