@@ -1,4 +1,3 @@
-var expect = require('chai').expect;
 import store from '../store'
 import BackendService from "~/services/backend-service"
 import { isConstructSignatureDeclaration } from 'typescript';
@@ -25,14 +24,14 @@ describe('Test REST API', function() {
             store.commit('moquiToken', result.data.moquiSessionToken)
             backendService.saveToken()
         });
-        expect(resultName).to.equal(user.name);
+        assert.equal(resultName, user.name);
     });
     // Start to test function Abuout Preparation
     it('test create Preparation Area function.', async function() {
         await backendService.createPreparationArea(preparationArea).then(function(result) {
             preparationArea.preparationAreaId = result.data.preparationAreaId;
         });
-        expect(preparationArea.preparationAreaId).to.not.be.null;
+        assert.equal(preparationArea.preparationAreaId, !null)
     });
 
     it('test update Preparation Area function.', async function() {
@@ -42,7 +41,7 @@ describe('Test REST API', function() {
             let obj = JSON.parse(result.config.data);
             descriptionUpdate = obj.description;
         });
-        expect(descriptionUpdate).to.equal(preparationArea.description);
+        assert.equal(descriptionUpdate,preparationArea.description);
     });
 
     it('test delete Preparation Area function.', async function() {
