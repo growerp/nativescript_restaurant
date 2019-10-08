@@ -1,6 +1,5 @@
 import store from '../store'
 import BackendService from "~/services/backend-service"
-import { isConstructSignatureDeclaration } from 'typescript';
 const backendService = new BackendService();
 const appSettings = require("tns-core-modules/application-settings")
 
