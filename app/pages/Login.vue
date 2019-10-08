@@ -262,7 +262,7 @@
                 this.note(JSON.stringify(error.response.data.errors))
               else if (error.response.status == null)
                 this.serverProblem()
-              this.$navigateTo(this.$routes.Login, {clearHistory: true})
+              this.isLoggingIn = true
             })
           },
 
