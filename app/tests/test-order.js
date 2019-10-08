@@ -1,4 +1,3 @@
-var expect = require('chai').expect;
 import store from '../store'
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService();
@@ -47,6 +46,6 @@ describe('#Order()', function () {
             await backendService.createSalesOrder(ordertest, orderItems).then(function(result) {
                 orderId = result.data.orderId;
             });
-            expect(orderId).to.not.be.null;
+            assert.equal(orderId, !null)
     });
 });
