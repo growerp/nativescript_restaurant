@@ -80,9 +80,7 @@ export default {
     },
     onSaveTap() {
       if (this.editedItem) {
-        this.$backendService.updateAccommodationArea(this.editedItem)
-        this.editedItem.verb = 'update'
-        this.$store.commit('accommodationArea', this.editedItem)
+        this.$store.dispatch('updateAccommodationArea', this.editedItem)
       }
       this.hideKeyboard()
       this.$navigateBack()

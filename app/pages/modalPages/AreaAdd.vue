@@ -38,17 +38,8 @@ export default {
     },
     submit() {
       if (this.editedItem != '') {
-        this.$backendService.createAccommodationArea(this.editedItem)
-        .then((result) => {
-          this.$store.commit('accommodationArea', {
-            verb: 'add',
-            description: this.editedItem.description,
-            accommodationAreaId: result.data.accommodationAreaId,
-            accommodationSpots: result.data.accommodationSpots,
-            image: global.noImage,
-            nbrOfSpots: this.editedItem.nbrOfSpots})
-          this.$modal.close()
-        })
+        this.$store.dispatch('createAccommodationArea', this.editedItem)
+        this.$modal.close()
       }
     }
   }

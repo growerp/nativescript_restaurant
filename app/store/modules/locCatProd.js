@@ -1,4 +1,4 @@
-import store from '../../store'
+import store from '~/store'
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService()
 const log = true 
@@ -240,6 +240,50 @@ const mutations = {
   },
 }
 const actions = {
+  createAccommodationArea(state, item) {
+    let item1 = {
+      verb: 'add',
+      description: item.description,
+      image: global.noImage,
+      nbrOfSpots: item.nbrOfSpots}
+    store.commit('accommodationArea', item1)
+    backendService.createAccommodationArea(item)
+    .then((result) => {
+      item1.verb= 'modify'
+      item1.accommodationAreaId = result.data.accommodationAreaId
+      item1.accommodationSpots = result.data.accommodationSpots
+      store.commit('accommodationArea', item1)
+    })
+  },
+  updateAccommodationArea(state, item) {
+    backendService.updateAccommodationArea(item)
+    item.verb = 'update'
+    store.commit('accommodationArea', item)
+  },
+  deleteAccommodationArea(state, id) {
+    backendService.deleteAccommodationArea(id)
+    store.commit('accommodationArea', {
+      verb: 'delete', accommodationAreaId: id})
+  },
+  createPreparationArea(state, item) {
+    let item1 = {
+      verb: 'add',
+      nbrOfCatg: 0,
+      description: item.description,
+      image: global.noImage}
+    store.commit('preparationArea', item1)
+    backendService.createPreparationArea(item)
+    .then( result => {
+      item1.verb = 'update'
+      item1.preparationAreaId = result.data.preparationAreaId
+      store.commit('preparationArea', item1)
+    })
+  },
+  updatePreparationArea(state, item) {
+    backendService.updatePreparationArea(item)
+    item.verb = 'update'
+    store.commit('preparationArea', item)
+  },
   deletePreparationArea(state, id) {
     backendService.deletePreparationArea(id)
     .then(() => {
@@ -247,13 +291,6 @@ const actions = {
           verb: 'delete', preparationAreaId: id})
     })
   },
-  deleteAccommodationArea(state, id) {
-    backendService.deleteAccommodationArea(id)
-    .then(() => {
-      store.commit('accommodationArea', {
-        verb: 'delete', accommodationAreaId: id})
-    })
-  }
 }
 const getters = {
   // accomodation related area related=========================================

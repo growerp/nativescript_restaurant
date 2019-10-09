@@ -177,9 +177,13 @@ const getters = {
     return values
   },
 }
+const  actions = {
+
+}
 // export this module.
 export default {
   state,
   mutations,
-  getters
+  getters,
+  actions
 }

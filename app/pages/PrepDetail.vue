@@ -75,9 +75,7 @@ export default {
       if (this.editedItem) {
         if (!this.editedItem.description) this.note(this.$t('nameIsRequired'))
         else {
-          this.$backendService.updatePreparationArea(this.editedItem)
-          this.editedItem.verb = 'update'
-          this.$store.commit('preparationArea', this.editedItem)
+          this.$store.dispatch('updatePreparationArea', this.editedItem)
         }
       }
       this.hideKeyboard()
