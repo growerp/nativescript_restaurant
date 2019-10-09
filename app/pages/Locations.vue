@@ -34,7 +34,7 @@
         </GridLayout>
       </TabViewItem>
       <TabViewItem :title="$t('tableAreas')">
-        <GridLayout rows="* ,50" class="p-10">
+        <GridLayout rows="* ,50" class="m-10">
           <RadListView for="item in areas" row="0">
             <v-template name="header">
               <StackLayout>
@@ -104,11 +104,8 @@ export default {
         })
         .then (result => {
           if (result) {
-            this.$backendService.deletePreparationArea(
+            this.$store.dispatch('deletePreparationArea',
                 item.preparationAreaId)
-            this.$store.commit('preparationArea', {
-                verb: 'delete',
-                preparationAreaId: item.preparationAreaId})
           }
         })
       }
@@ -118,11 +115,8 @@ export default {
           message: "Delete table area " + item.description + " ?"}
       }).then (data => {
         if (data) {
-          this.$backendService.deleteAccommodationArea(
-              item.accommodationAreaId)
-          this.$store.commit('accommodationArea', {
-              verb: 'delete',
-              accommodationAreaId: item.accommodationAreaId })
+          this.$store.dispatch('deleteAccommodationArea',
+                item.accommodationAreaId)
         }
       })
     },
