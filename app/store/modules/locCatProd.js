@@ -1,4 +1,6 @@
 import store from '../../store'
+import BackendService from "~/services/backend-service"
+const backendService = new BackendService()
 const log = true 
 const state = {
   accommodationAreas: [{
@@ -237,6 +239,22 @@ const mutations = {
     state.products = value
   },
 }
+const actions = {
+  deletePreparationArea(state, id) {
+    backendService.deletePreparationArea(id)
+    .then(() => {
+      store.commit('preparationArea', {
+          verb: 'delete', preparationAreaId: id})
+    })
+  },
+  deleteAccommodationArea(state, id) {
+    backendService.deleteAccommodationArea(id)
+    .then(() => {
+      store.commit('accommodationArea', {
+        verb: 'delete', accommodationAreaId: id})
+    })
+  }
+}
 const getters = {
   // accomodation related area related=========================================
   accommodationAreas: state => {
@@ -341,5 +359,6 @@ const getters = {
 export default {
   state,
   mutations,
-  getters
+  getters,
+  actions
 }
