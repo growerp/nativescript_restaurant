@@ -32,17 +32,8 @@ export default {
     },
     submit() {
       if (this.editedItem != '') {
-        this.$backendService.createPreparationArea(this.editedItem)
-        .then( result => {
-          this.$store.commit('preparationArea', {
-            verb: 'add',
-            preparationAreaId: result.data.preparationAreaId,
-            nbrOfCatg: 0,
-            description: this.editedItem.description,
-            image: global.noImage,
-          })
-          this.$modal.close()
-        })
+        this.$store.dispatch('createPreparationArea', this.editedItem)
+        this.$modal.close()
       }
     }
   }

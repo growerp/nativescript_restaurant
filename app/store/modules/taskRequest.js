@@ -164,9 +164,13 @@ const getters = {
     return typeof(result) != "undefined" ? result : -1
   },
 }
+const actions = {
+  
+}
 // export this module.
 export default {
   state,
   mutations,
-  getters
+  getters,
+  actions
 }

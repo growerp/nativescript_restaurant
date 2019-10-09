@@ -74,9 +74,13 @@ const getters = {
     return state.moquiToken
   },
 }
+const actions = {
+  
+}
 // export this module.
 export default {
   state,
   mutations,
-  getters
+  getters,
+  actions
 }

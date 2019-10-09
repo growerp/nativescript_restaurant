@@ -73,9 +73,12 @@ const getters = {
     return openOrders
   },
 }
-// export this module.
+const actions = {
+  
+}
 export default {
   state,
   mutations,
-  getters
+  getters,
+  actions
 }
