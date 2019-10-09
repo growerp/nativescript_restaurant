@@ -93,10 +93,8 @@
             this.editedItem.preparationAreaId =
               this.$store.getters.preparationAreaByDesc(
                   this.editedItem.description).preparationAreaId 
-            this.$backendService.updateCategory(this.editedItem)
-            this.editedItem.verb = 'update'
-            this.$store.commit('productCategory',this.editedItem)
-            this.hideKeyboard()
+           this.$store.dispatch('updateProductCategory', this.editedItem)
+           this.hideKeyboard()
           }
         }
         this.$navigateBack()

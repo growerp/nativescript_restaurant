@@ -71,11 +71,7 @@ export default {
         })
         .then (data => {
           if (data) {
-            this.$backendService.deleteCategory(
-              item.productCategoryId)
-            this.$store.commit('productCategory', {
-              verb: 'delete', 
-              productCategoryId: item.productCategoryId })
+            this.$store.dispatch('deleteProductCategory', item.productCategoryId)
           }
         })
       }

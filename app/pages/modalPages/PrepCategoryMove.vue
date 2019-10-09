@@ -38,14 +38,9 @@ export default {
   },
   methods: {
     onItemTap(preparationItem) {
-      this.$backendService.updateCategory({
+      this.$store.dispatch('updateProductCategory', {
         productCategoryId: this.productCategory.productCategoryId,
         preparationAreaId: preparationItem.preparationAreaId })
-      this.item.verb = 'update'
-      this.item.preparationAreaId = preparationItem.preparationAreaId
-      this.item.description = preparationItem.description
-      console.log("====update producCategory: " + this.productCategory.categoryName + " old prep:" + this.productCategory.description + " new: " + preparationItem.description)
-      this.$store.commit('productCategory', this.item)
       this.$modal.close()
     }
   },

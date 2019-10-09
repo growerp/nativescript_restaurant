@@ -98,15 +98,10 @@ export default {
       })
       .then (data => {
         if (data) {
-          this.$backendService.deleteAccommodationSpot(
-              table.accommodationSpotId)
-          .then(() => {
-            this.$store.commit('accommodationSpot', {
-                verb: 'delete',
-                accommodationSpotId: table.accommodationSpotId,
-                accommodationAreaId: table.accommodationAreaId})
-            this.makeTableMatix()
-          })
+          this.$store.dispatch('deleteAccommodationSpot', {
+              spotId: table.accommodationSpotId,
+              areaId: table.accommodationAreaId})
+          this.makeTableMatix()
         }
       })
     },
