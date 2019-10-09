@@ -21,10 +21,10 @@
               </StackLayout>
             </v-template>
             <v-template>
-              <GridLayout columns="50, *, auto" rows="*"
+              <GridLayout columns="50, *, auto" rows="*" class="p-5"
                   @tap="$navigateTo($routes.PrepDetail,{props: {item: item}})"
                   @longPress="onPrepAreaDeleteTap(item)">
-                <Image :src="item.image" col="0" class="thumbnail"/>
+                <Image :src="item.image" col="0"/>
                 <label :text="item.description" class="h2 m-l-10" col="1"/>
                 <label :text="item.nbrOfCatg" class="h2" col="2"
                       :visibility="item.nbrOfCatg>0?'visible':'hidden'"/>
@@ -48,10 +48,10 @@
               </StackLayout>
             </v-template>
             <v-template>
-              <GridLayout columns="50, *, auto" rows="*"
+              <GridLayout columns="50, *, auto" rows="*" class="p-5"
                   @tap="$navigateTo($routes.AreaDetail,{props:{item:item}})"
                   @longPress="onAccomAreaDeleteTap(item)">
-                <Image :src="item.image" col="0" class="thumbnail"/>
+                <Image :src="item.image" col="0"/>
                 <label :text="item.description" class="h2 m-l-10" col="1"/>
                 <label :text="item.nbrOfSpots" class="h2" col="2" 
                     :visibility="item.nbrOfSpots>0?'visible':'hidden'"/>
