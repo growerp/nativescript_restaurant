@@ -92,11 +92,13 @@ const mutations = {
       let index = state.accommodationSpots.findIndex(
         o => o.accommodationSpotId === value.accommodationSpotId)
       if (index == -1) {
-        if (log) console.log("===Acoomodation area not found:" + value.accommodationAreaId) }
+        if (log) console.log("===Acommodation area not found:" + value.accommodationAreaId) }
+      else if (verb == 'update') {
+          state.accommodationSpots.splice(index,1,value) }
       else if (verb == 'delete') {
         updateAccommodationSpotCount(value.accommodationAreaId, false)
         state.accommodationSpots.splice(index,1)
-      }
+      }        
     }
     if(log) console.log("=====accommodationspot action: " + verb + 
         ' completed name: ' + value.spotNumber)
@@ -265,6 +267,28 @@ const actions = {
     store.commit('accommodationArea', {
       verb: 'delete', accommodationAreaId: id})
   },
+  createAccommodationSpot(state, item) {
+    let item1 = {
+      verb: "add",
+      accommodationAreaId: item.areaId,
+      descripion: item.description,
+      spotNumber: item.spotNumber,
+      image: global.noImage }
+    store.commit('accommodationSpot',item1)
+    backendService.createAccommodationSpot(item.areaId, item.spotNumber)
+    .then( result => {
+      item1.verb = "update"
+      item1.accommodationSpotId = result.data.accommodationSpotId
+      store.commit('accommodationSpot', item1)
+    })
+  },
+  deleteAccommodationSpot(state, item) {
+    backendService.deleteAccommodationSpot(item.spotId)
+    store.commit('accommodationSpot', {
+      verb: 'delete',
+      accommodationSpotId: item.spotId,
+      accommodationAreaId: item.areaId})
+  },
   createPreparationArea(state, item) {
     let item1 = {
       verb: 'add',
@@ -291,6 +315,34 @@ const actions = {
           verb: 'delete', preparationAreaId: id})
     })
   },
+  createProductCategory(state, item) {
+    let item1 = {
+      verb: 'add',
+      categoryName: item.categoryName,
+      image: global.noImage,
+      preparationAreaId: item.preparationAreaId,
+      description: item.description,
+      nbrOfProducts: '0'
+    }
+    store.commit('productCategory', item1)
+    backendService.createCategory(item)
+    .then((result) => {
+      item1.verb = 'modify'
+      item1.productCategoryId = result.data.productCategoryId,
+      store.commit('productCategory', item1)
+    })
+  },
+  updateProductCategory(state, item) {
+    backendService.updateCategory(item)
+    item.verb = 'update'
+    store.commit('productCategory', item)
+  },
+  deleteProductCategory(state, id) {
+    backendService.deleteCategory(id)
+    store.commit('productCategory', {
+      verb: 'delete', 
+      productCategoryId: id })
+  }
 }
 const getters = {
   // accomodation related area related=========================================

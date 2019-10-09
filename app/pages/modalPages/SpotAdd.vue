@@ -36,20 +36,10 @@ export default {
     },
     submit() {
       if (this.editedItem != '') {
-        this.$backendService.createAccommodationSpot(
-            this.accommodationArea.accommodationAreaId,
-            this.editedItem.spotNumber)
-        .then((result) => {
-          this.$store.commit('accommodationSpot',{
-            verb: "add",
-            accommodationAreaId: this.accommodationArea.accommodationAreaId,
-            descripion: this.accommodationArea.description,
-            accommodationSpotId: result.data.accommodationSpotId,
-            spotNumber: this.editedItem.spotNumber,
-            image: global.noImage
-          })
+        this.$store.dispatch('createAccommodationSpot', {
+            areaId: this.accommodationArea.accommodationAreaId,
+            spotNumber: this.editedItem.spotNumber})
           this.$modal.close()
-        })
       }        
     }
   }

@@ -55,22 +55,11 @@
                 this.editedItem.description =
                     values[parseInt(this.editedItem.description,10)]}}
             else this.editedItem.description = this.prepAreaDescription
-            this.editedItem.preparationAreaId = 
+              this.editedItem.preparationAreaId = 
                 this.$store.getters.preparationAreaByDesc(
                   this.editedItem.description).preparationAreaId
-            this.$backendService.createCategory(this.editedItem)
-            .then((result) => {
-              this.$store.commit('productCategory', {
-                verb: 'add',
-                productCategoryId: result.data.productCategoryId,
-                categoryName: this.editedItem.categoryName,
-                image: global.noImage,
-                preparationAreaId: this.editedItem.preparationAreaId,
-                description: this.editedItem.description,
-                nbrOfProducts: '0'
-              })
+            this.$store.dispatch('createProductCategory', this.editedItem)
             this.$modal.close()
-            })
           }
         }
       }
