@@ -62,7 +62,7 @@
               <GridLayout columns="50, *, auto" rows="*" class="item"
                       paddingRight="5" paddingLeft="25" >
                     <Image :src="item.image"  col="0" class="thumbnail"/>
-                    <Label :text="item.itemDescription" class="h2" col="1"/>
+                    <Label :text="item.description" class="h2" col="1"/>
                     <Label :text="item.quantity" class="h2" col="2"/>
               </GridLayout>
             </v-template>
@@ -83,11 +83,10 @@
                 :visibility="billOrders.length ? 'visible':'collapse'"
                 for="item of billOrders"  childItems="items">
             <v-template name="title">
-              <GridLayout columns="50,*,auto, auto, 5, auto" rows="*" paddingLeft="10">
-                <Image col="0" :src="item.image" class="thumbnail"/>
-                <Label col="1" :text="item.description + '-' + item.spotNumber"
-                    class="h2" paddingLeft="10"/>
-                <Label col="2" :text="item.totalAmount" class="h2" paddingRight="10"/>
+              <GridLayout columns="auto,*,auto, auto, 5, auto" rows="*" class="m-10">
+                <Label col="0" :text="item.placedTime" class="h2"/>
+                <Label col="1" :text="item.table" class="h2" paddingLeft="10"/>
+                <Label col="2" :text="item.grandTotal" class="h2" paddingRight="10"/>
                 <Label class="button" col="3" :text="$t('print')" @tap="print(item)" padding="10"/>
                 <Label class="button" col="5" :text="$t('done')" @tap="setDone(item)" padding="10"/>
               </GridLayout>
@@ -96,10 +95,10 @@
               <GridLayout columns="50, *, 30, 70, 70" rows="*" class="item"
                   paddingRight="5" paddingLeft="25" >
                 <Image :src="item.image"  col="0" class="thumbnail"/>
-                <Label :text="item.itemDescription" class="h2" col="1"/>
+                <Label :text="item.description" class="h2" col="1"/>
                 <Label :text="item.quantity" class="h2" col="2" paddingRight="10"/>
                 <Label :text="item.price" class="h2" col="3" paddingRight="10"/>
-                <Label :text="Number(item.price) * Number(item.quantity)" class="h2" col="4"/>
+                <Label :text="item.totalAmount" class="h2" col="4"/>
               </GridLayout>
             </v-template>
           </Accordion>
@@ -108,7 +107,7 @@
             <Label class="message" col="0" row="0"
                 :text="$t('noOrdersTo') + ' ' + $t('bill')"/>
           </GridLayout>
-          <Button class="button" :text="$t('refresh')" @tap="refresh()"
+          <Button class="button" :text="$t('refresh')" @tap="refresh"
                   width="50%" row="1"/>
         </GridLayout>
       </TabViewItem>
@@ -146,8 +145,8 @@ export default {
       areaDescription: this.$store.getters.accommodationAreas[0].description,
       tableMatrix: this.makeTableMatix(
               this.$store.getters.accommodationAreas[0].accommodationAreaId),
-      servOrders: this.$store.getters.serveOrders,
-      billOrders: [[]],
+      servOrders: this.$store.getters.prepOrdersByStatusId('OrderPlaced'),
+      billOrders: this.$store.getters.ordersByStatusId('OrderApproved')
     }
   },
   created() {
@@ -156,9 +155,7 @@ export default {
       this.$navigateTo(this.$routes.Locations, {props: {startTab: 1}})
     } else {
       this.currentTab = this.startTab
-      this.areaId = this.$store.getters.accommodationAreas[0].accommodationAreaId,
-      this.$backendService.getOrdersAndItems('bill').then( result => {
-          this.billOrders = result.data.ordersAndItems})
+      this.areaId = this.$store.getters.accommodationAreas[0].accommodationAreaId
     }
   },
   methods: {
@@ -173,39 +170,27 @@ export default {
       this.tableMatrix = this.makeTableMatix(this.areaId)
     },
     refresh() {
-      if (this.currentTab == 1) {
-          this.$backendService.getOrdersAndItems('serv').then( result => {
-              this.servOrders = result.data.ordersAndItems})}
-      if (this.currentTab == 2) {
-          this.$backendService.getOrdersAndItems('bill').then( result => {
-              this.billOrders = result.data.ordersAndItems})}
+      if (this.currentTab == 1) // to be served
+        this.servOrders = this.$store.getters.prepOrdersByStatusId('OrderPlaced')
+      if (this.currentTab == 2){ // to be billed
+        this.$store.dispatch('updateOpenOrders').then(() => {
+          this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')
+      })}
     },
     setDone(item) {
-      if (this.currentTab == 1) {
-        for (let i=0; i < this.servOrders.length; i++) {
-          if (this.servOrders[i].orderId == item.orderId) {
-            this.servOrders.splice(i,1)
-            break}}
+      if (this.currentTab == 1) {  // to be served
+        this.$store.dispatch('changeOrderPartStatus', {
+            statusId: 'bill', orderId: item.orderId,
+            partId: item.orderPartSeqId}) 
+        this.servOrders =  this.$store.getters.prepOrdersByStatusId('OrderPlaced')
+        this.note(this.$t('table') + ' ' + item.description + '-' +
+            item.spotNumber + this.$t('isServedFrom') + item.prepDescription)}
+      if (this.currentTab === 2) { // to be billed
+        this.$store.dispatch('changeOrderPartStatus', {
+          statusId: 'completed', orderId: item.orderId}) 
+        this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')
+        this.note(this.$t('table') + ' ' + item.table + this.$t('isNowPaid'))
       }
-      let newStat = 'bill'
-      let partId = item.orderPartSeqId
-      if (this.currentTab === 2) {
-        newStat = 'completed'
-        partId = null
-        for (let i=0; i < this.billOrders.length; i++) {
-          if (this.billOrders[i].orderId == item.orderId) {
-            this.billOrders.splice(i,1); break}}
-      }
-      this.$backendService.changeOrderPartStatus(item.orderId, partId, newStat)
-      .then(() => {
-        if (this.currentTab == 1) {
-          this.note(this.$t('table') + ' ' + item.description + '-' +
-              item.spotNumber + this.$t('isServedFrom') + item.prepDescription)}
-        if (this.currentTab == 2) {
-          this.note(this.$t('table') + ' ' + item.description + '-' +
-                  item.spotNumber + this.$t('isNowPaid'))
-          this.$backendService.getOrdersItemsPartySpot()} //update store
-      })
     },
     print(item) {
       this.$navigateTo(this.$routes.OrderPrint, { props: { orderId: item.orderId}})

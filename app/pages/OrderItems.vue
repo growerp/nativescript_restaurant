@@ -68,7 +68,9 @@ export default {
   },
   methods: {
     saveOrder() {
-      this.$backendService.createSalesOrder(this.orderHeader, this.orderItems)
+      this.$store.dispatch('createSalesOrder', {
+          header: this.orderHeader,
+          items: this.orderItems })
       .then( result => {
         if (this.orderHeader.orderId) {
           this.note(this.$t('orderUpdated') + result.data.orderId +
@@ -77,6 +79,7 @@ export default {
           this.note(this.$t('orderReceived') + result.data.orderId +
               this.$t('appearPrepArea'))
         }
+
       })
       this.$navigateTo(this.$routes.Home)
     },

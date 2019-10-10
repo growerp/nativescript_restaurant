@@ -29,7 +29,7 @@
                 <GridLayout columns="50, *, auto" rows="*" class="item"
                         paddingRight="5" paddingLeft="25" >
                   <Image :src="item.image"  col="0" class="thumbnail"/>
-                  <Label :text="item.itemDescription" class="h2" col="1"/>
+                  <Label :text="item.description" class="h2" col="1"/>
                   <Label :text="item.quantity" class="h2" col="2"/>
                 </GridLayout>
             </v-template>
@@ -69,18 +69,13 @@ export default {
         this.currentTab = args.value
     },
     setDone(item) {
-      this.$backendService.changeOrderPartStatus(
-          item.orderId, item.orderPartSeqId, 'serv')
-      this.$store.commit('ordersAndItemsByPrepArea',
-          {orderId: item.orderId, 
-           preparationAreaId: item.preprarationAreaId})
+      this.$store.dispatch('changeOrderPartStatus', {
+          orderId: item.orderId, 
+          partId: item.orderPartSeqId,
+          statusId: 'serv'})
     },
     refresh() {
-      this.$backendService.GetOrdersAndItemsByPrepAreas()
-      .then((result) => {
-        store.commit("ordersAndItemsByPrepAreasToPrepare", 
-            result.data.ordersAndItemsByPrepAreas)
-      })
+      this.$store.dispatch('updateOrdersAndItemsByPrepAreas', null)
     }
   },
 }

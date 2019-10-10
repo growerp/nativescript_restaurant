@@ -6,7 +6,7 @@
       <RadListView ref="listView" for="item in items" @loaded="onLoaded">
         <v-template>
           <GridLayout columns="*, 30, 70, 70" rows="*" class="item">
-              <Label :text="item.itemDescription" class="h2"
+              <Label :text="item.description" class="h2"
                   col="0" paddingLeft="10"/>
               <Label :text="item.quantity" class="h2" col="1"
                   paddingRight="10"/>

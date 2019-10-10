@@ -11,7 +11,7 @@
             @propertyCommitted="onHeaderCommitted"/>
           <Accordion row="1" col="0" colSpan="3" height="100%"
               ref="accordion" allowMultiple="false"
-              for="item of ordersAndItems" childItems="orderItems">
+              for="item of ordersAndItems" childItems="items">
             <v-template name="title">
               <GridLayout columns="auto, *, auto, auto, 100" rows="*" class="item"
                   paddingRight="5" paddingLeft="5"
@@ -32,7 +32,7 @@
                   paddingRight="5" paddingLeft="5">
                 <label :text="item.description" class="h3" col="1" padding="10"/>
                 <label :text="item.quantity" col="2" padding="10"/>
-                <label :text="item.unitAmount" col="3" padding="10"/>
+                <label :text="item.price" col="3" padding="10"/>
                 <label :text="item.totalAmount" col="4" padding="10"/>
               </GridLayout>
             </v-template>
