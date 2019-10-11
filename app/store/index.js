@@ -11,9 +11,9 @@ import taskRequest from './modules/taskRequest'
 
 Vue.use(Vuex)
 
-let debug = process.env.NODE_ENV !== 'production'
+const debug = process.env.NODE_ENV !== 'production'
 
-let store = new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     sideDrawer,
     backEnd,

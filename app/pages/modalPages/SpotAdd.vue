@@ -37,9 +37,11 @@ export default {
     submit() {
       if (this.editedItem != '') {
         this.$store.dispatch('createAccommodationSpot', {
-            areaId: this.accommodationArea.accommodationAreaId,
+            accommodationAreaId: this.accommodationArea.accommodationAreaId,
             spotNumber: this.editedItem.spotNumber})
-          this.$modal.close()
+        .then(() => {
+          this.$modal.close("test")
+        })
       }        
     }
   }
