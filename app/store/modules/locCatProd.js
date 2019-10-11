@@ -242,104 +242,82 @@ const mutations = {
   },
 }
 const actions = {
-  createAccommodationArea(state, item) {
-    let item1 = {
-      verb: 'add',
-      description: item.description,
-      image: global.noImage,
-      nbrOfSpots: item.nbrOfSpots}
-    store.commit('accommodationArea', item1)
-    backendService.createAccommodationArea(item)
+  async createAccommodationArea({ commit }, item) {
+    await backendService.createAccommodationArea(item)
     .then((result) => {
-      item1.verb= 'modify'
-      item1.accommodationAreaId = result.data.accommodationAreaId
-      item1.accommodationSpots = result.data.accommodationSpots
-      store.commit('accommodationArea', item1)
+      item.verb= 'add'
+      item.image= global.noImage,
+      item.accommodationAreaId = result.data.accommodationAreaId
+      item.accommodationSpots = result.data.accommodationSpots
+      commit('accommodationArea', item)
     })
   },
-  updateAccommodationArea(state, item) {
+  updateAccommodationArea({ commit }, item) {
     backendService.updateAccommodationArea(item)
     item.verb = 'update'
-    store.commit('accommodationArea', item)
+    commit('accommodationArea', item)
   },
-  deleteAccommodationArea(state, id) {
+  deleteAccommodationArea({ commit }, id) {
     backendService.deleteAccommodationArea(id)
-    store.commit('accommodationArea', {
+    commit('accommodationArea', {
       verb: 'delete', accommodationAreaId: id})
   },
-  createAccommodationSpot(state, item) {
-    let item1 = {
-      verb: "add",
-      accommodationAreaId: item.areaId,
-      descripion: item.description,
-      spotNumber: item.spotNumber,
-      image: global.noImage }
-    store.commit('accommodationSpot',item1)
-    backendService.createAccommodationSpot(item.areaId, item.spotNumber)
+  async createAccommodationSpot({commit}, item) {
+    await backendService.createAccommodationSpot(
+        item.accommodationAreaId, item.spotNumber)
     .then( result => {
-      item1.verb = "update"
-      item1.accommodationSpotId = result.data.accommodationSpotId
-      store.commit('accommodationSpot', item1)
+      item.accommodationSpotId = result.data.accommodationSpotId
+      item.verb = "add",
+      commit('accommodationSpot',item)
     })
   },
-  deleteAccommodationSpot(state, item) {
+  deleteAccommodationSpot({ commit }, item) {
     backendService.deleteAccommodationSpot(item.spotId)
-    store.commit('accommodationSpot', {
+    commit('accommodationSpot', {
       verb: 'delete',
       accommodationSpotId: item.spotId,
       accommodationAreaId: item.areaId})
   },
-  createPreparationArea(state, item) {
-    let item1 = {
-      verb: 'add',
-      nbrOfCatg: 0,
-      description: item.description,
-      image: global.noImage}
-    store.commit('preparationArea', item1)
-    backendService.createPreparationArea(item)
+  async createPreparationArea({commit}, item) {
+    await backendService.createPreparationArea(item)
     .then( result => {
-      item1.verb = 'update'
-      item1.preparationAreaId = result.data.preparationAreaId
-      store.commit('preparationArea', item1)
+      item.verb = 'add'
+      item.nbrOfCatg = 0
+      item.image = global.noImage
+      item.preparationAreaId = result.data.preparationAreaId
+      commit('preparationArea', item)
     })
   },
-  updatePreparationArea(state, item) {
+  updatePreparationArea({ commit }, item) {
     backendService.updatePreparationArea(item)
     item.verb = 'update'
-    store.commit('preparationArea', item)
+    commit('preparationArea', item)
   },
-  deletePreparationArea(state, id) {
+  deletePreparationArea({ commit }, id) {
     backendService.deletePreparationArea(id)
     .then(() => {
-      store.commit('preparationArea', {
+      commit('preparationArea', {
           verb: 'delete', preparationAreaId: id})
     })
   },
-  createProductCategory(state, item) {
-    let item1 = {
-      verb: 'add',
-      categoryName: item.categoryName,
-      image: global.noImage,
-      preparationAreaId: item.preparationAreaId,
-      description: item.description,
-      nbrOfProducts: '0'
-    }
-    store.commit('productCategory', item1)
-    backendService.createCategory(item)
+  async createProductCategory({commit}, item) {
+    await backendService.createCategory(item)
     .then((result) => {
-      item1.verb = 'modify'
-      item1.productCategoryId = result.data.productCategoryId,
-      store.commit('productCategory', item1)
+      item.verb = 'add'
+      item.image = global.noImage
+      item.nbrOfProducts = '0'
+      item.productCategoryId = result.data.productCategoryId
+      commit('productCategory', item)
     })
   },
-  updateProductCategory(state, item) {
+  updateProductCategory({ commit }, item) {
     backendService.updateCategory(item)
     item.verb = 'update'
-    store.commit('productCategory', item)
+    commit('productCategory', item)
   },
-  deleteProductCategory(state, id) {
+  deleteProductCategory({ commit }, id) {
     backendService.deleteCategory(id)
-    store.commit('productCategory', {
+    commit('productCategory', {
       verb: 'delete', 
       productCategoryId: id })
   }

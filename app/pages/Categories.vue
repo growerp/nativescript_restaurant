@@ -60,7 +60,6 @@ export default {
   methods: {
     onAddTap() { //get new item and insert sorted into list
       this.$showModal(CategoryAdd)
-        this.itemList = this.$store.getters.productCategories
     },
     onDeleteTap(item) { //delete Item
       if (item.nbrOfProducts != "0") {

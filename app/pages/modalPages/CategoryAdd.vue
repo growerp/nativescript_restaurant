@@ -59,7 +59,9 @@
                 this.$store.getters.preparationAreaByDesc(
                   this.editedItem.description).preparationAreaId
             this.$store.dispatch('createProductCategory', this.editedItem)
-            this.$modal.close()
+            .then(() => {
+              this.$modal.close()
+            })
           }
         }
       }

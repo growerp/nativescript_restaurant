@@ -86,16 +86,17 @@ export default {
       this.$navigateBack()
     },
     addSpot() {
-      this.$showModal(SpotAdd,
-            { props: { accommodationArea: this.item}})
+      console.log("=====display modal")
+      this.$showModal(SpotAdd, { props: { accommodationArea: this.item}})
       .then(() => {
+        console.log("=====make tablel")
         this.makeTableMatix()
+        console.log("===table finished")
       })
     },
     deleteSpot(table) {
       this.$showModal(Confirm,{ props: {
-          message: this.$t('deleteTable') + table.spotNumber + '?'}
-      })
+          message: this.$t('deleteTable') + table.spotNumber + '?'}})
       .then (data => {
         if (data) {
           this.$store.dispatch('deleteAccommodationSpot', {
@@ -110,7 +111,6 @@ export default {
               accommodationSpotsByAreaId(this.item.accommodationAreaId)
       this.tableMatrix = []
       let record = 0
-      console.log("====number of tables: " + tables.length)
       while (record < tables.length) {
         let tableRecord = []
         for (let count = 0; count < 4 ; count++) {
