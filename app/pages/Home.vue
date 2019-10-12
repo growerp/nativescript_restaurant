@@ -28,28 +28,27 @@ const appSettings = require("tns-core-modules/application-settings");
 
 export default {
   name: 'Home',
+  props: {
+    firstTime: false
+  },
   data() {
     return {
       dashBoard: [],
     }
   },
   mixins: [sideDrawer, general],
-  beforeCreate() {
-    this.$backendService.initData()
-    this.$backendService.getAllPartyInfo()
-    this.$backendService.getMyTasks()
-    this.$backendService.getRequests()
-  },
   created() {
+    if (!this.firstTime) {
+      console.log(" init data at home")
+      this.$store.dispatch('initData') }
     this.hideKeyboard()
-      if (appSettings.getString('dashBoard'))
-        this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
-      else 
-        this.backToDefault()
+    if (appSettings.getString('dashBoard'))
+      this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
+    else 
+      this.backToDefault()
   },
   methods: {
     onItemReordered(args) {
-        var index = args.index, data = args.data, object = args.object;
         appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
     },
     backToDefault() { // icons from : https://www.flaticon.com/
@@ -75,7 +74,6 @@ export default {
               pageName: 'MyInfo', pageTab: 0}
       ]
       appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
-      this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
     },
     onItemTap(args) {
       this.$navigateTo(eval("this.$routes." + args.item.pageName),
