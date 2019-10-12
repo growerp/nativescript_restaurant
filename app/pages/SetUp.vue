@@ -2,7 +2,8 @@
   <Page @loaded="pageLoaded(0)">
       <ActionBar><NavigationButton visibility="collapsed"/>
         <myActionBar :openDrawer="openDrawer" header="setup" 
-            :onHeaderTap="onHeaderTapHome"/>
+            :onHeaderTap="onHeaderTapHome"
+            :reload="true" :onActionTap="backToDefault"/>
       </ActionBar>
      <GridLayout rows="*, 50" class="p-10">
         <RadListView for="item in dashBoard" @itemTap="onItemTap" row="0"
@@ -27,22 +28,26 @@ const appSettings = require("tns-core-modules/application-settings");
 export default {
     name: 'Home',
     data() {
-        return {
-          dashBoard: [],
-        }
+      return {
+        dashBoard: [],
+      }
     },
     mixins: [ sideDrawer, general],
+    created() {
+      if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
+        if (appSettings.getString('setUp'))
+          this.dashBoard = JSON.parse(appSettings.getString('setUp'))
+        else 
+          this.backToDefault()
+      }
+    },
     methods: {
       onItemReordered(args) {
-          var index = args.index, data = args.data, object = args.object;
           appSettings.setString('setUp', JSON.stringify(this.dashBoard))
       },
-      onItemTap(args) {
-          this.$navigateTo(eval("this.$routes." + args.item.pageName),{props: { startTab: args.item.pageTab}})
-      },
       backToDefault() { // icons from : https://www.flaticon.com/
-        const platformModule = require("tns-core-modules/platform");
-        this.dashBoard = [
+        if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
+          this.dashBoard = [
           {id: 1, image: '~/assets/images/prep.png', title: this.$t('prepLoc'),
             pageName: 'Locations', pageTab: 0},
           {id: 2, image: '~/assets/images/tables.png', title: this.$t('tables'),
@@ -61,13 +66,12 @@ export default {
             pageName: 'About', pageTab: 0},
           ]
           appSettings.setString('setUp', JSON.stringify(this.dashBoard))
+        }
       },
-    },
-    created() {
-      this.hideKeyboard()
-//      this.dashBoard = JSON.parse(appSettings.getString('setUp'))
-//    if (!this.dashBoard) { this.backToDefault() }
-      this.backToDefault()
+      onItemTap(args) {
+          this.$navigateTo(eval("this.$routes." + args.item.pageName),
+            {props: { startTab: args.item.pageTab}})
+      },
     },
 }
 </script>
