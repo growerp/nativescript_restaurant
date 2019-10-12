@@ -1,10 +1,13 @@
 import axios from 'axios'
 import store from '../store'
+var platform = require("platform");
 
 let log = false
 if (TNS_ENV === 'production') log = false
 
 let testUrl = 'http://10.0.2.2:8080/rest/'
+if(platform.device.os === platform.platformNames.ios)
+  testUrl = 'http://localhost:8080/rest/'
 let prodUrl = 'https://mobile.growerp.com/rest/' 
 
 const restPost = axios.create({
