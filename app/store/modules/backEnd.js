@@ -223,7 +223,7 @@ const actions = {
         backendService.createCategory(item).then( result => {
           backendService.uploadImage('small', images.drinksImageSmall, 'category', result.data.productCategoryId)
           backendService.uploadImage('medium', images.drinksImageMedium, 'category', result.data.productCategoryId)
-          backendService.createProduct({ name: t[6], price: 80, productCategoryId: result.data.productCategoryId})
+          backendService.createProduct({ name: t[8], price: 80, productCategoryId: result.data.productCategoryId})
           .then( result => {
             backendService.uploadImage('small', images.colaImageSmall, 'product', result.data.productId)
             backendService.uploadImage('medium', images.colaImageMedium, 'product', result.data.productId)
@@ -268,7 +268,7 @@ const actions = {
       backendService.createCategory(item).then( result => {
         backendService.uploadImage('small', images.drinksImageSmall, 'category', result.data.productCategoryId)
         backendService.uploadImage('medium', images.drinksImageMedium, 'category', result.data.productCategoryId)
-          backendService.createProduct({ name: t[6], price: 80, productCategoryId: result.data.productCategoryId})
+          backendService.createProduct({ name: t[8], price: 80, productCategoryId: result.data.productCategoryId})
         .then( result => {
           backendService.uploadImage('small', images.colaImageSmall, 'product', result.data.productId)
           backendService.uploadImage('medium', images.colaImageMedium, 'product', result.data.productId)})
