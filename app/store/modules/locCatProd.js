@@ -243,14 +243,12 @@ const mutations = {
 }
 const actions = {
   async createAccommodationArea({ commit }, item) {
-    await backendService.createAccommodationArea(item)
-    .then((result) => {
-      item.verb= 'add'
-      item.image= global.noImage,
-      item.accommodationAreaId = result.data.accommodationAreaId
-      item.accommodationSpots = result.data.accommodationSpots
-      commit('accommodationArea', item)
-    })
+    let result = await backendService.createAccommodationArea(item)
+    item.verb= 'add'
+    item.image= global.noImage,
+    item.accommodationAreaId = result.data.accommodationAreaId
+    item.accommodationSpots = result.data.accommodationSpots
+    commit('accommodationArea', item)
   },
   updateAccommodationArea({ commit }, item) {
     backendService.updateAccommodationArea(item)
@@ -279,14 +277,12 @@ const actions = {
       accommodationAreaId: item.areaId})
   },
   async createPreparationArea({commit}, item) {
-    await backendService.createPreparationArea(item)
-    .then( result => {
-      item.verb = 'add'
-      item.nbrOfCatg = 0
-      item.image = global.noImage
-      item.preparationAreaId = result.data.preparationAreaId
-      commit('preparationArea', item)
-    })
+    let result = await backendService.createPreparationArea(item)
+    item.verb = 'add'
+    item.nbrOfCatg = 0
+    item.image = global.noImage
+    item.preparationAreaId = result.data.preparationAreaId
+    commit('preparationArea', item)
   },
   updatePreparationArea({ commit }, item) {
     backendService.updatePreparationArea(item)
@@ -300,15 +296,13 @@ const actions = {
           verb: 'delete', preparationAreaId: id})
     })
   },
-  async createProductCategory({commit}, item) {
-    await backendService.createCategory(item)
-    .then((result) => {
-      item.verb = 'add'
-      item.image = global.noImage
-      item.nbrOfProducts = '0'
-      item.productCategoryId = result.data.productCategoryId
-      commit('productCategory', item)
-    })
+  async createProductCategory({ commit }, item) {
+    let result = await backendService.createCategory(item)
+    item.verb = 'add'
+    item.image = global.noImage
+    item.nbrOfProducts = '0'
+    item.productCategoryId = result.data.productCategoryId
+    commit('productCategory', item)
   },
   updateProductCategory({ commit }, item) {
     backendService.updateCategory(item)

@@ -54,6 +54,7 @@ const mutations = {
       state.employees.find(o => o.partyId === state.currentEmployeePartyId).username)
     state.currentEmployeeUserGroupId = 
         state.employees.find(o => o.partyId === state.currentEmployeePartyId).userGroupId
+    console.log("===============security" + state.currentEmployeeUserGroupId) 
     state.userGroups = value.userGroups
   },
   company(state,value) {
