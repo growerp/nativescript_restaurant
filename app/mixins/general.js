@@ -28,7 +28,7 @@ export default {
         const toast = new Toasty({
           text: text,
           duration: ToastDuration.LONG,
-          position: ToastPosition.TOP,
+          position: platformModule.isAndroid? ToastPosition.TOP : ToastPosition.BOTTOM,
           ios: {
             // anchorView: args.object.ios
             // anchorView: topmost().currentPage.actionBar.ios,
@@ -90,7 +90,7 @@ export default {
           function(error) { console.log("admob createBanner error: " + error) }
         ) 
       },
-      pageLoaded(location=50) {
+      pageLoaded(location=80) {
         if (!this.isSubscribed('noAdds')) {
             setTimeout(() => {
               this.createBanner(location) }, 1)
