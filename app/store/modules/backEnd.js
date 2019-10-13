@@ -131,12 +131,14 @@ const actions = {
 
   },
   async login({ commit}, user) {
+    console.log("store start logging in")
+    try {
       let result = await backendService.login(user)
-      console.log('===login status:' + result.status)
+      console.log('==store =login result:' + JSON.stringify(result))
       if (result.status == null) {
         return 'connError'
       } else if (result.data.passwordChange) {
-        console.log('=== change password')
+        console.log('==store= change password')
         return 'passwordChange'
       } else if (result.data.apiKey) { // if apiKey present = logged in
           console.log('===api key present')
@@ -148,6 +150,9 @@ const actions = {
       } else {
           return 'accountNotFound'
       }
+    } catch(error) {
+      console.log("====login catch error" + error.errors)
+      return 'error' }
   },
   async register({commit,dispatch}, input) {
     try {

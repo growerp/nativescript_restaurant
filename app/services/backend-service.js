@@ -1,61 +1,29 @@
 import axios from 'axios'
 import store from '../store'
-var platform = require("platform");
+const platformModule = require("tns-core-modules/platform")
+import { ToastDuration, ToastPosition, Toasty } from 'nativescript-toasty';
 
 let log = false
 if (TNS_ENV === 'production') log = false
 
-let testUrl = 'http://10.0.2.2:8080/rest/'
-if(platform.device.os === platform.platformNames.ios)
-  testUrl = 'http://localhost:8080/rest/'
-let prodUrl = 'https://mobile.growerp.com/rest/' 
+if (TNS_ENV === 'production') 
+  axios.defaults.baseURL = 'https://mobile.growerp.com/rest/'
+else if (platformModule.isAndroid) 
+  axios.defaults.baseURL = 'http://10.0.2.2:8080/rest/'
+else if (platformModule.isIOS) 
+  axios.defaults.baseURL = 'http://localhost:8080/rest/'
 
-const restPost = axios.create({
-  baseURL: TNS_ENV === 'production' ?
-    prodUrl : testUrl,
-  headers:
-    {   'Content-Type': 'application/json;charset=UTF-8',
-      "Access-Control-Allow-Origin": "*",
-      'Access-Control-Allow-Credentials': true,
-      'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept',
-      'api_key': '',
-      'moquiSessionToken': ''
-    },
-  withCredentials: true,
-  timeout: 5000, // 5 seconds
-})
-const restPostNoApi = axios.create({
-  baseURL: TNS_ENV === 'production' ?
-    prodUrl : testUrl,
-  headers:
-    {   'Content-Type': 'application/json;charset=UTF-8',
-      "Access-Control-Allow-Origin": "*",
-      'Access-Control-Allow-Credentials': true,
-      'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept',
-      'moquiSessionToken': ''
-    },
-  withCredentials: true,
-  timeout: 5000, // 5 seconds
-})
+axios.defaults.headers.common['Content-Type'] = 
+      'application/json;charset=UTF-8'
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true
+axios.defaults.headers.common['Access-Control-Allow-Headers'] = 
+      'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept'
+axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
-const restGet = axios.create({
-    baseURL: TNS_ENV === 'production' ?
-    prodUrl : testUrl,
-    headers:
-    {   'Content-Type': 'application/json;charset=UTF-8',
-      "Access-Control-Allow-Origin": "*",
-      'Access-Control-Allow-Credentials': true,
-      'Access-Control-Allow-Headers': 'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept',
-      'api_key': ''
-    },
-  withCredentials: true,
-  timeout: 5000, // 5 seconds
-})
+axios.defaults.headers.post['moquiSessionToken'] = '';
+axios.defaults.headers.post['api_key'] = '';
 
-const axiosSimple = axios.create({
-  baseURL: TNS_ENV === 'production' ?
-  prodUrl : testUrl,
-})
 
 axios.interceptors.request.use(function (config) {
     // Do something before request is sent
@@ -128,220 +96,216 @@ export default class BackendService {
     return error.message + ": " + error.response.statusText + '; ' + msg
   }
   saveToken() {
-    restPost.defaults.headers['moquiSessionToken'] = store.getters.moquiToken
-    restPostNoApi.defaults.headers['moquiSessionToken'] = store.getters.moquiToken }
+    axios.defaults.headers['moquiSessionToken'] = store.getters.moquiToken
+    axios.defaults.headers['moquiSessionToken'] = store.getters.moquiToken }
   saveKey(apiKey) {
-    restGet.defaults.headers['api_key'] = apiKey
-    restPost.defaults.headers['api_key'] = apiKey}
+    axios.defaults.headers['api_key'] = apiKey
+    axios.defaults.headers['api_key'] = apiKey}
   
   // ================getToken,login/out/register password forgot =============
   async getToken() {
-    return await axiosSimple.get('moquiSessionToken')}
+    return await axios.get('moquiSessionToken')}
   async login(user) {
-    return await restPostNoApi.post('s1/growerp/LoginUser',
-      { username: user.name, password: user.password })}
+    return await axios.post('s1/growerp/LoginUser',
+      { username: user.name, password: user.password },
+      { errorHandle: false })}
   async checkApiKey() {
-    return await restGet.get('s1/growerp/CheckApiKey',
-            { errorHandle: false})}
+    return await axios.get('s1/growerp/CheckApiKey',
+      { errorHandle: false})}
   async ping() {
-    return await axiosSimple.get('s1/growerp/Ping',
-            { errorHandle: false})}
+    return await axios.get('s1/growerp/Ping',
+      { errorHandle: false})}
   async logout() {
-    return await restGet.get('logout')}
+    return await axios.get('logout')}
   async register(user, company) {
-    return await restPostNoApi.post('s1/growerp/RegisterUserAndCompany',
-      {   username: user.name, emailAddress: user.emailAddress,
+    return await axios.post('s1/growerp/RegisterUserAndCompany',
+      { username: user.name, emailAddress: user.emailAddress,
         newPassword: user.password, firstName: user.firstName,
         lastName: user.lastName, locale: user.locale,
         companyPartyId: company.id, // for existing companies
         companyName: company.name, currencyUomId: company.currency,
         companyEmail: company.emailAddress? company.emailAddress : user.emailAddress,
         partyClassificationId : 'AppRestaurant'},
-      {   errorHandle: false })}
+      { errorHandle: false })}
   async resetUserPassword(username) {
-    return await restPost.post('s1/growerp/ResetPassword',
-      {   username: username },
-      {   errorHandle: false })}
+    return await axios.post('s1/growerp/ResetPassword',
+      { username: username },
+      { errorHandle: false })}
   async updatePassword(item) {
-    return await restPost.post('s1/growerp/UpdatePassword',
-      {   username: item.username, oldPassword: item.oldPassword,
+    return await axios.post('s1/growerp/UpdatePassword',
+      { username: item.username, oldPassword: item.oldPassword,
         newPassword: item.newPassword},
-      {   errorHandle: false })}
+      { errorHandle: false })}
   // ================get/update user, user liste================
   getAllPartyInfo() {
-    restGet.get('s1/growerp/GetAllPartyInfo')
+    axios.get('s1/growerp/GetAllPartyInfo')
     .then((result) => {
       store.commit('allPartyInfo', result.data)})}
   async getCurrentEmployeeUserGroupId() { // need groupId for access early
-    return await restGet.get('s1/growerp/GetCurrentEmployeeUserGroupId')}
+    return await axios.get('s1/growerp/GetCurrentEmployeeUserGroupId')}
   async createUser(user) { // roletypeid; Customer Employee
-    return await restPost.post('s1/growerp/CreateUser',
+    return await axios.post('s1/growerp/CreateUser',
       {   firstName: user.firstName, lastName: user.lastName,
         emailAddress: user.emailAddress, locale: user.locale,
         roleTypeId: user.roleTypeId, externalId: user.externalId,
         groupDescription: user.groupDescription})}
   async updateUser(user) {
-    return await restPost.post('s1/growerp/UpdateUser',
+    return await axios.post('s1/growerp/UpdateUser',
       {   partyId: user.partyId, userId: user.loginId,
         username: user.username, firstName: user.firstName,
         lastName: user.lastName, emailAddress: user.emailAddress,
         groupDescription: user.groupDescription})}
   async deleteUser(partyId) {
-    return await restPost.post('s1/growerp/DeleteUser',
+    return await axios.post('s1/growerp/DeleteUser',
       {   partyId: partyId})}
   // ===================company ==============================================
   async updateCompany(company) {
-    return await restPost.post('s1/growerp/UpdateCompany',
+    return await axios.post('s1/growerp/UpdateCompany',
       {   organizationName: company.organizationName, emailAddress: company.emailAddress})}
   // ======================= images ==========================================
   async uploadImage(size, base64, type, id) {
-    restPost.post('s1/growerp/UploadImage',
+    axios.post('s1/growerp/UploadImage',
       {   type: type, id: id,
         size: size, contentFile: base64 })}
   async downloadImage(size, type, id) {
-    return await restPost.post('s1/growerp/DownloadImage',
+    return await axios.post('s1/growerp/DownloadImage',
       {   size: size, type: type, id: id })}
   // ================(preparation Area)) ===============
   async createPreparationArea(item) {
-    return await restPost.post('s1/growerp/CreatePreparationArea',
+    return await axios.post('s1/growerp/CreatePreparationArea',
       {   description: item.description})}
   async updatePreparationArea(item) {
-    return await restPost.post('s1/growerp/UpdatePreparationArea',
+    return await axios.post('s1/growerp/UpdatePreparationArea',
       {   preparationAreaId: item.preparationAreaId,
         description: item.description})}
   async deletePreparationArea(id) {
-    return await restPost.post('s1/growerp/DeletePreparationArea',
+    return await axios.post('s1/growerp/DeletePreparationArea',
       {   preparationAreaId: id})}
   // ================ table Area (AccommodationArea) ===============
   async createAccommodationArea(accommodationArea) {
-    return await restPost.post('s1/growerp/CreateAccommodationArea',
+    return await axios.post('s1/growerp/CreateAccommodationArea',
       {   description: accommodationArea.description,
         nbrOfSpots: accommodationArea.nbrOfSpots,
         nbrOfSeats: accommodationArea.nbrOfSeats})}
   async updateAccommodationArea(accommodationArea) {
-    return await restPost.post('s1/growerp/UpdateAccommodationArea',
+    return await axios.post('s1/growerp/UpdateAccommodationArea',
       {   accommodationAreaId: accommodationArea.accommodationAreaId,
         description: accommodationArea.description})}
   async deleteAccommodationArea(id) {
-    return await restPost.post('s1/growerp/DeleteAccommodationArea',
+    return await axios.post('s1/growerp/DeleteAccommodationArea',
       {   accommodationAreaId: id})}
   // ================ table (AccommodationSpot) ===============
   async createAccommodationSpot(areaId,spotNumber) {
-    return await restPost.post('s1/growerp/CreateAccommodationSpot',
+    return await axios.post('s1/growerp/CreateAccommodationSpot',
       {   accommodationAreaId: areaId, spotNumber: spotNumber})}
   async deleteAccommodationSpot(spotId) {
-    return await restPost.post('s1/growerp/DeleteAccommodationSpot',
+    return await axios.post('s1/growerp/DeleteAccommodationSpot',
       {   accommodationSpotId: spotId})}
   // ======================== order ======================
   async getOrder(orderId) {
-    return await restPost.post('s1/growerp/GetOrder',
+    return await axios.post('s1/growerp/GetOrder',
       { orderId: orderId})}
   async GetOrdersAndItemsByPrepAreas() {
-    return await restGet.get('s1/growerp/GetOrdersAndItemsByPrepAreas')}
+    return await axios.get('s1/growerp/GetOrdersAndItemsByPrepAreas')}
   async getOrdersAndItems(statusId, prepId = null) {
-    return await restPost.post('s1/growerp/GetOrdersAndItems',
+    return await axios.post('s1/growerp/GetOrdersAndItems',
       { statusId: statusId, preparationAreaId: prepId})}
   async getOrdersItemsPartySpot(open=true, startDate=null) {
-    return await restPost.post('s1/growerp/GetOrdersItemsPartySpot',
+    return await axios.post('s1/growerp/GetOrdersItemsPartySpot',
       { open: open, startDate: startDate})}
   async createSalesOrder(header,items) {
-     return await restPost.post('s1/growerp/CreateSalesOrder',
+     return await axios.post('s1/growerp/CreateSalesOrder',
       {orderHeader: JSON.stringify(header), orderItems: JSON.stringify(items)})}
   async changeOrderPartStatus(orderId, partId, statusId) {
-    return await restPost.post('s1/growerp/ChangeOrderPartStatus',
+    return await axios.post('s1/growerp/ChangeOrderPartStatus',
        {orderId: orderId, orderPartSeqId: partId, statusId: statusId})}
   // ================ Category and Product (Store)===============
   async createProduct(item) {
-      return await restPost.post('s1/growerp/CreateProduct',
+      return await axios.post('s1/growerp/CreateProduct',
       {   productCategoryId: item.productCategoryId, productName: item.name, price: item.price})}
   async updateProduct(item) {
-      return await restPost.post('s1/growerp/UpdateProduct',
+      return await axios.post('s1/growerp/UpdateProduct',
       {   productId: item.productId, productCategoryId: item.productCategoryId,
         productName: item.name, price: item.price})}
   async deleteProduct(id) {
-      return await restPost.post('s1/growerp/DeleteProduct', { productId: id })}
+      return await axios.post('s1/growerp/DeleteProduct', { productId: id })}
   async createCategory(item) {
-      return await restPost.post('s1/growerp/CreateProductCategory',
+      return await axios.post('s1/growerp/CreateProductCategory',
         { categoryName: item.categoryName,
           preparationAreaId: item.preparationAreaId})}
   async updateCategory(item) {
-      return await restPost.post('s1/growerp/UpdateProductCategory',
+      return await axios.post('s1/growerp/UpdateProductCategory',
         { productCategoryId: item.productCategoryId,
           categoryName: item.categoryName,
           preparationAreaId: item.preparationAreaId})}
   async deleteCategory(id) {
-    return await restPost.post('s1/growerp/DeleteProductCategory',
+    return await axios.post('s1/growerp/DeleteProductCategory',
       {   productCategoryId: id})}
   //===============================tasks ====================================
   getMyTasks() {
-    restGet.get('s1/growerp/GetMyTasks')
+    axios.get('s1/growerp/GetMyTasks')
     .then((result) => {
       store.commit('tasks', result.data)})}
   async createTask(item) {
-      return await restPost.post('s1/growerp/CreateTask',
+      return await axios.post('s1/growerp/CreateTask',
       { workEffortName: item.workEffortName, priority: item.priority,
         description: item.description, partyId: item.userPartyId})}
   async updateTask(item) {
-      return await restPost.post('s1/growerp/UpdateTask',
+      return await axios.post('s1/growerp/UpdateTask',
       { workEffortId: item.workEffortId, description: item.description,
         workEffortName: item.workEffortName, partyId: item.userPartyId,
         statusId: item.statusId, priority: item.priority})}
   async deleteTask(id) {
-      return await restPost.post('s1/growerp/DeleteTask', { workEffortId: id })}
+      return await axios.post('s1/growerp/DeleteTask', { workEffortId: id })}
   //===============================requests ====================================
   getRequests() {
-    restGet.get('s1/growerp/GetRequests')
+    axios.get('s1/growerp/GetRequests')
     .then((result) => {
       store.commit('requests', result.data)})}
   async createRequest(item) {
-      return await restPost.post('s1/growerp/CreateRequest',
+      return await axios.post('s1/growerp/CreateRequest',
       {   requestName: item.requestName,
         description: item.description, partyId: item.partyId})}
   async updateRequest(item) {
-      return await restPost.post('s1/growerp/UpdateRequest',
+      return await axios.post('s1/growerp/UpdateRequest',
       {   requestId: item.requestId, description: item.description,
         requestName: item.requestName, partyId: item.partyId})}
   async deleteRequest(id) {
-      return await restPost.post('s1/growerp/DeleteRequest', { requestId: id })}
+      return await axios.post('s1/growerp/DeleteRequest', { requestId: id })}
   async createRequestNote(item) {
-      return await restPost.post('s1/growerp/CreateRequestNote',
+      return await axios.post('s1/growerp/CreateRequestNote',
       {   requestId: item.requestId,
         text: item.text})}
   // ============================reports =====================================
   async reportSales(period) {
-      return await restPost.post('s1/growerp/ReportSales', { period: period })}
+      return await axios.post('s1/growerp/ReportSales', { period: period })}
   // ======================initial data load when app starts==================
   initData() {
-    axios.all([
-      restGet.get('s1/growerp/GetPreparationAreas'),
-      restGet.get('s1/growerp/GetAccommodationAreas'),
-      restGet.get('s1/growerp/GetAccommodationSpots'),
-      restGet.get('s1/growerp/GetProductCategories'),
-      restGet.get('s1/growerp/GetProducts'),
-      restGet.get('s1/growerp/GetOrdersAndItemsByPrepAreas'),
-      restPost.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
+    return axios.all([
+      axios.get('s1/growerp/GetCurrentEmployeeUserGroupId'),
+      axios.get('s1/growerp/GetActiveSubscriptions'),
+      axios.get('s1/growerp/GetPreparationAreas'),
+      axios.get('s1/growerp/GetAccommodationAreas'),
+      axios.get('s1/growerp/GetAccommodationSpots'),
+      axios.get('s1/growerp/GetProductCategories'),
+      axios.get('s1/growerp/GetProducts'),
+      axios.get('s1/growerp/GetOrdersAndItemsByPrepAreas'),
+      axios.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
+      axios.get('s1/growerp/GetAllPartyInfo'),
+      axios.get('s1/growerp/GetMyTasks'),
+      axios.get('s1/growerp/GetRequests'),
     ])
-    .then(axios.spread(function ( GetPreparationAreas,GetAccommodationAreas,GetAccommodationSpots,
-      GetProductCategories, GetProducts, GetOrdersAndItemsByPrepAreas, GetOrdersItemsPartySpot) {
-        store.commit("preparationAreas", GetPreparationAreas.data.preparationAreas)
-        store.commit("accommodationAreas", GetAccommodationAreas.data.accommodationAreas)
-        store.commit("accommodationSpots", GetAccommodationSpots.data.accommodationSpots)
-        store.commit("productCategories", GetProductCategories.data.productCategories)
-        store.commit("products", GetProducts.data.products)
-        store.commit("ordersAndItemsByPrepAreas", GetOrdersAndItemsByPrepAreas.data.ordersAndItemsByPrepAreas)
-        store.commit("openOrders", GetOrdersItemsPartySpot.data.ordersAndItems)
-      }))
   }
   async createSubscription(id,desc) {
-    return await restPost.post('s1/growerp/CreateSubscription', {
+    return await axios.post('s1/growerp/CreateSubscription', {
       externalSubscriptionId: id,
       description: desc
     })
   }
   async getActiveSubscriptions() {
-    return await restGet.get('s1/growerp/GetActiveSubscriptions')
+    return await axios.get('s1/growerp/GetActiveSubscriptions')
   }
   async getCurrencyList() {
-    return await restGet.get('s1/growerp/CurrencyList')
+    return await axios.get('s1/growerp/CurrencyList')
   }
 }

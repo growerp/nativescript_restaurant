@@ -39,7 +39,6 @@ export default {
   mixins: [sideDrawer, general],
   created() {
     if (!this.firstTime) {
-      console.log(" init data at home")
       this.$store.dispatch('initData') }
     this.hideKeyboard()
     if (appSettings.getString('dashBoard'))
@@ -81,7 +80,6 @@ export default {
     },
   },
 }
-
 </script>
 
 <style lang="css">

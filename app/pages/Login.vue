@@ -184,16 +184,15 @@ const appSettings = require("tns-core-modules/application-settings")
         console.log("=====logging in ======")
         this.$store.dispatch('getConnection').then( result => {
           this.$store.dispatch("login", this.user).then(result => {
-            console.log(" login result: " + result)
+            console.log(" login page login result: " + result)
             if (result == 'success') {
-              console.log("====success, loading initial data")
+              console.log("====login page success, loading initial data")
               this.$store.dispatch('initData').then(() => { 
                 console.log("====done going home.....")
                 this.$navigateTo(this.$routes.Home, 
                     {clearHistory: true, props: { firstTime: true }})
               })
-            }
-            if (result == 'passwordChange') {
+            } else if (result == 'passwordChange') {
               this.$showModal(PasswordUpdate,{props:
                 { oldPassword : this.user.password,
                   username: this.user.name,
@@ -202,6 +201,8 @@ const appSettings = require("tns-core-modules/application-settings")
               .then (() => {
                 this.user.password = ''
                 this.processing = false})
+            } else {
+                this.processing = false
             }
           })
         })
