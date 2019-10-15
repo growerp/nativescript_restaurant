@@ -90,7 +90,7 @@ export default {
           function(error) { console.log("admob createBanner error: " + error) }
         ) 
       },
-      pageLoaded(location=80) {
+      pageLoaded(location=50) {
         if (!this.isSubscribed('noAdds')) {
             setTimeout(() => {
               this.createBanner(location) }, 1)
