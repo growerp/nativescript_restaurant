@@ -144,7 +144,7 @@ const actions = {
       }
     } catch(error) {
       log? console.log('====login catch error' + error.errors):''
-      return error.errors}
+      return error.errors? error.errors : 'serverProblem'}
   },
   async register({commit}, input) {
     try {
@@ -190,7 +190,7 @@ const actions = {
         commit('requests', GetRequests.data)
       }))
   },
-  loadDefaultData(state, t) {
+  loadDefaultData({state}, t) {
     if (TNS_ENV === 'production') {
       let item = {}
       item.description = t[0]

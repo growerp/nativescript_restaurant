@@ -1,4 +1,3 @@
-import store from '~/store'
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService()
 const log = true 
@@ -132,31 +131,30 @@ const getters = {
   },
 }
 const actions = {
-  changeOrderPartStatus(state, item) {
+  changeOrderPartStatus({commit}, item) {
     backendService.changeOrderPartStatus(
       item.orderId, item.partId, item.statusId)
-    store.commit('changeOrderPartStatus',{
+    commit('changeOrderPartStatus',{
       orderId: item.orderId, 
       partId: item.partId,
       statusId: item.statusId})
   }, 
-  async createSalesOrder(state, item) {
-    return backendService.createSalesOrder(
+  async createSalesOrder({dispatch}, item) {
+    let result = await backendService.createSalesOrder(
           item.header, item.items)
+    console.log("=====reult save order" + JSON.stringify(result.data))
+    dispatch('updateOrdersAndItemsByPrepAreas')
+    dispatch('updateOpenOrders')
+    console.log("====finished")
+    return result
   },
-  updateOrdersAndItemsByPrepAreas(state) {
-    backendService.GetOrdersAndItemsByPrepAreas()
-    .then((result) => {
-      store.commit("ordersAndItemsByPrepAreas", 
-        result.data.ordersAndItemsByPrepAreas)
-    })
+  async updateOrdersAndItemsByPrepAreas({commit}) {
+    let result = await backendService.GetOrdersAndItemsByPrepAreas()
+    commit("ordersAndItemsByPrepAreas", result.data.ordersAndItemsByPrepAreas)
   },
-  updateOpenOrders(state) {
-    backendService.getOrdersItemsPartySpot(state)
-    .then((result) => {
-      store.commit("openOrders", 
-        result.data.ordersAndItems)
-    })
+  async updateOpenOrders({commit}) {
+    let result = await backendService.getOrdersItemsPartySpot(state)
+    commit("openOrders", result.data.ordersAndItems)
   }
 }
 export default {
