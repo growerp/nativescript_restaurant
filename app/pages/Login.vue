@@ -140,18 +140,17 @@ const appSettings = require("tns-core-modules/application-settings")
         console.log("result from getConnection: " + result)
         if (result == 'noPing') {
           this.serverProblem() }
-        if (result == 'register') {
-          this.user.name = this.user.emailAddress //initially the same
-          this.isLoggingIn = false
-          this.register()}
-        if (result == 'noApiKey') {
+        else if (result == 'register') {
+          this.isLoggingIn = false}
+        else if (result == 'noApiKey') {
           this.isLoggingIn = true }
-        if (result == 'success') {
+        else if (result == 'success') {
           this.$store.dispatch('initData')
           console.log("==init ===created====going home======")
           this.$navigateTo(this.$routes.Home, 
             {clearHistory: true, props: {firstTime: true}})
         }
+        else console.log("==== unexpected return from getConnection dispatch!")
       })
     },
     methods: {
@@ -253,6 +252,7 @@ const appSettings = require("tns-core-modules/application-settings")
             } else if (this.company.currency === '') {
               this.note(this.$t('enterCurrency'))
             } else {
+              this.user.name = this.user.emailAddress //initially the same
               this.$store.dispatch('register', 
                   {company: this.company, user: this.user})
               .then( regResult => {
