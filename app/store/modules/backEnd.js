@@ -1,10 +1,10 @@
 import store from '../../store'
 import axios from 'axios'
-import BackendService from "~/services/backend-service"
+import BackendService from '~/services/backend-service'
 import { images } from '~/assets/imagesBase64'
 
 const backendService = new BackendService()
-const appSettings = require("tns-core-modules/application-settings")
+const appSettings = require('tns-core-modules/application-settings')
 const log = true 
 const state = {
   moquiToken: '',
@@ -53,7 +53,7 @@ const mutations = { //synchronous
         case 'user':
         item = store.getters.employeeById(value.id)
         if (item == -1) item = store.getters.customerById(value.id)
-        if (item == -1) console.log("party not found!")
+        if (item == -1) log?console.log('party not found!'):''
         else {
           item.image =  value.image
           item.verb = 'update'
@@ -82,66 +82,58 @@ const getters = {
 }
 const actions = {
   async getConnection({ commit, dispatch }) {
-    console.log('===store dispatch starting======')
-    console.log ('===checking ==ping')
+    log? console.log('===store dispatch starting======'):''
+    log? console.log ('===checking ==ping'):''
     try {
       let result = await backendService.ping() // check if server present
       if (result.data && result.data.ok === 'ok') {
-        console.log('=== ping is ok now getting token....')
+        log? console.log('=== ping is ok now getting token....'):''
         let resultToken = await backendService.getToken()
         commit('moquiToken', resultToken.data)
         backendService.saveToken(resultToken.data)
-        console.log('=== moqui token is ok....')
+        log?console.log('=== moqui token is ok....'):''
         if (!appSettings.getString('username')) {
-          console.log('===using for the first time so show register screen')
+          log?console.log('===using for the first time:show register screen'):''
           return 'register'
         }
-        else if (appSettings.getString('apiKey')) { // skip login when have api_key
-          console.log("api key found: " + appSettings.getString('apiKey'))
+        if (appSettings.getString('apiKey')) { // skip login when have api_key
+          log?console.log('api key found: ' + appSettings.getString('apiKey')):''
           backendService.saveKey(appSettings.getString('apiKey')) // save it in the API
           try {
             result = await backendService.checkApiKey() // check if apiKey still valid
             if (result.data.ok === 'ok') {
-              console.log('===checkApiKey is fine, so connection fine...')
+              log?console.log('===checkApiKey is fine, so connection fine...'):''
               return 'success'
             } else { // server key wrong so delete it and login again
               appSettings.remove('apiKey')
-              return 'noApiKey'
-            }
+              return 'noApiKey'}
           }
           catch( error ) {
-            console.log('====Api key invalid, catch error:' + JSON.stringify(error))
+            log?console.log('====Api key invalid, catch error:' + 
+                JSON.stringify(error)):''
             appSettings.remove('apiKey')
-            return "noApiKey"
-          }
+            return 'noApiKey'}
         } else {
-          console.log("=== No current ApiKey found")
-          return 'noApiKey'
-        }
+          log?console.log('=== No current ApiKey found'):''
+          return 'noApiKey'}
       } else {
-        console.log("=== No current ApiKey found")
-//        this.alert("====Unable to get a token from the GrowERP mobile server!")
-        this.serverProblem()
-      }
+        log?console.log('=== Ping does not return ok'):''
+        return 'serverProblem'}
     }
     catch( error ) {
-      console.log('=========ping server problem: ' + error.message)
-      return "noPing"
-    }
-
+      log?console.log('=========ping catch: ' + error.message):''
+      return 'serverProblem'}
   },
   async login({ commit}, user) {
-    console.log("store start logging in")
+    log? console.log('store start logging in'):''
     try {
       let result = await backendService.login(user)
-      console.log('==store =login result:' + JSON.stringify(result))
       if (result.status == null) {
-        return 'connError'
+        return 'serverProblem'
       } else if (result.data.passwordChange) {
-        console.log('==store= change password')
         return 'passwordChange'
       } else if (result.data.apiKey) { // if apiKey present = logged in
-          console.log('===api key present')
+          log? console.log('===api key present from login'):''
           backendService.saveKey(result.data.apiKey)
           appSettings.setString('apiKey', result.data.apiKey)
           commit('moquiToken', result.data.moquiSessionToken)
@@ -151,19 +143,18 @@ const actions = {
           return 'accountNotFound'
       }
     } catch(error) {
-      console.log("====login catch error" + error.errors)
-      return 'error' }
+      log? console.log('====login catch error' + error.errors):''
+      return error.errors}
   },
-  async register({commit,dispatch}, input) {
+  async register({commit}, input) {
     try {
       let response = await backendService.register(input.user, input.company)
-      console.log("register response")
       if (!response.data.user) return 'registerError'
       appSettings.clear() // start fresh
       appSettings.setString('username', input.user.name)
-      return "success"
+      return 'success'
     } catch( error ) {
-      if (error.response.data.errors.indexOf("Found issues with password") !== -1) {
+      if (error.response.data.errors.indexOf('Found issues with password') !== -1) {
         return 'passwordRequirement'
       } else {
         return 'regError' + error.response.data.errors
@@ -181,18 +172,18 @@ const actions = {
           GetCurrentEmployeeUserGroupId.data.currentEmployeeUserGroupId)
         commit('activeSubscriptions',
           GetActiveSubscriptions.data.subscriptions)
-        commit("preparationAreas",
+        commit('preparationAreas',
           GetPreparationAreas.data.preparationAreas)
-        commit("accommodationAreas",
+        commit('accommodationAreas',
           GetAccommodationAreas.data.accommodationAreas)
-        commit("accommodationSpots",
+        commit('accommodationSpots',
           GetAccommodationSpots.data.accommodationSpots)
-        commit("productCategories",
+        commit('productCategories',
           GetProductCategories.data.productCategories)
-        commit("products",GetProducts.data.products)
-        commit("ordersAndItemsByPrepAreas",
+        commit('products',GetProducts.data.products)
+        commit('ordersAndItemsByPrepAreas',
           GetOrdersAndItemsByPrepAreas.data.ordersAndItemsByPrepAreas)
-        commit("openOrders",
+        commit('openOrders',
           GetOrdersItemsPartySpot.data.ordersAndItems),
         commit('allPartyInfo', GetAllPartyInfo.data),
         commit('tasks', GetMyTasks.data),
@@ -240,14 +231,12 @@ const actions = {
     } else { // from here test data
     let item = {}
     item.description = t[0]
-    console.log("---preparat area")
     backendService.createPreparationArea(item).then( result => {
       backendService.uploadImage('small', images.kitchenImageSmall, 'prep', result.data.preparationAreaId)
       backendService.uploadImage('medium', images.kitchenImageMedium, 'prep', result.data.preparationAreaId)
       item.categoryName = t[1] ; item.preparationAreaId = result.data.preparationAreaId
       backendService.createCategory(item)
       .then( result => {
-        console.log("---area added")
         backendService.uploadImage('small', images.foodImageSmall, 'category', result.data.productCategoryId)
         backendService.uploadImage('medium', images.foodImageMedium, 'category', result.data.productCategoryId)
         backendService.createProduct({ name: t[2], price: 6.20, productCategoryId: result.data.productCategoryId})
@@ -257,10 +246,8 @@ const actions = {
         backendService.createProduct({name: 'french fries', price: 2.99, productCategoryId: result.data.productCategoryId})
         backendService.createProduct({name: 'Tomjamkuhn', price: 3.99, productCategoryId: result.data.productCategoryId})
         backendService.createProduct({name: 'Cheese plate', price: 4.99, productCategoryId: result.data.productCategoryId})})
-        console.log("===cheesplate loade")
     })
-    console.log("---starting bar")
-    item.description = "Bar"
+    item.description = 'Bar'
     backendService.createPreparationArea(item).then( result => {
       backendService.uploadImage('small', images.barImageSmall, 'prep', result.data.preparationAreaId)
       backendService.uploadImage('medium', images.barImageMedium, 'prep', result.data.preparationAreaId)
@@ -309,7 +296,6 @@ const actions = {
     backendService.createUser(user2).then( result => {
       let item2 = { workEffortName:'This a second task',
                 partyId: result.data.user.partyId , priority: '5'}
-      console.log("====login default data: " + JSON.stringify(item2))
       backendService.createTask(item2)})
 
     let item3 = { workEffortName:'This a third task for me', priority: '5'}

@@ -86,6 +86,7 @@
 </template>
 
 <script>
+const log = true
 import general from '~/mixins/general'
 import Confirm from './modalPages/Confirm'
 import Alert from './modalPages/Alert'
@@ -134,22 +135,23 @@ const appSettings = require("tns-core-modules/application-settings")
     },
     created() {
       this.processing = true
-      console.log("===created get connection")
+      log?console.log("===created get connection"):''
       this.$store.dispatch('getConnection').then( result => {
-        this.processing = false
-        console.log("result from getConnection: " + result)
-        if (result == 'noPing') {
+        log?console.log("result from getConnection: " + result):''
+        if (result == 'serverProblem') {
+          this.processing = false
           this.serverProblem() }
         else if (result == 'register') {
+          this.processing = false
           this.isLoggingIn = false}
         else if (result == 'noApiKey') {
+          this.processing = false
           this.isLoggingIn = true }
         else if (result == 'success') {
           this.$store.dispatch('initData')
-          console.log("==init ===created====going home======")
+          log?console.log("==init ===created====going home======"):''
           this.$navigateTo(this.$routes.Home, 
-            {clearHistory: true, props: {firstTime: true}})
-        }
+            {clearHistory: true, props: {firstTime: true}})}
         else console.log("==== unexpected return from getConnection dispatch!")
       })
     },
@@ -180,29 +182,30 @@ const appSettings = require("tns-core-modules/application-settings")
         }
       },
       login() {
-        console.log("=====logging in ======")
+        log?console.log("=====logging in ======"):''
         this.$store.dispatch('getConnection').then( result => {
           this.$store.dispatch("login", this.user).then(result => {
-            console.log(" login page login result: " + result)
-            if (result == 'success') {
-              console.log("====login page success, loading initial data")
-              this.$store.dispatch('initData').then(() => { 
-                console.log("====done going home.....")
-                this.$navigateTo(this.$routes.Home, 
-                    {clearHistory: true, props: { firstTime: true }})
-              })
-            } else if (result == 'passwordChange') {
+            this.processing = false
+            log?console.log(" login page login result: " + result):''
+            if (result == 'serverProblem') {
+              this.processing = false
+              this.serverProblem() }
+            else if (result == 'passwordChange') {
               this.$showModal(PasswordUpdate,{props:
                 { oldPassword : this.user.password,
                   username: this.user.name,
                   fullName: this.user.firstName + ' ' +
                     this.user.lastName}})
               .then (() => {
-                this.user.password = ''
-                this.processing = false})
-            } else {
-                this.processing = false
-            }
+                this.user.password = '' })}
+            else if (result == 'success') {
+              log?console.log("====login page success, loading initial data"):''
+              this.$store.dispatch('initData').then(() => { 
+                log?console.log("====init done going home....."):''
+                this.$navigateTo(this.$routes.Home, 
+                    {clearHistory: true, props: { firstTime: true }})})}
+            else {
+              this.note(result)}
           })
         })
       },
