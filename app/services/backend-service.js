@@ -207,11 +207,8 @@ export default class BackendService {
       { orderId: orderId})}
   async GetOrdersAndItemsByPrepAreas() {
     return await axios.get('s1/growerp/GetOrdersAndItemsByPrepAreas')}
-  async getOrdersAndItems(statusId, prepId = null) {
-    return await axios.post('s1/growerp/GetOrdersAndItems',
-      { statusId: statusId, preparationAreaId: prepId})}
-  async getOrdersItemsPartySpot(open=true, startDate=null) {
-    return await axios.post('s1/growerp/GetOrdersItemsPartySpot',
+  async getOrders(open=true, startDate=null) {
+    return await axios.post('s1/growerp/GetOrders',
       { open: open, startDate: startDate})}
   async createSalesOrder(header,items) {
      return await axios.post('s1/growerp/CreateSalesOrder',
@@ -290,7 +287,7 @@ export default class BackendService {
       axios.get('s1/growerp/GetProductCategories'),
       axios.get('s1/growerp/GetProducts'),
       axios.get('s1/growerp/GetOrdersAndItemsByPrepAreas'),
-      axios.post('s1/growerp/GetOrdersItemsPartySpot',{open: true}), //open orders
+      axios.post('s1/growerp/GetOrders',{open: true}), //open orders
       axios.get('s1/growerp/GetAllPartyInfo'),
       axios.get('s1/growerp/GetMyTasks'),
       axios.get('s1/growerp/GetRequests'),

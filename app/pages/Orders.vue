@@ -173,7 +173,7 @@ export default {
       if (this.currentTab == 1) // to be served
         this.servOrders = this.$store.getters.prepOrdersByStatusId('OrderPlaced')
       if (this.currentTab == 2){ // to be billed
-        this.$store.dispatch('updateOpenOrders').then(() => {
+        this.$store.dispatch('getOpenOrders').then(() => {
           this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')
       })}
     },
