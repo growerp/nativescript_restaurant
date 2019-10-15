@@ -112,7 +112,7 @@ export default {
     }
   },
   created() {
-    this.$backendService.getOrdersItemsPartySpot(this.open, this.startDate).then( result => {
+    this.$backendService.getOrders(this.open, this.startDate).then( result => {
       this.ordersAndItems = result.data.ordersAndItems
       // console.log('====orders and items: ' + JSON.stringify(this.ordersAndItems))
     })

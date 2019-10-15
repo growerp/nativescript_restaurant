@@ -142,18 +142,16 @@ const actions = {
   async createSalesOrder({dispatch}, item) {
     let result = await backendService.createSalesOrder(
           item.header, item.items)
-    console.log("=====reult save order" + JSON.stringify(result.data))
-    dispatch('updateOrdersAndItemsByPrepAreas')
-    dispatch('updateOpenOrders')
-    console.log("====finished")
+    dispatch('getOrdersAndItemsByPrepAreas')
+    dispatch('getOpenOrders')
     return result
   },
-  async updateOrdersAndItemsByPrepAreas({commit}) {
+  async getOrdersAndItemsByPrepAreas({commit}) {
     let result = await backendService.GetOrdersAndItemsByPrepAreas()
     commit("ordersAndItemsByPrepAreas", result.data.ordersAndItemsByPrepAreas)
   },
-  async updateOpenOrders({commit}) {
-    let result = await backendService.getOrdersItemsPartySpot(state)
+  async getOpenOrders({commit}) {
+    let result = await backendService.getOrders(state) // default is open only
     commit("openOrders", result.data.ordersAndItems)
   }
 }

@@ -166,7 +166,7 @@ const actions = {
     .then(axios.spread (function ( GetCurrentEmployeeUserGroupId, 
       GetActiveSubscriptions, GetPreparationAreas,
       GetAccommodationAreas, GetAccommodationSpots, GetProductCategories,
-      GetProducts, GetOrdersAndItemsByPrepAreas, GetOrdersItemsPartySpot,
+      GetProducts, GetOrdersAndItemsByPrepAreas, GetOrders,
       GetAllPartyInfo, GetMyTasks, GetRequests) {
         commit('currentEmployeeUserGroupId',
           GetCurrentEmployeeUserGroupId.data.currentEmployeeUserGroupId)
@@ -184,7 +184,7 @@ const actions = {
         commit('ordersAndItemsByPrepAreas',
           GetOrdersAndItemsByPrepAreas.data.ordersAndItemsByPrepAreas)
         commit('openOrders',
-          GetOrdersItemsPartySpot.data.ordersAndItems),
+          GetOrders.data.ordersAndItems),
         commit('allPartyInfo', GetAllPartyInfo.data),
         commit('tasks', GetMyTasks.data),
         commit('requests', GetRequests.data)
