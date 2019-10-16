@@ -2,8 +2,9 @@ import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 
 import sideDrawer from './modules/sideDrawer'
-import backEnd from './modules/backEnd'
-import locCatProd from './modules/locCatProd'
+import general from './modules/general'
+import catProd from './modules/catProd'
+import location from './modules/location'
 import orders from './modules/orders'
 import parties from './modules/parties'
 import taskRequest from './modules/taskRequest'
@@ -16,8 +17,9 @@ const debug = process.env.NODE_ENV !== 'production'
 const store = new Vuex.Store({
   modules: {
     sideDrawer,
-    backEnd,
-    locCatProd,
+    general,
+    catProd,
+    location,
     orders,
     parties,
     taskRequest,
