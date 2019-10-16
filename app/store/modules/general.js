@@ -1,9 +1,9 @@
 import store from '../../store'
 import axios from 'axios'
-import BackendService from '~/services/backend-service'
+import BackendService from "~/services/backend-service"
+const backendService = new BackendService()
 import { images } from '~/assets/imagesBase64'
 
-const backendService = new BackendService()
 const appSettings = require('tns-core-modules/application-settings')
 const log = true 
 const state = {
