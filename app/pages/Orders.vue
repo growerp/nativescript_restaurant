@@ -83,12 +83,14 @@
                 :visibility="billOrders.length ? 'visible':'collapse'"
                 for="item of billOrders"  childItems="items">
             <v-template name="title">
-              <GridLayout columns="auto,*,auto, auto, 5, auto" rows="*" class="m-10">
-                <Label col="0" :text="item.placedTime" class="h2"/>
-                <Label col="1" :text="item.table" class="h2" paddingLeft="10"/>
-                <Label col="2" :text="item.grandTotal" class="h2" paddingRight="10"/>
-                <Label class="button" col="3" :text="$t('print')" @tap="print(item)" padding="10"/>
-                <Label class="button" col="5" :text="$t('done')" @tap="setDone(item)" padding="10"/>
+              <GridLayout columns="*,auto, auto, 5, auto" rows="*" class="m-10">
+                <StackLayout col="0">
+                  <Label :text="item.placedTime" class="h3"/>
+                  <Label :text="item.table" class="h3"/>
+                </StackLayout>
+                <Label col="1" :text="item.grandTotal" class="h2" paddingRight="10"/>
+                <Label class="button" col="2" :text="$t('print')" @tap="print(item)" padding="10"/>
+                <Label class="button" col="4" :text="$t('done')" @tap="setDone(item)" padding="10"/>
               </GridLayout>
             </v-template>
             <v-template name="content">

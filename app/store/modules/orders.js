@@ -7,6 +7,7 @@ const state = {
   openOrders: [{
     orderId: '',
     orderStatusId: '',
+    placedDateTimestamp: '',
     placedDate: '',
     placedTime: '',
     partyId: '',
@@ -89,7 +90,10 @@ const mutations = {
     console.log("===status update completed")
   },
   openOrders(state, value) {
-    state.openOrders = value 
+    state.openOrders = value
+    if (state.openOrders.length > 1)
+      state.openOrders.sort(function (a, b) {
+        return a.placedDateTimestamp - b.placedDateTimestamp})
   },
   ordersAndItemsByPrepAreas(state, value) {
     state.ordersAndItemsByPrepAreas = value

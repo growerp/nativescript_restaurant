@@ -82,58 +82,63 @@ const getters = {
 }
 const actions = {
   async getConnection({ commit, dispatch }) {
-    log? console.log('===store dispatch starting======'):''
-    log? console.log ('===checking ==ping'):''
+    console.log ('===getConnection: checking ==ping')
     try {
       let result = await backendService.ping() // check if server present
       if (result.data && result.data.ok === 'ok') {
-        log? console.log('=== ping is ok now getting token....'):''
+        log? console.log('=== getConnection: ping is ok now getting token....'):''
         let resultToken = await backendService.getToken()
         commit('moquiToken', resultToken.data)
         backendService.saveToken(resultToken.data)
-        log?console.log('=== moqui token is ok....'):''
+        log? console.log('=== getConnection: moqui token is ok....'):''
         if (!appSettings.getString('username')) {
-          log?console.log('===using for the first time:show register screen'):''
+          log? console.log('=== getConnection: using for the first time so show register screen'):''
           return 'register'
         }
-        if (appSettings.getString('apiKey')) { // skip login when have api_key
-          log?console.log('api key found: ' + appSettings.getString('apiKey')):''
+        else if (appSettings.getString('apiKey')) { // skip login when have api_key
+          log? console.log("getConnection: api key found: " + appSettings.getString('apiKey')):''
           backendService.saveKey(appSettings.getString('apiKey')) // save it in the API
           try {
             result = await backendService.checkApiKey() // check if apiKey still valid
             if (result.data.ok === 'ok') {
-              log?console.log('===checkApiKey is fine, so connection fine...'):''
+              log? console.log('==== getConnection: checkApiKey is fine, so connection fine...'):''
               return 'success'
             } else { // server key wrong so delete it and login again
               appSettings.remove('apiKey')
-              return 'noApiKey'}
+              log?console.log('==== getConnection: no apiKey, needs logging in'):''
+              return 'noApiKey'
+            }
           }
           catch( error ) {
-            log?console.log('====Api key invalid, catch error:' + 
-                JSON.stringify(error)):''
+            log?console.log('==== getConnection: Api key invalid, catch error:' + JSON.stringify(error)):''
             appSettings.remove('apiKey')
             return 'noApiKey'}
         } else {
-          log?console.log('=== No current ApiKey found'):''
-          return 'noApiKey'}
+          log? console.log("=== No current ApiKey found"):''
+          return 'noApiKey'
+        }
       } else {
-        log?console.log('=== Ping does not return ok'):''
-        return 'serverProblem'}
+        log? console.log("==== getConnection:  No valid return from ping"):''
+        return "serverProblem"
+      }
     }
     catch( error ) {
-      log?console.log('=========ping catch: ' + error.message):''
-      return 'serverProblem'}
+      log? console.log('==== getConnection: ping catch server problem: ' + error.message):''
+      return "serverProblem"
+    }
+
   },
   async login({ commit}, user) {
-    log? console.log('store start logging in'):''
+    log? console.log("==== login: store start logging in"):''
     try {
       let result = await backendService.login(user)
       if (result.status == null) {
         return 'serverProblem'
       } else if (result.data.passwordChange) {
+        log? console.log('==== login change password'):''
         return 'passwordChange'
       } else if (result.data.apiKey) { // if apiKey present = logged in
-          log? console.log('===api key present from login'):''
+          log? console.log('==== login api key present'):''
           backendService.saveKey(result.data.apiKey)
           appSettings.setString('apiKey', result.data.apiKey)
           commit('moquiToken', result.data.moquiSessionToken)
@@ -143,8 +148,8 @@ const actions = {
           return 'accountNotFound'
       }
     } catch(error) {
-      log? console.log('====login catch error' + error.errors):''
-      return error.errors? error.errors : 'serverProblem'}
+      log? console.log("====login catch error" + error.errors):''
+      return 'serverProblem' }
   },
   async register({commit}, input) {
     try {
@@ -247,7 +252,7 @@ const actions = {
         backendService.createProduct({name: 'Tomjamkuhn', price: 3.99, productCategoryId: result.data.productCategoryId})
         backendService.createProduct({name: 'Cheese plate', price: 4.99, productCategoryId: result.data.productCategoryId})})
     })
-    item.description = 'Bar'
+    item.description = "Bar"
     backendService.createPreparationArea(item).then( result => {
       backendService.uploadImage('small', images.barImageSmall, 'prep', result.data.preparationAreaId)
       backendService.uploadImage('medium', images.barImageMedium, 'prep', result.data.preparationAreaId)
