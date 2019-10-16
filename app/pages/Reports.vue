@@ -13,27 +13,27 @@
               ref="accordion" allowMultiple="false"
               for="item of ordersAndItems" childItems="items">
             <v-template name="title">
-              <GridLayout columns="auto, *, auto, auto, 100" rows="*" class="item"
+              <GridLayout columns="auto, *, auto, auto, 100" rows="*"
                   paddingRight="5" paddingLeft="5"
                   backgroundColor="rgb(211, 215, 207)">
-                <Label :text="item.placedDate" col="0" padding="10"
-                  verticalAlignment="center"/>
+                <Label :text="item.placedDate" col="0" padding="5"  class="h3"
+                  verticalAlignment="center" />
                 <StackLayout col="1">
-                  <Label :text="item.table" padding="10" class="h3"/>
+                  <Label :text="item.table" padding="5" class="h3"/>
                   <label :text="item.firstName + ' ' + item.lastName" class="h3"/>
                 </StackLayout>
-                <Label :text="item.nbrOfGuests" col="2" padding="10"/>
-                <Label :text="item.grandTotal" col="3" padding="10"/>
-                <Label :text="item.statusId" col="4" padding="10"/>
+                <Label :text="item.nbrOfGuests" col="2" padding="5" class="h3"/>
+                <Label :text="item.grandTotal" col="3" padding="5" class="h3"/>
+                <Label :text="item.statusId" col="4" padding="5" class="h3"/>
               </GridLayout>
             </v-template>
             <v-template name="content">
-              <GridLayout columns="10, *, auto, auto, auto" rows="*" class="item"
+              <GridLayout columns="10, *, auto, auto, auto" rows="*"
                   paddingRight="5" paddingLeft="5">
-                <label :text="item.description" class="h3" col="1" padding="10"/>
-                <label :text="item.quantity" col="2" padding="10"/>
-                <label :text="item.price" col="3" padding="10"/>
-                <label :text="item.totalAmount" col="4" padding="10"/>
+                <label :text="item.description" class="h3" col="1" padding="5"/>
+                <label :text="item.quantity" col="2" padding="10" class="h3"/>
+                <label :text="item.price" col="3" padding="10" class="h3"/>
+                <label :text="item.totalAmount" col="4" padding="10" class="h3"/>
               </GridLayout>
             </v-template>
           </Accordion>

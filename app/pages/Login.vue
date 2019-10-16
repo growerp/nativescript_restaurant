@@ -211,39 +211,42 @@ const appSettings = require("tns-core-modules/application-settings")
       },
 
       forgotPassword() {
-        prompt({
-          title: this.$t('forgotPassword'),
-          message: this.$t('enterEmail'),
-          inputType: "email",
-          defaultText: appSettings.getString('username'),
-          okButtonText: "Ok",
-          cancelButtonText: this.$t('cancel')
-        }).then (data => {
-          this.processing = true
-          if (data.text && data.result == true) {
-            this.$store.dispatch('getConnection').then( result => {
-              this.$backendService.resetUserPassword(data.text.trim())
-              .then (res => {
-                  this.alert(res.data.messages);
-              })
-              .catch( error => {
-                  this.note(this.$t('sendPasswordError') + 
-                    this.$backendService.getErrorMessage(error))
-              })
+       this.$store.dispatch('getConnection').then( result => {
+          if (result == 'serverProblem') {
+            this.serverProblem() }
+          else {
+            prompt({
+              title: this.$t('forgotPassword'),
+              message: this.$t('enterEmail'),
+              inputType: "email",
+              defaultText: appSettings.getString('username'),
+              okButtonText: "Ok",
+              cancelButtonText: this.$t('cancel')
+            }).then (data => {
+              this.processing = true
+              if (data.text && data.result == true) {
+                  this.$backendService.resetUserPassword(data.text.trim())
+                  .then (res => {
+                      this.alert(res.data.messages);
+                  })
+                  .catch( error => {
+                      this.note(this.$t('sendPasswordError') + 
+                        this.$backendService.getErrorMessage(error))
+                  })
+              } else {
+                if (data.result == true) {
+                  this.note(this.$t('enterEmail'))
+                }
+              }
+              this.processing = false
             })
-          } else {
-            if (data.result == true) {
-              this.note(this.$t('enterEmail'))
-            }
           }
-          this.processing = false
         })
-        this.processing = false
       },
 
       register() {
         this.$store.dispatch('getConnection').then( result => {
-          if (result == 'noPing') {
+          if (result == 'serverProblem') {
             this.serverProblem() }
           else {
             console.log('--register!---company.name: ' + this.company.name)
