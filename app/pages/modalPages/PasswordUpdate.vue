@@ -36,7 +36,10 @@ export default {
       userMetaData: {
         propertyAnnotations:[
           { name: 'oldPassword', index: 0, editor: 'Password',
-            ignore: this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN' || this.oldPassword ? true : false},
+            ignore:
+                this.$store.getters.currentEmployeeUserGroupId ===
+                    'GROWERP_M_ADMIN' ||
+                this.oldPassword ? true : false},
           { name: 'newPassword', index: 1, editor: 'Password'},
           { name: 'passwordVerify', index: 2 , editor: 'Password'},
         ],

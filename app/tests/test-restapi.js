@@ -44,15 +44,13 @@ describe('Test REST API', function() {
     it('test Login function.', async function() {
         var resultName = null;
         await backendService.getToken().then (resultToken => {
-            store.commit('moquiToken', resultToken.data)
             backendService.saveToken(resultToken.data)
         });
         await backendService.login(user).then(function(result) {
             resultName = result.data.user.name;
             backendService.saveKey(result.data.apiKey)
             appSettings.setString('apiKey', result.data.apiKey)
-            store.commit('moquiToken', result.data.moquiSessionToken)
-            backendService.saveToken()
+            backendService.saveToken(resultToken.data)
         });
         assert.equal(resultName, user.name);
     });
