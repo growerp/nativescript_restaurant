@@ -6,6 +6,8 @@ import { images } from '~/assets/imagesBase64'
 
 const appSettings = require('tns-core-modules/application-settings')
 const log = true 
+if (TNS_ENV === 'production') log = false
+
 const state = {
   moquiToken: '',
   activeSubscriptions: [],
@@ -88,20 +90,23 @@ const actions = {
       if (result.data && result.data.ok === 'ok') {
         log? console.log('=== getConnection: ping is ok now getting token....'):''
         let resultToken = await backendService.getToken()
-        commit('moquiToken', resultToken.data)
+        log?console.log("==== conn token received: " + resultToken.data):''
         backendService.saveToken(resultToken.data)
         log? console.log('=== getConnection: moqui token is ok....'):''
         if (!appSettings.getString('username')) {
-          log? console.log('=== getConnection: using for the first time so show register screen'):''
+          log? console.log('=== getConnection: first usage, so show register screen'):''
           return 'register'
         }
         else if (appSettings.getString('apiKey')) { // skip login when have api_key
-          log? console.log("getConnection: api key found: " + appSettings.getString('apiKey')):''
+          log? console.log("====getConnection: api key found: " + 
+              appSettings.getString('apiKey')):''
           backendService.saveKey(appSettings.getString('apiKey')) // save it in the API
           try {
             result = await backendService.checkApiKey() // check if apiKey still valid
+            log? console.log("====result from check apiKey: ",
+                JSON.stringify(result.data)):''
             if (result.data.ok === 'ok') {
-              log? console.log('==== getConnection: checkApiKey is fine, so connection fine...'):''
+              log? console.log('==== getConnection: checkApiKey is fine.'):''
               return 'success'
             } else { // server key wrong so delete it and login again
               appSettings.remove('apiKey')
@@ -128,8 +133,9 @@ const actions = {
     }
 
   },
-  async login({ commit}, user) {
+  async login({commit}, user) {
     log? console.log("==== login: store start logging in"):''
+    appSettings.setString('username', user.name)
     try {
       let result = await backendService.login(user)
       if (result.status == null) {
@@ -138,19 +144,16 @@ const actions = {
         log? console.log('==== login change password'):''
         return 'passwordChange'
       } else if (result.data.apiKey) { // if apiKey present = logged in
-          log? console.log('==== login api key present'):''
+          log? console.log("==== login api key received key: " + result.data.apiKey):''
           backendService.saveKey(result.data.apiKey)
-          appSettings.setString('apiKey', result.data.apiKey)
-          commit('moquiToken', result.data.moquiSessionToken)
-          backendService.saveToken()
+          backendService.saveToken(result.data.moquiSessionToken)
           return 'success'
       } else {
-          return 'accountNotFound'
-      }
+          return 'loginFailed'}
     } catch(error) {
-      log? console.log("====login catch error" + error.errors):''
-      return 'serverProblem' }
-  },
+      log? console.log("====login catch error: " + error.errors):''
+        return 'loginFailed'}
+    },
   async register({commit}, input) {
     try {
       let response = await backendService.register(input.user, input.company)

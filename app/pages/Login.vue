@@ -87,9 +87,11 @@
 
 <script>
 const log = true
+if (TNS_ENV === 'production') log = false
 import general from '~/mixins/general'
 import Confirm from './modalPages/Confirm'
 import Alert from './modalPages/Alert'
+import Prompt from './modalPages/Prompt'
 import PasswordUpdate from './modalPages/PasswordUpdate'
 import { ValueList } from "nativescript-drop-down";
 import { exit } from 'nativescript-exit';
@@ -137,7 +139,7 @@ const appSettings = require("tns-core-modules/application-settings")
       this.processing = true
       log?console.log("===created get connection"):''
       this.$store.dispatch('getConnection').then( result => {
-        log?console.log("result from getConnection: " + result):''
+        log?console.log("==== result from getConnection: " + result):''
         if (result == 'serverProblem') {
           this.processing = false
           this.serverProblem() }
@@ -184,29 +186,37 @@ const appSettings = require("tns-core-modules/application-settings")
       login() {
         log?console.log("=====logging in ======"):''
         this.$store.dispatch('getConnection').then( result => {
-          this.$store.dispatch("login", this.user).then(result => {
-            this.processing = false
-            log?console.log(" login page login result: " + result):''
-            if (result == 'serverProblem') {
-              this.processing = false
-              this.serverProblem() }
-            else if (result == 'passwordChange') {
-              this.$showModal(PasswordUpdate,{props:
-                { oldPassword : this.user.password,
-                  username: this.user.name,
-                  fullName: this.user.firstName + ' ' +
-                    this.user.lastName}})
-              .then (() => {
-                this.user.password = '' })}
-            else if (result == 'success') {
-              log?console.log("====login page success, loading initial data"):''
-              this.$store.dispatch('initData').then(() => { 
-                log?console.log("====init done going home....."):''
-                this.$navigateTo(this.$routes.Home, 
-                    {clearHistory: true, props: { firstTime: true }})})}
-            else {
-              this.note(result)}
-          })
+          if (result = 'noApiKey') {
+            this.$store.dispatch("login", this.user).then(result => {
+              log?console.log("==== login page login result: " + result):''
+              if (result == 'success') {
+                log?console.log("====login page success, loading initial data"):''
+                this.$store.dispatch('initData').then(() => { 
+                  log?console.log("====init done going home....."):''
+                  this.$navigateTo(this.$routes.Home, 
+                      {clearHistory: true, props: { firstTime: true }})
+                })
+              } else {
+                this.processing = false
+                if (result == 'loginFailed') {
+                  console.log("==== login failed")}
+                else if (result == 'serverProblem') {
+                  this.serverProblem() }
+                else if (result == 'passwordChange') {
+                  this.$showModal(PasswordUpdate,{props:
+                    { oldPassword : this.user.password,
+                      username: this.user.name,
+                      fullName: this.user.firstName + ' ' +
+                        this.user.lastName}})
+                  .then (() => {
+                    this.user.password = '' })}
+              }
+            })
+          } else if (result == 'success') {
+            this.$store.dispatch('initData').then(() => { 
+              log?console.log("====apiKey found in login, init done, going home....."):''
+              this.$navigateTo(this.$routes.Home, 
+                  {clearHistory: true, props: { firstTime: true }})})}
         })
       },
 
@@ -215,30 +225,26 @@ const appSettings = require("tns-core-modules/application-settings")
           if (result == 'serverProblem') {
             this.serverProblem() }
           else {
-            prompt({
+            this.$showModal(Prompt,{ props:{
               title: this.$t('forgotPassword'),
               message: this.$t('enterEmail'),
-              inputType: "email",
-              defaultText: appSettings.getString('username'),
-              okButtonText: "Ok",
-              cancelButtonText: this.$t('cancel')
+              defaultText: this.user.emailAddress ,
+              inputType: 'email',}
             }).then (data => {
-              this.processing = true
-              if (data.text && data.result == true) {
-                  this.$backendService.resetUserPassword(data.text.trim())
-                  .then (res => {
-                      this.alert(res.data.messages);
+              if (data) {
+                this.processing = true
+                this.$backendService.resetUserPassword(data.trim())
+                .then (res => {
+                  this.processing = false
+                  this.$showModal(Alert,{ props: {
+                      message: res.data.messages}
                   })
-                  .catch( error => {
-                      this.note(this.$t('sendPasswordError') + 
-                        this.$backendService.getErrorMessage(error))
-                  })
-              } else {
-                if (data.result == true) {
-                  this.note(this.$t('enterEmail'))
-                }
+                })
+                .catch( error => {
+                    this.note(this.$t('sendPasswordError') +
+                      this.$backendService.getErrorMessage(error))
+                })
               }
-              this.processing = false
             })
           }
         })
@@ -259,16 +265,12 @@ const appSettings = require("tns-core-modules/application-settings")
               this.note(this.$t('enterCurrency'))
             } else {
               this.user.name = this.user.emailAddress //initially the same
+              this.processing = true
               this.$store.dispatch('register', 
                   {company: this.company, user: this.user})
               .then( regResult => {
                 console.log("====register result: " + regResult)
-                if (regResult == 'passwordRequirement')
-                  this.note(this.$t(regResult))
-                else if (regResult.startsWith('regError')) {
-                  this.note(this.$t(regError) + regResult.substring(8))
-                } else {
-                  this.processing = true
+                if (regResult == 'success') {
                   console.log("====== register success! logging in")
                   this.$store.dispatch('login',this.user)
                   .then (() => {
@@ -283,11 +285,19 @@ const appSettings = require("tns-core-modules/application-settings")
                       this.$showModal(Alert,{ props: {
                         message: 'You can login now.....'}})
                       .then(() => {
+                        // force the user to enter password again.....
                         if (TNS_ENV === 'production') delete this.user.password 
                         this.isLoggingIn = true
                       })
                     })
                   })
+                } else { // something wrong....
+                  this.processing =false
+                  if (regResult == 'passwordRequirement')
+                    this.note(this.$t(regResult))
+                  else if (regResult.startsWith('regError')) {
+                    this.note(this.$t(regError) + regResult.substring(8))
+                  } 
                 }
               })
             }
@@ -303,12 +313,6 @@ const appSettings = require("tns-core-modules/application-settings")
             this.$refs.confirmPassword.nativeView.focus();
         }
       },
-      alert(message) {
-        this.$showModal(Alert,{ props: {
-              message: message}
-        })
-      },
-
       serverProblem(message=this.$t('connError')) {
         this.$showModal(Confirm,{ props: {
             message: this.$t('serverNotAvailable'),

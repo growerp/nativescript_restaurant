@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '../store'
 const platformModule = require("tns-core-modules/platform")
+const appSettings = require("tns-core-modules/application-settings")
 import { ToastDuration, ToastPosition, Toasty } from 'nativescript-toasty';
 
 let log = false
@@ -22,7 +23,7 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] =
 axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
 axios.defaults.headers.post['moquiSessionToken'] = '';
-axios.defaults.headers.post['api_key'] = '';
+// axios.defaults.headers['api_key'] = '';
 
 
 axios.interceptors.request.use(function (config) {
@@ -35,8 +36,8 @@ axios.interceptors.request.use(function (config) {
       ' headers: ' + JSON.stringify(config.headers))):''
     return config;
     }, function (error) {
-    // Do something with request error
-    log?console.log('===Request Error Handler: ', error):''
+    // Do something with request error beter not suppress....
+    console.log('===Request Error Handler: ', error)
     return Promise.reject(error);
     });
 
@@ -84,6 +85,7 @@ axios.interceptors.response.use(
   )
 
 export default class BackendService {
+
   getErrorMessage(error) {
     let msg = ''
     if (error.response.status == '401') {
@@ -95,11 +97,10 @@ export default class BackendService {
     }
     return error.message + ": " + error.response.statusText + '; ' + msg
   }
-  saveToken() {
-    axios.defaults.headers['moquiSessionToken'] = store.getters.moquiToken
-    axios.defaults.headers['moquiSessionToken'] = store.getters.moquiToken }
+  saveToken(moquiToken) {
+    axios.defaults.headers.post['moquiSessionToken'] = moquiToken }
   saveKey(apiKey) {
-    axios.defaults.headers['api_key'] = apiKey
+    appSettings.setString('apiKey', apiKey)
     axios.defaults.headers['api_key'] = apiKey}
   
   // ================getToken,login/out/register password forgot =============
@@ -113,8 +114,13 @@ export default class BackendService {
     return await axios.get('s1/growerp/CheckApiKey',
       { errorHandle: false})}
   async ping() {
-    return await axios.get('s1/growerp/Ping',
-      { errorHandle: false})}
+    let apiKey = axios.defaults.headers.common["apiKey"] 
+    delete axios.defaults.headers.common["apiKey"]
+    let result = await axios.get('s1/growerp/Ping',
+      { errorHandle: false})
+    axios.defaults.headers.common["apiKey"] = apiKey
+    return result
+  }
   async logout() {
     return await axios.get('logout')}
   async register(user, company) {

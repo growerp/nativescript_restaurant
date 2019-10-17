@@ -31,9 +31,7 @@ describe('#Order()', function () {
     beforeEach(async function() {
         await backendService.login(usertest).then(function(result) {
             backendService.saveKey(result.data.apiKey)
-            appSettings.setString('apiKey', result.data.apiKey)
-            store.commit('moquiToken', result.data.moquiSessionToken)
-            backendService.saveToken()
+            backendService.saveToken(result.data.moquiSessionToken)
         });
     });
 
