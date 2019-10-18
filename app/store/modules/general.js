@@ -5,7 +5,7 @@ const backendService = new BackendService()
 import { images } from '~/assets/imagesBase64'
 
 const appSettings = require('tns-core-modules/application-settings')
-const log = true 
+var log = true 
 if (TNS_ENV === 'production') log = false
 
 const state = {

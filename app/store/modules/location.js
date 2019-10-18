@@ -1,7 +1,8 @@
 import store from '~/store'
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService()
-const log = true 
+var log = true
+if (TNS_ENV === 'production') log = false
 const state = {
   accommodationAreas: [{
     accommodationAreaId: '',

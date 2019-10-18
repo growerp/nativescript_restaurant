@@ -86,7 +86,7 @@
 </template>
 
 <script>
-const log = true
+var log = true
 if (TNS_ENV === 'production') log = false
 import general from '~/mixins/general'
 import Confirm from './modalPages/Confirm'
