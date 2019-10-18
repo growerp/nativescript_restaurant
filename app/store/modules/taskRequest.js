@@ -1,5 +1,6 @@
 import store from '../../store'
-const log = true 
+var log = true
+if (TNS_ENV === 'production') log = false
 const state = {
   myTasks: [{
     workEffortId: '',
