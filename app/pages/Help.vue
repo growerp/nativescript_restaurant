@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
