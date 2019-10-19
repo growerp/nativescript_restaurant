@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <ScrollView>
     <StackLayout width="100%">
       <Image src='~/assets/images/growerp.png' height="70" class="m-10"

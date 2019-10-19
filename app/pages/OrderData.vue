@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"

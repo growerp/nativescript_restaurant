@@ -1,4 +1,4 @@
-import store from '../../store'
+import store from '~/store'
 import axios from 'axios'
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService()
