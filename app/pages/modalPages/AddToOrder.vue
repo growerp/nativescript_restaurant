@@ -9,7 +9,7 @@
       <label :text="$t('selectExistOrNew')"  class="h3" 
           row="2" horizontalAlignment="center"/>
       <RadListView for="order in openOrders" @itemTap="onOrderTap" 
-        height="50%" row="3">
+        height="40%" row="3">
         <v-template>
           <GridLayout width="100%" columns="auto, 30, auto, 30, *" padding="20">
             <label :text="order.placedTime" class="h2" col="0"/>

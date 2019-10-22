@@ -54,7 +54,8 @@ axios.interceptors.response.use(
 
     function(error) { // better not suppress REST console errors
       // check for errorHandle config
-      if( error.config.hasOwnProperty('errorHandle') && error.config.errorHandle === false ) {
+      if( error.config.hasOwnProperty('errorHandle') && 
+          error.config.errorHandle === false ) {
         return Promise.reject(error)
       }
       if (error.response) {
@@ -70,7 +71,7 @@ axios.interceptors.response.use(
 //      trace.error("Error in service communication:" + error.response.data.errors);
 
       var toast = new Toasty({
-        text: 'Server error: ' + error.response.data.errors,
+        text: error.response.data.errors,
         duration: ToastDuration.LONG,
         position: ToastPosition.TOP,
         ios: {
@@ -107,9 +108,13 @@ export default class BackendService {
   async getToken() {
     return await axios.get('moquiSessionToken')}
   async login(user) {
-    return await axios.post('s1/growerp/LoginUser',
-      { username: user.name, password: user.password },
-      { errorHandle: false })}
+    let apiKey = axios.defaults.headers.common["apiKey"] 
+    delete axios.defaults.headers.common["apiKey"]
+    let result = await axios.post('s1/growerp/LoginUser',
+      { username: user.name, password: user.password })
+    axios.defaults.headers.common["apiKey"] = apiKey
+    return result
+  }
   async checkApiKey() {
     return await axios.get('s1/growerp/CheckApiKey',
       { errorHandle: false})}
@@ -123,6 +128,8 @@ export default class BackendService {
   }
   async logout() {
     return await axios.get('logout')}
+  async getCurrencyList() {
+    return await axios.get('s1/growerp/CurrencyList')}
   async register(user, company) {
     return await axios.post('s1/growerp/RegisterUserAndCompany',
       { username: user.name, emailAddress: user.emailAddress,
@@ -211,7 +218,7 @@ export default class BackendService {
   async getOrder(orderId) {
     return await axios.post('s1/growerp/GetOrder',
       { orderId: orderId})}
-  async GetOrdersAndItemsByPrepAreas() {
+  async getOrdersAndItemsByPrepAreas() {
     return await axios.get('s1/growerp/GetOrdersAndItemsByPrepAreas')}
   async getOrders(open=true, startDate=null) {
     return await axios.post('s1/growerp/GetOrders',
@@ -307,8 +314,5 @@ export default class BackendService {
   }
   async getActiveSubscriptions() {
     return await axios.get('s1/growerp/GetActiveSubscriptions')
-  }
-  async getCurrencyList() {
-    return await axios.get('s1/growerp/CurrencyList')
   }
 }

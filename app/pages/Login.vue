@@ -10,7 +10,7 @@
             <TextField class="input" :hint="$t('usrNameEmail')" :isEnabled="!processing"
                 autocorrect="false" ref="username" 
                 autocapitalizationType="none" v-model="user.name"
-                returnKeyType="next" @returnPress="focusPassword"></TextField>
+                returnKeyType="next" ></TextField>
             <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
@@ -18,7 +18,7 @@
             <TextField class="input" :hint="$t('restName')" :isEnabled="!processing"
                 autocorrect="false"
                 autocapitalizationType="none" v-model="company.name"
-                returnKeyType="next" @returnPress="focusPassword"></TextField>
+                returnKeyType="next" ></TextField>
             <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
@@ -54,8 +54,7 @@
           <StackLayout row="3" col="0" colSpan="2" class="input-field">
             <TextField class="input" ref="password" :isEnabled="!processing"
                 :hint="$t('password')" secure="true" v-model="user.password"
-                :returnKeyType="isLoggingIn ? 'done' : 'next'"
-                @returnPress="focusConfirmPassword"></TextField>
+                :returnKeyType="isLoggingIn ? 'done' : 'next'"></TextField>
             <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
@@ -70,7 +69,7 @@
         </GridLayout>
 
         <Button :text="isLoggingIn ? $t('login') : $t('signUp') " :isEnabled="!processing"
-            @tap="submit" class="btn btn-primary btn-rounded-sm"></Button>
+            @tap="submit" class="btn btn-primary btn-rounded-sm" ref="submit"></Button>
         <Label *v-show="isLoggingIn" :text="$t('forgotPassword')"
             class="login-label" @tap="forgotPassword"></Label>
       </StackLayout>
@@ -132,7 +131,7 @@ const appSettings = require("tns-core-modules/application-settings")
           name: 'My litle Restaurant',
           currency: 'THB',
         },
-        currencyUomIds: null,
+        currencyUomIds: null
       };
     },
     created() {
@@ -140,30 +139,31 @@ const appSettings = require("tns-core-modules/application-settings")
       log?console.log("===created get connection"):''
       this.$store.dispatch('getConnection').then( result => {
         log?console.log("==== result from getConnection: " + result):''
-        if (result == 'serverProblem') {
-          this.processing = false
-          this.serverProblem() }
-        else if (result == 'register') {
-          this.processing = false
-          this.isLoggingIn = false}
-        else if (result == 'noApiKey') {
-          this.processing = false
-          this.isLoggingIn = true }
-        else if (result == 'success') {
+        if (result == 'success') {
           this.$store.dispatch('initData')
           log?console.log("==init ===created====going home======"):''
           this.$navigateTo(this.$routes.Home, 
             {clearHistory: true, props: {firstTime: true}})}
-        else console.log("==== unexpected return from getConnection dispatch!")
+        else {
+          this.processing = false
+          if (result.startsWith('message:'))
+            this.note(result.substring(8)) 
+          else if (result == 'serverProblem')
+            this.serverProblem()
+          else if (result == 'register')
+            this.toggleForm()   // started with login, switch to register
+          else if (result == 'noApiKey')
+            ()=>{} // no-op: just show login screen
+          else console.log("==== unexpected return from getConnection dispatch!")}
       })
     },
     methods: {
       toggleForm() {
         this.isLoggingIn = !this.isLoggingIn;
-        if (!this.isLoggingIn){
-          this.$backendService.getCurrencyList().then (results => {
-              this.currencyUomIds = 
-                  new ValueList(results.data.currencyList)
+        if (!this.isLoggingIn && !this.currencyUomIds){
+          this.$backendService.getCurrencyList()
+          .then (results => {
+            this.currencyUomIds = new ValueList(results.data.currencyList)
           })
         }
       },
@@ -198,10 +198,12 @@ const appSettings = require("tns-core-modules/application-settings")
                 })
               } else {
                 this.processing = false
-                if (result == 'loginFailed') {
-                  console.log("==== login failed")}
-                else if (result == 'serverProblem') {
-                  this.serverProblem() }
+                if (result.startsWith('message:'))
+                    this.note(result.substring(8))
+                else if (result == 'loginFailed')
+                  console.log("==== login failed")
+                else if (result == 'serverProblem')
+                  this.serverProblem()
                 else if (result == 'passwordChange') {
                   this.$showModal(PasswordUpdate,{props:
                     { oldPassword : this.user.password,
@@ -233,7 +235,7 @@ const appSettings = require("tns-core-modules/application-settings")
             }).then (data => {
               if (data) {
                 this.processing = true
-                this.$backendService.resetUserPassword(data.trim())
+                this.$backendService.resetUserPassword(data.toLowerCase().trim())
                 .then (res => {
                   this.processing = false
                   this.$showModal(Alert,{ props: {
@@ -255,7 +257,6 @@ const appSettings = require("tns-core-modules/application-settings")
           if (result == 'serverProblem') {
             this.serverProblem() }
           else {
-            console.log('--register!---company.name: ' + this.company.name)
             this.processing = false
             if (this.user.password !== this.user.confirmPassword) {
               this.note(this.$t('passwordNotMatch'))
@@ -264,7 +265,6 @@ const appSettings = require("tns-core-modules/application-settings")
             } else if (this.company.currency === '') {
               this.note(this.$t('enterCurrency'))
             } else {
-              this.user.name = this.user.emailAddress //initially the same
               this.processing = true
               this.$store.dispatch('register', 
                   {company: this.company, user: this.user})
@@ -292,12 +292,13 @@ const appSettings = require("tns-core-modules/application-settings")
                     })
                   })
                 } else { // something wrong....
-                  this.processing =false
-                  if (regResult == 'passwordRequirement')
-                    this.note(this.$t(regResult))
-                  else if (regResult.startsWith('regError')) {
-                    this.note(this.$t(regError) + regResult.substring(8))
-                  } 
+                  this.processing = false
+                  if (regResult.startsWith("message:Found issues with password"))
+                    this.$showModal(Confirm,{ props: {
+                      message: this.$t('passwordRequirement1') }})
+                  else if (regResult.startsWith('message:'))
+                    this.$showModal(Confirm,{ props: {
+                      message: regResult.substring(8)}})
                 }
               })
             }
@@ -305,14 +306,6 @@ const appSettings = require("tns-core-modules/application-settings")
         }) 
       },
 
-      focusPassword() {
-          this.$refs.password.nativeView.focus();
-      },
-      focusConfirmPassword() {
-        if (!this.isLoggingIn) {
-            this.$refs.confirmPassword.nativeView.focus();
-        }
-      },
       serverProblem(message=this.$t('connError')) {
         this.$showModal(Confirm,{ props: {
             message: this.$t('serverNotAvailable'),
