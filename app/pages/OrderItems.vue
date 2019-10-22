@@ -3,8 +3,8 @@
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           :openDrawer="openDrawer" 
-          :header="this.$t('orderFor') + this.orderHeader.description +
-                    this.$t('table') + ' ' + this.orderHeader.spotNumber"
+          :header="this.orderHeader.description + this.$t('table') +
+             ' ' + this.orderHeader.spotNumber"
           :text="$t('totalAmount') + ': ' + getOrderTotal" />
     </ActionBar>
     <StackLayout>
@@ -73,10 +73,12 @@ export default {
           items: this.orderItems })
       .then( result => {
         if (this.orderHeader.orderId) {
-          this.note(this.$t('orderUpdated') + result.data.orderId +
+          this.note(this.$t('orderUpdated') + result.data.orderId + ' ',
+          this.orderHeader.description + '-' + this.orderHeader.spotNumber,
             this.$t('appearPrepArea'))
         } else {
-          this.note(this.$t('orderReceived') + result.data.orderId +
+          this.note(this.$t('orderReceived') + result.data.orderId + ' ',
+          this.orderHeader.description + '-' + this.orderHeader.spotNumber,
               this.$t('appearPrepArea'))
         }
 

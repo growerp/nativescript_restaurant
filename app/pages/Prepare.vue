@@ -75,6 +75,7 @@ export default {
           statusId: 'serv'})
     },
     refresh() {
+      this.$store.dispatch('getOpenOrders', null)
       this.$store.dispatch('getOrdersAndItemsByPrepAreas', null)
     }
   },

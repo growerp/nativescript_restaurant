@@ -6,7 +6,7 @@ import { images } from '~/assets/imagesBase64'
 
 const appSettings = require('tns-core-modules/application-settings')
 var log = true 
-if (TNS_ENV === 'production') log = false
+// if (TNS_ENV === 'production') log = false
 
 const state = {
   moquiToken: '',
@@ -93,81 +93,67 @@ const actions = {
         log?console.log("==== conn token received: " + resultToken.data):''
         backendService.saveToken(resultToken.data)
         log? console.log('=== getConnection: moqui token is ok....'):''
-        if (!appSettings.getString('username')) {
+        if (!appSettings.hasKey('username')) {
           log? console.log('=== getConnection: first usage, so show register screen'):''
           return 'register'
-        }
-        else if (appSettings.getString('apiKey')) { // skip login when have api_key
+        } else if (appSettings.hasKey('apiKey')) { // skip login when have api_key
           log? console.log("====getConnection: api key found: " + 
               appSettings.getString('apiKey')):''
           backendService.saveKey(appSettings.getString('apiKey')) // save it in the API
-          try {
+          try{
             result = await backendService.checkApiKey() // check if apiKey still valid
-            log? console.log("====result from check apiKey: ",
-                JSON.stringify(result.data)):''
-            if (result.data.ok === 'ok') {
+            if (result && result.data && result.data.ok === 'ok') {
               log? console.log('==== getConnection: checkApiKey is fine.'):''
               return 'success'
             } else { // server key wrong so delete it and login again
               appSettings.remove('apiKey')
-              log?console.log('==== getConnection: no apiKey, needs logging in'):''
+              log?console.log('==== getConnection: apiKey failed, needs logging in'):''
               return 'noApiKey'
             }
-          }
-          catch( error ) {
-            log?console.log('==== getConnection: Api key invalid, catch error:' + JSON.stringify(error)):''
-            appSettings.remove('apiKey')
-            return 'noApiKey'}
+          } catch(error) {
+            log? console.log('==== getConnection: check apiKey catch'):''
+            return "message:" + error.response.data.errors }
         } else {
           log? console.log("=== No current ApiKey found"):''
-          return 'noApiKey'
-        }
+          return 'noApiKey'}
       } else {
         log? console.log("==== getConnection:  No valid return from ping"):''
-        return "serverProblem"
       }
-    }
-    catch( error ) {
-      log? console.log('==== getConnection: ping catch server problem: ' + error.message):''
-      return "serverProblem"
-    }
-
+    } catch(error) {
+      log? console.log('==== getConnection: ping catch server problem: '):''
+      return "serverProblem" }
   },
-  async login({commit}, user) {
+  async login({}, user) {
     log? console.log("==== login: store start logging in"):''
+    user.name = user.name.toLowerCase().trim()
     appSettings.setString('username', user.name)
     try {
       let result = await backendService.login(user)
-      if (result.status == null) {
-        return 'serverProblem'
-      } else if (result.data.passwordChange) {
-        log? console.log('==== login change password'):''
-        return 'passwordChange'
-      } else if (result.data.apiKey) { // if apiKey present = logged in
+      if (result ) {
+        if (result.data.passwordChange) {
+          log? console.log('==== login change password'):''
+          return 'passwordChange'
+        } else if (result.data.apiKey) { // if apiKey present = logged in
           log? console.log("==== login api key received key: " + result.data.apiKey):''
           backendService.saveKey(result.data.apiKey)
           backendService.saveToken(result.data.moquiSessionToken)
-          return 'success'
-      } else {
-          return 'loginFailed'}
+          return 'success' }}
     } catch(error) {
-      log? console.log("====login catch error: " + error.errors):''
-        return 'loginFailed'}
-    },
+      return "message:" + error.response.data.errors }
+  },
   async register({commit}, input) {
+    input.user.emailAddress = input.user.emailAddress.toLowerCase().trim()
+    input.user.username = input.user.emailAddress
     try {
       let response = await backendService.register(input.user, input.company)
-      if (!response.data.user) return 'registerError'
-      appSettings.clear() // start fresh
-      appSettings.setString('username', input.user.name)
-      return 'success'
-    } catch( error ) {
-      if (error.response.data.errors.indexOf('Found issues with password') !== -1) {
-        return 'passwordRequirement'
-      } else {
-        return 'regError' + error.response.data.errors
+      console.log("=====response: " + JSON.stringify(response))
+      if (response && response.data) { 
+        appSettings.clear() // start fresh
+        appSettings.setString('username', input.user.name)
+        return 'success'
       }
-    }
+    } catch(error) {
+        return "message:" + error.response.data.errors }
   },
   async initData({commit}) {
     await backendService.initData()

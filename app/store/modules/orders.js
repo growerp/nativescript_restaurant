@@ -1,7 +1,7 @@
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService()
 var log = true
-if (TNS_ENV === 'production') log = false
+//if (TNS_ENV === 'production') log = false
 
 const state = {
    // all open orders with all items in list together in a single order line
@@ -65,13 +65,11 @@ const mutations = {
   changeOrderPartStatus(state, value) {
     log?console.log("=====update part status in store: " + JSON.stringify(value)):''
     let index = state.openOrders.findIndex(o => o.orderId == value.orderId)
-    console.log("====finding index order: " + index, "==id: " + value.orderId)
     let item = state.openOrders[index]
     let prepItem = null;let prepIndex = null
-    if (value.partId) {
+    if (value.partId) { // order separated by preparea?
       prepIndex = state.ordersAndItemsByPrepAreas.findIndex( 
         o => o.orderId == value.orderId && o.orderPartSeqId == value.partId)
-      console.log("====finding index prep: " + prepIndex, "==id: " + value.partId)
       prepItem = state.ordersAndItemsByPrepAreas[prepIndex]}
     if (value.statusId == 'serv') {
       prepItem.partStatusId = 'OrderPlaced'
@@ -82,13 +80,12 @@ const mutations = {
       state.ordersAndItemsByPrepAreas.splice(prepIndex,1)
       prepIndex = state.ordersAndItemsByPrepAreas.findIndex( // any left? 
             o => o.orderId == value.orderId)
-      if (index == -1) { // no, so we can bill: change status in openOrders
+      if (prepIndex == -1) { // no, so we can bill: change status in openOrders
         item.orderStatusId = 'OrderPlaced'
         state.openOrders.splice(index,1,item)}
     } else if (value.statusId == 'completed') { // change open orders
       item.orderStatusId = 'OrderCompleted'
       state.openOrders.splice(index,1,item)}
-    console.log("===status update completed")
   },
   openOrders(state, value) {
     state.openOrders = value
@@ -127,12 +124,10 @@ const getters = {
     return state.openOrders
   },
   openOrdersByAreaSpot: state => (areaId, spotId) => {
-    let openOrders = []
-    for (let i=0; i<state.openOrders.length;i++) {
-      if (state.openOrders[i].accommodationAreaId === areaId &&
-          state.openOrders[i].accommodationSpotId === spotId)
-        openOrders.push(state.openOrders[i])}
-    return openOrders
+    return state.openOrders.filter(
+      o => o.accommodationAreaId === areaId &&
+           o.accommodationSpotId === spotId &&
+           o.orderStatusId !== 'Completed')
   },
 }
 const actions = {
@@ -151,14 +146,14 @@ const actions = {
     dispatch('getOpenOrders')
     return result
   },
-  async getOrdersAndItemsByPrepAreas({commit}) {
-    let result = await backendService.GetOrdersAndItemsByPrepAreas()
-    commit("ordersAndItemsByPrepAreas", result.data.ordersAndItemsByPrepAreas)
-  },
   async getOpenOrders({commit}) {
-    let result = await backendService.getOrders(state) // default is open only
+    let result = await backendService.getOrders() // default is open only
     commit("openOrders", result.data.ordersAndItems)
-  }
+  },
+  async getOrdersAndItemsByPrepAreas({commit}) {
+    let result = await backendService.getOrdersAndItemsByPrepAreas() 
+    commit('ordersAndItemsByPrepAreas', result.data.ordersAndItemsByPrepAreas)
+}
 }
 export default {
   state,
