@@ -2,7 +2,6 @@ import store from '~/store'
 import axios from 'axios'
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService()
-import { images } from '~/assets/imagesBase64'
 
 const appSettings = require('tns-core-modules/application-settings')
 var log = true 
@@ -143,10 +142,9 @@ const actions = {
   },
   async register({commit}, input) {
     input.user.emailAddress = input.user.emailAddress.toLowerCase().trim()
-    input.user.username = input.user.emailAddress
+    input.user.name = input.user.emailAddress
     try {
       let response = await backendService.register(input.user, input.company)
-      console.log("=====response: " + JSON.stringify(response))
       if (response && response.data) { 
         appSettings.clear() // start fresh
         appSettings.setString('username', input.user.name)
@@ -184,126 +182,8 @@ const actions = {
         commit('requests', GetRequests.data)
       }))
   },
-  loadDefaultData({state}, t) {
-    if (TNS_ENV === 'production') {
-      let item = {}
-      item.description = t[0]
-      backendService.createPreparationArea(item).then( result => {
-        backendService.uploadImage('small', images.kitchenImageSmall, 'prep', result.data.preparationAreaId)
-        backendService.uploadImage('medium', images.kitchenImageMedium, 'prep', result.data.preparationAreaId)
-        item.categoryName = t[1] ; item.preparationAreaId = result.data.preparationAreaId
-        backendService.createCategory(item).then( result => {
-          backendService.uploadImage('small', images.foodImageSmall, 'category', result.data.productCategoryId)
-          backendService.uploadImage('medium', images.foodImageMedium, 'category', result.data.productCategoryId)
-          backendService.createProduct({ name: t[2], price: 6.20, productCategoryId: result.data.productCategoryId})
-          .then( result => {
-            backendService.uploadImage('small', images.macaroniImageSmall, 'product', result.data.productId)
-            backendService.uploadImage('medium', images.macaroniImageMedium, 'product', result.data.productId)
-      })})})
-      item.description = t[3]
-      backendService.createPreparationArea(item).then( result => {
-        backendService.uploadImage('small', images.barImageSmall, 'prep', result.data.preparationAreaId)
-        backendService.uploadImage('medium', images.barImageMedium, 'prep', result.data.preparationAreaId)
-        item = { categoryName: t[4], preparationAreaId: result.data.preparationAreaId }
-        backendService.createCategory(item).then( result => {
-          backendService.uploadImage('small', images.drinksImageSmall, 'category', result.data.productCategoryId)
-          backendService.uploadImage('medium', images.drinksImageMedium, 'category', result.data.productCategoryId)
-          backendService.createProduct({ name: t[8], price: 80, productCategoryId: result.data.productCategoryId})
-          .then( result => {
-            backendService.uploadImage('small', images.colaImageSmall, 'product', result.data.productId)
-            backendService.uploadImage('medium', images.colaImageMedium, 'product', result.data.productId)
-      })})})
-      // accomodation area and spot(table)
-      let area = { description: t[5], nbrOfSpots: '10'}
-      backendService.createAccommodationArea(area).then( result => {
-        backendService.uploadImage('small', images.insideImageSmall, 'area', result.data.accommodationAreaId)
-        backendService.uploadImage('medium', images.insideImageMedium, 'area', result.data.accommodationAreaId)})
-      area = {description: t[6], nbrOfSpots: '15'}
-      backendService.createAccommodationArea(area).then( result => {
-        backendService.uploadImage('small', images.outsideImageSmall, 'area', result.data.accommodationAreaId)
-        backendService.uploadImage('medium', images.outsideImageMedium, 'area', result.data.accommodationAreaId)})
-    } else { // from here test data
-    let item = {}
-    item.description = t[0]
-    backendService.createPreparationArea(item).then( result => {
-      backendService.uploadImage('small', images.kitchenImageSmall, 'prep', result.data.preparationAreaId)
-      backendService.uploadImage('medium', images.kitchenImageMedium, 'prep', result.data.preparationAreaId)
-      item.categoryName = t[1] ; item.preparationAreaId = result.data.preparationAreaId
-      backendService.createCategory(item)
-      .then( result => {
-        backendService.uploadImage('small', images.foodImageSmall, 'category', result.data.productCategoryId)
-        backendService.uploadImage('medium', images.foodImageMedium, 'category', result.data.productCategoryId)
-        backendService.createProduct({ name: t[2], price: 6.20, productCategoryId: result.data.productCategoryId})
-        .then( result => {
-          backendService.uploadImage('small', images.macaroniImageSmall, 'product', result.data.productId)
-          backendService.uploadImage('medium', images.macaroniImageMedium, 'product', result.data.productId)})
-        backendService.createProduct({name: 'french fries', price: 2.99, productCategoryId: result.data.productCategoryId})
-        backendService.createProduct({name: 'Tomjamkuhn', price: 3.99, productCategoryId: result.data.productCategoryId})
-        backendService.createProduct({name: 'Cheese plate', price: 4.99, productCategoryId: result.data.productCategoryId})})
-    })
-    item.description = "Bar"
-    backendService.createPreparationArea(item).then( result => {
-      backendService.uploadImage('small', images.barImageSmall, 'prep', result.data.preparationAreaId)
-      backendService.uploadImage('medium', images.barImageMedium, 'prep', result.data.preparationAreaId)
-      item.categoryName = 'Sodas' ; item.preparationAreaId = result.data.preparationAreaId
-      backendService.createCategory(item).then( result => {
-        backendService.uploadImage('small', images.drinksImageSmall, 'category', result.data.productCategoryId)
-        backendService.uploadImage('medium', images.drinksImageMedium, 'category', result.data.productCategoryId)
-          backendService.createProduct({ name: t[8], price: 80, productCategoryId: result.data.productCategoryId})
-        .then( result => {
-          backendService.uploadImage('small', images.colaImageSmall, 'product', result.data.productId)
-          backendService.uploadImage('medium', images.colaImageMedium, 'product', result.data.productId)})
-        backendService.createProduct({name: 'fanta', price: 6.99, productCategoryId: result.data.productCategoryId})
-        backendService.createProduct({name: 'Pepsi', price: 7.99, productCategoryId: result.data.productCategoryId})
-        backendService.createProduct({name: 'Smoothy', price: 8.99, productCategoryId: result.data.productCategoryId})})
-      item.categoryName = 'Beers and Liquor'
-      backendService.createCategory(item)
-      .then( result => {
-        backendService.createProduct({name: 'Best Beer', price: 11.99, productCategoryId: result.data.productCategoryId})
-        backendService.createProduct({name: 'Wiskey', price: 21.99, productCategoryId: result.data.productCategoryId})
-        backendService.createProduct({name: 'Red Wine', price: 31.99, productCategoryId: result.data.productCategoryId})
-        backendService.createProduct({name: 'White wine', price: 41.99, productCategoryId: result.data.productCategoryId})})
-    })
-    let area = { description: 'Inside', nbrOfSpots: '10'}
-    backendService.createAccommodationArea(area).then( result => {
-      backendService.uploadImage('small', images.insideImageSmall, 'area', result.data.accommodationAreaId)
-      backendService.uploadImage('medium', images.insideImageMedium, 'area', result.data.accommodationAreaId)})
-    area = { description: 'Outside', nbrOfSpots: '15'}
-    backendService.createAccommodationArea(area).then( result => {
-      backendService.uploadImage('small', images.outsideImageSmall, 'area', result.data.accommodationAreaId)
-      backendService.uploadImage('medium', images.outsideImageMedium, 'area', result.data.accommodationAreaId)})
-
-    // add users and todo tasks only test
-    const random = Math.random().toString(36).substring(2, 15) + 
-          Math.random().toString(36).substring(2, 15);
-    let user1 = {firstName: 'Peter', lastName: 'Coster',
-        emailAddress: random + '@example.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
-    backendService.createUser(user1).then( result => {
-      let item = { workEffortName:'This a first task',
-                partyId: result.data.user.partyId,priority: '5'}
-      backendService.createTask(item)})
-
-    const random1 = Math.random().toString(36).substring(2, 15) + 
-            Math.random().toString(36).substring(2, 15);
-      let user2 = {firstName: 'Kevin', lastName: 'Junker',
-        emailAddress: random1 + '@example.com',roleTypeId: 'Employee', groupDescription: 'Employee'}
-    backendService.createUser(user2).then( result => {
-      let item2 = { workEffortName:'This a second task',
-                partyId: result.data.user.partyId , priority: '5'}
-      backendService.createTask(item2)})
-
-    let item3 = { workEffortName:'This a third task for me', priority: '5'}
-    backendService.createTask(item3)
-    item3 = { workEffortName:'This a fourth task to me'}
-    backendService.createTask(item3)
-    // customer
-    const random2 = Math.random().toString(36).substring(2, 15) + 
-            Math.random().toString(36).substring(2, 15);
-    user2 = {firstName: 'Steven', lastName: 'Customer',
-        emailAddress: random2 + '@example.com',roleTypeId: 'Customer',
-        image: '~/assets/images/addImage.png', externalId: '99999'}
-    backendService.createUser(user2)
-    }
+  async loadDefaultData({}, t) { // t = list translated areas
+    await backendService.loadDefaultData(TNS_ENV, t)
   }
 }
 

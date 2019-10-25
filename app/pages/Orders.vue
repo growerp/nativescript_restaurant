@@ -173,10 +173,9 @@ export default {
     },
     refresh() {
       if (this.currentTab == 1){ // to be served
-        this.$store.dispatch('getOpenOrders').then(() => {
-          this.$store.dispatch('getOrdersAndItemsByPrepAreas').then(() => {
+        this.$store.dispatch('getOrders').then(() => {
             this.servOrders = this.$store.getters.prepOrdersByStatusId('OrderPlaced')
-      })})}
+      })}
       if (this.currentTab == 2){ // to be billed
         this.$store.dispatch('getOpenOrders').then(() => {
           this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')

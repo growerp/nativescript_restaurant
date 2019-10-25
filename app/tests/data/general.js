@@ -15,8 +15,9 @@ function getRandomCompanyName() {
 function getRandomEmail() {
   return random8 + '@example.com'}
 function getRandomUser() {
+  const email = getRandomEmail()
   return {firstName: getRandomFirstName(), lastName: getRandomLastname(),
-          emailAddress: getRandomEmail(), password: 'qqqqqq9!'}}
+          emailAddress: email, password: 'qqqqqq9!', name: email }}
 function getRandomCompany() {
   return {name: getRandomCompanyName(), emailAddress: getRandomEmail()}}
 /* const currencies = async function() {
