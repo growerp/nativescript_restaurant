@@ -66,23 +66,23 @@ const mutations = {
     log?console.log("=====update part status in store: " + JSON.stringify(value)):''
     let index = state.openOrders.findIndex(o => o.orderId == value.orderId)
     let item = state.openOrders[index]
-    let prepItem = null;let prepIndex = null
-    if (value.partId) { // order separated by preparea?
-      prepIndex = state.ordersAndItemsByPrepAreas.findIndex( 
+    if (value.partId) { // order separated by preparea => update prepOrders
+      let prepIndex = state.ordersAndItemsByPrepAreas.findIndex( 
         o => o.orderId == value.orderId && o.orderPartSeqId == value.partId)
-      prepItem = state.ordersAndItemsByPrepAreas[prepIndex]}
-    if (value.statusId == 'serv') {
-      prepItem.partStatusId = 'OrderPlaced'
-      state.ordersAndItemsByPrepAreas.splice(prepIndex,0,prepItem)
-      item.orderStatusId = 'OrderPlaced'
-      state.openOrders.splice(index,1,item)
-    } else if (value.statusId == 'bill') { // remove from prep list -> billed
-      state.ordersAndItemsByPrepAreas.splice(prepIndex,1)
-      prepIndex = state.ordersAndItemsByPrepAreas.findIndex( // any left? 
-            o => o.orderId == value.orderId)
-      if (prepIndex == -1) { // no, so we can bill: change status in openOrders
+      let prepItem = state.ordersAndItemsByPrepAreas[prepIndex]
+      if (value.statusId == 'serv') {
+        prepItem.partStatusId = 'OrderPlaced'
+        state.ordersAndItemsByPrepAreas.splice(prepIndex,1,prepItem)
         item.orderStatusId = 'OrderPlaced'
-        state.openOrders.splice(index,1,item)}
+        state.openOrders.splice(index,1,item)
+      } else if (value.statusId == 'bill') { // remove from prep list -> billed
+        state.ordersAndItemsByPrepAreas.splice(prepIndex,1)
+        let left = state.ordersAndItemsByPrepAreas.filter( // any left? 
+              o => o.orderId == value.orderId)
+        if (left.length == 0) { // no, so we can bill: change status in openOrders
+          item.orderStatusId = 'OrderApproved'
+          state.openOrders.splice(index,1,item)}
+      }
     } else if (value.statusId == 'completed') { // change open orders
       item.orderStatusId = 'OrderCompleted'
       state.openOrders.splice(index,1,item)}
@@ -109,10 +109,9 @@ const getters = {
         o => o.preparationAreaId === id && o.partStatusId === 'OrderOpen')
   },
   preparationAreaHasOrders: state => id => {
-    return state.ordersAndItemsByPrepAreas.filter(
-        o => o.preparationAreaId === id && o.partStatusId === 'OrderOpen').length 
+    return getters.preparationAreaOrdersById(id).length 
   },
-  prepOrdersByStatusId: state => id => {
+  prepOrdersByStatusId: state => id => { //OrderPlaced = serv,OrderApproved = bill 
     return state.ordersAndItemsByPrepAreas.filter(
         o => o.partStatusId === id)
     },
@@ -122,6 +121,10 @@ const getters = {
   },
   openOrders: state => {
     return state.openOrders
+  },
+  ordersAndItemsByPrepAreas: state => {
+    console.log("===store return prep orders: " + state.ordersAndItemsByPrepAreas.length)
+    return state.ordersAndItemsByPrepAreas
   },
   openOrdersByAreaSpot: state => (areaId, spotId) => {
     return state.openOrders.filter(
@@ -140,20 +143,22 @@ const actions = {
       statusId: item.statusId})
   }, 
   async createSalesOrder({dispatch}, item) {
-    let result = await backendService.createSalesOrder(
-          item.header, item.items)
-    dispatch('getOrdersAndItemsByPrepAreas')
-    dispatch('getOpenOrders')
+    let result = await backendService.createSalesOrder(item.header, item.items)
+    await dispatch('getOrders')
     return result
   },
   async getOpenOrders({commit}) {
     let result = await backendService.getOrders() // default is open only
     commit("openOrders", result.data.ordersAndItems)
   },
+  async getOrders({dispatch}) {
+    await dispatch('getOpenOrders')
+    await dispatch('getOrdersAndItemsByPrepAreas')
+  },
   async getOrdersAndItemsByPrepAreas({commit}) {
     let result = await backendService.getOrdersAndItemsByPrepAreas() 
     commit('ordersAndItemsByPrepAreas', result.data.ordersAndItemsByPrepAreas)
-}
+  }
 }
 export default {
   state,

@@ -220,8 +220,13 @@ const getters = {
     return state.preparationAreas.find(o => o.description === desc)
   },
   preparationAreaById: state => id => {
-    console.log("getters get id " , id)
     return state.preparationAreas.find(o => o.preparationAreaId === id)
+  },
+  preparationAreaIdByProductId: state => productId => {
+    let productCategoryId = 
+        store.getters.productById(productId).productCategoryId
+    return store.getters.productCategoryById(
+        productCategoryId).preparationAreaId
   },
   preparationAreasMinusOne: state => prepId => {
     let prepAreas = []

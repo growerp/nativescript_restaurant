@@ -105,7 +105,7 @@ const appSettings = require("tns-core-modules/application-settings")
         apiKey: '',
         user: (TNS_ENV === 'production')? {
           name: appSettings.getString('username'),
-          emailAddress: appSettings.getString('username'),
+          emailAddress: '',
           password: '',
           confirmPassword: '',
           firstName: '',
@@ -113,7 +113,7 @@ const appSettings = require("tns-core-modules/application-settings")
           currency: '',
           locale: ''
         } : {
-          name: appSettings.getString('username') ? 
+          name: appSettings.getString('username') ?
                   appSettings.getString('username') : "admin@growerp.com",
           emailAddress: "admin@growerp.com",
           password: "qqqqqq9!",

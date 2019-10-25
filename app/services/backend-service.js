@@ -306,11 +306,14 @@ export default class BackendService {
       axios.get('s1/growerp/GetRequests'),
     ])
   }
+  async loadDefaultData(env, t) {
+    return await axios.post('s1/growerp/LoadDefaultData', {
+      environment: env, transData: t })
+  }
   async createSubscription(id,desc) {
     return await axios.post('s1/growerp/CreateSubscription', {
       externalSubscriptionId: id,
-      description: desc
-    })
+      description: desc })
   }
   async getActiveSubscriptions() {
     return await axios.get('s1/growerp/GetActiveSubscriptions')

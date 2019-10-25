@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'Confirm',
+  name: 'Prompt',
   props: {
     title: String,
     message: String,

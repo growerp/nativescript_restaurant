@@ -22,7 +22,6 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
-import { images } from '~/assets/imagesBase64'
 import {Printer} from "nativescript-printer"
 const appSettings = require("tns-core-modules/application-settings");
 
