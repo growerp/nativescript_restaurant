@@ -143,6 +143,9 @@ const actions = {
       statusId: item.statusId})
   }, 
   async createSalesOrder({dispatch}, item) {
+    // remove pictures
+    for (let i=0; i<item.items.length;i++)
+      delete item.items[i].image
     let result = await backendService.createSalesOrder(item.header, item.items)
     await dispatch('getOrders')
     return result

@@ -83,14 +83,15 @@
                 :visibility="billOrders.length ? 'visible':'collapse'"
                 for="item of billOrders"  childItems="items">
             <v-template name="title">
-              <GridLayout columns="*,auto, auto, 5, auto" rows="*" class="m-10">
-                <StackLayout col="0">
+              <GridLayout columns="50,*,auto, auto, 5, auto" rows="*" class="m-10">
+                <Image :src="item.image"  col="0" class="thumbnail"/>
+                <StackLayout col="1" paddingLeft="10">
                   <Label :text="item.placedTime" class="h3"/>
                   <Label :text="item.table" class="h3"/>
                 </StackLayout>
-                <Label col="1" :text="item.grandTotal" class="h2" paddingRight="10"/>
-                <Label class="button" col="2" :text="$t('print')" @tap="print(item)" padding="10"/>
-                <Label class="button" col="4" :text="$t('done')" @tap="setDone(item)" padding="10"/>
+                <Label col="2" :text="item.grandTotal" class="h2" paddingRight="10"/>
+                <Label class="button" col="3" :text="$t('print')" @tap="print(item)" padding="10"/>
+                <Label class="button" col="5" :text="$t('done')" @tap="setDone(item)" padding="10"/>
               </GridLayout>
             </v-template>
             <v-template name="content">
@@ -159,6 +160,7 @@ export default {
       this.currentTab = this.startTab
       this.areaId = this.$store.getters.accommodationAreas[0].accommodationAreaId
     }
+    console.log("billing orders" + JSON.stringify(this.$store.getters.ordersByStatusId('OrderApproved')))
   },
   methods: {
     tabChange(args) {
