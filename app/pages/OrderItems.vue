@@ -73,11 +73,11 @@ export default {
           items: this.orderItems })
       .then( result => {
         if (this.orderHeader.orderId) {
-          this.note(this.$t('orderUpdated') + result.data.orderId + ' ',
+          this.note(this.$t('orderUpdated') + result.data.orderId + ' ' +
           this.orderHeader.description + '-' + this.orderHeader.spotNumber,
             this.$t('appearPrepArea'))
         } else {
-          this.note(this.$t('orderReceived') + result.data.orderId + ' ',
+          this.note(this.$t('orderReceived') + result.data.orderId + ' ' +
           this.orderHeader.description + '-' + this.orderHeader.spotNumber,
               this.$t('appearPrepArea'))
         }

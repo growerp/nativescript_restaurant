@@ -274,11 +274,11 @@ const appSettings = require("tns-core-modules/application-settings")
                   console.log("====== register success! logging in")
                   this.$store.dispatch('login',this.user)
                   .then (() => {
-                    console.log("=======after register logged in")
+                    console.log("=======after register logged in to setup initial data")
                     this.$store.dispatch('loadDefaultData', [
                         this.$t('kitchen'),this.$t('food'),this.$t('macaroni'),
-                        this.$t('bar'),this.$t('drinks'),this.$t('inside'),
-                        this.$t('garden'),this.$t('drinks'),this.$t('cola')])
+                        this.$t('bar'),this.$t('inside'),this.$t('garden'),
+                        this.$t('drinks'),this.$t('cola')])
                     .then(() => {
                       console.log("===== default data loaded ")
                       this.processing = false

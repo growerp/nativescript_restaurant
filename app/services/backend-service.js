@@ -106,7 +106,7 @@ export default class BackendService {
   
   // ================getToken,login/out/register password forgot =============
   async getToken() {
-    return await axios.get('moquiSessionToken')}
+    return await simple.get('moquiSessionToken')}
   async login(user) {
     let apiKey = axios.defaults.headers.common["apiKey"] 
     delete axios.defaults.headers.common["apiKey"]
