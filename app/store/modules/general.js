@@ -119,7 +119,8 @@ const actions = {
         log? console.log("==== getConnection:  No valid return from ping"):''
       }
     } catch(error) {
-      log? console.log('==== getConnection: ping catch server problem: '):''
+      log? console.log('==== getConnection: ping catch server problem: '
+         + error):''
       return "serverProblem" }
   },
   async login({}, user) {

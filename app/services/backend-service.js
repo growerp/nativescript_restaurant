@@ -23,8 +23,8 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] =
 axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
 axios.defaults.headers.post['moquiSessionToken'] = '';
-// axios.defaults.headers['api_key'] = '';
 
+const simple = axios.create({ baseUrl:axios.defaults.baseURL})
 
 axios.interceptors.request.use(function (config) {
     // Do something before request is sent
@@ -119,12 +119,7 @@ export default class BackendService {
     return await axios.get('s1/growerp/CheckApiKey',
       { errorHandle: false})}
   async ping() {
-    let apiKey = axios.defaults.headers.common["apiKey"] 
-    delete axios.defaults.headers.common["apiKey"]
-    let result = await axios.get('s1/growerp/Ping',
-      { errorHandle: false})
-    axios.defaults.headers.common["apiKey"] = apiKey
-    return result
+    return await simple.get('s1/growerp/Ping')
   }
   async logout() {
     return await axios.get('logout')}
