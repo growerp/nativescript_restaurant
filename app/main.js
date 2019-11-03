@@ -60,7 +60,7 @@ export const i18n = new VueI18n({
 })
 // Prints Vue logs when --env.production is *NOT* set while building
 Vue.config.silent = (TNS_ENV === 'production')
-
+/*
 var application = require("tns-core-modules/application");
 application.on(application.discardedErrorEvent, function (args) {
   console.log('====discarded error args: ' + JSON.stringify(args.error))
@@ -75,7 +75,7 @@ application.on(application.discardedErrorEvent, function (args) {
   global.exceptionErrorMessage = error.stackTrace.substring(start,end)
   console.log('==discarded ErrorEvent message: ' + global.exceptionErrorMessage)
 });
-
+*/
 new Vue({
   i18n,
   store,

@@ -146,10 +146,10 @@ const appSettings = require("tns-core-modules/application-settings")
             {clearHistory: true, props: {firstTime: true}})}
         else {
           this.processing = false
+          if (result == 'serverProblem')
+            this.serverProblem()
           if (result.startsWith('message:'))
             this.note(result.substring(8)) 
-          else if (result == 'serverProblem')
-            this.serverProblem()
           else if (result == 'register')
             this.toggleForm()   // started with login, switch to register
           else if (result == 'noApiKey')

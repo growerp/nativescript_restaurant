@@ -8,7 +8,7 @@
      <GridLayout rows="*, 50" class="p-10">
         <RadListView for="item in dashBoard" @itemTap="onItemTap" row="0"
             itemReorder="true" @itemReordered="onItemReordered"
-            layout="grid" itemHeight="100"><!--itemHeight for ios -->
+            layout="grid" height="100%" itemHeight="100"><!--itemHeight for ios -->
           <v-template>
             <StackLayout orientation="vertical" padding="10">
               <Image :src="item.image" height="60"/>
@@ -62,6 +62,8 @@ export default {
             pageName: 'Organization', pageTab: 2},
           {id: 7, image: '~/assets/images/payment.png', title: this.$t('upgrade'),
               pageName: 'Upgrade', pageTab: 0},
+          {id: 8, image: '~/assets/images/export.png', title: this.$t('export'),
+            pageName: 'Export', pageTab: 0},
           {id: 8, image: '~/assets/images/about.png', title: this.$t('about'),
             pageName: 'About', pageTab: 0},
           ]
