@@ -83,6 +83,7 @@ export default {
     enterRestaurantName: 'Enter a restaurant name!',
     existing: 'Existing ',
     exit: 'Exit',
+    export: 'Export data via email',
     externalId: 'Customer id/telno',
     extraInformation: 'Extra information',
     FAQ: 'Frequently Asked questions(FAQ)',
@@ -100,6 +101,7 @@ export default {
     isRequired: ' is Required',
     isServedFrom: ' is served from ',
     items: ' item(s)', // order items
+    JobStarted: 'Export job has been started',
     justBought: 'Just bought ',
     kitchen: 'kitchen',
     lastName: 'Last Name',

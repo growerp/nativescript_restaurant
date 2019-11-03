@@ -8,7 +8,7 @@ var assert = chai.assert;
 const appSettings = require("tns-core-modules/application-settings")
 var user = {};var company = {};var orderHeader = {};var orderItems = []
 describe('Connect, register and login', function () {
-  this.timeout(40000);
+  this.timeout(60000);
   before(function( done ){
     appSettings.clear()
     store.dispatch('getConnection')
@@ -152,5 +152,23 @@ describe('Connect, register and login', function () {
       })
       done()
     });
+  });
+  it('Preparation Location CRUD test', function (done) {
+    done()
+  });
+  it('Accommodation Area CRUD test', function (done) {
+    done()
+  });
+  it('Employee CRUD test', function (done) {
+    done()
+  });
+  it('Customer CRUD test', function (done) {
+    done()
+  });
+  it('Company CRUD test', function (done) {
+    done()
+  });
+  it('MyIndfo CRUD test', function (done) {
+    done()
   });
 });

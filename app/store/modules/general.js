@@ -105,7 +105,7 @@ const actions = {
               log? console.log('==== getConnection: checkApiKey is fine.'):''
               return 'success'
             } else { // server key wrong so delete it and login again
-              appSettings.remove('apiKey')
+              backendService.removeKey()
               log?console.log('==== getConnection: apiKey failed, needs logging in'):''
               return 'noApiKey'
             }
@@ -139,7 +139,7 @@ const actions = {
           backendService.saveToken(result.data.moquiSessionToken)
           return 'success' }}
     } catch(error) {
-      return "message:" + error.response.data.errors }
+      return "catch login message:" + error.response.data.errors }
   },
   async register({commit}, input) {
     input.user.emailAddress = input.user.emailAddress.toLowerCase().trim()

@@ -22,8 +22,6 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] =
       'X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept'
 axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
-axios.defaults.headers.post['moquiSessionToken'] = '';
-
 const simple = axios.create({ baseUrl:axios.defaults.baseURL})
 
 axios.interceptors.request.use(function (config) {
@@ -100,45 +98,42 @@ export default class BackendService {
   }
   saveToken(moquiToken) {
     axios.defaults.headers.post['moquiSessionToken'] = moquiToken }
-  saveKey(apiKey) {
-    appSettings.setString('apiKey', apiKey)
-    axios.defaults.headers['api_key'] = apiKey}
-  
+    saveKey(apiKey) {
+      appSettings.setString('apiKey', apiKey)
+      axios.defaults.headers['api_key'] = apiKey}
+    removeKey() {
+      appSettings.remove('apiKey')
+      delete axios.defaults.headers.common["apiKey"]}
   // ================getToken,login/out/register password forgot =============
   async getToken() {
     return await simple.get('moquiSessionToken')}
   async login(user) {
-    let apiKey = axios.defaults.headers.common["apiKey"] 
-    delete axios.defaults.headers.common["apiKey"]
-    let result = await axios.post('s1/growerp/LoginUser',
-      { username: user.name, password: user.password })
-    axios.defaults.headers.common["apiKey"] = apiKey
-    return result
-  }
+    return await simple.post('s1/growerp/LoginUser',
+      { username: user.name, password: user.password,
+        moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
   async checkApiKey() {
     return await axios.get('s1/growerp/CheckApiKey',
       { errorHandle: false})}
   async ping() {
-    return await simple.get('s1/growerp/Ping')
-  }
+    return await simple.get('s1/growerp/Ping') }
   async logout() {
     return await axios.get('logout')}
   async getCurrencyList() {
     return await axios.get('s1/growerp/CurrencyList')}
   async register(user, company) {
-    return await axios.post('s1/growerp/RegisterUserAndCompany',
+    return await simple.post('s1/growerp/RegisterUserAndCompany',
       { username: user.name, emailAddress: user.emailAddress,
         newPassword: user.password, firstName: user.firstName,
         lastName: user.lastName, locale: user.locale,
         companyPartyId: company.id, // for existing companies
         companyName: company.name, currencyUomId: company.currency,
         companyEmail: company.emailAddress? company.emailAddress : user.emailAddress,
-        partyClassificationId : 'AppRestaurant'},
-      { errorHandle: false })}
+        partyClassificationId : 'AppRestaurant',
+        moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
   async resetUserPassword(username) {
-    return await axios.post('s1/growerp/ResetPassword',
-      { username: username },
-      { errorHandle: false })}
+    return await simple.post('s1/growerp/ResetPassword',
+      { username: username, 
+        moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
   async updatePassword(item) {
     return await axios.post('s1/growerp/UpdatePassword',
       { username: item.username, oldPassword: item.oldPassword,
@@ -303,14 +298,18 @@ export default class BackendService {
   }
   async loadDefaultData(env, t) {
     return await axios.post('s1/growerp/LoadDefaultData', {
-      environment: env, transData: t })
-  }
+      environment: env, transData: t })}
   async createSubscription(id,desc) {
     return await axios.post('s1/growerp/CreateSubscription', {
       externalSubscriptionId: id,
-      description: desc })
-  }
+      description: desc })}
   async getActiveSubscriptions() {
-    return await axios.get('s1/growerp/GetActiveSubscriptions')
-  }
+    return await axios.get('s1/growerp/GetActiveSubscriptions')}
+  async exportOrders(date) {
+    return await axios.post('s1/growerp/ExportOrders', {
+        startDate: date })}
+  async exportCustomers() {
+    return await axios.get('s1/growerp/ExportCustomers')}
+  async exportCatgsProducts() {
+    return await axios.get('s1/growerp/ExportCatgsProducts')}
 }

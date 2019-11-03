@@ -24,6 +24,7 @@ import Upgrade from '~/pages/Upgrade'
 import OrderData from '~/pages/OrderData'
 import OrderPrint from '~/pages/OrderPrint'
 import MyInfo from '~/pages/MyInfo'
+import Export from '~/pages/Export'
 
 const routes = {
   Login,
@@ -51,6 +52,7 @@ const routes = {
   OrderData,
   OrderPrint,
   MyInfo,
+  Export,
 }
 
 export default routes
