@@ -3,7 +3,7 @@
       <ActionBar><NavigationButton visibility="collapsed"/>
         <myActionBar :openDrawer="openDrawer" header="setup" 
             :onHeaderTap="onHeaderTapHome"
-            :reload="true" :onActionTap="backToDefault"/>
+            :reload="reload" :onActionTap="backToDefault"/>
       </ActionBar>
      <GridLayout rows="*, 50" class="p-10">
         <RadListView for="item in dashBoard" @itemTap="onItemTap" row="0"
@@ -30,20 +30,22 @@ export default {
     data() {
       return {
         dashBoard: [],
+        reload: false
       }
     },
     mixins: [ sideDrawer, general],
     created() {
       if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
-        if (appSettings.getString('setUp'))
+        if (appSettings.getString('setUp')) {
+          this.reload = true
           this.dashBoard = JSON.parse(appSettings.getString('setUp'))
-        else 
-          this.backToDefault()
+        } else this.backToDefault()
       }
     },
     methods: {
       onItemReordered(args) {
           appSettings.setString('setUp', JSON.stringify(this.dashBoard))
+          this.reload = true
       },
       backToDefault() { // icons from : https://www.flaticon.com/
         if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
@@ -67,6 +69,8 @@ export default {
           {id: 9, image: '~/assets/images/about.png', title: this.$t('about'),
             pageName: 'About', pageTab: 0},
           ]
+          appSettings.remove('setUp')
+          this.reload = false
         }
       },
       onItemTap(args) {
