@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :openDrawer="openDrawer" header="dashBoard"
-        :reload="true" :onActionTap="backToDefault"/>
+        :reload="reload" :onActionTap="backToDefault"/>
     </ActionBar>
      <GridLayout rows="*, 50" class="p-10">
       <RadListView for="item in dashBoard" @itemTap="onItemTap"
@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       dashBoard: [],
+      reload: false
     }
   },
   mixins: [sideDrawer, general],
@@ -40,14 +41,15 @@ export default {
     if (!this.firstTime) {
       this.$store.dispatch('initData') }
     this.hideKeyboard()
-    if (appSettings.getString('dashBoard'))
+    if (appSettings.getString('dashBoard')) {
+      this.reload = true
       this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
-    else 
-      this.backToDefault()
+    } else this.backToDefault()
   },
   methods: {
     onItemReordered(args) {
-        appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
+      appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
+      this.reload = true
     },
     backToDefault() { // icons from : https://www.flaticon.com/
       this.dashBoard = [
@@ -71,6 +73,8 @@ export default {
         : {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),
               pageName: 'MyInfo', pageTab: 0}
       ]
+      appSettings.remove('dashBoard')
+      this.reload = false
     },
     onItemTap(args) {
       this.$navigateTo(eval("this.$routes." + args.item.pageName),
