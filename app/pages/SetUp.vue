@@ -64,10 +64,9 @@ export default {
               pageName: 'Upgrade', pageTab: 0},
           {id: 8, image: '~/assets/images/export.png', title: this.$t('export'),
             pageName: 'Export', pageTab: 0},
-          {id: 8, image: '~/assets/images/about.png', title: this.$t('about'),
+          {id: 9, image: '~/assets/images/about.png', title: this.$t('about'),
             pageName: 'About', pageTab: 0},
           ]
-          appSettings.setString('setUp', JSON.stringify(this.dashBoard))
         }
       },
       onItemTap(args) {

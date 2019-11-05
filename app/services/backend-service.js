@@ -11,6 +11,7 @@ if (TNS_ENV === 'production')
   axios.defaults.baseURL = 'https://mobile.growerp.com/rest/'
 else if (platformModule.isAndroid) 
   axios.defaults.baseURL = 'http://10.0.2.2:8080/rest/'
+  //axios.defaults.baseURL = 'http://192.168.1.13:8080/rest/'
 else if (platformModule.isIOS) 
   axios.defaults.baseURL = 'http://localhost:8080/rest/'
 

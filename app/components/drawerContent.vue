@@ -25,7 +25,7 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import {exit} from 'nativescript-exit'
 const appSettings = require("tns-core-modules/application-settings")
-
+const platformModule = require("tns-core-modules/platform");
 export default {
   mixins: [sideDrawer],
   data () {
@@ -48,23 +48,14 @@ export default {
             component: this.$routes.MyInfo, action: '', show: 'employee'},
         { image: '~/assets/images/logout.png', title: this.$t('logout'),
             component: this.$routes.Login, action: 'Logout', show: 'employee'},
-        { image: '~/assets/images/company.png', title: this.$t('companyEmplCust'),
-            component: this.$routes.Organization, action: '', show: 'admin'},
-        { image: '~/assets/images/locations.png', title: this.$t('locations'),
-            component: this.$routes.Locations, action: '', show: 'admin'},
-        { image: '~/assets/images/product.png', title: this.$t('products'),
-            component: this.$routes.Products, action: '', show: 'admin'},
-        { image: '~/assets/images/category.png', title: this.$t('categories'),
-            component: this.$routes.Categories, action: '', show: 'admin'},
-        { image: '~/assets/images/about.png', title: this.$t('about'), 
-            component: this.$routes.About, action: '', show: 'admin'},
+        { image: '~/assets/images/setup.png', title: this.$t('setUp'),
+            component: this.$routes.SetUp, action: '', show: 'admin'},
       ]
     }
   },
   methods: {
     menuAction(pageComponent, action) {
         if (action == 'Logout') {
-            const platformModule = require("tns-core-modules/platform");
             if (platformModule.isAndroid) {
               this.$i18n.locale = java.util.Locale.getDefault().getLanguage();
             }
@@ -72,16 +63,14 @@ export default {
               this.$i18n.locale = NSLocale.preferredLanguages.firstObject;
             }
             console.log('logging out....')
-//            this.$backendService.logout()
-//            .then(() =>{
-              appSettings.remove('apiKey')
+              this.$backendService.removeKey()
               console.log('logged out')
               this.$navigateTo(this.$routes.Login, {clearHistory: true})
-//            })
 //            exit() // exit caused update of apiKey to be ignored
         }
         // use the manual navigation method
-        this.$navigateTo(pageComponent, {props: { startTab: 1}}) // 0 not working for IOS?
+        this.$navigateTo(pageComponent,
+          {props: { startTab: platformModule.isAndroid? 0 : 1}}) // 0 not working for IOS?
         // and we probably want to close the drawer when changing pages
         this.closeDrawer()
     }

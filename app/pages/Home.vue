@@ -71,7 +71,6 @@ export default {
         : {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),
               pageName: 'MyInfo', pageTab: 0}
       ]
-      appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
     },
     onItemTap(args) {
       this.$navigateTo(eval("this.$routes." + args.item.pageName),
