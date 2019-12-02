@@ -1,5 +1,5 @@
 <template>
-  <page><ModalStack dismissEnabled="true" class="modal-container">
+  <page>
     <StackLayout  backgroundColor="white" padding="20" width="90%">
     <GridLayout rows="auto,auto,auto,auto,50">
       <label :text="$t('orderExist')" class="h2" horizontalAlignment="center"
@@ -20,7 +20,7 @@
       </RadListView>
       <Button class="button" :text="$t('cancel')" @tap="$modal.close()" row="4"/>
     </GridLayout>
-    </StackLayout></ModalStack>
+    </StackLayout>
   </page>
 </template>
 
