@@ -18,6 +18,8 @@
 
 <script>
 import general from '~/mixins/general'
+import Confirm from '../modalPages/Confirm'
+
 export default {
   name: 'PasswordUpdate',
   mixins: [general],
@@ -66,10 +68,12 @@ export default {
           this.$backendService.updatePassword(this.editedItem)
           .then(() => {
               this.note(this.$t('updatePasswordSuccessful'))
-              this.$modal.close()})
+              this.$modal.close()
+          })
           .catch( error => {
-              if (error.response.data.errors.indexOf("Found issues with password") !== -1) {
-                this.note(this.$t('passwordRequirement'))
+              if (error.response.data.errors.startsWith("Found issues with password")) {
+                this.$showModal(Confirm,{ props: {
+                message: this.$t('passwordRequirement')}})
               } else {
                 this.note(this.$t('regError') + this.$backendService.getErrorMessage(error))
               }
