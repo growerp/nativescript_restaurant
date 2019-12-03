@@ -136,10 +136,10 @@ export default class BackendService {
       { username: username, 
         moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
   async updatePassword(item) {
-    return await axios.post('s1/growerp/UpdatePassword',
+    return await simple.post('s1/growerp/UpdatePassword',
       { username: item.username, oldPassword: item.oldPassword,
-        newPassword: item.newPassword},
-      { errorHandle: false })}
+        newPassword: item.newPassword,
+        moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
   // ================get/update user, user liste================
   getAllPartyInfo() {
     axios.get('s1/growerp/GetAllPartyInfo')

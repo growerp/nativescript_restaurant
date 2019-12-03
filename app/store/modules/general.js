@@ -139,7 +139,7 @@ const actions = {
           backendService.saveToken(result.data.moquiSessionToken)
           return 'success' }}
     } catch(error) {
-      return "catch login message:" + error.response.data.errors }
+      return "message:" + error.response.data.errors }
   },
   async register({commit}, input) {
     input.user.emailAddress = input.user.emailAddress.toLowerCase().trim()
