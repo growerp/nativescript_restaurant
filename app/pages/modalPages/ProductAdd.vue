@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <page><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="90%" padding="10">
       <label :text="$t('addProduct')" class="h2" horizontalAlignment="center"/>
       <RadDataForm ref="addItem" :source="item" :metadata="itemMeta"
@@ -8,8 +8,8 @@
         <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
         <Button class="button" :text="$t('addProduct')" @tap="submit" col="1"/>
       </GridLayout>
-    </StackLayout>
-  </Page>
+    </StackLayout></ModalStack>
+  </page>
 </template>
 
 <script>
