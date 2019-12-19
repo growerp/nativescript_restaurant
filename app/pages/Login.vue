@@ -137,7 +137,11 @@ const appSettings = require("tns-core-modules/application-settings")
     created() {
       this.processing = true
       log?console.log("===created get connection"):''
-      this.$store.dispatch('getConnection').then( result => {
+      if (!appSettings.hasKey('username')) {
+          this.processing = false
+          log? console.log('=== getConnection: first usage, so show register screen'):''
+          this.toggleForm()   // started with login, switch to register
+      } else this.$store.dispatch('getConnection').then( result => {
         log?console.log("==== result from getConnection: " + result):''
         if (result == 'success') {
           this.$store.dispatch('initData')
@@ -150,8 +154,6 @@ const appSettings = require("tns-core-modules/application-settings")
             this.serverProblem()
           if (result.startsWith('message:'))
             this.note(result.substring(8)) 
-          else if (result == 'register')
-            this.toggleForm()   // started with login, switch to register
           else if (result == 'noApiKey')
             ()=>{} // no-op: just show login screen
           else console.log("==== unexpected return from getConnection dispatch!")}

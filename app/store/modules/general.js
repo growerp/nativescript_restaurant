@@ -92,10 +92,7 @@ const actions = {
         log?console.log("==== conn token received: " + resultToken.data):''
         backendService.saveToken(resultToken.data)
         log? console.log('=== getConnection: moqui token is ok....'):''
-        if (!appSettings.hasKey('username')) {
-          log? console.log('=== getConnection: first usage, so show register screen'):''
-          return 'register'
-        } else if (appSettings.hasKey('apiKey')) { // skip login when have api_key
+        if (appSettings.hasKey('apiKey')) { // skip login when have api_key
           log? console.log("====getConnection: api key found: " + 
               appSettings.getString('apiKey')):''
           backendService.saveKey(appSettings.getString('apiKey')) // save it in the API
