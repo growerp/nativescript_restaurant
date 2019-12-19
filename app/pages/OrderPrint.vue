@@ -1,9 +1,10 @@
 <template>
   <Page><ActionBar><Label text=''/></ActionBar>
     <StackLayout padding="10" visibility="hidden">
-      <Image :src="companyImage" height="200"/>
-      <Label :text="company.name" class="h2" horizontalAlignment="center"/>
-      <RadListView ref="listView" for="item in items" @loaded="onLoaded">
+      <Image :src="company.image" height="200"/>
+      <Label :text="company.organizationName" class="h2" horizontalAlignment="center"/>
+      <Label :text="$t('table') + order.table" class="h2" horizontalAlignment="center"/>
+      <RadListView ref="listView" for="item in order.items" @loaded="onLoaded">
         <v-template>
           <GridLayout columns="*, 30, 70, 70" rows="*" class="item">
               <Label :text="item.description" class="h2"
@@ -17,7 +18,7 @@
           </GridLayout>
         </v-template>
         <v-template name="footer">
-          <Label :text="$t('totalAmount') + ': ' + order.totalAmount + ' ' + order.currency"
+          <Label :text="$t('totalAmount') + ': ' + order.grandTotal + ' ' + company.currencyId"
               class="h2"/>
         </v-template>
       </RadListView>
@@ -33,26 +34,16 @@ export default {
         orderId: String,
     },
     data () {
-        return {
-        company: {},
-        companyImage: '',
-        order: {},
-        items: [],
+      return {
+        company: this.$store.getters.company,
+        order: this.$store.getters.openOrderById(this.orderId),
       }
     },
     methods: {
       onLoaded() {
-        this.$backendService.getCompany().then(result => {
-            this.company = result.data.company
-            this.$backendService.downloadImage('medium', 'company', this.company.partyId).then(result => {
-                this.companyImage = result.data.imageFile
-                this.$backendService.getOrder(this.orderId).then( result => {
-                  this.order = result.data.order
-                  this.items = this.order.items
-                  setTimeout(this.showPrint, 300)
-                })
-            })
-        })
+        this.order = this.$store.getters.openOrderById(this.orderId)
+        this.items = this.order.items
+        setTimeout(this.showPrint, 300)
       },
       showPrint() {
         var printer = new Printer()

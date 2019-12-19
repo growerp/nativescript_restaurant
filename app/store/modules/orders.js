@@ -1,3 +1,4 @@
+import store from '~/store'
 import BackendService from "~/services/backend-service"
 const backendService = new BackendService()
 var log = true
@@ -122,8 +123,10 @@ const getters = {
   openOrders: state => {
     return state.openOrders
   },
+  openOrderById: state => id => {
+    return state.openOrders.find( o => o.orderId === id)
+  },
   ordersAndItemsByPrepAreas: state => {
-    console.log("===store return prep orders: " + state.ordersAndItemsByPrepAreas.length)
     return state.ordersAndItemsByPrepAreas
   },
   openOrdersByAreaSpot: state => (areaId, spotId) => {
@@ -143,6 +146,11 @@ const actions = {
       statusId: item.statusId})
   }, 
   async createSalesOrder({dispatch}, item) {
+    // set spot to ordered
+    let spot = Object.assign({}, store.getters.accommodationSpotByItem(item.header))
+    spot.verb = 'update'
+    spot.ordered = true
+    store.commit('accommodationSpot', spot)
     // remove pictures
     for (let i=0; i<item.items.length;i++)
       delete item.items[i].image

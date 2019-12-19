@@ -106,6 +106,7 @@ export default {
           if (result) {
             this.$store.dispatch('deletePreparationArea',
                 item.preparationAreaId)
+            this.preps = this.$store.getters.preparationAreas
           }
         })
       }

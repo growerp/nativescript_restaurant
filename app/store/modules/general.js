@@ -151,6 +151,20 @@ const actions = {
     } catch(error) {
         return "message:" + error.response.data.errors }
   },
+  async initialData({commit}) {
+    await backendService.initialData()
+    .then(axios.spread (function ( GetCurrentEmployeeUserGroupId,
+      GetActiveSubscriptions, GetAccommodationAreas, GetAccommodationSpots) {
+        commit('currentEmployeeUserGroupId',
+          GetCurrentEmployeeUserGroupId.data.currentEmployeeUserGroupId)
+        commit('activeSubscriptions',
+          GetActiveSubscriptions.data.subscriptions)
+        commit('accommodationAreas',
+          GetAccommodationAreas.data.accommodationAreas)
+        commit('accommodationSpots',
+          GetAccommodationSpots.data.accommodationSpots)
+      }))
+  },
   async initData({commit}) {
     await backendService.initData()
     .then(axios.spread (function ( GetCurrentEmployeeUserGroupId, 

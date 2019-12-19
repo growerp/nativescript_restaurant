@@ -13,14 +13,18 @@
 </template>
 
 <script>
+import general from '~/mixins/general'
 export default {
   name: 'PrepAdd',
+  mixins: [general],
   data() {
     return {
-      item: { description: '' },
+      item: { description: '' , printerHostUrl: ' ', printerName: ' '},
       itemMeta: {
         propertyAnnotations: [
             { name: 'description', required: true, index: 0},
+            { name: 'printerHostUrl', index: 1},
+            { name: 'printerName', index: 2 },
         ]
       },
       editedItem: null,
@@ -31,9 +35,12 @@ export default {
         this.editedItem = JSON.parse(data.object.editedObject)
     },
     submit() {
-      if (this.editedItem != '') {
-        this.$store.dispatch('createPreparationArea', this.editedItem)
-        this.$modal.close()
+      if (this.editedItem) {
+        if (!this.editedItem.description) this.note(this.$t('nameIsRequired'))
+        else {
+          this.$store.dispatch('createPreparationArea', this.editedItem)
+          this.$modal.close()
+        }
       }
     }
   }

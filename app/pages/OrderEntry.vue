@@ -44,51 +44,51 @@ import general from '~/mixins/general'
 import sideDrawer from '~/mixins/sideDrawer'
 
 export default {
-    name: 'OrderEntry',
-    props: {
-        orderHeader: {}
+  name: 'OrderEntry',
+  props: {
+      orderHeader: {}
+  },
+  mixins: [ sideDrawer, general ],
+  data() {
+    return {
+      header: this.$t('orderFor') + this.$t('table') + 
+          this.orderHeader.description +
+          '-' + this.orderHeader.spotNumber,
+      categoriesAndProducts:  this.$store.getters.productCategoriesAndProducts,
+      orderItems: [],
+      itemCount: 0,
+    }
+  },
+  methods: {
+    getOrderitems() {
+      let items = this.orderItems.length
+      for (let i = 0; i < items; i++) {
+          this.itemCount += this.orderItems[i].quantity }
     },
-    mixins: [ sideDrawer, general ],
-    data() {
-			return {
-        header: this.$t('orderFor') + this.$t('table') + 
-            this.orderHeader.description +
-            '-' + this.orderHeader.spotNumber,
-        categoriesAndProducts:  this.$store.getters.productCategoriesAndProducts,
-        orderItems: [],
-        itemCount: 0,
-      }
+    goToItems() {
+      this.$navigateTo(this.$routes.OrderItems,
+        {props: { orderHeader: this.orderHeader,
+                  orderItems: this.orderItems}})
     },
-    methods: {
-      getOrderitems() {
-        let items = this.orderItems.length
-        for (let i = 0; i < items; i++) {
-            this.itemCount += this.orderItems[i].quantity }
-      },
-      goToItems() {
-        this.$navigateTo(this.$routes.OrderItems,
-          {props: { orderHeader: this.orderHeader,
-                    orderItems: this.orderItems}})
-      },
-      addToOrder(product,quantity) {
-        this.itemCount++
-        let i = 0
-        for (i = 0; i < this.orderItems.length; i++) {
-            if (product.productId === this.orderItems[i].productId) {
-              this.orderItems[i].quantity += quantity;
-              this.getOrderitems
-              this.note(product.name + this.$t('nowQuantity') + this.orderItems[i].quantity)
-              break}}
-        if (i === this.orderItems.length) {
-            product.quantity = quantity
-            this.orderItems.push(product)
-            this.note(product.name + this.$t('added'))}
-      },
-      expandAll() { this.$refs.accordion.nativeView.expandAll();},
-      collapseAll() { this.$refs.accordion.nativeView.collapseAll()},
-		}
-	}
-  </script>
+    addToOrder(product,quantity) {
+      this.itemCount++
+      let i = 0
+      for (i = 0; i < this.orderItems.length; i++) {
+          if (product.productId === this.orderItems[i].productId) {
+            this.orderItems[i].quantity += quantity;
+            this.getOrderitems
+            this.note(product.name + this.$t('nowQuantity') + this.orderItems[i].quantity)
+            break}}
+      if (i === this.orderItems.length) {
+          product.quantity = quantity
+          this.orderItems.push(product)
+          this.note(product.name + this.$t('added'))}
+    },
+    expandAll() { this.$refs.accordion.nativeView.expandAll();},
+    collapseAll() { this.$refs.accordion.nativeView.collapseAll()},
+  }
+}
+</script>
 
 <style lang="css">
 

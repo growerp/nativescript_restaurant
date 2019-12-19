@@ -144,11 +144,12 @@ const appSettings = require("tns-core-modules/application-settings")
       } else this.$store.dispatch('getConnection').then( result => {
         log?console.log("==== result from getConnection: " + result):''
         if (result == 'success') {
-          this.$store.dispatch('initData')
-          log?console.log("==init ===created====going home======"):''
-          this.$navigateTo(this.$routes.Home, 
-            {clearHistory: true, props: {firstTime: true}})}
-        else {
+          this.$store.dispatch('initialData').then(() => {
+            console.log("=====created accom areas: " + this.$store.getters.accommodationAreas[0].description)
+            log?console.log("==init ===created====going home======"):''
+            this.$navigateTo(this.$routes.Home, {clearHistory: true })
+          })
+        } else {
           this.processing = false
           if (result == 'serverProblem')
             this.serverProblem()
@@ -188,16 +189,16 @@ const appSettings = require("tns-core-modules/application-settings")
       login() {
         log?console.log("=====logging in ======"):''
         this.$store.dispatch('getConnection').then( result => {
-          if (result = 'noApiKey') {
+          if (result == 'noApiKey') {
             this.$store.dispatch("login", this.user).then(result => {
               log?console.log("==== login page login result: " + result):''
               if (result == 'success') {
                 log?console.log("====login page success, loading initial data"):''
-                this.$store.dispatch('initData').then(() => { 
-                  log?console.log("====init done going home....."):''
-                  this.$navigateTo(this.$routes.Home, 
-                      {clearHistory: true, props: { firstTime: true }})
-                })
+                this.$store.dispatch('initialData') 
+                console.log("========login accom areas: " + this.$store.getters.accommodationAreas[0].description)
+                log?console.log("====init done going home....."):''
+                this.$navigateTo(this.$routes.Home, 
+                  {clearHistory: true, props: { firstTime: true }})
               } else {
                 this.processing = false
                 if (result.startsWith('message:'))
@@ -217,10 +218,12 @@ const appSettings = require("tns-core-modules/application-settings")
               }
             })
           } else if (result == 'success') {
-            this.$store.dispatch('initData').then(() => { 
-              log?console.log("====apiKey found in login, init done, going home....."):''
-              this.$navigateTo(this.$routes.Home, 
-                  {clearHistory: true, props: { firstTime: true }})})}
+            this.$store.dispatch('initialData')
+            console.log("accom areas: " + this.$store.getters.accommodationAreas[0].description)
+            log?console.log("====apiKey found in login, init done, going home....."):''
+            this.$navigateTo(this.$routes.Home, 
+                  {clearHistory: true, props: { firstTime: true }})
+          }
         })
       },
 

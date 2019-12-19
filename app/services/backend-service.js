@@ -177,11 +177,17 @@ export default class BackendService {
   // ================(preparation Area)) ===============
   async createPreparationArea(item) {
     return await axios.post('s1/growerp/CreatePreparationArea',
-      {   description: item.description})}
+      { description: item.description,
+        printerHostUrl: item.printerHostUrl,
+        printerName: item.printerName
+      })}
   async updatePreparationArea(item) {
     return await axios.post('s1/growerp/UpdatePreparationArea',
-      {   preparationAreaId: item.preparationAreaId,
-        description: item.description})}
+      { preparationAreaId: item.preparationAreaId,
+        description: item.description,
+        printerHostUrl: item.printerHostUrl,
+        printerName: item.printerName
+      })}
   async deletePreparationArea(id) {
     return await axios.post('s1/growerp/DeletePreparationArea',
       {   preparationAreaId: id})}
@@ -281,6 +287,14 @@ export default class BackendService {
   async reportSales(period) {
       return await axios.post('s1/growerp/ReportSales', { period: period })}
   // ======================initial data load when app starts==================
+  initialData() {
+    return axios.all([
+      axios.get('s1/growerp/GetCurrentEmployeeUserGroupId'),
+      axios.get('s1/growerp/GetActiveSubscriptions'),
+      axios.get('s1/growerp/GetAccommodationAreas'),
+      axios.get('s1/growerp/GetAccommodationSpots'),
+    ])
+  }
   initData() {
     return axios.all([
       axios.get('s1/growerp/GetCurrentEmployeeUserGroupId'),
