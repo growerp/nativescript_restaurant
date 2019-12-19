@@ -8,14 +8,17 @@ const state = {
     accommodationAreaId: '',
     description: '',
     image: '',
-    nbrOfSpots: ''
+    nbrOfSpots: '',
+    printerHostUrl: '',
+    printerName: ''
   }],
   accommodationSpots: [{
     accommodationSpotId: '',
     spotNumber: '',
     nbrOfSeats: '',
     accommodationAreaId: '',
-    description: ''
+    description: '',
+    ordered: Boolean
   }],
   preparationAreas: [{
     preparationAreaId: '',
@@ -188,7 +191,7 @@ const actions = {
   },
 }
 const getters = {
-  // accomodation related area related=========================================
+  // accomodation related area/spot related===================================
   accommodationAreas: state => {
     return state.accommodationAreas
   },
@@ -211,6 +214,12 @@ const getters = {
   },
   accommodationSpotsByAreaId: state => id => {
     return state.accommodationSpots.filter(o => o.accommodationAreaId === id)
+  },
+  accommodationSpotByItem: state => item =>{
+    return state.accommodationSpots.find(
+      o => (o.accommodationSpotId === item.accommodationSpotId &&
+           o.accommodationAreaId === item.accommodationAreaId) 
+      )
   },
   // preparation area related==================================================
   preparationAreas: state => {

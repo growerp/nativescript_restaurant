@@ -2,15 +2,30 @@
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :openDrawer="openDrawer" header="dashBoard"
-        :reload="reload" :onActionTap="backToDefault"/>
+        :reload="reload" :onActionTap="backToDefault" :onHeaderTap=null />
     </ActionBar>
-     <GridLayout rows="*, 50" class="p-10">
+    <GridLayout rows="*, 200" class="p-10">
+      <Stacklayout row="0">
+        <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
+          @propertyCommitted="onAreaCommitted" color="green"/>
+        <label :text="$t('tables')" paddingLeft="15"/>
+        <RadListView for="table in tables" @itemTap="onTableTap"
+              layout="grid" :gridSpanCount="6" itemHeight="100">
+          <v-template>
+            <Stacklayout padding="10">
+            <Stacklayout  :backgroundColor="table.ordered?'red':'lightGreen'">
+            <label :text="table.spotNumber" class="h2"
+              horizontalAlignment="center"/>
+            </Stacklayout></Stacklayout>
+          </v-template>
+        </RadListView>
+      </Stacklayout>
       <RadListView for="item in dashBoard" @itemTap="onItemTap"
-          itemReorder="true" @itemReordered="onItemReordered" row="0" 
-          layout="grid" height="100%" itemHeight="100"><!--itemHeight for ios -->
+          itemReorder="true" @itemReordered="onItemReordered" row="1" 
+          layout="grid" :gridSpanCount="4" itemHeight="100"><!--itemHeight for ios -->
         <v-template>
           <StackLayout orientation="vertical" padding="10">
-            <Image :src="item.image" height="60"/>
+            <Image :src="item.image" width="40"/>
             <Label :text="item.title" horizontalAlignment="center" class="h3"/>
           </StackLayout>
         </v-template>
@@ -22,43 +37,73 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
+import AddToOrder from './modalPages/AddToOrder'
 import {Printer} from "nativescript-printer"
 const appSettings = require("tns-core-modules/application-settings");
 
 export default {
   name: 'Home',
   props: {
-    firstTime: false
+    accommodationAreaId: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
       dashBoard: [],
-      reload: false
+      reload: false,
+      orderHeader: {
+        description: ''
+      },
+      orderHeaderMeta: {
+        propertyAnnotations:[
+          { name: 'description', displayName: this.$t('areaName'),
+              editor: 'SegmentedEditor',
+              valuesProvider:
+                this.$store.getters.accommodationAreasDesc(false)},
+        ]
+      },
+      areaId: '',
+      areaDescription:'',
+      tables: []
     }
   },
   mixins: [sideDrawer, general],
   created() {
-    if (!this.firstTime) {
-      this.$store.dispatch('initData') }
+    this.areaId = this.accommodationAreaId ? this.accommodationAreaId:
+        this.$store.getters.accommodationAreas[0].accommodationAreaId
+    this.areaDescription = 
+        this.$store.getters.accommodationAreaById(this.areaId).description 
+    this.orderHeader.description = this.areaDescription
+    this.$store.dispatch('initData')
     this.hideKeyboard()
     if (appSettings.getString('dashBoard')) {
       this.reload = true
       this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
     } else this.backToDefault()
+    this.tables = this.$store.getters.accommodationSpotsByAreaId(this.areaId)
   },
   methods: {
+    onAreaCommitted(data) {
+      let editedObject = JSON.parse(data.object.editedObject)
+      this.areaId = this.$store.getters.accommodationAreaByDesc(
+          editedObject.description).accommodationAreaId
+      this.tables = this.$store.getters.accommodationSpotsByAreaId(this.areaId)
+      this.areaDescription = editedObject.areaDescription
+    },
     onItemReordered(args) {
       appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
       this.reload = true
     },
     backToDefault() { // icons from : https://www.flaticon.com/
       this.dashBoard = [
-        {id: 1, image: '~/assets/images/waiter.png', title: this.$t('order'),
-          pageName: 'Orders', pageTab: 0},
+        // {id: 1, image: '~/assets/images/waiter.png', title: this.$t('order'),
+        //  pageName: 'Orders', pageTab: 0},
         {id: 2, image: '~/assets/images/prep.png', title: this.$t('prepare'),
           pageName: 'Prepare', pageTab: 0},
-        {id: 3, image: '~/assets/images/serve.png', title: this.$t('serve'),
-          pageName: 'Orders', pageTab: 1},
+        //{id: 3, image: '~/assets/images/serve.png', title: this.$t('serve'),
+        //  pageName: 'Orders', pageTab: 1},
         {id: 4, image: '~/assets/images/bill.png', title: this.$t('bill'),
           pageName: 'Orders', pageTab: 2},
         {id: 5, image: '~/assets/images/report.png', title: this.$t('reports'),
@@ -79,6 +124,32 @@ export default {
     onItemTap(args) {
       this.$navigateTo(eval("this.$routes." + args.item.pageName),
           {props: { startTab: args.item.pageTab}})
+    },
+    onTableTap(args) {
+      let openOrders = this.$store.getters.openOrdersByAreaSpot(
+            args.item.accommodationAreaId, args.item.accommodationSpotId)
+      let itemProps = { props: { orderHeader: {
+          accommodationAreaId:  args.item.accommodationAreaId,
+          description:          this.areaDescription,
+          accommodationSpotId:  args.item.accommodationSpotId,
+          spotNumber:           args.item.spotNumber,
+      }}}
+      if (openOrders.length > 0) {
+        this.$showModal(AddToOrder, {props: { openOrders: openOrders,
+            areaDescription: this.areaDescription, 
+            spotNumber: args.item.spotNumber}})
+        .then( result => {
+          if (result) {
+            itemProps.props.orderHeader.orderId = result.orderId
+            this.note(this.$t('addExistingOrderFrom') + result.placedTime)
+          } else {
+            this.$navigateTo(this.$routes.OrderData, itemProps)
+          }
+        })
+        this.$navigateTo(this.$routes.OrderEntry, itemProps)
+      } else {
+        this.$navigateTo(this.$routes.OrderData, itemProps)
+      }
     },
   },
 }

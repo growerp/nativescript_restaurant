@@ -83,7 +83,8 @@ export default {
         }
 
       })
-      this.$navigateTo(this.$routes.Home)
+      this.$navigateTo(this.$routes.Home, {
+        props: { accommodationAreaId: this.orderHeader.accommodationAreaId}})
     },
     onItemDeleteTap(args) {
       this.orderItems.splice(args.index,1)

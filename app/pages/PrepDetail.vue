@@ -46,7 +46,7 @@ export default {
   name: 'PrepDetail',
   mixins: [ imageSelector, general, sideDrawer],
   props: {
-      item: Object,
+      item: Object
   },
   data() {
     return {
@@ -58,10 +58,14 @@ export default {
           { name: 'preparationAreaId', ignore: true},
           { name: 'image', ignore: true},
           { name: 'nbrOfCatg', ignore: true},
-          { name: 'description', required: true, index: 0}]},
+          { name: 'description', required: true, index: 0},
+          { name: 'printerHostUrl', required: true, index: 1 },
+          { name: 'printerName', required: true, index: 2 }]},
     }
   },
   created() {
+      if (!this.item.printerHostUrl) this.item.printerHostUrl = '' 
+      if (!this.item.printerName) this.item.printerName = '' 
       if (!this.itemImage.length) {
         this.$backendService.downloadImage('medium', 'prep',
           this.item.preparationAreaId)
