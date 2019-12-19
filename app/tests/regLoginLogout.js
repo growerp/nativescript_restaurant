@@ -10,47 +10,39 @@ var user = {};var company = {};var orderHeader = {};var orderItems = []
 describe('Connect, register and login', function () {
   this.timeout(60000);
   before(function( done ){
-    appSettings.clear()
-    store.dispatch('getConnection')
+    user = dataModule.getRandomUser()
+    company = dataModule.getRandomCompany()
+    store.dispatch('register', {company: company, user: user})
     .then( function(result) {
-      if ( result != 'register')
-        done("should get 'register' response from get connection")
+      if (result != 'success') done("===cannot register")
       else {
-        user = dataModule.getRandomUser()
-        company = dataModule.getRandomCompany()
-        store.dispatch('register', {company: company, user: user})
+        store.dispatch('login', user)
         .then( function(result) {
-          if (result != 'success') done("===cannot register")
+          if ( result != 'success') done("===cannot login, returned " + result)
           else {
-            store.dispatch('login', user)
-            .then( function(result) {
-              if ( result != 'success') done("===cannot login, returned " + result)
-              else {
-                store.dispatch('loadDefaultData', [ 'kitchen','food',
-                    'macaroni','bar','inside','garden','drinks','cola'])
-                .then( function() {
-                    store.dispatch('initData').then( function() {
-                      assert.lengthOf(store.getters.accommodationAreas,2,
-                          "check nbr of accomodation areas: 2")
-                      assert.lengthOf(store.getters.preparationAreas,2,
-                        "check nbr of preparation areas: 2")
-                      assert.lengthOf(store.getters.accommodationSpots,25,
-                        "check nbr of accomodation spot: 25")
-                      assert.lengthOf(store.getters.products,2,
-                        "check nbr of products: 2")
-                      assert.lengthOf(store.getters.productCategories,2,
-                        "check nbr of categories: 2")
-                      assert.lengthOf(store.getters.employees,2,
-                        "check nbr of employees: 2")
-                      done()
-                    })
+            store.dispatch('loadDefaultData', [ 'kitchen','food',
+                'macaroni','bar','inside','garden','drinks','cola'])
+            .then( function() {
+                store.dispatch('initData').then( function() {
+                  assert.lengthOf(store.getters.accommodationAreas,2,
+                      "check nbr of accomodation areas: 2")
+                  assert.lengthOf(store.getters.preparationAreas,2,
+                    "check nbr of preparation areas: 2")
+                  assert.lengthOf(store.getters.accommodationSpots,25,
+                    "check nbr of accomodation spot: 25")
+                  assert.lengthOf(store.getters.products,2,
+                    "check nbr of products: 2")
+                  assert.lengthOf(store.getters.productCategories,2,
+                    "check nbr of categories: 2")
+                  assert.lengthOf(store.getters.employees,2,
+                    "check nbr of employees: 2")
+                  done()
                 })
-              }
             })
           }
-        }) 
+        })
       }
-    })
+    }) 
   })
 
   it('enter order should show in prep, serve and bill screens', function (done) {
