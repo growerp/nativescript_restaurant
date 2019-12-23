@@ -1,57 +1,58 @@
-import sideDrawer from '~/components/sideDrawer'
-import Login from '~/pages/Login'
-import Home from '~/pages/Home'
-import SetUp from '~/pages/SetUp'
-import Tasks from '~/pages/Tasks'
-import TaskDetail from '~/pages/TaskDetail'
-import Orders from '~/pages/Orders'
-import Organization from '~/pages/Organization'
-import Locations from '~/pages/Locations'
-import Products from '~/pages/Products'
-import Categories from '~/pages/Categories'
-import Reports from '~/pages/Reports'
-import UserDetail from '~/pages/UserDetail'
+import About from '~/pages/About'
 import AreaDetail from '~/pages/AreaDetail'
-import PrepDetail from '~/pages/PrepDetail'
+import Billing from '~/pages/Billing'
+import Categories from '~/pages/Categories'
+import CategoryDetail from '~/pages/CategoryDetail'
+import Company from '~/pages/Company'
+import Export from '~/pages/Export'
+import Help from '~/pages/Help'
+import Home from '~/pages/Home'
+import InProcess from '~/pages/InProcess'
+import Locations from '~/pages/Locations'
+import Login from '~/pages/Login'
+import MyInfo from '~/pages/MyInfo'
+import OrderData from '~/pages/OrderData'
 import OrderEntry from '~/pages/OrderEntry'
 import OrderItems from '~/pages/OrderItems'
-import Prepare from '~/pages/Prepare'
-import ProductDetail from '~/pages/ProductDetail'
-import CategoryDetail from '~/pages/CategoryDetail'
-import Help from '~/pages/Help'
-import About from '~/pages/About'
-import Upgrade from '~/pages/Upgrade'
-import OrderData from '~/pages/OrderData'
 import OrderPrint from '~/pages/OrderPrint'
-import MyInfo from '~/pages/MyInfo'
-import Export from '~/pages/Export'
+import Organization from '~/pages/Organization'
+import PrepDetail from '~/pages/PrepDetail'
+import ProductDetail from '~/pages/ProductDetail'
+import Products from '~/pages/Products'
+import Reports from '~/pages/Reports'
+import SetUp from '~/pages/SetUp'
+import TaskDetail from '~/pages/TaskDetail'
+import Tasks from '~/pages/Tasks'
+import Upgrade from '~/pages/Upgrade'
+import UserDetail from '~/pages/UserDetail'
 
 const routes = {
-  Login,
-  Home,
-  SetUp,
-  Tasks,
-  TaskDetail,
-  Orders,
-  Organization,
-  Locations,
-  Products,
-  Categories,
-  Reports,
-  UserDetail,
+  About,
   AreaDetail,
-  PrepDetail,
+  Billing,
+  Categories,
+  CategoryDetail,
+  Company,
+  Help,
+  Home,
+  InProcess,
+  Locations,
+  Login,
+  MyInfo,
+  OrderData,
   OrderEntry,
   OrderItems,
-  Prepare,
-  ProductDetail,
-  CategoryDetail,
-  Help,
-  About,
-  Upgrade,
-  OrderData,
   OrderPrint,
-  MyInfo,
+  Organization,
+  PrepDetail,
+  ProductDetail,
+  Products,
+  Reports,
+  SetUp,
+  TaskDetail,
+  Tasks,
+  Upgrade,
+  UserDetail,
   Export,
 }
 

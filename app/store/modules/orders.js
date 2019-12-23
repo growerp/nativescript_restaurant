@@ -63,30 +63,16 @@ const state = {
   }] 
 }
 const mutations = {
-  changeOrderPartStatus(state, value) {
+  changeOrderStatus(state, value) {
     log?console.log("=====update part status in store: " + JSON.stringify(value)):''
+    state.ordersAndItemsByPrepAreas.forEach( (order, prepIndex) => {
+      if (order.orderId == value.orderId)
+        state.ordersAndItemsByPrepAreas.splice(prepIndex,1)
+    })
     let index = state.openOrders.findIndex(o => o.orderId == value.orderId)
     let item = state.openOrders[index]
-    if (value.partId) { // order separated by preparea => update prepOrders
-      let prepIndex = state.ordersAndItemsByPrepAreas.findIndex( 
-        o => o.orderId == value.orderId && o.orderPartSeqId == value.partId)
-      let prepItem = state.ordersAndItemsByPrepAreas[prepIndex]
-      if (value.statusId == 'serv') {
-        prepItem.partStatusId = 'OrderPlaced'
-        state.ordersAndItemsByPrepAreas.splice(prepIndex,1,prepItem)
-        item.orderStatusId = 'OrderPlaced'
-        state.openOrders.splice(index,1,item)
-      } else if (value.statusId == 'bill') { // remove from prep list -> billed
-        state.ordersAndItemsByPrepAreas.splice(prepIndex,1)
-        let left = state.ordersAndItemsByPrepAreas.filter( // any left? 
-              o => o.orderId == value.orderId)
-        if (left.length == 0) { // no, so we can bill: change status in openOrders
-          item.orderStatusId = 'OrderApproved'
-          state.openOrders.splice(index,1,item)}
-      }
-    } else if (value.statusId == 'completed') { // change open orders
-      item.orderStatusId = 'OrderCompleted'
-      state.openOrders.splice(index,1,item)}
+    item.orderStatusId = value.statusId
+    state.openOrders.splice(index,1,item)
   },
   openOrders(state, value) {
     state.openOrders = value
@@ -137,12 +123,11 @@ const getters = {
   },
 }
 const actions = {
-  changeOrderPartStatus({commit}, item) {
+  changeOrderStatus({commit}, item) {
     backendService.changeOrderPartStatus(
-      item.orderId, item.partId, item.statusId)
-    commit('changeOrderPartStatus',{
+      item.orderId, null, item.statusId)
+    commit('changeOrderStatus',{
       orderId: item.orderId, 
-      partId: item.partId,
       statusId: item.statusId})
   }, 
   async createSalesOrder({dispatch}, item) {

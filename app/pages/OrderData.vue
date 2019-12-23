@@ -15,7 +15,6 @@
 
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
-import AddToOrder from './modalPages/AddToOrder'
 import general from '~/mixins/general'
 import * as frameModule from 'tns-core-modules/ui/frame'
 import { AutoCompleteDisplayMode } from 'nativescript-ui-dataform'
@@ -23,11 +22,11 @@ export default {
   name: 'orders',
   mixins: [ sideDrawer, general],
   props: {
-    orderHeader: {}
+    orderHeader: Object
   },
   data () {
     return {
-      header: this.$t('orderFor') + 
+      header: this.$t('new') + this.$t('orderFor') + 
           this.$t('table') + this.orderHeader.description +
           '-' + this.orderHeader.spotNumber,
       currentTab: 0,

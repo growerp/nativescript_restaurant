@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
-          header="preparation"/>
+          header="inProcess"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange"
              paddingTop="10">
@@ -21,8 +21,8 @@
                 <Label :text="item.description + '-' +
                     item.spotNumber + '   ' + item.nbrOfItems + ' ' + $t('items')" 
                     class="h2" col="1" paddingLeft="10"/>
-                <Label class="button" @tap="setDone(item)"
-                    col="2" :text="$t('done')" text-align="center"/>
+                <Label class="button" @tap="rePrint(item)"
+                    col="2" :text="$t('rePrint')" text-align="center"/>
               </GridLayout>
             </v-template>
             <v-template name="content">
@@ -68,11 +68,11 @@ export default {
     tabChange(args) {
         this.currentTab = args.value
     },
-    setDone(item) {
-      this.$store.dispatch('changeOrderPartStatus', {
+    rePrint(item) {
+      this.$backendService.print({
+          type: 'order', 
           orderId: item.orderId, 
-          partId: item.orderPartSeqId,
-          statusId: 'serv'})
+          orderPartSeqId: item.orderPartSeqId})
     },
     refresh() {
       this.$store.dispatch('getOrders', null)

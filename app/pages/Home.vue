@@ -22,11 +22,11 @@
       </Stacklayout>
       <RadListView for="item in dashBoard" @itemTap="onItemTap"
           itemReorder="true" @itemReordered="onItemReordered" row="1" 
-          layout="grid" :gridSpanCount="4" itemHeight="100"><!--itemHeight for ios -->
+          layout="grid" :gridSpanCount="5" itemHeight="100"><!--itemHeight for ios -->
         <v-template>
           <StackLayout orientation="vertical" padding="10">
             <Image :src="item.image" width="40"/>
-            <Label :text="item.title" horizontalAlignment="center" class="h3"/>
+            <Label :text="item.title" horizontalAlignment="center" class="h4"/>
           </StackLayout>
         </v-template>
       </RadListView>
@@ -37,7 +37,7 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
-import AddToOrder from './modalPages/AddToOrder'
+import TableDetail from './modalPages/TableDetail'
 import {Printer} from "nativescript-printer"
 const appSettings = require("tns-core-modules/application-settings");
 
@@ -100,23 +100,23 @@ export default {
       this.dashBoard = [
         // {id: 1, image: '~/assets/images/waiter.png', title: this.$t('order'),
         //  pageName: 'Orders', pageTab: 0},
-        {id: 2, image: '~/assets/images/prep.png', title: this.$t('prepare'),
-          pageName: 'Prepare', pageTab: 0},
+        {id: 2, image: '~/assets/images/prep.png', title: this.$t('inProcess'),
+          pageName: 'InProcess', pageTab: 0},
         //{id: 3, image: '~/assets/images/serve.png', title: this.$t('serve'),
         //  pageName: 'Orders', pageTab: 1},
         {id: 4, image: '~/assets/images/bill.png', title: this.$t('bill'),
-          pageName: 'Orders', pageTab: 2},
+          pageName: 'Billing', pageTab: 2},
         {id: 5, image: '~/assets/images/report.png', title: this.$t('reports'),
               pageName: 'Reports', pageTab: 0},
         {id: 6, image: '~/assets/images/task.png', title: this.$t('tasks'),
           pageName: 'Tasks', pageTab: 0},
         {id: 7, image: '~/assets/images/help.png', title: this.$t('help'),
               pageName: 'Help', pageTab: 0},
+        {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),
+              pageName: 'MyInfo', pageTab: 0},
         this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN' ?
-          {id: 8, image: '~/assets/images/setup.png', title: this.$t('setup'),
-              pageName: 'SetUp', pageTab: 0}
-        : {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),
-              pageName: 'MyInfo', pageTab: 0}
+          {id: 8, image: '~/assets/images/setup.png', title: this.$t('admin'),
+              pageName: 'SetUp', pageTab: 0}: ''
       ]
       appSettings.remove('dashBoard')
       this.reload = false
@@ -128,27 +128,18 @@ export default {
     onTableTap(args) {
       let openOrders = this.$store.getters.openOrdersByAreaSpot(
             args.item.accommodationAreaId, args.item.accommodationSpotId)
-      let itemProps = { props: { orderHeader: {
+      let orderHeader = {
           accommodationAreaId:  args.item.accommodationAreaId,
           description:          this.areaDescription,
           accommodationSpotId:  args.item.accommodationSpotId,
           spotNumber:           args.item.spotNumber,
-      }}}
-      if (openOrders.length > 0) {
-        this.$showModal(AddToOrder, {props: { openOrders: openOrders,
-            areaDescription: this.areaDescription, 
-            spotNumber: args.item.spotNumber}})
-        .then( result => {
-          if (result) {
-            itemProps.props.orderHeader.orderId = result.orderId
-            this.note(this.$t('addExistingOrderFrom') + result.placedTime)
-          } else {
-            this.$navigateTo(this.$routes.OrderData, itemProps)
-          }
-        })
-        this.$navigateTo(this.$routes.OrderEntry, itemProps)
+      }
+      if (openOrders.length == 0) {
+        this.$navigateTo(this.$routes.OrderData, 
+            { props: { orderHeader: orderHeader }})
       } else {
-        this.$navigateTo(this.$routes.OrderData, itemProps)
+        this.$showModal(TableDetail, 
+            { props: { openOrders: openOrders, orderHeader: orderHeader}})
       }
     },
   },
