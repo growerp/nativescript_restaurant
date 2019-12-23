@@ -1,5 +1,7 @@
 const appSettings = require("tns-core-modules/application-settings")
 import store from '../../store'
+import BackendService from "~/services/backend-service"
+const backendService = new BackendService()
 
 var log = true
 if (TNS_ENV === 'production') log = false 
@@ -179,7 +181,10 @@ const getters = {
   },
 }
 const  actions = {
-
+  updateCompany({commit}, item) {
+    backendService.updateCompany(item)
+    commit('company', item)
+  }
 }
 // export this module.
 export default {
