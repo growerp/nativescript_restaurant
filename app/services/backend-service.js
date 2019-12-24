@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '../store'
 const platformModule = require("tns-core-modules/platform")
 const appSettings = require("tns-core-modules/application-settings")
+const qs = require('qs');
 import { ToastDuration, ToastPosition, Toasty } from 'nativescript-toasty';
 
 let log = false
@@ -26,20 +27,26 @@ axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencod
 const simple = axios.create({ baseUrl:axios.defaults.baseURL})
 
 axios.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    // console.log('=wwwww==Request Handler config: ', config)
-    log?(console.log('===REQUEST url: ' + config.url +
-      ' method: ' + config.method +
-      ' data: ' + (config.data? JSON.stringify(config.data) : '') +
-      ' interceptor errorHandle: ' +  (config.errorHandle == false ? 'disabled' : 'active') +
-      ' headers: ' + JSON.stringify(config.headers))):''
-    return config;
-    }, function (error) {
-    // Do something with request error beter not suppress....
-    console.log('===Request Error Handler: ', error)
-    return Promise.reject(error);
-    });
+  // Do something before request is sent
+  // console.log('=wwwww==Request Handler config: ', config)
+  log?(console.log('===REQUEST url: ' + config.url +
+    ' method: ' + config.method +
+    ' data: ' + (config.data? JSON.stringify(config.data) : '') +
+    ' interceptor errorHandle: ' +  (config.errorHandle == false ? 'disabled' : 'active') +
+    ' headers: ' + JSON.stringify(config.headers))):''
+  return config;
+}, function (error) {
+// Do something with request error beter not suppress....
+console.log('===Request Error Handler: ', error)
+return Promise.reject(error);
+});
 
+/*this.$axios = axios.create({
+  transformRequest: [
+    data => (isString(data) ? data : qs.stringify(data)),
+  ],
+});
+*/
 axios.interceptors.response.use(
 
     function (response) {
@@ -52,6 +59,14 @@ axios.interceptors.response.use(
     },
 
     function(error) { // better not suppress REST console errors
+      // retry after moquiSession token invalid
+      if (error.config && error.response && error.response.status === 401) {
+        return getToken().then((token) => { 
+          saveToken(token.data)
+          return axios.request(error.config);
+          //return this.$axios.request(config);
+        });
+      }
       // check for errorHandle config
       if( error.config.hasOwnProperty('errorHandle') && 
           error.config.errorHandle === false ) {

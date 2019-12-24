@@ -194,11 +194,12 @@ const appSettings = require("tns-core-modules/application-settings")
               log?console.log("==== login page login result: " + result):''
               if (result == 'success') {
                 log?console.log("====login page success, loading initial data"):''
-                this.$store.dispatch('initialData') 
-                console.log("========init done, accom area: " + 
-                    this.$store.getters.accommodationAreas[0].description)
-                log?console.log("====going home....."):''
-                this.$navigateTo(this.$routes.Home, {clearHistory: true })
+                this.$store.dispatch('initialData').then(() => { 
+                  console.log("========init done, accom area: " + 
+                      this.$store.getters.accommodationAreas[0].description)
+                  log?console.log("====going home....."):''
+                  this.$navigateTo(this.$routes.Home, {clearHistory: true })
+                })
               } else {
                 this.processing = false
                 if (result.startsWith('message:'))
