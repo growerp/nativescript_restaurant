@@ -37,6 +37,7 @@
     "nativescript-vue": "^2.4.0",
     "nativescript-windowed-modal": "^6.2.0",
     "net": "^1.0.2",
+    "qs": "^6.9.1",
     "source-map-support": "^0.5.10",
     "tns-core-modules": "^6.2.3",
     "typescript": "^3.2.2",
