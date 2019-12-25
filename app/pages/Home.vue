@@ -64,33 +64,32 @@ export default {
                 this.$store.getters.accommodationAreasDesc(false)},
         ]
       },
-      areaId: '',
-      areaDescription:'',
-      tables: []
+      area: {},
+      tables: [],
     }
   },
   mixins: [sideDrawer, general],
   created() {
-    this.areaId = this.accommodationAreaId ? this.accommodationAreaId:
-        this.$store.getters.accommodationAreas[0].accommodationAreaId
-    this.areaDescription = 
-        this.$store.getters.accommodationAreaById(this.areaId).description 
-    this.orderHeader.description = this.areaDescription
+    this.area = this.accommodationAreaId ?
+      this.$store.getters.accommodationAreaById(this.accommodationAreaId):
+      this.$store.getters.accommodationAreas[0]
+    this.tables = this.$store.getters.accommodationSpotsByAreaId(
+        this.area.accommodationAreaId)
     this.$store.dispatch('initData')
     this.hideKeyboard()
     if (appSettings.getString('dashBoard')) {
       this.reload = true
       this.dashBoard = JSON.parse(appSettings.getString('dashBoard'))
     } else this.backToDefault()
-    this.tables = this.$store.getters.accommodationSpotsByAreaId(this.areaId)
+    this.orderHeader.description = this.area.description
   },
   methods: {
     onAreaCommitted(data) {
       let editedObject = JSON.parse(data.object.editedObject)
-      this.areaId = this.$store.getters.accommodationAreaByDesc(
-          editedObject.description).accommodationAreaId
-      this.tables = this.$store.getters.accommodationSpotsByAreaId(this.areaId)
-      this.areaDescription = editedObject.areaDescription
+      this.area = this.$store.getters.accommodationAreaByDesc(
+          editedObject.description)
+      this.tables = this.$store.getters.accommodationSpotsByAreaId(
+        this.area.accommodationAreaId)
     },
     onItemReordered(args) {
       appSettings.setString('dashBoard', JSON.stringify(this.dashBoard))
@@ -130,7 +129,7 @@ export default {
             args.item.accommodationAreaId, args.item.accommodationSpotId)
       let orderHeader = {
           accommodationAreaId:  args.item.accommodationAreaId,
-          description:          this.areaDescription,
+          description:          this.area.description,
           accommodationSpotId:  args.item.accommodationSpotId,
           spotNumber:           args.item.spotNumber,
       }
@@ -140,6 +139,10 @@ export default {
       } else {
         this.$showModal(TableDetail, 
             { props: { openOrders: openOrders, orderHeader: orderHeader}})
+        .then(() => {
+          this.tables = this.$store.getters.accommodationSpotsByAreaId(
+            this.area.accommodationAreaId)
+        })
       }
     },
   },

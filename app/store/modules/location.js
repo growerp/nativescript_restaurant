@@ -89,7 +89,7 @@ const mutations = {
       }        
     }
     if(log) console.log("=====accommodationspot action: " + verb + 
-        ' completed name: ' + value.spotNumber)
+        ' completed spot: ' + value.spotNumber)
     // update count in the preparation area list
     function updateAccommodationSpotCount( id, increment) {
       if (log) console.log("==== update count in accom list for accomm id: " + id)
