@@ -88,7 +88,7 @@ export default {
     enterRestaurantName: 'Enter a restaurant name!',
     existing: 'Existing ',
     exit: 'Exit',
-    export: 'Export data via email',
+    export: 'Export',
     externalId: 'Customer id/telno',
     extraInformation: 'Extra information',
     FAQ: 'Frequently Asked questions(FAQ)',

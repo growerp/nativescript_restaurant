@@ -1,15 +1,15 @@
 <template>
   <page><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout  backgroundColor="white" padding="20" width="90%">
-    <GridLayout rows="auto,auto,auto,auto,auto,50">
+    <GridLayout rows="auto,10,auto,10,auto,50">
       <label :text="$t('table') + this.openOrders[0].table" 
           class="h2" horizontalAlignment="center" row="0"/>
-      <RadListView for="order in openOrders" height="40%" row="2">
+      <RadListView for="order,index in openOrders" height="40%" row="2">
         <v-template name="header">
           <GridLayout width="100%" columns="auto, 100, *">
             <StackLayout col="0">
               <label :text="$t('time')" class="h3" col="0"/>
-              <label :text="$t('name')" class="h3" col="2"/>
+              <label :text="$t('customer') + ' ' + $t('name')" class="h3" col="2"/>
             </StackLayout>
           </GridLayout>
         </v-template>
@@ -19,19 +19,26 @@
               <label :text="order.placedTime" class="h3"/>
               <label :text="order.firstName + ' ' + order.lastName" class="h3"/>
             </StackLayout>
-            <Button class="button" :text="$t('cancel')" 
-              @tap="onCancelOrderTap(order)" col="2"/>
+            <label text="Printed" class="h2" col="2"
+              :visibility="openOrders[index].orderStatusId==='OrderApproved'?
+                'visible':'hidden'"/>
             <Button class="button" :text="$t('addTo')" 
-              @tap="onAddOrderTap(order)" col="4"/>
+              @tap="onAddOrderTap(order)" col="2"
+              :visibility="openOrders[index].orderStatusId==='OrderApproved'?
+                'hidden':'visible'"/>
+            <Button class="button" :text="$t('cancel')" 
+              @tap="onCancelOrderTap(order)" col="4"/>
           </GridLayout>
         </v-template>
       </RadListView>
-      <StackLayout orientation="horizontal" row="4" horizontalAlignment="center">
+      <StackLayout row="4">
+        <Button class="button" :text="$t('billOrder')" @tap="onBillTap"
+          :visibility="openOrders[0].orderStatusId==='OrderApproved'?
+            'hidden':'visible'"/>
         <Button class="button" :text="$t('new')+$t('order')" @tap="onNewOrderTap"/>
-        <Button class="button" :text="$t('billOrder')" @tap="onBillTap"/>
-      </StackLayout>
-      <Button class="button" :text="$t('cancel')"
+        <Button class="button" :text="$t('cancel')"
           @tap="$modal.close()" row="5"/>
+      </StackLayout>
     </GridLayout>
     </StackLayout></ModalStack>
   </page>
@@ -56,18 +63,18 @@ export default {
       },
       onBillTap() {
         this.openOrders.forEach((order) => {
-          this.$store.dispatch('changeOrderStatus',
-            {orderId: order.orderId, statusId: 'OrderApproved'}) // show in billing 
-          this.note(this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('tobeBilled'))
+          if (order.orderStatusId != 'OrderApproved') { // can be billed before
+            this.$store.dispatch('changeOrderStatus',
+              {orderId: order.orderId, orderStatusId: 'OrderApproved'}) // show in billing 
+            this.note(this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('tobeBilled'))
+          }
         })
         this.$modal.close()
       },
       onCancelOrderTap(order) {
-        this.openOrders.forEach((order) => {
-          this.$store.dispatch('changeOrderStatus',
-            {orderId: order.orderId, statusId: 'OrderCancelled'}) 
-          this.note(this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('cancelled'))
-        })
+        this.$store.dispatch('changeOrderStatus',
+          {orderId: order.orderId, orderStatusId: 'OrderCancelled'}) 
+        this.note(this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('cancelled'))
         this.$modal.close()
       },
       onNewOrderTap() {

@@ -119,16 +119,27 @@ const getters = {
     return state.openOrders.filter(
       o => o.accommodationAreaId === areaId &&
            o.accommodationSpotId === spotId &&
-           o.orderStatusId !== 'Completed')
+           o.orderStatusId !== 'OrderCompleted')
   },
 }
 const actions = {
   changeOrderStatus({commit}, item) {
+    // clear spot un-occupied
+    if (item.orderStatusId === 'OrderCancelled' || item.orderStatusId === 'OrderCompleted') {
+      let order = Object.assign({},store.getters.openOrderById(item.orderId))
+      if (store.getters.openOrdersByAreaSpot(
+        order.accommodationAreaId, order.accommodationSpotId).length < 2) {
+        let spot = Object.assign({},store.getters.accommodationSpotByItem(order))
+        spot.verb = 'update'
+        spot.ordered = false
+        store.commit('accommodationSpot', spot)
+      }
+    }
     backendService.changeOrderPartStatus(
-      item.orderId, null, item.statusId)
+      item.orderId, null, item.orderStatusId)
     commit('changeOrderStatus',{
       orderId: item.orderId, 
-      statusId: item.statusId})
+      statusId: item.orderStatusId})
   }, 
   async createSalesOrder({dispatch}, item) {
     // set spot to ordered

@@ -58,19 +58,17 @@ export default {
   },
   methods: {
     refresh() {
-      this.$store.dispatch('getOpenOrders').then(() => {
-        this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')
-      })
+      this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')
     },
     setDone(item) {
       this.$store.dispatch('changeOrderStatus', {
-        statusId: 'OrderCompleted', orderId: item.orderId}) 
+        orderStatusId: 'OrderCompleted', orderId: item.orderId}) 
       this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')
       this.note(this.$t('table') + ' ' + item.table + this.$t('isNowPaid'))
     },
     setCancel(item) {
       this.$store.dispatch('changeOrderStatus', {
-        statusId: 'OrderCancelled', orderId: item.orderId}) 
+        orderStatusId: 'OrderCancelled', orderId: item.orderId}) 
       this.billOrders = this.$store.getters.ordersByStatusId('OrderCancelled')
       this.note(this.$t('table') + ' ' + item.table + this.$t('cancelled'))
     },

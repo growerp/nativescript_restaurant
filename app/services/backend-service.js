@@ -61,6 +61,7 @@ axios.interceptors.response.use(
     function(error) { // better not suppress REST console errors
       // retry after moquiSession token invalid
       if (error.config && error.response && error.response.status === 401) {
+        console.log("=====401 moqui token error")
         return getToken().then((token) => { 
           saveToken(token.data)
           return axios.request(error.config);
