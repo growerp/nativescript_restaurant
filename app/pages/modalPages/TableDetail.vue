@@ -73,8 +73,9 @@ export default {
       },
       onCancelOrderTap(order) {
         this.$store.dispatch('changeOrderStatus',
-          {orderId: order.orderId, orderStatusId: 'OrderCancelled'}) 
-        this.note(this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('cancelled'))
+            {orderId: order.orderId, orderStatusId: 'OrderCancelled'}) 
+        this.note(this.$t('time') + ' ' + 
+            order.placedTime + ' ' + this.$t('cancelled'))
         this.$modal.close()
       },
       onNewOrderTap() {

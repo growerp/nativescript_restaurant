@@ -62,7 +62,7 @@ axios.interceptors.response.use(
       // retry after moquiSession token invalid
       if (error.config && error.response && error.response.status === 401) {
         console.log("=====401 moqui token error")
-        return getToken().then((token) => { 
+        getToken().then((token) => { 
           saveToken(token.data)
           return axios.request(error.config);
           //return this.$axios.request(config);
@@ -115,12 +115,12 @@ export default class BackendService {
   }
   saveToken(moquiToken) {
     axios.defaults.headers.post['moquiSessionToken'] = moquiToken }
-    saveKey(apiKey) {
-      appSettings.setString('apiKey', apiKey)
-      axios.defaults.headers['api_key'] = apiKey}
-    removeKey() {
-      appSettings.remove('apiKey')
-      delete axios.defaults.headers.common["apiKey"]}
+  saveKey(apiKey) {
+    appSettings.setString('apiKey', apiKey)
+    axios.defaults.headers['api_key'] = apiKey}
+  removeKey() {
+    appSettings.remove('apiKey')
+    delete axios.defaults.headers.common["apiKey"]}
   // ================getToken,login/out/register password forgot =============
   async getToken() {
     return await simple.get('moquiSessionToken')}
