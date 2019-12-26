@@ -5,22 +5,28 @@
           :onHeaderTap="onHeaderTapHome"
           :reload="reload" :onActionTap="backToDefault"/>
     </ActionBar>
-    <GridLayout rows="*, 250, 50" class="p-10">
-    <RadCartesianChart row="0">
-      <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
-        minimum="19/12/2019" maximum="27/12/2019"
-        majorStep="1" majorStepUnit="Day" dateFormat="MMM-dd"
-        labelFitMode="Rotate" labelRotationAngle="1.2"/>
-      <LinearAxis v-tkCartesianVerticalAxis/>
-      <LineSeries v-tkCartesianSeries :items="items"
-          categoryProperty="timeStamp"
-          valueProperty="orderCount" legendTitle="orders"/>
-      <LineSeries v-tkCartesianSeries :items="items"
-          categoryProperty="timeStamp"
-          valueProperty="amount" legendTitle="Amount"/>
-      <RadLegendView v-tkCartesianLegend position="Right" width="75" height="75"/>
-    </RadCartesianChart>
-      <RadListView for="item in dashBoard" @itemTap="onItemTap" row="1"
+    <GridLayout rows="*, auto, 200, 50" class="p-10">
+      <RadCartesianChart row="0">
+        <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
+            :minimum="fromDate" :maximum="thruDate"
+            majorStep="1" :majorStepUnit="stepUnit" dateFormat="MMM-dd"
+            labelFitMode="Rotate" labelRotationAngle="1.2"/>
+        <LinearAxis v-tkCartesianVerticalAxis/>
+        <LineSeries v-tkCartesianSeries :items="items"
+            categoryProperty="timeStamp"
+            valueProperty="orderCount" legendTitle="orders"/>
+        <LineSeries v-tkCartesianSeries :items="items"
+            categoryProperty="timeStamp"
+            valueProperty="amount" legendTitle="Amount"/>
+        <RadLegendView v-tkCartesianLegend position="Right" width="75"
+            height="75"/>
+      </RadCartesianChart>
+      <GridLayout columns="*,*,*" row="1">
+        <Button class="button" col="0" :text="$t('day')" @tap="getReport('day')"/>
+        <Button class="button" col="1" :text="$t('week')" @tap="getReport('week')"/>
+        <Button class="button" col="2" :text="$t('month')" @tap="getReport('month')"/>
+      </GridLayout>
+      <RadListView for="item in dashBoard" @itemTap="onItemTap" row="2"
           itemReorder="true" @itemReordered="onItemReordered"
           layout="grid" :gridSpanCount="5" itemHeight="100"><!--itemHeight for ios -->
         <v-template>
@@ -46,12 +52,17 @@ export default {
         dashBoard: [],
         reload: false,
         items: [],
+        fromDate: '',
+        thruDate: '',
+        stepUnit: '',
       }
     },
     mixins: [ sideDrawer, general],
     created() {
       this.$backendService.reportSales('day').then( result => {
         this.items = result.data.periods
+        this.fromDate = result.data.fromDate
+        this.thruDate = result.data.thruDate
         // console.log('====weeksales: ' + JSON.stringify(this.items))
       })
       if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
@@ -62,6 +73,12 @@ export default {
       }
     },
     methods: {
+      getReport(type) {
+        this.$backendService.reportSales(type).then( result => {
+          this.items = result.data.periods
+        })
+        this.stepUnit = type
+      },
       onItemReordered(args) {
           appSettings.setString('setUp', JSON.stringify(this.dashBoard))
           this.reload = true
