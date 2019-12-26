@@ -6,23 +6,20 @@
           :reload="reload" :onActionTap="backToDefault"/>
     </ActionBar>
     <GridLayout rows="*, 250, 50" class="p-10">
-      <RadCartesianChart row="0">
-        <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
-          minimum="01/02/2015" maximum="01/10/2015"
-          majorStep="1" majorStepUnit="Month" dateFormat="MMM-dd"
-          labelFitMode="Rotate" labelRotationAngle="1.2">
-        </DateTimeContinuousAxis>
-        <LinearAxis v-tkCartesianVerticalAxis></LinearAxis>
-        <LineSeries v-tkCartesianSeries :items="items" legendTitle="Orders"
-          categoryProperty="new Date(timeStamp)" valueProperty="orderCount"></LineSeries>
-        <LineSeries v-tkCartesianSeries :items="items" legendTitle="Amount"
-          categoryProperty="new Date(timeStamp)" valueProperty="amount"></LineSeries>
-        <Palette v-tkCartesianPalette seriesName="Line">
-          <PaletteEntry v-tkCartesianPaletteEntry fillColor="#4d88ff" 
-          strokeColor="#4d88ff"></PaletteEntry>
-        </Palette>
-        <RadLegendView v-tkCartesianLegend position="Right" width="75" height="75"/>
-      </RadCartesianChart>
+    <RadCartesianChart row="0">
+      <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
+        minimum="19/12/2019" maximum="27/12/2019"
+        majorStep="1" majorStepUnit="Day" dateFormat="MMM-dd"
+        labelFitMode="Rotate" labelRotationAngle="1.2"/>
+      <LinearAxis v-tkCartesianVerticalAxis/>
+      <LineSeries v-tkCartesianSeries :items="items"
+          categoryProperty="timeStamp"
+          valueProperty="orderCount" legendTitle="orders"/>
+      <LineSeries v-tkCartesianSeries :items="items"
+          categoryProperty="timeStamp"
+          valueProperty="amount" legendTitle="Amount"/>
+      <RadLegendView v-tkCartesianLegend position="Right" width="75" height="75"/>
+    </RadCartesianChart>
       <RadListView for="item in dashBoard" @itemTap="onItemTap" row="1"
           itemReorder="true" @itemReordered="onItemReordered"
           layout="grid" :gridSpanCount="5" itemHeight="100"><!--itemHeight for ios -->
@@ -48,14 +45,14 @@ export default {
       return {
         dashBoard: [],
         reload: false,
-        items: []
+        items: [],
       }
     },
     mixins: [ sideDrawer, general],
     created() {
       this.$backendService.reportSales('day').then( result => {
         this.items = result.data.periods
-        console.log('====weeksales: ' + JSON.stringify(this.items))
+        // console.log('====weeksales: ' + JSON.stringify(this.items))
       })
       if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
         if (appSettings.getString('setUp')) {
