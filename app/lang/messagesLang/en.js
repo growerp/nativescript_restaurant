@@ -61,6 +61,7 @@ export default {
     customerSearch: 'Search on customer first/last name',
     customers: 'Customers',
     customerId: 'Customer member ID or telephone',
+    day: 'Day',
     delete: 'DELETE  ',
     deleteCategory: 'Delete Category ',
     deleteTask: 'Delete task ',
@@ -241,4 +242,5 @@ export default {
     WeApproved: 'Active',
     WeCancelled: 'Cancelled',
     WeCompleted: 'Completed',
+    week: 'Week',
 }

@@ -63,7 +63,9 @@ axios.interceptors.response.use(
       if (error.config && error.response && error.response.status === 401) {
         console.log("=====401 moqui token error")
         getToken().then((token) => { 
+          console.log("===token received: " + token.data)
           saveToken(token.data)
+          console.log("====retry request....")
           return axios.request(error.config);
           //return this.$axios.request(config);
         });

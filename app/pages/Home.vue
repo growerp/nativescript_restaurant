@@ -4,7 +4,7 @@
       <myActionBar :openDrawer="openDrawer" header="dashBoard"
         :reload="reload" :onActionTap="backToDefault" :onHeaderTap=null />
     </ActionBar>
-    <GridLayout rows="*, 200" class="p-10">
+    <GridLayout rows="*, 200, 50" class="p-10">
       <Stacklayout row="0">
         <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
           @propertyCommitted="onAreaCommitted" color="green"/>
@@ -58,7 +58,7 @@ export default {
       },
       orderHeaderMeta: {
         propertyAnnotations:[
-          { name: 'description', displayName: this.$t('areaName'),
+          { name: 'description', displayName: this.$t('area'),
               editor: 'SegmentedEditor',
               valuesProvider:
                 this.$store.getters.accommodationAreasDesc(false)},
