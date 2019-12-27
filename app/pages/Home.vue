@@ -125,8 +125,8 @@ export default {
           {props: { startTab: args.item.pageTab}})
     },
     onTableTap(args) {
-      let openOrders = this.$store.getters.openOrdersByAreaSpot(
-            args.item.accommodationAreaId, args.item.accommodationSpotId)
+      let openOrders = this.$store.getters.openOrdersByAreaSpotId(
+            args.item.accommodationSpotId)
       let orderHeader = {
           accommodationAreaId:  args.item.accommodationAreaId,
           description:          this.area.description,

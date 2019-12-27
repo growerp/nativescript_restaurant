@@ -215,11 +215,9 @@ const getters = {
   accommodationSpotsByAreaId: state => id => {
     return state.accommodationSpots.filter(o => o.accommodationAreaId === id)
   },
-  accommodationSpotByItem: state => item =>{
+  accommodationSpotById: state => id =>{
     return state.accommodationSpots.find(
-      o => (o.accommodationSpotId === item.accommodationSpotId &&
-           o.accommodationAreaId === item.accommodationAreaId) 
-      )
+      o => o.accommodationSpotId === id)
   },
   // preparation area related==================================================
   preparationAreas: state => {

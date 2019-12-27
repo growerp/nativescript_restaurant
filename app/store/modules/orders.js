@@ -64,7 +64,7 @@ const state = {
 }
 const mutations = {
   changeOrderStatus(state, value) {
-    log?console.log("=====update part status in store: " + JSON.stringify(value)):''
+    log?console.log("=====update order status in store: " + JSON.stringify(value)):''
     state.ordersAndItemsByPrepAreas.forEach( (order, prepIndex) => {
       if (order.orderId == value.orderId)
         state.ordersAndItemsByPrepAreas.splice(prepIndex,1)
@@ -115,11 +115,11 @@ const getters = {
   ordersAndItemsByPrepAreas: state => {
     return state.ordersAndItemsByPrepAreas
   },
-  openOrdersByAreaSpot: state => (areaId, spotId) => {
+  openOrdersByAreaSpotId: state => (spotId) => {
     return state.openOrders.filter(
-      o => o.accommodationAreaId === areaId &&
-           o.accommodationSpotId === spotId &&
-           o.orderStatusId !== 'OrderCompleted')
+      o => o.accommodationSpotId === spotId &&
+      o.orderStatusId !== 'OrderCompleted' &&
+      o.orderStatusId !== 'OrderCancelled' )
   },
 }
 const actions = {
@@ -127,9 +127,9 @@ const actions = {
     // clear spot un-occupied
     if (item.orderStatusId === 'OrderCancelled' || item.orderStatusId === 'OrderCompleted') {
       let order = Object.assign({},store.getters.openOrderById(item.orderId))
-      if (store.getters.openOrdersByAreaSpot(
-        order.accommodationAreaId, order.accommodationSpotId).length < 2) {
-        let spot = Object.assign({},store.getters.accommodationSpotByItem(order))
+      if (store.getters.openOrdersByAreaSpotId(order.accommodationSpotId).length < 2) {
+        let spot = Object.assign({},
+          store.getters.accommodationSpotById(order.accommodationSpotId))
         spot.verb = 'update'
         spot.ordered = false
         store.commit('accommodationSpot', spot)
@@ -143,13 +143,13 @@ const actions = {
   }, 
   async createSalesOrder({dispatch}, item) {
     // set spot to ordered
-    let spot = Object.assign({}, store.getters.accommodationSpotByItem(item.header))
+    let spot = Object.assign({}, 
+        store.getters.accommodationSpotById(item.header.accommodationSpotId))
     spot.verb = 'update'
     spot.ordered = true
     store.commit('accommodationSpot', spot)
     // remove pictures
-    for (let i=0; i<item.items.length;i++)
-      delete item.items[i].image
+    for (let i=0; i<item.items.length;i++) delete item.items[i].image
     let result = await backendService.createSalesOrder(item.header, item.items)
     await dispatch('getOrders')
     return result

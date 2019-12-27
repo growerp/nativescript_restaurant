@@ -30,7 +30,7 @@ export default {
           this.$t('table') + this.orderHeader.description +
           '-' + this.orderHeader.spotNumber,
       currentTab: 0,
-      editedOrderHeader: {},
+      editedOrderHeader: null,
       orderHeaderInfo: {
         newExternalId: '',
         newFirstName: '',
@@ -63,21 +63,24 @@ export default {
       this.editedOrderHeader = JSON.parse(data.object.editedObject)
     },
     goToEntry() {
-      if (this.editedOrderHeader.externalId && this.editedOrderHeader.newExternalId)
-        this.note(this.$t('eitherNewOrExistingCustomerId'))
-      else if (this.editedOrderHeader.newExternalId && !this.editedOrderHeader.newFirstName)
-            this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
-      else if (this.editedOrderHeader.newExternalId && !this.editedOrderHeader.newLastName)
-            this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
-      else if (!this.editedOrderHeader.newExternalId && this.editedOrderHeader.newLastName)
-            this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
-      else if (!this.editedOrderHeader.newExternalId && this.editedOrderHeader.newFirstName)
-            this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
-      else {
-        this.hideKeyboard()
-        for (var key in this.editedOrderHeader) {
-          if (this.editedOrderHeader.hasOwnProperty(key))
-                this.orderHeader[key] = this.editedOrderHeader[key]}
+      if (this.editedOrderHeader) {
+        if (this.editedOrderHeader.externalId && this.editedOrderHeader.newExternalId)
+          this.note(this.$t('eitherNewOrExistingCustomerId'))
+        else if (this.editedOrderHeader.newExternalId && !this.editedOrderHeader.newFirstName)
+              this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
+        else if (this.editedOrderHeader.newExternalId && !this.editedOrderHeader.newLastName)
+              this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
+        else if (!this.editedOrderHeader.newExternalId && this.editedOrderHeader.newLastName)
+              this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
+        else if (!this.editedOrderHeader.newExternalId && this.editedOrderHeader.newFirstName)
+              this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
+        else {
+          this.hideKeyboard()
+          for (var key in this.editedOrderHeader) {
+            if (this.editedOrderHeader.hasOwnProperty(key))
+                  this.orderHeader[key] = this.editedOrderHeader[key]
+          }
+        }
         this.$navigateTo(this.$routes.OrderEntry,
           {props: { orderHeader: this.orderHeader }})
       }
