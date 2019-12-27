@@ -9,7 +9,7 @@
       <RadCartesianChart row="0">
         <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
             :minimum="fromDate" :maximum="thruDate"
-            majorStep="1" :majorStepUnit="stepUnit" dateFormat="MMM-dd"
+            majorStep="1" :majorStepUnit="stepUnit" :dateFormat="dateFormat"
             labelFitMode="Rotate" labelRotationAngle="1.2"/>
         <LinearAxis v-tkCartesianVerticalAxis/>
         <LineSeries v-tkCartesianSeries :items="items"
@@ -55,16 +55,14 @@ export default {
         fromDate: '',
         thruDate: '',
         stepUnit: '',
+        dateFormat: '',
       }
     },
     mixins: [ sideDrawer, general],
     created() {
-      this.$backendService.reportSales('day').then( result => {
-        this.items = result.data.periods
-        this.fromDate = result.data.fromDate
-        this.thruDate = result.data.thruDate
-        // console.log('====weeksales: ' + JSON.stringify(this.items))
-      })
+      this.getReport('day')
+      // console.log('====sales: ' + JSON.stringify(this.items))
+      // console.log('====fromDate/ThruDate:  ' + this.fromDate + '/' + this.thruDate)
       if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
         if (appSettings.getString('setUp')) {
           this.reload = true
@@ -76,6 +74,10 @@ export default {
       getReport(type) {
         this.$backendService.reportSales(type).then( result => {
           this.items = result.data.periods
+          this.fromDate = result.data.fromDate
+          this.thruDate = result.data.thruDate
+          if (type == 'month') this.dateFormat = 'MMM'
+          else this.dateFormat = 'MMM-dd'
         })
         this.stepUnit = type
       },
