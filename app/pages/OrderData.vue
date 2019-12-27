@@ -33,21 +33,27 @@ export default {
       editedOrderHeader: {},
       orderHeaderInfo: {
         newExternalId: '',
+        newFirstName: '',
+        newLastName: '',
         externalId: '',
         nbrOfGuests: '',
       },
       orderHeaderInfoMeta: {
         propertyAnnotations:[
-          { name: 'newExternalId', displayName: this.$t('new') + this.$t('customerId') + ' + ' + this.$t('lastName'),
-              index: 0},
           { name: 'externalId', displayName: this.$t('existing') + this.$t('customerId'),
               editor: 'AutoCompleteInline',
               editorParams: {
               autoCompleteDisplayMode: AutoCompleteDisplayMode.Plain},
               valuesProvider: this.$store.getters.customerProvider,
-              index: 1},
+              index: 0},
           { name: 'nbrOfGuests', displayName: this.$t('nbrOfGuests'),
-              editor: 'Number', index: 2 },
+              editor: 'Number', index: 1 },
+          { name: 'newExternalId', displayName: this.$t('new') + this.$t('customerId'),
+              index: 2},
+          { name: 'newFirstName', displayName: this.$t('new') + this.$t('firstName'),
+              index: 3},
+          { name: 'newLastName', displayName: this.$t('new') + this.$t('lastName'),
+              index: 4},
           ]
       },
     }
@@ -57,9 +63,17 @@ export default {
       this.editedOrderHeader = JSON.parse(data.object.editedObject)
     },
     goToEntry() {
-      if (this.editedOrderHeader.externalId && this.editedOrderHeader.newExternalId) {
+      if (this.editedOrderHeader.externalId && this.editedOrderHeader.newExternalId)
         this.note(this.$t('eitherNewOrExistingCustomerId'))
-      } else {
+      else if (this.editedOrderHeader.newExternalId && !this.editedOrderHeader.newFirstName)
+            this.note(this.$t('firstName') + ' ' + this.$t('cannotBeEmpty'))
+      else if (this.editedOrderHeader.newExternalId && !this.editedOrderHeader.newLastName)
+            this.note(this.$t('lastName') + ' ' + this.$t('cannotBeEmpty'))
+      else if (!this.editedOrderHeader.newExternalId && this.editedOrderHeader.newLastName)
+            this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
+      else if (!this.editedOrderHeader.newExternalId && this.editedOrderHeader.newFirstName)
+            this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
+      else {
         this.hideKeyboard()
         for (var key in this.editedOrderHeader) {
           if (this.editedOrderHeader.hasOwnProperty(key))
