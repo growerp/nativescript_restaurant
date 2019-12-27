@@ -218,8 +218,8 @@ export default {
       return tableMatrix
     },
     onSpotSelect(table) {
-      let openOrders = this.$store.getters.openOrdersByAreaSpot(
-            table.accommodationAreaId, table.accommodationSpotId)
+      let openOrders = this.$store.getters.openOrdersByAreaSpotId(
+            table.accommodationSpotId)
       let itemProps = { props: { orderHeader: {
           accommodationAreaId:  this.areaId,
           description:          this.areaDescription,

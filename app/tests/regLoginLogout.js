@@ -48,7 +48,7 @@ describe('Connect, register and login', function () {
   it('enter order should show in prep, serve and bill screens', function (done) {
     orderHeader = {
       accommodationAreaId:
-        store.getters.accommodationAreas[1].accommodationAreaId,
+        store.getters.accommodationSpots[5].accommodationAreaId,
       accommodationSpotId:
         store.getters.accommodationSpots[5].accommodationSpotId}
     orderItems = []
@@ -68,11 +68,12 @@ describe('Connect, register and login', function () {
       assert.isString(result.data.orderId, 'Orderid is not a string')
       assert.isNumber(parseInt(result.data.orderId, 10), 
           "returned orderId should be a number")
-      console.log("=====check local order lists")
+      console.log("test: check local order lists")
       assert.lengthOf(store.getters.openOrders, 1, "Orders not received yet")
       assert.lengthOf(store.getters.ordersAndItemsByPrepAreas, 2,
           "Preparation Orders not received yet")
-      console.log("check prep area 1")
+
+      console.log("test: check prep area 1")
       let preparationAreaId =  
           store.getters.preparationAreaIdByProductId(orderItems[0].productId)
       let orderParts = store.getters.preparationAreaOrdersById(preparationAreaId)
@@ -83,25 +84,7 @@ describe('Connect, register and login', function () {
           orderItems[0].name + " was not found in preparation area: " +
           store.getters.preparationAreaById(preparationAreaId).description) 
 
-      console.log("========change part 1 status to serv")
-      store.dispatch('changeOrderPartStatus', {
-          orderId: orderParts[0].orderId, 
-          partId: orderParts[0].orderPartSeqId,
-          statusId: 'serv'})
-      assert.lengthOf(store.getters.prepOrdersByStatusId('OrderPlaced'),1,
-          " not appear in serv screen")
-
-      console.log("=====change part 1 status to bill")
-      store.dispatch('changeOrderPartStatus', {
-        orderId: orderParts[0].orderId, 
-        partId: orderParts[0].orderPartSeqId,
-        statusId: 'bill'})
-      assert.lengthOf(store.getters.prepOrdersByStatusId('OrderPlaced'),0,
-          " not disappear from serv screen")
-      assert.lengthOf(store.getters.ordersByStatusId('OrderApproved'),0,
-            " should not appear in bill screen YET")
-
-      console.log("check prep area 2")
+      console.log("test: check prep area 2")
       preparationAreaId =  
           store.getters.preparationAreaIdByProductId(orderItems[1].productId)
       orderParts = store.getters.preparationAreaOrdersById(preparationAreaId)
@@ -112,36 +95,25 @@ describe('Connect, register and login', function () {
           orderItems[1].name + " was not found in preparation area: " +
           store.getters.preparationAreaById(preparationAreaId).description)
 
-      console.log("========change part 2 status to serv")
-      store.dispatch('changeOrderPartStatus', {
-        orderId: orderParts[0].orderId, 
-        partId: orderParts[0].orderPartSeqId,
-        statusId: 'serv'})
-        console.log("===check if show")
-        assert.lengthOf(store.getters.prepOrdersByStatusId('OrderPlaced'),1,
-          " not appear in serv screen")
+      console.log("test: change order to billing (OrderApproved)")
+      store.dispatch('changeOrderStatus', {
+          orderId: orderParts[0].orderId, 
+          orderStatusId: 'OrderApproved'})
+      assert.lengthOf( store.getters.ordersByStatusId('OrderApproved'),1,
+          " not appear in billing screen")
 
-      console.log("=====change part 2 status to bill")
-      store.dispatch('changeOrderPartStatus', {
+      console.log("====test=====change order status to complete")
+      store.dispatch('changeOrderStatus', {
         orderId: orderParts[0].orderId, 
-        partId: orderParts[0].orderPartSeqId,
-        statusId: 'bill'})
-      assert.lengthOf(store.getters.prepOrdersByStatusId('OrderPlaced'),0,
-          " not disappear from serv screen")
-      assert.lengthOf(store.getters.ordersByStatusId('OrderApproved'),1,
-            " should now appear in bill screen ")
-
-      console.log("=========change part status to complete")
-      store.dispatch('changeOrderPartStatus', {
-        orderId: orderParts[0].orderId, 
-        statusId: 'completed'})
-      assert.lengthOf(store.getters.prepOrdersByStatusId('OrderApproved'),0,
+        orderStatusId: 'OrderCompleted'})
+      assert.lengthOf(store.getters.ordersByStatusId('OrderCompleted'),1,
         " not disappear from bill screen")
 
-      // check if show in reports
+      console.log("test: check if order downloaded from server....")
       backendService.getOrders(false, null).then( function(result) {
         assert.lengthOf(result.data.ordersAndItems, 1, "order not found in report")
       })
+      console.log("========all tests done========")
       done()
     });
   });
