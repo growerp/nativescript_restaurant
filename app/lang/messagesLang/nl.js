@@ -43,7 +43,7 @@ export default {
     closeDrawer: 'Menu sluiten',
     cola: 'Cola',
     company: 'Bedrijf',
-    companyEmplCust: 'Mijzelf, Bedrijf, werknemers en klanten.',
+    companyEmplCust: 'werknemers en klanten.',
     connError: 'Internet of server verbindings fout`',
     confirmDeletion: 'Confirmeer verwijdering',
     confirmDeletionMsg: 'Ben je zeker dat je dit wilt verwijderen? ',

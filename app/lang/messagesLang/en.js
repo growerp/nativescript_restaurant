@@ -48,7 +48,7 @@ export default {
     closeDrawer: 'Close Menu',
     cola: 'Cola',
     company: 'Company',
-    companyEmplCust: 'Me, Company, Empl. & Customers.',
+    companyEmplCust: 'Employees & Customers.',
     connError: 'Internet or server connection error',
     confirmDeletion: 'Confirm Deletion',
     confirmDeletionMsg: 'Are you sure you want to delete this ',

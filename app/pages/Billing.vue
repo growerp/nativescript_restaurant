@@ -69,7 +69,7 @@ export default {
     setCancel(item) {
       this.$store.dispatch('changeOrderStatus', {
         orderStatusId: 'OrderCancelled', orderId: item.orderId}) 
-      this.billOrders = this.$store.getters.ordersByStatusId('OrderCancelled')
+      this.billOrders = this.$store.getters.ordersByStatusId('OrderApproved')
       this.note(this.$t('table') + ' ' + item.table + this.$t('cancelled'))
     },
     print(item) {
