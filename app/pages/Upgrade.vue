@@ -26,7 +26,7 @@
       </RadListView>
       <Label class="h5" :text="$t('upgradeDetailIos')" horizontalAlignment="center" 
         textWrap="true" :visibility="ios?'visible':'collapse'" padding="30"/>
-      <Button class="button" :text="$t('upgradeMoreDetail')" horizontalAlignment="center"
+      <Button class="buttonText" :text="$t('upgradeMoreDetail')" horizontalAlignment="center"
         textWrap="true" @tap="$navigateTo($routes.About)"  padding="15"/>
     </StackLayout>
   </Page>
