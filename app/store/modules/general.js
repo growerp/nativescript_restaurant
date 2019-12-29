@@ -151,8 +151,8 @@ const actions = {
     } catch(error) {
         return "message:" + error.response.data.errors }
   },
-  async initialData({commit}) {
-    await backendService.initialData()
+  initialData({commit}) {
+    backendService.initialData()
     .then(axios.spread (function ( GetCurrentEmployeeUserGroupId,
       GetActiveSubscriptions, GetAccommodationAreas, GetAccommodationSpots) {
         commit('currentEmployeeUserGroupId',

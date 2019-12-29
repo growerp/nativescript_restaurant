@@ -309,8 +309,8 @@ export default class BackendService {
   async reportSales(period) {
       return await axios.post('s1/growerp/ReportSales', { period: period })}
   // ======================initial data load when app starts==================
-  initialData() {
-    return axios.all([
+  async initialData() {
+    return await axios.all([
       axios.get('s1/growerp/GetCurrentEmployeeUserGroupId'),
       axios.get('s1/growerp/GetActiveSubscriptions'),
       axios.get('s1/growerp/GetAccommodationAreas'),

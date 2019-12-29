@@ -16,21 +16,21 @@
               :visibility="$store.getters.preparationAreaHasOrders(
                 prep.preparationAreaId)? 'visible' : 'collapse'">
             <v-template name="title">
-              <GridLayout columns="50,*,80" rows="*" paddingBottom="10">
+              <GridLayout columns="50,*,auto" rows="*" paddingBottom="10">
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <Label :text="item.description + '-' +
                     item.spotNumber + '   ' + item.nbrOfItems + ' ' + $t('items')" 
                     class="h2" col="1" paddingLeft="10"/>
                 <Label class="button" @tap="rePrint(item)"
-                    col="2" :text="$t('rePrint')" text-align="center"/>
+                    col="2" :text="$t('rePrint')" padding="10"/>
               </GridLayout>
             </v-template>
             <v-template name="content">
-                <GridLayout columns="50, *, auto" rows="*" class="item"
+                <GridLayout columns="30, 10, *, auto" rows="*" class="item"
                         paddingRight="5" paddingLeft="25" >
                   <Image :src="item.image"  col="0" class="thumbnail"/>
-                  <Label :text="item.description" class="h2" col="1"/>
-                  <Label :text="item.quantity" class="h2" col="2"/>
+                  <Label :text="item.description" class="h3" col="2"/>
+                  <Label :text="item.quantity" class="h3" col="3"/>
                 </GridLayout>
             </v-template>
           </Accordion>
