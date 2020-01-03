@@ -22,8 +22,9 @@
             <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
-          <StackLayout row="0" col="1"  v-show="!isLoggingIn" class="input-field">
-            <DropDown :items="currencyUomIds" :hint="$t('currency')" :isEnabled="!processing" class="selectionCurrency"
+          <StackLayout row="0" col="1"  v-show="!isLoggingIn" class="input-field" height="30">
+            <DropDown :items="currencyUomIds" :hint="$t('currency')" 
+              :isEnabled="!processing" class="selectionCurrency"
               @selectedIndexChanged="dropDownSelectedIndexChanged"/>
           </StackLayout>
 
@@ -100,7 +101,7 @@ const appSettings = require("tns-core-modules/application-settings")
     mixins: [ general ],
     data() {
       return {
-        isLoggingIn: true,
+        isLoggingIn: true, // login screen, false is register
         processing: false,
         apiKey: '',
         user: (TNS_ENV === 'production')? {
@@ -136,13 +137,13 @@ const appSettings = require("tns-core-modules/application-settings")
     },
     created() {
       this.processing = true
-      log?console.log("===created get connection"):''
+      log?console.log("===created get connection==="):''
       if (!appSettings.hasKey('username')) {
           this.processing = false
           log? console.log('=== getConnection: first usage, so show register screen'):''
           this.toggleForm()   // started with login, switch to register
       } else this.$store.dispatch('getConnection').then( result => {
-        log?console.log("==== result from getConnection: " + result):''
+        log?console.log("==== result from created getConnection: " + result):''
         if (result == 'success') {
           this.$store.dispatch('initialData').then(() => {
             console.log("=====created accom areas: " + this.$store.getters.accommodationAreas[0].description)
@@ -157,16 +158,24 @@ const appSettings = require("tns-core-modules/application-settings")
             this.note(result.substring(8)) 
           else if (result == 'noApiKey')
             ()=>{} // no-op: just show login screen
-          else console.log("==== unexpected return from getConnection dispatch!")}
+          else console.log("==== unexpected return from getConnection dispatch! result: " + result)}
       })
     },
     methods: {
       toggleForm() {
         this.isLoggingIn = !this.isLoggingIn;
         if (!this.isLoggingIn && !this.currencyUomIds){
-          this.$backendService.getCurrencyList()
-          .then (results => {
-            this.currencyUomIds = new ValueList(results.data.currencyList)
+          console.log("====pinginh now====")
+          this.$backendService.ping()
+          .catch( error => {
+            console.log("initial ping problem....")
+            this.serverProblem()
+          })
+          .then(result => { // check if server present
+            if (result.data && result.data.ok === 'ok') {
+              this.$backendService.getCurrencyList().then(result => {
+                this.currencyUomIds = new ValueList(result.data.currencyList)})
+            } else this.serverProblem()
           })
         }
       },
@@ -189,6 +198,7 @@ const appSettings = require("tns-core-modules/application-settings")
       login() {
         log?console.log("=====logging in ======"):''
         this.$store.dispatch('getConnection').then( result => {
+          log?console.log("==== result from login getConnection: " + result):''
           if (result == 'noApiKey') {
             this.$store.dispatch("login", this.user).then(result => {
               log?console.log("==== login page login result: " + result):''
@@ -311,10 +321,10 @@ const appSettings = require("tns-core-modules/application-settings")
           }
         }) 
       },
-
-      serverProblem(message=this.$t('connError')) {
+      serverProblem(message=this.$t('serverNotAvailable')) {
+        console.log("====yes server problem!====")
         this.$showModal(Confirm,{ props: {
-            message: this.$t('serverNotAvailable'),
+            message: message,
             ok: 'retry',
             cancel: 'exit' }
         })

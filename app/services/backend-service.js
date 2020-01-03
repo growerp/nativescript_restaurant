@@ -134,11 +134,11 @@ export default class BackendService {
     return await axios.get('s1/growerp/CheckApiKey',
       { errorHandle: false})}
   async ping() {
-    return await simple.get('s1/growerp/Ping') }
+    return await axios.get('s1/growerp/Ping') }
   async logout() {
     return await axios.get('logout')}
   async getCurrencyList() {
-    return await axios.get('s1/growerp/CurrencyList')}
+    return await simple.get('s1/growerp/CurrencyList')}
   async register(user, company) {
     return await simple.post('s1/growerp/RegisterUserAndCompany',
       { username: user.name, emailAddress: user.emailAddress,
@@ -309,8 +309,8 @@ export default class BackendService {
   async reportSales(period) {
       return await axios.post('s1/growerp/ReportSales', { period: period })}
   // ======================initial data load when app starts==================
-  async initialData() {
-    return await axios.all([
+  initialData() {
+    return axios.all([
       axios.get('s1/growerp/GetCurrentEmployeeUserGroupId'),
       axios.get('s1/growerp/GetActiveSubscriptions'),
       axios.get('s1/growerp/GetAccommodationAreas'),

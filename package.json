@@ -7,10 +7,10 @@
   "nativescript": {
     "id": "com.growerp.restaurant",
     "tns-ios": {
-      "version": "6.2.0"
+      "version": "6.3.0"
     },
     "tns-android": {
-      "version": "6.2.0"
+      "version": "6.3.1"
     }
   },
   "dependencies": {

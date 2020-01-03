@@ -117,8 +117,10 @@ const actions = {
       }
     } catch(error) {
       log? console.log('==== getConnection: ping catch server problem: '
-         + error):''
-      return "serverProblem" }
+         + error):'';
+      console.log(" return string")
+      return "serverProblem"
+    }
   },
   async login({}, user) {
     log? console.log("==== login: store start logging in"):''
@@ -151,8 +153,8 @@ const actions = {
     } catch(error) {
         return "message:" + error.response.data.errors }
   },
-  initialData({commit}) {
-    backendService.initialData()
+  async initialData({commit}) {
+    await backendService.initialData()
     .then(axios.spread (function ( GetCurrentEmployeeUserGroupId,
       GetActiveSubscriptions, GetAccommodationAreas, GetAccommodationSpots) {
         commit('currentEmployeeUserGroupId',
