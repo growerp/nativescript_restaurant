@@ -2,6 +2,7 @@ import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 import store from '~/store'
 import BackendService from "~/services/backend-service"
+import PrintService from "~/services/print-service"
 import routes from '~/router'
 import RadListView from 'nativescript-ui-listview/vue'
 import RadDataForm from 'nativescript-ui-dataform/vue'
@@ -27,6 +28,8 @@ Vue.registerElement("DropDown", () => require("nativescript-drop-down/drop-down"
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 const backendService = new BackendService()
 Vue.prototype.$backendService = backendService
+const printService = new PrintService()
+Vue.prototype.$printService = printService
 Vue.prototype.$routes = routes
 // modal view on IOS
 overrideModalViewMethod()

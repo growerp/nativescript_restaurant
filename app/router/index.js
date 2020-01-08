@@ -14,7 +14,6 @@ import MyInfo from '~/pages/MyInfo'
 import OrderData from '~/pages/OrderData'
 import OrderEntry from '~/pages/OrderEntry'
 import OrderItems from '~/pages/OrderItems'
-import OrderPrint from '~/pages/OrderPrint'
 import Organization from '~/pages/Organization'
 import PrepDetail from '~/pages/PrepDetail'
 import ProductDetail from '~/pages/ProductDetail'
@@ -42,7 +41,6 @@ const routes = {
   OrderData,
   OrderEntry,
   OrderItems,
-  OrderPrint,
   Organization,
   PrepDetail,
   ProductDetail,

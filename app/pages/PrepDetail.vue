@@ -58,14 +58,13 @@ export default {
           { name: 'preparationAreaId', ignore: true},
           { name: 'image', ignore: true},
           { name: 'nbrOfCatg', ignore: true},
-          { name: 'description', required: true, index: 0},
-          { name: 'printerHostUrl', required: true, index: 1 },
-          { name: 'printerName', required: true, index: 2 }]},
+          { name: 'description', index: 0},
+          { name: 'printerIp', index: 1 },
+        ]},
     }
   },
   created() {
-      if (!this.item.printerHostUrl) this.item.printerHostUrl = '' 
-      if (!this.item.printerName) this.item.printerName = '' 
+      if (!this.item.printerIp) this.item.printerIp = '' 
       if (!this.itemImage.length) {
         this.$backendService.downloadImage('medium', 'prep',
           this.item.preparationAreaId)

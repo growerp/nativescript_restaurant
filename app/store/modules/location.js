@@ -9,8 +9,6 @@ const state = {
     description: '',
     image: '',
     nbrOfSpots: '',
-    printerHostUrl: '',
-    printerName: ''
   }],
   accommodationSpots: [{
     accommodationSpotId: '',
@@ -24,7 +22,8 @@ const state = {
     preparationAreaId: '',
     description: '',
     image: '',
-    nbrOfCatg: ''
+    nbrOfCatg: '',
+    printerIp: '',
   }],
 }
 

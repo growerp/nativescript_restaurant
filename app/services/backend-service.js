@@ -200,15 +200,13 @@ export default class BackendService {
   async createPreparationArea(item) {
     return await axios.post('s1/growerp/CreatePreparationArea',
       { description: item.description,
-        printerHostUrl: item.printerHostUrl,
-        printerName: item.printerName
+        printerIp: item.printerIp,
       })}
   async updatePreparationArea(item) {
     return await axios.post('s1/growerp/UpdatePreparationArea',
       { preparationAreaId: item.preparationAreaId,
         description: item.description,
-        printerHostUrl: item.printerHostUrl,
-        printerName: item.printerName
+        printerIp: item.printerIp
       })}
   async deletePreparationArea(id) {
     return await axios.post('s1/growerp/DeletePreparationArea',
