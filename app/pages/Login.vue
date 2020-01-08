@@ -230,7 +230,6 @@ const appSettings = require("tns-core-modules/application-settings")
             })
           } else if (result == 'success') {
             this.$store.dispatch('initialData')
-            console.log("accom areas: " + this.$store.getters.accommodationAreas[0].description)
             log?console.log("====apiKey found in login, init done, going home....."):''
             this.$navigateTo(this.$routes.Home, 
                   {clearHistory: true, props: { firstTime: true }})

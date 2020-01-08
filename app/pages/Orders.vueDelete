@@ -199,7 +199,7 @@ export default {
       }
     },
     print(item) {
-      this.$navigateTo(this.$routes.OrderPrint, { props: { orderId: item.orderId}})
+      
     },
     makeTableMatix(areaId) { // same as in locations tablearea
       let tables = this.$store.getters.

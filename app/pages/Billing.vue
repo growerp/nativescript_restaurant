@@ -48,6 +48,8 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
 import { AutoCompleteDisplayMode } from 'nativescript-ui-dataform'
+import {PrintClient} from "nativescript-ichi-printer";
+
 export default {
   name: 'bill',
   mixins: [ sideDrawer, general],
@@ -73,7 +75,6 @@ export default {
       this.note(this.$t('table') + ' ' + item.table + this.$t('cancelled'))
     },
     print(item) {
-      this.$navigateTo(this.$routes.OrderPrint, { props: { orderId: item.orderId}})
     },
   }
 }

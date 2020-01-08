@@ -38,7 +38,6 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
 import TableDetail from './modalPages/TableDetail'
-import {Printer} from "nativescript-printer"
 const appSettings = require("tns-core-modules/application-settings");
 
 export default {

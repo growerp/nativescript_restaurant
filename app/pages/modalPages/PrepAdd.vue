@@ -19,12 +19,11 @@ export default {
   mixins: [general],
   data() {
     return {
-      item: { description: '' , printerHostUrl: ' ', printerName: ' '},
+      item: { description: '' , printerIp: ' '},
       itemMeta: {
         propertyAnnotations: [
             { name: 'description', required: true, index: 0},
-            { name: 'printerHostUrl', index: 1},
-            { name: 'printerName', index: 2 },
+            { name: 'printerIp', index: 1},
         ]
       },
       editedItem: null,
