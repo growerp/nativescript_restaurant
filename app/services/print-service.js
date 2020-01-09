@@ -1,51 +1,63 @@
 import store from "../store"
+import {PrintClient} from "nativescript-ichi-printer";
+import { traceMessageType } from "tns-core-modules/ui/page/page";
+const platformModule = require("tns-core-modules/platform")
+const esc = '\x1B'; //ESC byte in hex notation
+const newLine = '\x0A'; //LF byte in hex notation
 
 export default class PrintService {
+  prepareTicket(orderItem) {
+    console.log("area printing orderId: " + orderItem.orderId + 
+    ' partId: ' + orderItem.orderPartSeqId + ' prepAreaId: ' + orderItem.preparationAreaId)
+    //console.log("===orderItem: " + JSON.stringify(orderItem))
+    let ip = store.getters.preparationAreaById(orderItem.preparationAreaId).printerIp
+    let cmds = esc + "@"; //Initializes the printer (ESC @)
+    cmds += '012345678901234567890123456789012345678901234567890123456789' + newLine
+    cmds += esc + '!' + '\x38'; //Emphasized + Double-height + Double-width mode selected (ESC ! (8 + 16 + 32)) 56 dec => 38 hex
+    let comp = store.getters.company.organizationName
+    cmds += this.center(comp) + comp + newLine + newLine;
+    let prep = orderItem.prepDescription
+    cmds += this.center(prep) + prep + newLine + newLine;
+    cmds += orderItem.description + '-' + orderItem.spotNumber + newLine + newLine;
+    orderItem.items.forEach(a => {
+      cmds += a.quantity + '   ' + a.description + '   ' + newLine;
+    })
+    this.printTicket(ip,cmds)
+  }
 
-  prepareTicket(preparationAreaId,orderId) {
-    console.log("area printing areaId: " + preparationAreaId + " orderId: " + orderId) 
+  receiptTicket(order) {
+      console.log("receipt printing for order: " + order.orderId)
+      console.log("===order: " + JSON.stringify(order))
+      let cmds = esc + "@"; //Initializes the printer (ESC @)
+      // cmds += '012345678901234567890123456789012345678901234567890123456789' + newLine
+      cmds += esc + '!' + '\x38'; //Emphasized + Double-height + Double-width mode selected (ESC ! (8 + 16 + 32)) 56 dec => 38 hex
+      let comp = store.getters.company.organizationName
+      cmds += this.center(comp) + comp + newLine + newLine;
+      order.items.forEach(a => {
+        cmds += a.quantity + '   ' + a.description + '   ' + a.price + '    ' + a.totalAmount + newLine;
+      })
+      cmds += 'Grand total: ' + order.grandTotal + newLine + newLine;
+      this.printTicket(null,cmds)
+    }
+
+  center(str) {
+    return this.numberOfSpaces((60 - str.length) / 2 | 0) // whole numbers only
+  }
+  numberOfSpaces(amount) {
+    let str = ''; while(amount--) str += ' '; return str
+  }
+  printTicket(ip, content) {
     let port = 9100
-    let ip = ''
+    if (ip && ip.indexOf(":") != -1) { //if port specified extract ip and port
+      port = parseInt(ip.substring(ip.indexOf(":")+1),10)
+      ip = ip.substring(0, ip.indexOf(":"))
+    }
     if (TNS_ENV != 'production') {
         if (platformModule.isAndroid) ip = '10.0.2.2'
-        let prepIp = store.getters('preparationAreaById', preparationAreaId).printerIp
-        port = prepIp.substring(prepIp.indexOf(":"))
     }
-    var esc = '\x1B'; //ESC byte in hex notation
-    var newLine = '\x0A'; //LF byte in hex notation
-    var cmds = esc + "@"; //Initializes the printer (ESC @)
-    cmds += esc + '!' + '\x38'; //Emphasized + Double-height + Double-width mode selected (ESC ! (8 + 16 + 32)) 56 dec => 38 hex
-    cmds += 'BEST DEAL STORES'; //text to print
-    cmds += newLine + newLine;
-    cmds += esc + '!' + '\x00'; //Character font A selected (ESC ! 0)
-    cmds += 'COOKIES                   5.00'; 
-    cmds += newLine;
-    cmds += 'MILK 65 Fl oz             3.78';
-    cmds += newLine + newLine;
-    cmds += 'SUBTOTAL                  8.78';
-    cmds += newLine;
-    cmds += 'TAX 5%                    0.44';
-    cmds += newLine;
-    cmds += 'TOTAL                     9.22';
-    cmds += newLine;
-    cmds += 'CASH TEND                10.00';
-    cmds += newLine;
-    cmds += 'CASH DUE                  0.78';
-    cmds += newLine + newLine;
-    cmds += esc + '!' + '\x18'; //Emphasized + Double-height mode selected (ESC ! (16 + 8)) 24 dec => 18 hex
-    cmds += '# ITEMS SOLD 2';
-    cmds += esc + '!' + '\x00'; //Character font A selected (ESC ! 0)
-    cmds += newLine + newLine;
-    cmds += '11/03/13  19:53:17';
-    this.printTicket(ip,port,cmds)
-  }
+    if (!ip || !port) return 'printerIp and/or port not defined'
 
-  receiptTicket(orderId) {
-      console.log("receipt printing for order: " + orderId)
-  }
-
-  printTicket(ip, port, content) {
-    console.log("printing on ip: " + ip + ' port:' + port)
+    console.log("printing on ip: " + ip + ' port: ' + port)
     if (platformModule.isIOS)
       alert("IOS printer not supported yet!")
     else {
@@ -55,7 +67,8 @@ export default class PrintService {
       };
       printClient.onError = (id, message) => {
           console.log("Print client error for action #", id, ": ", message);
-      };    printClient.connect(ip, port);
+      };
+      printClient.connect(ip, port);
       printClient.onConnected = (id) => {
         console.log("Print client connected action #: ", id);
         var message = content

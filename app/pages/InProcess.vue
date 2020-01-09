@@ -69,10 +69,8 @@ export default {
         this.currentTab = args.value
     },
     rePrint(item) {
-      this.$backendService.print({
-          type: 'order', 
-          orderId: item.orderId, 
-          orderPartSeqId: item.orderPartSeqId})
+      let result = this.$printService.prepareTicket(item)
+      if (result)  console.log("printer error: " + result)
     },
     refresh() {
       this.$store.dispatch('getOrders', null)

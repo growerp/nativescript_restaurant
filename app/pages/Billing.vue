@@ -75,6 +75,7 @@ export default {
       this.note(this.$t('table') + ' ' + item.table + this.$t('cancelled'))
     },
     print(item) {
+      this.$printService.receiptTicket(item)
     },
   }
 }
