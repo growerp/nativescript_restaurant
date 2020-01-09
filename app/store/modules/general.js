@@ -108,7 +108,8 @@ const actions = {
             }
           } catch(error) {
             log? console.log('==== getConnection: check apiKey catch'):''
-            return "message:" + error.response.data.errors }
+            backendService.removeKey()
+            return 'noApiKey'}
         } else {
           log? console.log("=== No current ApiKey found"):''
           return 'noApiKey'}

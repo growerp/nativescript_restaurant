@@ -108,6 +108,8 @@ export default {
             pageName: 'Export', pageTab: 0},
           {id: 9, image: '~/assets/images/about.png', title: this.$t('about'),
             pageName: 'About', pageTab: 0},
+          //{id: 10, image: '~/assets/images/printer.png', title: this.$t('printers'),
+          //  pageName: 'Printers', pageTab: 0},
           ]
           appSettings.remove('setUp')
           this.reload = false
