@@ -1,8 +1,11 @@
 import ImageSource from "tns-core-modules/image-source"
-var platformModule = require("tns-core-modules/platform");
-var permissions = require("nativescript-permissions");
-var camera = require("nativescript-camera");
-var imagepicker = require("nativescript-imagepicker");
+const platformModule = require("tns-core-modules/platform");
+const permissions = require("nativescript-permissions");
+const camera = require("nativescript-camera");
+const imagepicker = require("nativescript-imagepicker");
+const fileSystemModule = require("tns-core-modules/file-system")
+const imageSourceModule = require("tns-core-modules/image-source")
+const BitmapFactory = require("nativescript-bitmap-factory")
 
 export default {
     name: 'imageSelector',
@@ -16,7 +19,7 @@ export default {
         camera.requestPermissions()
         .then(() => {
           camera.takePicture({ width: 300, height: 300, keepAspectRatio: true,
-            saveToGallery:true })
+            saveToGallery:false })
           .then(imageAsset => {
             this.scaleUploadImage(type, id, imageAsset)
           })
@@ -29,32 +32,33 @@ export default {
         });
       },
       selectPicture(type,id) {
-        let localPath = null
         let context = imagepicker.create({mode: 'single'})
         if (platformModule.device.os === "Android" && 
                 platformModule.device.sdkVersion >= 23) {
-          permissions.requestPermission(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                  "I need these permissions to read a picture from galery")
-          .then(function() {
-            console.log("Permissions granted!");
-            startSelection(context)})
-          .catch(function() {
-            console.log("Uh oh, no permissions - plan B time?")})}
-        context.authorize()
+          permissions.requestPermission([
+              android.Manifest.permission.READ_EXTERNAL_STORAGE,
+              android.Manifest.permission.WRITE_EXTERNAL_STORAGE],
+              "I need these permissions to read/write scaled copies in the gallery")
+          .then(() => { console.log ("permission ok") })
+          .catch(error => {
+            console.log("Permission problem: " + error)
+          })
+        }
+        context
+        .authorize()
         .then(function() {return context.present()})
         .then((selection) => {
           console.log("Selection done: " + JSON.stringify(selection))
-          this.scaleUploadImage(type, id, selection[0])})
-        .catch(function(e) {
+          this.scaleUploadImage(type, id, selection[0])
+        })
+        .catch(e => {
           console.log('====error picture selection:' + e)
         })
       },
       scaleUploadImage(type,id, selected_item) {
-        const fileSystemModule = require("tns-core-modules/file-system")
-        const imageSourceModule = require("tns-core-modules/image-source")
-        const BitmapFactory = require("nativescript-bitmap-factory")
-        imageSourceModule.fromAsset(selected_item)
+        console.log("==!=selected item: " + JSON.stringify(selected_item))
+        const source = new imageSourceModule.ImageSource();
+        source.fromAsset(selected_item)
         .then((imageSource) => {
           const folder = fileSystemModule.knownFolders.documents().path;
           const fileName = "growerp" + Math.floor(Math.random() * 1000) + ".png";
@@ -77,6 +81,8 @@ export default {
                 var b3 = b.resizeMax(500);
                 var medium_image = b3.toImageSource();
                 base64Medium = medium_image.toBase64String("png")})
+                // console.log("===small===" + base64Small + "<<")
+                // console.log("===medium===" + base64Medium + "<<")
             this.$backendService.uploadImage('small', 
                 base64Small, type, id)
             this.$backendService.uploadImage('medium',
@@ -85,6 +91,9 @@ export default {
                 image: 'data:image/png;base64,' + base64Small})
           } else console.log('Image could not be saved')
         })
-      }
+        .catch(e => {
+          console.log('from asset error:', e)
+        })
+    }
   }
 }
