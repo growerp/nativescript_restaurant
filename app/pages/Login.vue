@@ -293,7 +293,7 @@ const appSettings = require("tns-core-modules/application-settings")
                     this.$store.dispatch('loadDefaultData', [
                         this.$t('kitchen'),this.$t('food'),this.$t('macaroni'),
                         this.$t('bar'),this.$t('inside'),this.$t('garden'),
-                        this.$t('drinks'),this.$t('cola')])
+                        this.$t('drinks'),this.$t('cola'),this.$t('bill')])
                     .then(() => {
                       console.log("===== default data loaded ")
                       this.processing = false
