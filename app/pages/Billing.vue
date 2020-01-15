@@ -49,6 +49,7 @@ import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
 import { AutoCompleteDisplayMode } from 'nativescript-ui-dataform'
 import {PrintClient} from "nativescript-ichi-printer";
+import Alert from './modalPages/Alert'
 
 export default {
   name: 'bill',
@@ -75,7 +76,10 @@ export default {
       this.note(this.$t('table') + ' ' + item.table + this.$t('cancelled'))
     },
     print(item) {
-      this.$printService.receiptTicket(item)
+      let mess = this.$printService.receiptTicket(item)
+      console.log("result of print: " + JSON.stringify(mess))
+      if (mess) this.$showModal(Alert,{ props: {
+                      message: mess}})
     },
   }
 }

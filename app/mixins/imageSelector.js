@@ -82,7 +82,7 @@ export default {
                 var medium_image = b3.toImageSource();
                 base64Medium = medium_image.toBase64String("png")})
                 // console.log("===small===" + base64Small + "<<")
-                // console.log("===medium===" + base64Medium + "<<")
+                //  console.log("===medium===" + base64Medium + "<<")
             this.$backendService.uploadImage('small', 
                 base64Small, type, id)
             this.$backendService.uploadImage('medium',

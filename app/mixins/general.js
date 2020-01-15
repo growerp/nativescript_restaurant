@@ -27,7 +27,7 @@ export default {
     note(text) {
       const toast = new Toasty({
         text: text,
-        duration: ToastDuration.LONG,
+        duration: ToastDuration.SHORT,
         position: platformModule.isAndroid? ToastPosition.TOP : ToastPosition.BOTTOM,
         ios: {
           // anchorView: args.object.ios
