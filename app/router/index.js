@@ -1,6 +1,5 @@
 import About from '~/pages/About'
 import AreaDetail from '~/pages/AreaDetail'
-import Billing from '~/pages/Billing'
 import Categories from '~/pages/Categories'
 import CategoryDetail from '~/pages/CategoryDetail'
 import Company from '~/pages/Company'
@@ -28,7 +27,6 @@ import UserDetail from '~/pages/UserDetail'
 const routes = {
   About,
   AreaDetail,
-  Billing,
   Categories,
   CategoryDetail,
   Company,

@@ -98,15 +98,15 @@ describe('Connect, register and login', function () {
       console.log("test: change order to billing (OrderApproved)")
       store.dispatch('changeOrderStatus', {
           orderId: orderParts[0].orderId, 
-          orderStatusId: 'OrderApproved'})
-      assert.lengthOf( store.getters.ordersByStatusId('OrderApproved'),1,
+          statusId: 'OrderApproved'})
+      assert.lengthOf( store.getters.prepOrdersByStatusId('OrderApproved'),1,
           " not appear in billing screen")
 
       console.log("====test=====change order status to complete")
       store.dispatch('changeOrderStatus', {
-        orderId: orderParts[0].orderId, 
-        orderStatusId: 'OrderCompleted'})
-      assert.lengthOf(store.getters.ordersByStatusId('OrderCompleted'),1,
+        orderId: orderParts[0].orderId,
+        statusId: 'OrderCompleted'})
+      assert.lengthOf(store.getters.prepOrdersByStatusId('OrderCompleted'),1,
         " not disappear from bill screen")
 
       console.log("test: check if order downloaded from server....")

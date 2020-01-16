@@ -17,14 +17,14 @@
           <GridLayout width="100%" columns="*, 10, auto, 10, auto" class="m-10">
             <StackLayout col="0">
               <label :text="order.placedTime" class="h3"/>
-              <label :text="order.firstName + ' ' + order.lastName" class="h3"/>
+              <label :text="order.name" class="h3"/>
             </StackLayout>
             <label text="Printed" class="h2" col="2"
-              :visibility="openOrders[index].orderStatusId==='OrderApproved'?
+              :visibility="openOrders[index].statusId==='OrderApproved'?
                 'visible':'hidden'"/>
             <Button class="button" :text="$t('addTo')" 
               @tap="onAddOrderTap(order)" col="2"
-              :visibility="openOrders[index].orderStatusId==='OrderApproved'?
+              :visibility="openOrders[index].statusId==='OrderApproved'?
                 'hidden':'visible'"/>
             <Button class="button" :text="$t('cancel')" 
               @tap="onCancelOrderTap(order)" col="4"/>
@@ -33,7 +33,7 @@
       </RadListView>
       <StackLayout row="4">
         <Button class="button" :text="$t('billOrder')" @tap="onBillTap"
-          :visibility="openOrders[0].orderStatusId==='OrderApproved'?
+          :visibility="openOrders[0].statusId==='OrderApproved'?
             'hidden':'visible'"/>
         <Button class="button" :text="$t('new')+$t('order')" @tap="onNewOrderTap"/>
         <Button class="button" :text="$t('cancel')"
@@ -47,7 +47,7 @@
 <script>
 import general from '~/mixins/general'
 export default {
-    name: 'AddToOrder',
+    name: 'TableDetail',
     mixins: [general],
     props: {
       openOrders: Array,
@@ -63,9 +63,9 @@ export default {
       },
       onBillTap() {
         this.openOrders.forEach((order) => {
-          if (order.orderStatusId != 'OrderApproved') { // can be billed before
+          if (order.statusId != 'OrderApproved') { // can be billed before
             this.$store.dispatch('changeOrderStatus',
-              {orderId: order.orderId, orderStatusId: 'OrderApproved'}) // show in billing 
+              {orderId: order.orderId, statusId: 'OrderApproved'}) // show in billing 
             this.note(this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('tobeBilled'))
           }
         })
@@ -73,7 +73,7 @@ export default {
       },
       onCancelOrderTap(order) {
         this.$store.dispatch('changeOrderStatus',
-            {orderId: order.orderId, orderStatusId: 'OrderCancelled'}) 
+            {orderId: order.orderId, statusId: 'OrderCancelled'}) 
         this.note(this.$t('time') + ' ' + 
             order.placedTime + ' ' + this.$t('cancelled'))
         this.$modal.close()

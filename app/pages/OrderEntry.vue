@@ -11,20 +11,20 @@
           for="item of categoriesAndProducts" childItems="products">
         <v-template name="title">
           <GridLayout columns="50, *" rows="*" class="item"
-            :visibility="item.nbrOfProducts!='0'?'visible':'hidden'">
-            <Image :src="item.image"  col="0" class="thumbnail"/>
+              :visibility="item.nbrOfProducts!='0'?'visible':'hidden'">
+            <Image :src="item.image"  col="0" class="thumbnail" height="30"/>
             <Label backgroundColor="rgb(211, 215, 207)" 
                 :text="item.categoryName"
-                col="1" class="h2" paddingLeft="10"/>
+                col="1" class="h3" paddingLeft="10"/>
           </GridLayout>
         </v-template>
         <v-template name="content">
-            <GridLayout columns="50, *, auto" rows="*" class="item"
-               paddingRight="5" paddingLeft="25" @tap="addToOrder(item, 1)">
-                <Image :src="item.image"  col="0" class="thumbnail"/>
-                <label :text="item.name" class="h2" col="1"/>
-                <label :text="item.price" class="h3" col="2"/>
-             </GridLayout>
+          <GridLayout columns="50, *, auto" rows="*" class="item"
+                paddingRight="5" paddingLeft="25" @tap="addToOrder(item, 1)">
+            <Image :src="item.image" col="0" class="thumbnail" height="30"/>
+            <label :text="item.name" class="h3" col="1"/>
+            <label :text="item.price" class="h3" col="2"/>
+          </GridLayout>
         </v-template>
       </Accordion>
       <GridLayout columns="auto,auto,*" row="1">

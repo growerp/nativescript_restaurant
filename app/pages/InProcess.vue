@@ -18,20 +18,33 @@
             <v-template name="title">
               <GridLayout columns="50,*,auto" rows="*" paddingBottom="10">
                 <Image :src="item.image"  col="0" class="thumbnail"/>
-                <Label :text="item.description + '-' +
-                    item.spotNumber + '   ' + item.nbrOfItems + ' ' + $t('items')" 
-                    class="h2" col="1" paddingLeft="10"/>
+                <StackLayout paddingLeft="10" col="1">
+                  <Label :text="item.table" class="h2"/>
+                  <Label :text="item.nbrOfItems + ' ' + $t('items')" class="h3"
+                      :visibility="item.statusId!='OrderApproved'?'visible':'collapsed'"/>
+                  <Label :text="$t('totalAmount') + ': ' + item.grandTotal" class="h3"  
+                      :visibility="item.statusId=='OrderApproved'?'visible':'collapsed'"/>
+                </StackLayout>
                 <Label class="button" @tap="rePrint(item)"
-                    col="2" :text="$t('rePrint')" padding="10"/>
+                    col="2" :text="$t('rePrint')" padding="10"
+                    :visibility="item.statusId!='OrderApproved'?'visible':'hidden'"/>
+                <StackLayout orientation="horizontal" col="2"
+                    :visibility="item.statusId=='OrderApproved'?'visible':'hidden'">
+                    <Label class="button" :text="$t('cancel')" @tap="setCancel(item)" padding="10"/>
+                    <Label class="button" :text="$t('print')" @tap="print(item)" padding="10"/>
+                    <Label class="button" :text="$t('done')" @tap="setDone(item)" padding="10"/>
+                </StackLayout>
               </GridLayout>
             </v-template>
             <v-template name="content">
-                <GridLayout columns="30, 10, *, auto" rows="*" class="item"
-                        paddingRight="5" paddingLeft="25" >
-                  <Image :src="item.image"  col="0" class="thumbnail"/>
-                  <Label :text="item.description" class="h3" col="2"/>
-                  <Label :text="item.quantity" class="h3" col="3"/>
-                </GridLayout>
+              <GridLayout columns="50, *, 30, 70, 70" rows="*" class="item"
+                  paddingRight="5" paddingLeft="25" >
+                <Image :src="item.image"  col="0" class="thumbnail" height="30"/>
+                <Label :text="item.description" class="h3" col="1"/>
+                <Label :text="item.quantity" class="h3" col="2" paddingRight="10"/>
+                <Label :text="item.price" class="h3" col="3" paddingRight="10"/>
+                <Label :text="item.totalAmount" class="h3" col="4"/>
+              </GridLayout>
             </v-template>
           </Accordion>
           <Button class="button" :text="$t('refresh')" @tap="refresh"
@@ -72,8 +85,24 @@ export default {
       let result = this.$printService.prepareTicket(item)
       if (result)  console.log("printer error: " + result)
     },
+    setDone(item) {
+      this.$store.dispatch('changeOrderStatus', {
+        statusId: 'OrderCompleted', orderId: item.orderId}) 
+      this.note(this.$t('table') + ' ' + item.table + this.$t('isNowPaid'))
+    },
+    setCancel(item) {
+      this.$store.dispatch('changeOrderStatus', {
+        statusId: 'OrderCancelled', orderId: item.orderId}) 
+      this.note(this.$t('table') + ' ' + item.table + this.$t('cancelled'))
+    },
+    print(item) {
+      let mess = this.$printService.receiptTicket(item)
+      console.log("result of print: " + JSON.stringify(mess))
+      if (mess) this.$showModal(Alert,{ props: {
+                      message: mess}})
+    },
     refresh() {
-      this.$store.dispatch('getOrders', null)
+      this.$store.dispatch('getOrdersAndItemsByPrepAreas', null)
     }
   },
 }
