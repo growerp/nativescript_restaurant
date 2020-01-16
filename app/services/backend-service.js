@@ -325,7 +325,6 @@ export default class BackendService {
       axios.get('s1/growerp/GetProductCategories'),
       axios.get('s1/growerp/GetProducts'),
       axios.get('s1/growerp/GetOrdersAndItemsByPrepAreas'),
-      axios.post('s1/growerp/GetOrders',{open: true}), //open orders
       axios.get('s1/growerp/GetAllPartyInfo'),
       axios.get('s1/growerp/GetMyTasks'),
       axios.get('s1/growerp/GetRequests'),

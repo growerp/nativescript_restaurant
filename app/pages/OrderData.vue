@@ -4,7 +4,7 @@
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           :openDrawer="openDrawer" :headerNoI18n="header"/>
     </ActionBar>
-    <GridLayout rows="*,50,50">
+    <GridLayout rows="auto,50,50">
       <RadDataForm :source="orderHeaderInfo" :metadata="orderHeaderInfoMeta"
           @propertyCommitted="onHeaderCommitted" row="0" height="80%"/>
       <Button class="button" :text="$t('continue')" @tap="goToEntry"

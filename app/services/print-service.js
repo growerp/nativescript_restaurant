@@ -46,10 +46,7 @@ export default class PrintService {
         cmds += tab + a.quantity + tab + a.description + tab + a.price + tab + a.totalAmount + newLine;
       })
       cmds += 'Grand total: ' + order.grandTotal + newLine + newLine;
-      let prepAreas = store.getters.preparationAreas
-      let ip = ''
-      prepAreas.forEach(o => { if (o.nbrOfCatg == 0) ip = o.printerIp})
-      this.printTicket(ip,cmds)
+      this.printTicket(store.getters.billingArea.printerIp,cmds)
     }
 
   center(str) {

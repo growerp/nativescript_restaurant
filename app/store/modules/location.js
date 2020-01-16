@@ -219,6 +219,11 @@ const getters = {
       o => o.accommodationSpotId === id)
   },
   // preparation area related==================================================
+  billingArea: state => {
+    for(let i=0; i < state.preparationAreas.length; i++)
+      if (state.preparationAreas[i].nbrOfCatg == 0) 
+        return state.preparationAreas[i]
+  },
   preparationAreas: state => {
     return state.preparationAreas
   },

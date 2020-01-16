@@ -15,15 +15,15 @@
               :visibility="orderItems.length? 'visible':'collapse'">
           <v-template>
             <GridLayout columns="50, *, auto, auto, auto" rows="*" class="item">
-              <Image :src="item.image"  col="0" class="thumbnail"/>
+              <Image :src="item.image"  col="0" class="thumbnail" height="30"/>
               <label :text="item.name" class="h2"
                   col="1" paddingLeft="10"/>
-              <label :text="item.quantity" class="h2" col="2"
+              <label :text="item.quantity" class="h3" col="2"
                   paddingRight="10"/>
-              <label :text="item.price" class="h2" col="3"
+              <label :text="item.price" class="h3" col="3"
                   paddingRight="10"/>
               <label :text="Number(item.price) * Number(item.quantity)"
-                  class="h2" col="4" paddingRight="10"/>
+                  class="h3" col="4" paddingRight="10"/>
             </GridLayout>
           </v-template>
         </RadListView>
