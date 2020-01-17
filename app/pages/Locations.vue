@@ -11,22 +11,25 @@
           <RadListView for="item in preps" row="0"><!-- @itemTap not work on IOS -->
             <v-template name="header">
               <StackLayout>
-                <GridLayout columns="60, *, auto" rows="*">
+                <GridLayout columns="60, *, auto,10, auto" rows="*">
                     <label :text="$t('area') + ' ' + $t('name')"
                         col="1" class="h3"/>
-                    <label :text="$t('nbrOf') + $t('categories')"
+                    <label :text="$t('printerIp')"
                         col="2" class="h3"/>
+                    <label :text="$t('catg')"
+                        col="4" class="h3"/>
                 </GridLayout>
                 <StackLayout class="hr-dark m-5"/>
               </StackLayout>
             </v-template>
             <v-template>
-              <GridLayout columns="50, *, auto" rows="*" class="p-5"
+              <GridLayout columns="50, *, auto,10, auto" rows="*" class="p-5"
                   @tap="$navigateTo($routes.PrepDetail,{props: {item: item}})"
                   @longPress="onPrepAreaDeleteTap(item)">
                 <Image :src="item.image" col="0"/>
                 <label :text="item.description" class="h2 m-l-10" col="1"/>
-                <label :text="item.nbrOfCatg" class="h2" col="2"
+                <label :text="item.printerIp" class="h3 m-l-10" col="2"/>
+                <label :text="item.nbrOfCatg" class="h2" col="4"
                       :visibility="item.nbrOfCatg>0?'visible':'hidden'"/>
               </GridLayout>
             </v-template>

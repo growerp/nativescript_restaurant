@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded()">
+  <Page @loaded="pageLoaded()" :key="componentKey">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
           header="inProcess"/>
@@ -73,11 +73,18 @@ export default {
   },
   data () {
     return {
+      componentKey: 0,
       currentTab: 0,
       prepAreas: this.$store.getters.preparationAreas,
     }
   },
+  created() {
+    this.forceRerender()
+  },
   methods: {
+    forceRerender() {
+      this.componentKey += 1;  
+    },
     tabChange(args) {
         this.currentTab = args.value
     },
@@ -87,7 +94,7 @@ export default {
     },
     setDone(item) {
       this.$store.dispatch('changeOrderStatus', {
-        statusId: 'OrderCompleted', orderId: item.orderId}) 
+        statusId: 'OrderCompleted', orderId: item.orderId})
       this.note(this.$t('table') + ' ' + item.table + this.$t('isNowPaid'))
     },
     setCancel(item) {

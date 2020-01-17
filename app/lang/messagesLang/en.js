@@ -40,6 +40,7 @@ export default {
     cannotDelCatProd: 'Cannot delete category, attached Products first have to move to other categories',
     categoryDetail: 'Category Detail Information',
     categories: 'Categories',
+    catg: 'Catg', // short of categories
     category: 'Category',
     categoriesPrepared: 'Menu categories prepared here.(tap to move)',
     change: 'Change',
@@ -176,6 +177,7 @@ export default {
     prepLoc: 'Prep.Loc',
     price: 'Price',
     print: 'Print',
+    printerIp: 'Printer IP',
     product: 'Product',
     products: 'Products',
     productDetail:'Product Detail information',
