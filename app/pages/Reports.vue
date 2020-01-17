@@ -114,7 +114,7 @@ export default {
   created() {
     this.$backendService.getOrders(this.open, this.startDate).then( result => {
       this.ordersAndItems = result.data.ordersAndItems
-      // console.log('====orders and items: ' + JSON.stringify(this.ordersAndItems))
+      console.log('====orders and items: ' + JSON.stringify(this.ordersAndItems))
     })
     this.$backendService.reportSales('day').then( result => {
       this.daySales = result.data.periods
