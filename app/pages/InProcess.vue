@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded()" :key="componentKey">
+  <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
           header="inProcess"/>
@@ -11,7 +11,7 @@
           :key="index" :col="index" :title="prep.description">
         <GridLayout rows="*,auto,50" class="p-10">
           <Accordion allowMultiple="false" height="100%" row="0"
-              for="item of $store.getters.preparationAreaOrdersById(
+              for="item of $store.getters.openOrdersByPrepId(
                 prep.preparationAreaId)"  childItems="items"
               :visibility="$store.getters.preparationAreaHasOrders(
                 prep.preparationAreaId)? 'visible' : 'collapse'">
@@ -30,9 +30,12 @@
                     :visibility="item.statusId!='OrderApproved'?'visible':'hidden'"/>
                 <StackLayout orientation="horizontal" col="2"
                     :visibility="item.statusId=='OrderApproved'?'visible':'hidden'">
-                    <Label class="button" :text="$t('cancel')" @tap="setCancel(item)" padding="10"/>
-                    <Label class="button" :text="$t('print')" @tap="print(item)" padding="10"/>
-                    <Label class="button" :text="$t('done')" @tap="setDone(item)" padding="10"/>
+                    <Label class="button" :text="$t('cancel')"
+                        @tap="setCancel(item)" padding="10"/>
+                    <Label class="button" :text="$t('rePrint')"
+                        @tap="rePrint(item)" padding="10"/>
+                    <Label class="button" :text="$t('done')"
+                        @tap="setDone(item)" padding="10"/>
                 </StackLayout>
               </GridLayout>
             </v-template>
@@ -47,14 +50,14 @@
               </GridLayout>
             </v-template>
           </Accordion>
-          <Button class="button" :text="$t('refresh')" @tap="refresh"
-                    width="50%" row="1"/>
           <GridLayout columns="*" rows="*" row="0"
               :visibility="$store.getters.preparationAreaHasOrders(
                 prep.preparationAreaId)? 'collapse' :'visible'">
             <Label class="message" col="0" row="0"
                 :text="$t('noOrdersToPrepare') + prep.description"/>
           </GridLayout>
+          <Button class="button" :text="$t('refresh')" @tap="refresh"
+                    width="50%" row="1"/>
         </GridLayout>
       </TabViewItem>
     </TabView>
@@ -66,50 +69,48 @@ import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
 
 export default {
-  name: 'prepare',
+  name: 'inProcess',
   mixins: [ sideDrawer, general ],
   props: {
       startTab: Number
   },
   data () {
     return {
-      componentKey: 0,
       currentTab: 0,
       prepAreas: this.$store.getters.preparationAreas,
     }
   },
   created() {
-    this.forceRerender()
+    this.prepAreas.forEach((area,index) => {
+      if (area.preparationAreaId == this.$store.getters.billingArea.preparationAreaId)
+        this.currentTab = index
+    })
   },
   methods: {
-    forceRerender() {
-      this.componentKey += 1;  
-    },
     tabChange(args) {
         this.currentTab = args.value
     },
     rePrint(item) {
-      let result = this.$printService.prepareTicket(item)
+      let result = ''
+      if (item.statusId == 'OrderApproved') {
+        result = this.$printService.receiptTicket(item.orderId)
+      } else {
+        result = this.$printService.prepareTicket([item])
+      }
       if (result)  console.log("printer error: " + result)
     },
     setDone(item) {
-      this.$store.dispatch('changeOrderStatus', {
+      this.$store.dispatch('orderStatus', { spotId: item.spotId,
         statusId: 'OrderCompleted', orderId: item.orderId})
       this.note(this.$t('table') + ' ' + item.table + this.$t('isNowPaid'))
     },
     setCancel(item) {
-      this.$store.dispatch('changeOrderStatus', {
+      this.$store.dispatch('orderStatus', { spotId: item.spotId,
         statusId: 'OrderCancelled', orderId: item.orderId}) 
       this.note(this.$t('table') + ' ' + item.table + this.$t('cancelled'))
     },
-    print(item) {
-      let mess = this.$printService.receiptTicket(item)
-      console.log("result of print: " + JSON.stringify(mess))
-      if (mess) this.$showModal(Alert,{ props: {
-                      message: mess}})
-    },
     refresh() {
-      this.$store.dispatch('getOrdersAndItemsByPrepAreas', null)
+      this.$store.dispatch('getOpenOrders')
     }
   },
 }

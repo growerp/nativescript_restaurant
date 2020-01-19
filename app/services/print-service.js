@@ -13,32 +13,45 @@ const center = '\x1B\x61\x01'
 const doubleHeightOn = '\x1B\x21\x38'; //Emphasized + Double-height + Double-width mode selected (ESC ! (8 + 16 + 32)) 56 dec => 38 hex
 const doubleHeightOff= '\x1B\x21\x00'; //Emphasized + Double-height + Double-width mode selected (ESC ! (8 + 16 + 32)) 56 dec => 38 hex
 export default class PrintService {
-  prepareTicket(orderItem) {
-    console.log("area printing orderId: " + orderItem.orderId + 
-    ' partId: ' + orderItem.orderPartSeqId + ' prepAreaId: ' + orderItem.preparationAreaId)
-    let ip = store.getters.preparationAreaById(orderItem.preparationAreaId).printerIp
-    let cmds = center + orderItem.prepDescription + ' >>>>>> ' + 
-        orderItem.table + newLine + newLine;
-    cmds += tabs
-    orderItem.items.forEach(a => {
-      cmds += tab + a.description + tab + a.quantity + newLine;
+  prepareTicket(orders) { // multiple orderrecords as found in store/modules/orders.js
+    orders.forEach(order => {
+      console.log("area printing orderId: " + order.orderId + 
+        ' prepAreaId: ' + order.preparationAreaId)
+      let ip = store.getters.preparationAreaById(order.preparationAreaId).printerIp
+      if (ip) {
+        let cmds = center + order.prepDescription + ' >>>>>> ' + 
+            order.table + newLine + newLine;
+        cmds += tabs
+        order.items.forEach(a => {
+          cmds += tab + a.description + tab + a.quantity + newLine;
+        })
+        return this.printTicket(ip,cmds)
+      } else {
+        return 'Printer not defined'
+      }
     })
-    this.printTicket(ip,cmds)
   }
 
-  receiptTicket(order) {
-      console.log("receipt printing for order: " + order.orderId)
-      let cmds = center + order.table + newLine + newLine
-      cmds += tabs
-      cmds += tab + 'Quant.' + tab + 'Decription' + tab + 'price' + tab + 'Total' + newLine;
-      order.items.forEach(a => {
-        cmds += tab + a.quantity + tab + a.description + tab + a.price 
-          + tab + a.totalAmount + ' ' + store.getters.company.currencyId + newLine;
-      })
-      cmds += tab + tab + 'Grand total: ' + tab + tab + order.grandTotal + ' ' +
-        + store.getters.company.currencyId + newLine
-      this.printTicket(store.getters.billingArea.printerIp,cmds)
-    }
+  receiptTicket(orderId) {
+      console.log("receipt printing for order: " + orderId)
+      let ip = store.getters.billingArea.printerIp
+      if (ip) {
+        let order = store.getters.openOrderById(orderId)
+        let cmds = center + order.table + newLine + newLine
+        cmds += tabs
+        cmds += tab + 'Quant.' + tab + 'Decription' + tab + 'price' + tab + 'Total' + newLine;
+        console.log("====2===== items: " + order.items.length)
+        order.items.forEach(a => {
+          cmds += tab + a.quantity + tab + a.description + tab + a.price 
+            + tab + a.totalAmount + ' ' + store.getters.company.currencyId + newLine;
+        })
+        cmds += tab + tab + 'Grand total: ' + tab + tab + order.grandTotal + ''
+          + store.getters.company.currencyId + newLine
+        this.printTicket(ip,cmds)
+      } else {
+        return 'Printer not defined'
+      }
+  }
 
   printTicket(ip, content) {
     console.log("Incoming printer ip: " + ip)

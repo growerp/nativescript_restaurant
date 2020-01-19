@@ -16,8 +16,12 @@
               <GridLayout columns="auto, *, auto, auto, 100" rows="*"
                   paddingRight="5" paddingLeft="5"
                   backgroundColor="rgb(211, 215, 207)">
-                <Label :text="item.placedDate" col="0" padding="5"  class="h3"
-                  verticalAlignment="center" />
+                <StackLayout col="0">
+                  <Label :text="item.placedDate" col="0" padding="5"  class="h3"
+                    verticalAlignment="center" />
+                  <Label :text="item.placedTime" col="0" padding="5"  class="h3"
+                    verticalAlignment="center" />
+                </StackLayout>
                 <StackLayout col="1">
                   <Label :text="item.table" padding="5" class="h3"/>
                   <label :text="item.firstName + ' ' + item.lastName" class="h3"/>

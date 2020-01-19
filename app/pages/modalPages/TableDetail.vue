@@ -26,7 +26,7 @@
               @tap="onAddOrderTap(order)" col="2"
               :visibility="openOrders[index].statusId==='OrderApproved'?
                 'hidden':'visible'"/>
-            <Button class="button" :text="$t('cancel')" 
+            <Button class="button" :text="$t('cancel') + ' ' + $t('order')" 
               @tap="onCancelOrderTap(order)" col="4"/>
           </GridLayout>
         </v-template>
@@ -35,9 +35,12 @@
         <Button class="button" :text="$t('billOrder')" @tap="onBillTap"
           :visibility="openOrders[0].statusId==='OrderApproved'?
             'hidden':'visible'"/>
-        <Button class="button" :text="$t('new')+$t('order')" @tap="onNewOrderTap"/>
-        <Button class="button" :text="$t('cancel')"
-          @tap="$modal.close()" row="5"/>
+        <GridLayout columns="*,*">
+          <Button class="button" :text="$t('new')+$t('order')" col="0" 
+            @tap="onNewOrderTap"/>
+          <Button class="button" :text="$t('cancel')" col="1"
+            @tap="$modal.close()" row="5"/>
+        </GridLayout>
       </StackLayout>
     </GridLayout>
     </StackLayout></ModalStack>
@@ -64,17 +67,17 @@ export default {
       onBillTap() {
         this.openOrders.forEach((order) => {
           if (order.statusId != 'OrderApproved') { // can be billed before
-            this.$store.dispatch('changeOrderStatus',
+            this.$store.dispatch('orderStatus',
               {orderId: order.orderId, statusId: 'OrderApproved'}) // show in billing 
-            this.note(this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('tobeBilled'))
+            this.note(this.$t('table') + ' ' + order.table + ' ' + this.$t('time') + ' ' + order.placedTime + ' ' + this.$t('tobeBilled'))
           }
         })
         this.$modal.close()
       },
       onCancelOrderTap(order) {
-        this.$store.dispatch('changeOrderStatus',
+        this.$store.dispatch('orderStatus',
             {orderId: order.orderId, statusId: 'OrderCancelled'}) 
-        this.note(this.$t('time') + ' ' + 
+        this.note(this.$t('table') + ': ' + order.table + ' ' + this.$t('time') + ' ' + 
             order.placedTime + ' ' + this.$t('cancelled'))
         this.$modal.close()
       },
