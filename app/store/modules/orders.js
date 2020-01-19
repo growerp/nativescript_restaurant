@@ -1,14 +1,15 @@
 import store from '~/store'
 import BackendService from "~/services/backend-service"
+import PrintService from '../../services/print-service'
 const backendService = new BackendService()
+const printService = new PrintService()
 var log = true
 //if (TNS_ENV === 'production') log = false
 
 const state = {
   // all open orders with status open(prepare), 
   // placed(serve) approved(bill) completed(done)
-  // orders have items split by preparation area(parts)
-  ordersAndItemsByPrepAreas: [{ 
+  openOrders: [{ 
     orderId: '',
     statusId: '',
     spotId: '',
@@ -19,122 +20,189 @@ const state = {
     name: '',
     nbrOfGuests: '',
     table: '',
-    grandTotal: '',
+    grandTotal: '', // to be removed, can be calculated
     image: '',
-    parts: [{
-      preparationAreaId: '',
-      prepDescription: '',
-      orderPartSeqId: '',
-      statusId: '',
-      nbrOfItems: '',
+    preparationAreaId: '',
+    prepDescription: '',
+    orderPartSeqId: '',
+    partStatusId: '',
+    nbrOfItems: '',
+    image: '',
+    items: [{
+      orderItemSeqId: '',
+      productId: '',
+      description: '',
+      quantity: '',
+      price: '',
+      totalAmount: '', // to be removed, can be calculated
       image: '',
-      items: [{
-        orderItemSeqId: '',
-        productId: '',
-        description: '',
-        quantity: '',
-        price: '',
-        totalAmount: '',
-        image: '',
-      }]
     }]
   }] 
 }
 const mutations = {
-  changeOrderStatus(state, value) {
+  orderStatus(state, value) {
     log?console.log("=====update order status in store: " + JSON.stringify(value)):''
-    let orderIndex = state.ordersAndItemsByPrepAreas.
-      findIndex(o => { o.orderId == value.orderId})
-    if (value.statusId == 'orderApproved') {
-      let order = Object.assign({},state.ordersAndItemsByPrepAreas[orderIndex])
-      // change orderfile, merge parts.items when more than one
-      if (order.parts.length > 1) {
-        for (i=1; i < order.parts.length;i++) {
-          order.parts[0].items = {...order.parts[0].items, ...order.parts[i].items } 
-          order.parts.slice(i,1) // remove it
+    if (value.statusId === 'OrderApproved') {
+      // change orderfile, merge order.items
+      let firstItem = ''; let firstIndex = ''
+      state.openOrders.forEach((o,index) => {
+        if (o.orderId === value.orderId) {
+          console.log("orderId: " + o.orderId)
+          if(!firstItem) {
+            console.log("firstItem")
+            firstItem = o
+            firstItem.statusId = value.statusId
+            firstItem.partStatusId = value.statusId
+            firstItem.preparationAreaId = store.getters.billingArea.preparationAreaId
+            firstItem.description = store.getters.billingArea.description
+            firstIndex = index
+            console.log("firstItem items: " + firstItem.items.length)
+          } else {
+            console.log("nextItem")
+            o.items.forEach(newItem => {
+              let found = false
+              firstItem.items.forEach((fitem, findex) => {
+                if (newItem.productId === fitem.productId) { //exists?
+                  console.log("found!")
+                  fitem[findex].quantity += newItem.quantity
+                  fitem[findex].totalAmount += newItem.totalAmount
+                  found = true
+                }
+              })
+              if (!found) {
+                console.log("not found")
+                firstItem.items.push(newItem)
+              } 
+            })
+            console.log("firstItem items: " + firstItem.items.length)
+            state.openOrders.splice(index,1) // remove it
+          }
         }
-      }
-      order.statusId = value.statusId
-      order.parts[0].statusId = value.statusId
-      order.parts[0].preparationAreaId = store.getters.billingArea.preparationAreaId
-      order.parts[0].description = store.getters.billingArea.description
-      state.ordersAndItemsByPrepAreas.splice(orderIndex,1,order)
-    } else { // cancelled or completed
-      state.ordersAndItemsByPrepAreas.splice(orderIndex,1)
+      })
+      state.openOrders.splice(firstIndex,1,firstItem)
+      console.log("===new record: " + firstItem.items.length)
+    } else { // cancelled or completed:  delete records
+      state.openOrders.forEach((item,index) => {
+        if (item.orderId === value.orderId)
+          state.openOrders.splice(index,1)
+      })
     }
   },
-  ordersAndItemsByPrepAreas(state, value) {
-    state.ordersAndItemsByPrepAreas = value
+  openOrders(state, value) {
+    state.openOrders = value
   },
   ordersAndItemsByPrepArea(state,value) { // need orderId and prepId
-    let index = state.ordersAndItemsByPrepAreas.findIndex(
+    let index = state.openOrders.findIndex(
       o => o.preparationAreaId === value.preparationAreaId &&
       o.orderId === value.orderId)
-    state.ordersAndItemsByPrepAreas.splice(index,1)
+    state.openOrders.splice(index,1)
   }
 }
 const getters = {
-  preparationAreaOrdersById: state => id => {
-    let result = []
-    for (let i=0; i< state.ordersAndItemsByPrepAreas.length; i++)
-      for (let p=0; p< state.ordersAndItemsByPrepAreas[i].parts.length; p++)
-        if (state.ordersAndItemsByPrepAreas[i].parts[p].preparationAreaId === id)
-          result.push({...state.ordersAndItemsByPrepAreas[i],
-                      ...state.ordersAndItemsByPrepAreas[i].parts[p]})
-    return result
+  openOrderByIdAndPrepId: state => (orderId,prepId) => { 
+    return state.openOrders.filter( o => 
+      o.orderId === orderId && o.preparationAreaId === prepId)
   },
-  preparationAreaHasOrders: state => id => {
-    return getters.preparationAreaOrdersById(id).length 
+  openOrdersByPrepId: state => prepId => {
+    return state.openOrders.filter( o => o.preparationAreaId === prepId)
+  },
+  preparationAreaHasOrders: state => prepId => {
+    return getters.openOrdersByPrepId(prepId).length 
   },
   prepOrdersByStatusId: state => id => { //OrderPlaced = serv,OrderApproved = bill 
-    return state.ordersAndItemsByPrepAreas.filter(
-        o => o.partStatusId === id)
-    },
-  openOrderById: state => id => {
-    return state.ordersAndItemsByPrepAreas.find( o => o.orderId === id)
+    return state.openOrders.filter(o => o.partStatusId === id)
   },
-  ordersAndItemsByPrepAreas: state => {
-    return state.ordersAndItemsByPrepAreas
+  openOrdersById: state => id => { // separate orders for each prepArea
+    return state.openOrders.filter(o => o.orderId === id)
+  },
+  openOrderById: state => id => { // single record expected
+    return state.openOrders.find(o => o.orderId === id)
+  },
+  openOrders: state => {
+    let orders = []; let lastOrderId = ''
+    state.openOrders.forEach( o => {
+      if (!lastOrderId || o.orderId !== lastOrderId)
+        orders.push(o)
+      lastOrderId = o.orderId
+    })
+    return orders
   },
   openOrdersByAreaSpotId: state => spotId => {
-    return state.ordersAndItemsByPrepAreas.filter(
-      o => o.spotId === spotId &&
-      o.statusId !== 'OrderCompleted' &&
-      o.statusId !== 'OrderCancelled' )
+    let orders = []; let lastItem = ''
+    state.openOrders.forEach( o => {
+      if (o.spotId === spotId &&
+          o.statusId !== 'OrderCompleted' &&
+          o.statusId !== 'OrderCancelled' &&
+          (!lastItem || lastItem.orderId !== o.orderId)) {
+        orders.push(o)
+      }
+      lastItem = o
+    })
+    return orders
   },
 }
 const actions = {
-  changeOrderStatus({commit}, item) {
-    if (item.orderStatusId === 'OrderCancelled' || item.orderStatusId === 'OrderCompleted') {
+  async orderStatus({commit,getters}, item) {
+    if (item.statusId === 'OrderCancelled' || 
+        item.statusId === 'OrderCompleted') {
       let spot = Object.assign({},
-        store.getters.accommodationSpotById(order.spotId))
+        getters.accommodationSpotById(item.spotId))
       spot.verb = 'update'
       spot.ordered = false
-      store.commit('accommodationSpot', spot)
+      commit('accommodationSpot', spot)
     }
-    backendService.changeOrderPartStatus(
-      item.orderId, null, item.statusId)
-    commit('changeOrderStatus', item)
-    }, 
-  async createSalesOrder({dispatch}, item) {
+    commit('orderStatus', item)
+    if (item.statusId === 'OrderApproved') {
+      printService.receiptTicket(item.orderId)
+    } 
+    backendService.changeOrderPartStatus(item.orderId, null, item.statusId)
+  }, 
+  async createSalesOrder({dispatch,commit,getters}, item) {
     // set spot to ordered
     let spot = Object.assign({}, 
         store.getters.accommodationSpotById(item.header.accommodationSpotId))
     spot.verb = 'update'
     spot.ordered = true
-    store.commit('accommodationSpot', spot)
+    commit('accommodationSpot', spot)
     // remove pictures
     for (let i=0; i<item.items.length;i++) delete item.items[i].image
     let result = await backendService.createSalesOrder(item.header, item.items)
-    await dispatch('getOrders')
+    await dispatch('getOpenOrders')
+    if (item.header.orderId) { // add to existing order so use new items only for print
+      console.log(" add to existing orderId: " + item.header.orderId)
+      let orders = getters.openOrdersById(item.header.orderId) // multiple for every prepArea each
+      console.log("orders found: " + orders.length)
+      let ordersToPrint = []
+      orders.forEach( order => {
+        console.log(" process preparea: " + order.prepDescription)
+        let printOrder = ''
+        order.items.forEach( product =>{
+          console.log(" process product: " + product.description)
+          let found = false;
+          item.items.forEach( newItem => {
+            if (product.productId === newItem.productId) found = true
+          })
+          if (found) {
+            console.log(" item found: " + product.description)
+            if (!printOrder) {
+              printOrder = Object.assign({}, order)
+              printOrder.items = []
+            }
+            printOrder.items.push(product)
+          }
+        })
+        if (printOrder) ordersToPrint.push(printOrder)
+      })
+      result.printer = printService.prepareTicket(ordersToPrint)
+    } else {
+      result.printer = printService.prepareTicket(
+          getters.openOrdersById(result.data.orderId))
+    }
     return result
   },
-  async getOrders({dispatch}) {
-    await dispatch('getOrdersAndItemsByPrepAreas')
-  },
-  async getOrdersAndItemsByPrepAreas({commit}) {
-    let result = await backendService.getOrdersAndItemsByPrepAreas() 
-    commit('ordersAndItemsByPrepAreas', result.data.ordersAndItemsByPrepAreas)
+  async getOpenOrders({commit}) {
+    let result = await backendService.getOpenOrders() 
+    commit('openOrders', result.data.ordersAndItemsByPrepAreas)
   }
 }
 export default {

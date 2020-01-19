@@ -235,7 +235,7 @@ export default class BackendService {
   async getOrder(orderId) {
     return await axios.post('s1/growerp/GetOrder',
       { orderId: orderId})}
-  async getOrdersAndItemsByPrepAreas() {
+  async getOpenOrders() {
     return await axios.get('s1/growerp/GetOrdersAndItemsByPrepAreas')}
   async getOrders(open=true, startDate=null) {
     return await axios.post('s1/growerp/GetOrders',

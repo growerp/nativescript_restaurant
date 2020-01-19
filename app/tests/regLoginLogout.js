@@ -70,13 +70,13 @@ describe('Connect, register and login', function () {
           "returned orderId should be a number")
       console.log("test: check local order lists")
       assert.lengthOf(store.getters.openOrders, 1, "Orders not received yet")
-      assert.lengthOf(store.getters.ordersAndItemsByPrepAreas, 2,
+      assert.lengthOf(store.getters.openOrders, 2,
           "Preparation Orders not received yet")
 
       console.log("test: check prep area 1")
       let preparationAreaId =  
           store.getters.preparationAreaIdByProductId(orderItems[0].productId)
-      let orderParts = store.getters.preparationAreaOrdersById(preparationAreaId)
+      let orderParts = store.getters.openOrdersByPrepId(preparationAreaId)
           assert.exists(orderParts, "No parts found in: " +
           store.getters.preparationAreaById(preparationAreaId).description)
       assert.lengthOf(orderParts,1,
@@ -87,7 +87,7 @@ describe('Connect, register and login', function () {
       console.log("test: check prep area 2")
       preparationAreaId =  
           store.getters.preparationAreaIdByProductId(orderItems[1].productId)
-      orderParts = store.getters.preparationAreaOrdersById(preparationAreaId)
+      orderParts = store.getters.openOrdersByPrepId(preparationAreaId)
       assert.exists(orderParts, "No parts found in: " +
           store.getters.preparationAreaById(preparationAreaId).description)
       assert.lengthOf(orderParts, 1,
@@ -96,21 +96,21 @@ describe('Connect, register and login', function () {
           store.getters.preparationAreaById(preparationAreaId).description)
 
       console.log("test: change order to billing (OrderApproved)")
-      store.dispatch('changeOrderStatus', {
+      store.dispatch('orderStatus', {
           orderId: orderParts[0].orderId, 
           statusId: 'OrderApproved'})
       assert.lengthOf( store.getters.prepOrdersByStatusId('OrderApproved'),1,
           " not appear in billing screen")
 
       console.log("====test=====change order status to complete")
-      store.dispatch('changeOrderStatus', {
+      store.dispatch('orderStatus', {
         orderId: orderParts[0].orderId,
         statusId: 'OrderCompleted'})
       assert.lengthOf(store.getters.prepOrdersByStatusId('OrderCompleted'),1,
         " not disappear from bill screen")
 
       console.log("test: check if order downloaded from server....")
-      backendService.getOrders(false, null).then( function(result) {
+      backendService.openOrders(false, null).then( function(result) {
         assert.lengthOf(result.data.ordersAndItems, 1, "order not found in report")
       })
       console.log("========all tests done========")

@@ -72,6 +72,8 @@ export default {
           header: this.orderHeader,
           items: this.orderItems })
       .then( result => {
+        console.log("==============Return from backend")
+        console.log("result from printer: " + result.printer)
         if (this.orderHeader.orderId) {
           this.note(this.$t('orderUpdated') + result.data.orderId + ' ' +
           this.orderHeader.description + '-' + this.orderHeader.spotNumber,
