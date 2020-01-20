@@ -67,6 +67,7 @@
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
+import Confirm from './modalPages/Confirm'
 
 export default {
   name: 'inProcess',
@@ -97,7 +98,16 @@ export default {
       } else {
         result = this.$printService.prepareTicket([item])
       }
-      if (result)  console.log("printer error: " + result)
+      if (result) {
+        this.$showModal(Confirm,{ props: {
+            message: result + "\n Define printer?" }})
+        .then(response => {
+          if (response) {
+            let prep = this.$store.getters.preparationAreaById(item.preparationAreaId)
+            this.$navigateTo(this.$routes.PrepDetail, {props: { item: prep }})
+          }
+        })
+      }
     },
     setDone(item) {
       this.$store.dispatch('orderStatus', { spotId: item.spotId,
