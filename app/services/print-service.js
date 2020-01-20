@@ -14,6 +14,7 @@ const doubleHeightOn = '\x1B\x21\x38'; //Emphasized + Double-height + Double-wid
 const doubleHeightOff= '\x1B\x21\x00'; //Emphasized + Double-height + Double-width mode selected (ESC ! (8 + 16 + 32)) 56 dec => 38 hex
 export default class PrintService {
   prepareTicket(orders) { // multiple orderrecords as found in store/modules/orders.js
+    let result = ''
     orders.forEach(order => {
       console.log("area printing orderId: " + order.orderId + 
         ' prepAreaId: ' + order.preparationAreaId)
@@ -25,11 +26,12 @@ export default class PrintService {
         order.items.forEach(a => {
           cmds += tab + a.description + tab + a.quantity + newLine;
         })
-        return this.printTicket(ip,cmds)
+        result = this.printTicket(ip,cmds)
       } else {
-        return 'Printer not defined'
+        result = 'Printer not defined'
       }
     })
+    return result
   }
 
   receiptTicket(orderId) {
