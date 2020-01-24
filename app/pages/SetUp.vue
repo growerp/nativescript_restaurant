@@ -6,33 +6,31 @@
           :reload="reload" :onActionTap="backToDefault"/>
     </ActionBar>
     <GridLayout rows="*, auto, 200, 50" class="p-10">
-      <RadCartesianChart row="0">
+      <RadCartesianChart>
         <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
-            :minimum="fromDate" :maximum="thruDate"
-            majorStep="1" :majorStepUnit="stepUnit" :dateFormat="dateFormat"
-            labelFitMode="Rotate" labelRotationAngle="1.2"/>
+          :minimum=fromDate :maximum=thruDate
+          :majorStep=step :majorStepUnit=stepUnit :dateFormat=dateFormat
+          labelFitMode="Rotate" labelRotationAngle="1.2"/>
         <LinearAxis v-tkCartesianVerticalAxis/>
-        <LineSeries v-tkCartesianSeries :items="items"
-            categoryProperty="timeStamp"
-            valueProperty="orderCount" legendTitle="orders"/>
-        <LineSeries v-tkCartesianSeries :items="items"
-            categoryProperty="timeStamp"
-            valueProperty="amount" legendTitle="Amount"/>
-        <RadLegendView v-tkCartesianLegend position="Right" width="75"
-            height="75"/>
+        <LineSeries v-tkCartesianSeries :items="items" legendTitle="Amount" 
+          categoryProperty="timeStamp" valueProperty="amount"/>
+        <LineSeries v-tkCartesianSeries :items="items" legendTitle="Orders" 
+          categoryProperty="timeStamp" valueProperty="orderCount"/>
+        <RadLegendView v-tkCartesianLegend position="Right"
+            width="75" height="75"/>
       </RadCartesianChart>
       <GridLayout columns="*,*,*" row="1">
-        <Button class="button" col="0" :text="$t('day')" @tap="getReport('day')"/>
-        <Button class="button" col="1" :text="$t('week')" @tap="getReport('week')"/>
-        <Button class="button" col="2" :text="$t('month')" @tap="getReport('month')"/>
+        <Button class="button" col="0" :text="$t('day')" @tap="getReport('Day')"/>
+        <Button class="button" col="1" :text="$t('week')" @tap="getReport('Week')"/>
+        <Button class="button" col="2" :text="$t('month')" @tap="getReport('Month')"/>
       </GridLayout>
       <RadListView for="item in dashBoard" @itemTap="onItemTap" row="2"
           itemReorder="true" @itemReordered="onItemReordered"
           layout="grid" :gridSpanCount="5" itemHeight="100"><!--itemHeight for ios -->
         <v-template>
-          <StackLayout orientation="vertical" padding="10">
-            <Image :src="item.image" height="40"/>
-            <Label :text="item.title" horizontalAlignment="center" class="h4"/>
+          <StackLayout>
+            <Image :src="item.image" width="60"/>
+            <Label :text="item.title"  class="h6" horizontalAlignment="center"/>
           </StackLayout>
         </v-template>
       </RadListView>
@@ -55,14 +53,16 @@ export default {
         fromDate: '',
         thruDate: '',
         stepUnit: '',
-        dateFormat: '',
+        step: 1,
+        dateFormat: 'MMM-dd',
       }
     },
     mixins: [ sideDrawer, general],
     created() {
-      this.getReport('day')
-      // console.log('====sales: ' + JSON.stringify(this.items))
-      // console.log('====fromDate/ThruDate:  ' + this.fromDate + '/' + this.thruDate)
+      this.getReport('Day')
+      console.log('====fromDate/ThruDate:  ' + this.fromDate + ' / ' + this.thruDate)
+      console.log('====stepUnit/dateFormat: ' + this.stepUnit + ' / ' + this.dateFormat)
+      console.log('====sales: ' + JSON.stringify(this.items))
       if (this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN') {
         if (appSettings.getString('setUp')) {
           this.reload = true
@@ -76,8 +76,21 @@ export default {
           this.items = result.data.periods
           this.fromDate = result.data.fromDate
           this.thruDate = result.data.thruDate
-          if (type == 'month') this.dateFormat = 'MMM'
-          else this.dateFormat = 'MMM-dd'
+          if (type == 'Day') {
+            this.stepUnit = 'Day'
+            this.step=1
+          }
+          if (type == 'Week') {
+            this.stepUnit = 'Day'
+            this.step=5
+          }
+          if (type == 'Month') {
+            this.stepUnit = 'Month'
+            this.step=1
+          }
+          console.log('====fromDate/ThruDate:  ' + this.fromDate + ' / ' + this.thruDate)
+          console.log('====stepUnit/dateFormat: ' + this.stepUnit + ' / ' + this.dateFormat)
+          console.log('====sales: ' + JSON.stringify(this.items))
         })
         this.stepUnit = type
       },

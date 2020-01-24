@@ -3,6 +3,8 @@ import BackendService from "~/services/backend-service"
 import PrintService from '../../services/print-service'
 const backendService = new BackendService()
 const printService = new PrintService()
+import { isIOS, isAndroid } from 'tns-core-modules/platform';
+
 var log = true
 //if (TNS_ENV === 'production') log = false
 
@@ -193,9 +195,11 @@ const actions = {
         })
         if (printOrder) ordersToPrint.push(printOrder)
       })
-      result.printer = printService.prepareTicket(ordersToPrint)
+      if (isAndroid)
+        result.printer = printService.prepareTicket(ordersToPrint)
     } else {
-      result.printer = printService.prepareTicket(
+      if (isAndroid)
+        result.printer = printService.prepareTicket(
           getters.openOrdersById(result.data.orderId))
     }
     return result

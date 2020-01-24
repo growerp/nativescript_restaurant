@@ -68,6 +68,7 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
 import Confirm from './modalPages/Confirm'
+import { isIOS, isAndroid } from 'tns-core-modules/platform';
 
 export default {
   name: 'inProcess',
@@ -92,6 +93,8 @@ export default {
         this.currentTab = args.value
     },
     rePrint(item) {
+      if (isIOS) alert("IOS printer not supported yet, check again in a couple of weeks!")
+      else {
       let result = ''
       if (item.statusId == 'OrderApproved') {
         result = this.$printService.receiptTicket(item.orderId)
@@ -107,7 +110,7 @@ export default {
             this.$navigateTo(this.$routes.PrepDetail, {props: { item: prep }})
           }
         })
-      }
+      }}
     },
     setDone(item) {
       this.$store.dispatch('orderStatus', { spotId: item.spotId,

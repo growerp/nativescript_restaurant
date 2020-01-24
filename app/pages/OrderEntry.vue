@@ -1,11 +1,11 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           :openDrawer="openDrawer" 
           :headerNoI18n="header"/>
     </ActionBar>
-    <GridLayout rows="*,50,50">
+    <GridLayout rows="*,80,60">
       <Accordion row="0" height="100%"
           ref="accordion" allowMultiple="true"
           for="item of categoriesAndProducts" childItems="products">

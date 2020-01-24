@@ -172,6 +172,17 @@ const getters = {
       (o.firstName.toLowerCase().indexOf(name.toLowerCase()) > -1) ||
       (o.lastName.toLowerCase().indexOf(name.toLowerCase()) > -1))
   },
+  userGroups: state => {
+    return state.userGroups
+  },
+  userGroupByDesc: state => desc => {
+    for (let i=0; i < state.userGroups.length;i++)
+      if (state.userGroups[i].description === desc)
+        return state.userGroups[i]
+    return -1 
+//    this does not work
+//    return state.userGroups.find(o => {o.description === desc })
+  },
   userGroupsDesc: state => (blank = true) => {
     let values = []
     if (blank) values.push(' ')
@@ -180,10 +191,20 @@ const getters = {
     return values
   },
 }
-const  actions = {
+const actions = {
   updateCompany({commit}, item) {
     backendService.updateCompany(item)
     commit('company', item)
+  },
+  updateUser({commit}, item) {
+    if (log) console.log("====party incoming update:" +
+        JSON.stringify(item))
+    backendService.updateUser(item)
+    item.verb = 'update'
+    if (item.roleTypeId == 'Customer')
+      commit('customer', item)
+    if (item.roleTypeId == 'Employee')
+      commit('employee', item)
   }
 }
 // export this module.

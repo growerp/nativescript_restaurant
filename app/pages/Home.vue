@@ -8,25 +8,26 @@
       <Stacklayout row="0">
         <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
           @propertyCommitted="onAreaCommitted" color="green"/>
-        <label :text="$t('tables')" paddingLeft="15"/>
+        <label :text="$t('tables')" paddingLeft="10" color="green"/>
         <RadListView for="table in tables" @itemTap="onTableTap"
-              layout="grid" :gridSpanCount="6" itemHeight="100">
+              layout="grid" :gridSpanCount="6" itemHeight="50">
           <v-template>
-            <Stacklayout padding="10">
-            <Stacklayout  :backgroundColor="table.ordered?'red':'lightGreen'">
-            <label :text="table.spotNumber" class="h2"
-              horizontalAlignment="center"/>
+            <Stacklayout paddingLeft="10" paddingRight="10"> 
+            <Stacklayout :backgroundColor="table.ordered?'red':'lightGreen'"
+               padding="5">
+              <label :text="table.spotNumber" class="h2"
+                horizontalAlignment="center" paddingTop="5"/>
             </Stacklayout></Stacklayout>
           </v-template>
         </RadListView>
       </Stacklayout>
       <RadListView for="item in dashBoard" @itemTap="onItemTap"
           itemReorder="true" @itemReordered="onItemReordered" row="1" 
-          layout="grid" :gridSpanCount="5" itemHeight="100"><!--itemHeight for ios -->
+          layout="grid" :gridSpanCount="5" itemHeight="90"><!--itemHeight for ios -->
         <v-template>
-          <StackLayout orientation="vertical" padding="10">
-            <Image :src="item.image" width="40"/>
-            <Label :text="item.title" horizontalAlignment="center" class="h4"/>
+          <StackLayout>
+            <Image :src="item.image" width="60"/>
+            <Label :text="item.title"  class="h6" horizontalAlignment="center"/>
           </StackLayout>
         </v-template>
       </RadListView>
