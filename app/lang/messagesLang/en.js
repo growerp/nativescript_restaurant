@@ -102,7 +102,7 @@ export default {
     goBack: 'Go Back',
     help: 'Help',
     informationIsUpdated: 'Information is updated',
-    inProcess: 'In Process',
+    inProcess: 'InProcess',
     inside: 'Inside',
     isNowPaid: ' is now paid and complete',
     isReadyToServeFrom: ' is now ready to serve from ',

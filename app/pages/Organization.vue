@@ -18,8 +18,7 @@
                   <StackLayout col="1">
                     <label :text="$t('employee') + ' ' + $t('name')"
                         class="h3"/>
-                    <label :text="$t('email')"
-                        class="h3"/>
+                    <label :text="$t('email')" class="h3"/>
                   </StackLayout>
                   <label :text="$t('userGroup')" col="2" class="h3"/>
                 </GridLayout>
@@ -93,7 +92,7 @@ import UserAdd from './modalPages/UserAdd'
 import Confirm from './modalPages/Confirm'
 import Search from './modalPages/Search'
 import passwordUpdate from './modalPages/PasswordUpdate'
-const platformModule = require("tns-core-modules/platform")
+import { isIOS } from 'tns-core-modules/platform';
 export default {
   name: 'organization',
   mixins: [ sideDrawer, imageSelector, general ],
@@ -113,9 +112,7 @@ export default {
   },
   created() {
     this.currentTab = this.startTab
-    if (platformModule.isIOS) { // returns an index instead of value so change
-      this.item.groupDescription = this.userGroups.findIndex(
-          o => o === this.item.groupDescription)}
+    console.log("first empl from store: " +JSON.stringify(this.employees))
   },
   methods: {
     tabChange(args) {

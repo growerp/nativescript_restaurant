@@ -29,7 +29,8 @@
         </v-template>
       </RadListView>
       <Button class="button" :text="$t('addCategory')" 
-          @tap="onAddCategoryTap" width="50%"  row="4"/>
+          @tap="onAddCategoryTap" width="50%"  row="4"
+          :visibility="!editedItem ? 'visible':'hidden'"/>
     </GridLayout>
   </Page>
 </template>

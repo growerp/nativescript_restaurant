@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTap" :save="true" :back="true"
           :onActionTap="onSaveTap"
@@ -20,7 +20,7 @@
       <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"
         width="50%" row="1"  :visibility=
           "this.$store.getters.currentEmployeeUserGroupId ===
-          'GROWERP_M_ADMIN'?'visible':'hidden'"/>
+          'GROWERP_M_ADMIN' &amp;&amp; !this.editedItem?'visible':'hidden'"/>
     </StackLayout>
   </Page>
 </template>
@@ -76,6 +76,8 @@ export default {
     if (platformModule.isIOS) { // returns an index instead of value so change
       this.itemData.groupDescription = this.userGroups.findIndex(
           o => o === this.itemData.description)}
+    console.log("====employee: " + JSON.stringify(this.item))
+
   },
   methods: {
     onHeaderTap() {

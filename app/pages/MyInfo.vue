@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
           :onActionTap="onSaveTap"
@@ -17,7 +17,8 @@
       </GridLayout>
       <RadDataForm ref="itemForm" :source="item"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-      <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"/>
+      <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"
+        :visibility="!this.editedItem?'visible':'hidden'"/>
     </StackLayout>
   </Page>
 </template>
@@ -27,7 +28,7 @@ import sideDrawer from '~/mixins/sideDrawer'
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import passwordUpdate from './modalPages/PasswordUpdate'
-const platformModule = require("tns-core-modules/platform");
+import { isIOS, isAndroid } from 'tns-core-modules/platform';
 
 export default {
   name: 'MyInfo',
@@ -62,9 +63,9 @@ export default {
   created() {
     this.$backendService.downloadImage('medium', 'user', this.item.partyId)
     .then(result => {this.itemImage = result.data.imageFile})
-    if (platformModule.isIOS) { // returns an index instead of value so change
-      this.itemData.groupDescription = this.userGroups.findIndex(
-          o => o === this.itemData.description)}
+    if (isIOS) { // returns an index instead of value so change
+      this.item.groupDescription = this.userGroups.findIndex(
+          o => o === this.item.groupDescription)}
   },
   methods: {
     onItemCommitted(data) {
@@ -87,7 +88,7 @@ export default {
         } else if (!this.editedItem.groupDescription && this.item.roleTypeId != 'Customer'){
             this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
         } else {
-          if (platformModule.isIOS) { // returns an index instead of value so change
+          if (isIOS) { // returns an index instead of value so change
             this.editedItem.groupDescription = 
                 this.userGroups[parseInt(this.editedItem.groupDescription,10)]}
           this.$backendService.updateUser(this.editedItem)

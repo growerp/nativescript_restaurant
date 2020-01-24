@@ -3,12 +3,12 @@
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           :openDrawer="openDrawer" 
-          :header="this.orderHeader.description + this.$t('table') +
+          :header="this.$t('table') + this.orderHeader.description + '-' +
              ' ' + this.orderHeader.spotNumber"
           :text="$t('totalAmount') + ': ' + getOrderTotal" />
     </ActionBar>
     <StackLayout>
-      <GridLayout columns="auto,auto,*" rows="*,auto,50">
+      <GridLayout columns="auto,auto,*" rows="*,auto,60">
         <RadListView ref="listView" for="item in orderItems"
               row="0" colSpan="3"
               @itemTap="onItemDeleteTap" height="80%"

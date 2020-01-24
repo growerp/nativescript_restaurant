@@ -48,7 +48,7 @@ export default {
             component: this.$routes.MyInfo, action: '', show: 'employee'},
         { image: '~/assets/images/logout.png', title: this.$t('logout'),
             component: this.$routes.Login, action: 'Logout', show: 'employee'},
-        { image: '~/assets/images/setup.png', title: this.$t('setUp'),
+        { image: '~/assets/images/setup.png', title: this.$t('admin'),
             component: this.$routes.SetUp, action: '', show: 'admin'},
       ]
     }
