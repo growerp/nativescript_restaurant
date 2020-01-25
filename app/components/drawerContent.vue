@@ -25,7 +25,7 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import {exit} from 'nativescript-exit'
 const appSettings = require("tns-core-modules/application-settings")
-const platformModule = require("tns-core-modules/platform");
+import { isIOS, isAndroid } from 'tns-core-modules/platform';
 export default {
   mixins: [sideDrawer],
   data () {
@@ -45,7 +45,7 @@ export default {
         { image: '~/assets/images/task.png', title:this.$t('tasks'),
             component: this.$routes.Tasks, action: '', show: 'employee'},
         { image: '~/assets/images/myInfo.png', title: this.$t('myInfo'), 
-            component: this.$routes.MyInfo, action: '', show: 'employee'},
+            component: this.$routes.MyInfo, action: 'MyInfo', show: 'employee'},
         { image: '~/assets/images/logout.png', title: this.$t('logout'),
             component: this.$routes.Login, action: 'Logout', show: 'employee'},
         { image: '~/assets/images/setup.png', title: this.$t('admin'),
@@ -56,10 +56,10 @@ export default {
   methods: {
     menuAction(pageComponent, action) {
         if (action == 'Logout') {
-            if (platformModule.isAndroid) {
+            if (isAndroid) {
               this.$i18n.locale = java.util.Locale.getDefault().getLanguage();
             }
-            if (platformModule.isIOS) {
+            if (isIOS) {
               this.$i18n.locale = NSLocale.preferredLanguages.firstObject;
             }
             console.log('logging out....')
@@ -67,10 +67,12 @@ export default {
               console.log('logged out')
               this.$navigateTo(this.$routes.Login, {clearHistory: true})
 //            exit() // exit caused update of apiKey to be ignored
-        }
-        // use the manual navigation method
-        this.$navigateTo(pageComponent,
-          {props: { startTab: platformModule.isAndroid? 0 : 1}}) // 0 not working for IOS?
+        } else if (action == 'MyInfo')
+          this.$navigateTo(this.$routes.UserDetail,
+              {props: { item: this.$store.getters.currentEmployee, myInfo: true}})
+        else
+          this.$navigateTo(pageComponent,
+            {props: { startTab: 0}}) // 0 not working for IOS?
         // and we probably want to close the drawer when changing pages
         this.closeDrawer()
     }
