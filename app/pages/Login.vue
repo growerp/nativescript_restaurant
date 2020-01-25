@@ -228,11 +228,12 @@ const appSettings = require("tns-core-modules/application-settings")
                     this.user.password = '' })}
               }
             })
-          } else if (result == 'success') {
-            this.$store.dispatch('initialData')
-            log?console.log("====apiKey found in login, init done, going home....."):''
-            this.$navigateTo(this.$routes.Home, 
+          } else if (result == 'success') { // after register
+            this.$store.dispatch('initialData').then(() => {
+              log?console.log("====apiKey found in login, init done, going home....."):''
+              this.$navigateTo(this.$routes.Home, 
                   {clearHistory: true, props: { firstTime: true }})
+            })
           }
         })
       },
