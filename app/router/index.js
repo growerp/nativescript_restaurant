@@ -9,7 +9,6 @@ import Home from '~/pages/Home'
 import InProcess from '~/pages/InProcess'
 import Locations from '~/pages/Locations'
 import Login from '~/pages/Login'
-import MyInfo from '~/pages/MyInfo'
 import OrderData from '~/pages/OrderData'
 import OrderEntry from '~/pages/OrderEntry'
 import OrderItems from '~/pages/OrderItems'
@@ -35,7 +34,6 @@ const routes = {
   InProcess,
   Locations,
   Login,
-  MyInfo,
   OrderData,
   OrderEntry,
   OrderItems,

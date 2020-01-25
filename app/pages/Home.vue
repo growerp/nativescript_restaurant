@@ -121,6 +121,10 @@ export default {
       this.reload = false
     },
     onItemTap(args) {
+      if (args.item.pageName === 'MyInfo')
+        this.$navigateTo(this.$routes.UserDetail,
+            {props: { item: this.$store.getters.currentEmployee, myInfo: true}})
+      else
       this.$navigateTo(eval("this.$routes." + args.item.pageName),
           {props: { startTab: args.item.pageTab}})
     },
