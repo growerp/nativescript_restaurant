@@ -34,7 +34,7 @@
         </GridLayout>
         <GridLayout columns="*,*" rows="auto" row="1" colSpan="3">
           <Button class="button" :text="$t('cancel')" 
-            @tap="$navigateTo($routes.Orders)" col="0"/>
+            @tap="$navigateTo($routes.Home)" col="0"/>
           <Button class="button" :text="$t('saveOrder')" 
               @tap="saveOrder" col="1"
               :visibility="orderItems.length? 'visible':'hidden'"/>

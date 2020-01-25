@@ -8,7 +8,7 @@
     <GridLayout rows="auto, *, 50" class="p-10">
       <GridLayout width="100%" columns="100,30,*" rows="50,50" row="0">
         <Image ref="itemForm" :src="itemImage" width="100" height="100"
-            col="0" row="0" rowSpan="2"/>
+            col="0" row="0" rowSpan="2" padding="10"/>
         <Button class="button" :text="$t('copyFromGal')"
             @tap="selectPicture('company', itemComp.partyId)" col=2 row="0"/>
         <Button class="button" :text="$t('useCamera')"

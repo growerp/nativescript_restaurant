@@ -15,6 +15,7 @@ else if (platformModule.isAndroid)
   //axios.defaults.baseURL = 'http://192.168.1.17:8080/rest/'
 else if (platformModule.isIOS) 
   axios.defaults.baseURL = 'http://localhost:8080/rest/'
+  //axios.defaults.baseURL = 'http://192.168.0.14:8080/rest/'
 
 axios.defaults.headers.common['Content-Type'] = 
       'application/json;charset=UTF-8'
