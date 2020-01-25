@@ -12,7 +12,7 @@
         <RadListView for="table in tables" @itemTap="onTableTap"
               layout="grid" :gridSpanCount="6" itemHeight="50">
           <v-template>
-            <Stacklayout paddingLeft="10" paddingRight="10"> 
+            <Stacklayout padding="10"> 
             <Stacklayout :backgroundColor="table.ordered?'red':'lightGreen'"
                padding="5">
               <label :text="table.spotNumber" class="h2"
