@@ -30,12 +30,14 @@ import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import Confirm from './modalPages/Confirm'
 import passwordUpdate from './modalPages/PasswordUpdate'
-const platformModule = require("tns-core-modules/platform")
+import { isIOS, isAndroid } from 'tns-core-modules/platform'
+const frameModule = require("tns-core-modules/ui/frame");
 export default {
   name: 'UserDetail',
   mixins: [ imageSelector, general ],
   props: {
-    item: Object
+    item: Object,
+    myInfo: {type: Boolean, default: false},
   },
   data() {
     return {
@@ -73,18 +75,17 @@ export default {
     if (!this.itemImage.length) {
       this.$backendService.downloadImage('medium', 'user', this.item.partyId)
       .then(result => { this.itemImage = result.data.imageFile})}
-    if (platformModule.isIOS) { // returns an index instead of value so change
+    if (isIOS) { // returns an index instead of value so change
       this.itemData.groupDescription = this.userGroups.findIndex(
           o => o === this.itemData.description)}
-    console.log("====employee: " + JSON.stringify(this.item))
-
   },
   methods: {
     onHeaderTap() {
-      if (this.item.roleTypeId === "Employee")
+      if (this.myInfo) frameModule.topmost().goBack()
+      else if (this.item.roleTypeId === "Employee")
+          this.$navigateTo(this.$routes.Organization,{props:{startTab: 0}})
+      else if (this.item.roleTypeId === "Customer")
           this.$navigateTo(this.$routes.Organization,{props:{startTab: 1}})
-      if (this.item.roleTypeId === "Customer")
-          this.$navigateTo(this.$routes.Organization,{props:{startTab: 2}})
     },
     onItemCommitted(data) {
       this.editedItem = JSON.parse(data.object.editedObject)
@@ -102,7 +103,7 @@ export default {
         } else if (!this.editedItem.groupDescription && this.item.roleTypeId != 'Customer'){
             this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
         } else {
-          if (platformModule.isIOS) { // returns an index instead of value so change
+          if (isIOS) { // returns an index instead of value so change
             this.editedItem.groupDescription = 
                 this.userGroups[parseInt(this.editedItem.groupDescription,10)]}
           this.$backendService.updateUser(this.editedItem)
