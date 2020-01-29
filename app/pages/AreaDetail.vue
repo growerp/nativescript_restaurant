@@ -14,7 +14,7 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('area', item.accommodationAreaId)"/>
       </GridLayout>
-      <RadDataForm :source="Object.assign({},item)" row="1"
+      <RadDataForm :source="item" row="1"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label class="h3"  row="2" paddingLeft="15"
             :text="$t('tableNumbers') + $t('tapLongToDelete')"/>
@@ -86,12 +86,9 @@ export default {
       this.$navigateBack()
     },
     addSpot() {
-      console.log("=====display modal")
       this.$showModal(SpotAdd, { props: { accommodationArea: this.item}})
       .then(() => {
-        console.log("=====make tablel")
         this.makeTableMatix()
-        console.log("===table finished")
       })
     },
     deleteSpot(table) {
