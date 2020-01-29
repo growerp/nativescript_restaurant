@@ -7,7 +7,7 @@
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('preparation')">
-        <GridLayout rows="* ,50" class="p-10">
+        <GridLayout rows="* ,50" padding="10">
           <RadListView for="item in preps" row="0"><!-- @itemTap not work on IOS -->
             <v-template name="header">
               <StackLayout>
@@ -24,7 +24,7 @@
             </v-template>
             <v-template>
               <GridLayout columns="50, *, auto,10, auto" rows="*" class="p-5"
-                  @tap="$navigateTo($routes.PrepDetail,{props: {item: item}})"
+                  @tap="$navigateTo($routes.PrepDetail,{props: {item: Object.assign({},item)}})"
                   @longPress="onPrepAreaDeleteTap(item)">
                 <Image :src="item.image" col="0"/>
                 <label :text="item.description" class="h2 m-l-10" col="1"/>
@@ -37,7 +37,7 @@
         </GridLayout>
       </TabViewItem>
       <TabViewItem :title="$t('tableAreas')">
-        <GridLayout rows="* ,50" class="m-10">
+        <GridLayout rows="* ,50" padding="10">
           <RadListView for="item in areas" row="0">
             <v-template name="header">
               <StackLayout>
@@ -52,7 +52,7 @@
             </v-template>
             <v-template>
               <GridLayout columns="50, *, auto" rows="*" class="p-5"
-                  @tap="$navigateTo($routes.AreaDetail,{props:{item:item}})"
+                  @tap="$navigateTo($routes.AreaDetail,{props:{item:Object.assign({},item)}})"
                   @longPress="onAccomAreaDeleteTap(item)">
                 <Image :src="item.image" col="0"/>
                 <label :text="item.description" class="h2 m-l-10" col="1"/>

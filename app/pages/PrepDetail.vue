@@ -14,7 +14,7 @@
         <Button class="button" :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('prep', item.preparationAreaId)"/>
       </GridLayout>
-      <RadDataForm ref="itemForm" :source="Object.assign({},item)" row="1"
+      <RadDataForm ref="itemForm" :source="item" row="1"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
       <Label :text="$t('categoriesPrepared')" class="h3" row="2"
           paddingLeft="15"/>
@@ -70,7 +70,7 @@ export default {
         this.$backendService.downloadImage('medium', 'prep',
           this.item.preparationAreaId)
           .then(result => { this.itemImage = result.data.imageFile })}
-},
+  },
   methods: {
     onItemCommitted(data) {
       this.editedItem = JSON.parse(data.object.editedObject)
