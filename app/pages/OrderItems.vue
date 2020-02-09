@@ -8,7 +8,7 @@
           :text="$t('totalAmount') + ': ' + getOrderTotal" />
     </ActionBar>
     <StackLayout>
-      <GridLayout columns="auto,auto,*" rows="*,auto,60">
+      <GridLayout rows="*,50,90">
         <RadListView ref="listView" for="item in orderItems"
               row="0" colSpan="3"
               @itemTap="onItemDeleteTap" height="80%"

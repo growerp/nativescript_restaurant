@@ -1,6 +1,7 @@
 /*
   Pointers to printer drivers:
   https://github.com/leesiongchan/react-native-esc-pos
+  https://blog.csdn.net/iosYangming/article/details/80270469 (translated)
 
 
 

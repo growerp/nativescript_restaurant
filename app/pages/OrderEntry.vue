@@ -5,7 +5,7 @@
           :openDrawer="openDrawer" 
           :headerNoI18n="header"/>
     </ActionBar>
-    <GridLayout rows="*,80,60">
+    <GridLayout rows="*,50,90">
       <Accordion row="0" height="100%"
           ref="accordion" allowMultiple="true"
           for="item of categoriesAndProducts" childItems="products">
