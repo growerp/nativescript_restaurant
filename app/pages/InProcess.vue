@@ -9,7 +9,7 @@
       <!-- create a list for every preparation area -->
       <TabViewItem v-for="(prep, index) in this.prepAreas"
           :key="index" :col="index" :title="prep.description">
-        <GridLayout rows="*,auto,50" class="p-10">
+        <GridLayout rows="*,auto,90" class="p-10">
           <Accordion allowMultiple="false" height="100%" row="0"
               for="item of $store.getters.openOrdersByPrepId(
                 prep.preparationAreaId)"  childItems="items"

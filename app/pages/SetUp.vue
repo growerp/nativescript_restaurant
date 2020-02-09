@@ -5,7 +5,7 @@
           :onHeaderTap="onHeaderTapHome"
           :reload="reload" :onActionTap="backToDefault"/>
     </ActionBar>
-    <GridLayout rows="*, auto, 200, 50" class="p-10">
+    <GridLayout rows="*, auto, 200, 90" class="p-10">
       <RadCartesianChart>
         <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
           :minimum=fromDate :maximum=thruDate
