@@ -1,16 +1,7 @@
-/*
-  Pointers to printer drivers:
-  https://github.com/leesiongchan/react-native-esc-pos
-  https://blog.csdn.net/iosYangming/article/details/80270469 (translated)
-
-
-
-
-*/
 import store from "../store"
-import {PrintClient} from "nativescript-ichi-printer";
-const platformModule = require("tns-core-modules/platform")
-const defaultIp = platformModule.isAndroid? '10.0.2.2': 'localhost'
+import {PrintClient} from "nativescript-escpos-printer";
+import { isAndroid } from 'tns-core-modules/platform';
+const defaultIp = isAndroid? '10.0.2.2': 'localhost'
 const esc = '\x1B'; //ESC byte in hex notation
 const test = '012345678901234567890123456789012345678901234567' // width 80mm
 const newLine = '\x0A'; //LF byte in hex notation
@@ -51,7 +42,6 @@ export default class PrintService {
         let cmds = center + order.table + newLine + newLine
         cmds += tabs
         cmds += tab + 'Quant.' + tab + 'Decription' + tab + 'price' + tab + 'Total' + newLine;
-        console.log("====2===== items: " + order.items.length)
         order.items.forEach(a => {
           cmds += tab + a.quantity + tab + a.description + tab + a.price 
             + tab + a.totalAmount + ' ' + store.getters.company.currencyId + newLine;
@@ -65,7 +55,6 @@ export default class PrintService {
   }
 
   printTicket(ip, content) {
-    console.log("Incoming printer ip: " + ip)
     const header = reset + doubleHeightOn + center + 
     store.getters.company.organizationName + doubleHeightOff +
     newLine + newLine 
@@ -76,37 +65,12 @@ export default class PrintService {
     }
     if (!ip)
     if (TNS_ENV != 'production') {
-        if (platformModule.isAndroid) ip = defaultIp
+        if (isAndroid) ip = defaultIp
     }
     if (!ip || !port) return 'printerIp and/or port not defined'
 
     console.log("printing on ip: " + ip + ' port: ' + port)
-    var printClient = new PrintClient(0);
-    printClient.onData = (data) => {
-      console.log("Data from Printer: ", data);
-    };
-    printClient.onError = (id, message) => {
-        console.log("Print client error for action #", id, ": ", message);
-    };
-    printClient.connect(ip, port);
-    printClient.onConnected = (id) => {
-      console.log("Print client connected action #: ", id);
-      var message = header + content + cut
-      var bytes = [];
-      for (var i = 0; i < message.length; i++) {
-          var c = message.charCodeAt(i);
-          bytes.push(c & 0xFF);
-      }
-      bytes.push(0x0A);
-      printClient.send(bytes);
-    };
-    printClient.onSent = (id) => {
-        console.log("Print client sent action #: ", id);
-        // When we are finished
-        printClient.close();
-    };
-    printClient.onClosed = (id) => {
-      console.log("Print client closed action #: ", id);
-    };
+    var printClient = new PrintClient
+    printClient.print(ip,port, header + content + cut)
   }
 }
