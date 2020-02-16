@@ -93,8 +93,6 @@ export default {
         this.currentTab = args.value
     },
     rePrint(item) {
-      if (isIOS) alert("IOS printer not supported yet, check again in a couple of weeks!")
-      else {
       let result = ''
       if (item.statusId == 'OrderApproved') {
         result = this.$printService.receiptTicket(item.orderId)
@@ -110,7 +108,7 @@ export default {
             this.$navigateTo(this.$routes.PrepDetail, {props: { item: prep }})
           }
         })
-      }}
+      }
     },
     setDone(item) {
       this.$store.dispatch('orderStatus', { spotId: item.spotId,

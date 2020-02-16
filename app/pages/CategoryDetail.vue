@@ -42,7 +42,7 @@
   import ProductAdd from './modalPages/ProductAdd'
   import Confirm from './modalPages/Confirm'
   import general from '~/mixins/general'
-  const platformModule = require("tns-core-modules/platform")
+  import { isIOS } from 'tns-core-modules/platform';
   export default {
     name: 'CategoryDetail',
     mixins: [ imageSelector,general, sideDrawer ],
@@ -69,7 +69,7 @@
       this.$backendService.downloadImage('medium', 'category',
           this.item.productCategoryId)
       .then(result => { this.itemImage = result.data.imageFile})
-      if (platformModule.isIOS) { // returns an index instead of value so change
+      if (isIOS) { // returns an index instead of value so change
         this.item.description = this.prepAreas.findIndex(
             o => o === this.item.description)}
     },
@@ -87,7 +87,7 @@
         if (this.editedItem) {
           if (!this.editedItem.categoryName) this.note(this.$t('nameIsRequired'))
           else {
-            if (platformModule.isIOS) { // returns an index instead of value so change
+            if (isIOS) { // returns an index instead of value so change
               this.editedItem.description = 
                   this.prepAreas[parseInt(this.editedItem.description,10)]}
             this.editedItem.preparationAreaId =
