@@ -65,7 +65,7 @@ export default class PrintService {
     }
     if (!ip)
     if (TNS_ENV != 'production') {
-        if (isAndroid) ip = defaultIp
+        ip = defaultIp
     }
     if (!ip || !port) return 'printerIp and/or port not defined'
 
