@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded()">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
         <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :plus="true" 
             :onActionTap="onAddTap"
@@ -7,7 +7,6 @@
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
       <TabViewItem :title="$t('preparation')">
-        <GridLayout rows="* ,50" padding="10">
           <RadListView for="item in preps" row="0"><!-- @itemTap not work on IOS -->
             <v-template name="header">
               <StackLayout>
@@ -34,10 +33,8 @@
               </GridLayout>
             </v-template>
           </RadListView>
-        </GridLayout>
       </TabViewItem>
       <TabViewItem :title="$t('tableAreas')">
-        <GridLayout rows="* ,50" padding="10">
           <RadListView for="item in areas" row="0">
             <v-template name="header">
               <StackLayout>
@@ -61,7 +58,6 @@
               </GridLayout>
             </v-template>
           </RadListView>
-        </GridLayout>
       </TabViewItem>
     </TabView>
   </Page>

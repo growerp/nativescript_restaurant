@@ -53,8 +53,6 @@
 		</array>
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false/>
-		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-3815355572205814~5023997360</string>
 		<key>NSCameraUsageDescription</key>
 		<string>$(PRODUCT_NAME) would like to use your camera to add pictures to users, products and tables</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>

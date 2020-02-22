@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar header="upgrade" :onHeaderTap="onHeaderTapHome" :back=true />
     </ActionBar>

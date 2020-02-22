@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded()">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :save="save" :plus="plus" 
         :onActionTap="onActionTap" :back=true
@@ -7,8 +7,7 @@
     </ActionBar>
 
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
-      <TabViewItem :title="$t('employee') + ' max:' + subscribedUsers()">
-        <GridLayout rows="*, 50" class="p-10">
+      <TabViewItem :title="$t('employees')">
           <RadListView for="item in employees" row="0">
             <v-template name="header">
               <StackLayout>
@@ -39,7 +38,6 @@
               </GridLayout>
             </v-template>
           </RadListView>
-        </GridLayout>
       </TabViewItem>
 
       <TabViewItem :title="$t('customer')">
@@ -154,10 +152,10 @@ export default {
     onActionTap() {
       switch(this.currentTab) {
         case 0: // employees
-          if (this.employees.length >= this.subscribedUsers()) {
-            this.note(this.$t('maxEmployeesReached'))
-            this.$navigateTo(this.$routes.Upgrade)
-          } else
+  //        if (this.employees.length >= this.subscribedUsers()) {
+  //          this.note(this.$t('maxEmployeesReached'))
+  //          this.$navigateTo(this.$routes.Upgrade)
+  //        } else
             this.$showModal(UserAdd, {props: { roleTypeId: 'Employee'}})
           break
         case 1: // customer
