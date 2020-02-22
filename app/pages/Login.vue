@@ -3,7 +3,7 @@
     <FlexboxLayout class="page">
       <StackLayout class="form">
         <Image class="logo" src="~/assets/images/growerp.png"/>
-        <!-- Label class="header"> {{ $t("login" )}} {{ $t("restaurant") }} </Label-->
+        <Label class="header"> {{ $t("login" )}} {{ $t("restaurant") }} </Label>
 
         <GridLayout rows="auto, auto, auto, auto, auto" columns="*,*" width="100%">
           <StackLayout row="0" col="0" colSpan="2"  v-show="isLoggingIn" class="input-field">
@@ -11,7 +11,6 @@
                 autocorrect="false" ref="username" 
                 autocapitalizationType="none" v-model="user.name"
                 returnKeyType="next" ></TextField>
-            <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
           <StackLayout row="0" col="0" v-show="!isLoggingIn" class="input-field">
@@ -19,7 +18,6 @@
                 autocorrect="false"
                 autocapitalizationType="none" v-model="company.name"
                 returnKeyType="next" ></TextField>
-            <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
           <StackLayout row="0" col="1"  v-show="!isLoggingIn" class="input-field" height="30">
@@ -33,7 +31,6 @@
                   autocorrect="false"
                   autocapitalizationType="none" v-model="user.firstName"
                   returnKeyType="next"></TextField>
-            <StackLayout class="hr-light"/>
           </StackLayout>
 
           <StackLayout row="1" col="1" v-show="!isLoggingIn" class="input-field">
@@ -41,29 +38,20 @@
                 autocorrect="false"
                 autocapitalizationType="none" v-model="user.lastName"
                 returnKeyType="next"></TextField>
-            <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
           <StackLayout row="2" col="0" colSpan="2" v-show="!isLoggingIn" class="input-field">
+            <Label :text="$t('passwordByEmail')" class="warning"/>
             <TextField class="input" :hint="$t('email')" :isEnabled="!processing"
                 keyboardType="email" autocorrect="false"
                 autocapitalizationType="none" v-model="user.emailAddress"
                 returnKeyType="next"></TextField>
-            <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
-          <StackLayout row="3" col="0" colSpan="2" class="input-field">
+          <StackLayout row="3" col="0" colSpan="2" class="input-field" v-show="isLoggingIn"> 
             <TextField class="input" ref="password" :isEnabled="!processing"
                 :hint="$t('password')" secure="true" v-model="user.password"
                 :returnKeyType="isLoggingIn ? 'done' : 'next'"></TextField>
-            <StackLayout class="hr-light"></StackLayout>
-          </StackLayout>
-
-          <StackLayout row="4" col="0" colSpan="2" v-show="!isLoggingIn" class="input-field">
-            <TextField class="input" ref="confirmPassword" :isEnabled="!processing"
-                :hint="$t('confirmPassword')" secure="true" v-model="user.confirmPassword"
-                returnKeyType="done"></TextField>
-            <StackLayout class="hr-light"></StackLayout>
           </StackLayout>
 
           <ActivityIndicator col="0" colSpan="2" :busy="processing"/>
@@ -163,6 +151,7 @@ const appSettings = require("tns-core-modules/application-settings")
     },
     methods: {
       toggleForm() {
+        this.processing = false
         this.isLoggingIn = !this.isLoggingIn;
         if (!this.isLoggingIn && !this.currencyUomIds){
           console.log("====pinginh now====")
@@ -387,7 +376,7 @@ const appSettings = require("tns-core-modules/application-settings")
 
     .login-label {
         horizontal-align: center;
-        color: #A8A8A8;
+        color: rgb(19, 16, 16);
         font-size: 16;
     }
 
@@ -402,5 +391,11 @@ const appSettings = require("tns-core-modules/application-settings")
         font-size: 16;
         color: black;
         text-align: center;
+    }
+    .warning {
+        font-size: 16;
+        color:#D51A1A;
+        margin-left: 15;
+        height: 25;
     }
 </style>
