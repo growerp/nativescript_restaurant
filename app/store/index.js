@@ -1,7 +1,6 @@
 import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 
-import sideDrawer from './modules/sideDrawer'
 import general from './modules/general'
 import catProd from './modules/catProd'
 import location from './modules/location'
@@ -16,7 +15,7 @@ const debug = process.env.NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
   modules: {
-    sideDrawer,
+    
     general,
     catProd,
     location,

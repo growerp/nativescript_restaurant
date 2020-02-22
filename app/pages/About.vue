@@ -1,7 +1,7 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" :header="versionText" :onHeaderTap="onHeaderTapSetUp"/>
+      <myActionBar :header="versionText" :onHeaderTap="onHeaderTapHome" :back=true />
     </ActionBar>
     <ScrollView>
       <StackLayout padding="10">
@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
 import general from '~/mixins/general'
 
 export default {
@@ -23,7 +22,7 @@ export default {
       text: this.policy()
     }
   },
-  mixins: [sideDrawer, general],
+  mixins: [general],
   methods: {
     version() {
       var appversion = require("nativescript-appversion")

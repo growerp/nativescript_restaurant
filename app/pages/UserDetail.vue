@@ -1,7 +1,7 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTap" :save="true" :back="true"
+      <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
           :onActionTap="onSaveTap"
           :headerNoI18n="$t(item.roleTypeId.toLowerCase()) + ' ' + 
               this.$t('detailedInfo')"/>

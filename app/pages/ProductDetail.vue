@@ -1,8 +1,8 @@
 <template>
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
-          :onActionTap="onSaveTap" :openDrawer="openDrawer" header="productDetail"/>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
+          :onActionTap="onSaveTap" header="productDetail"/>
     </ActionBar>
     <StackLayout>
       <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
@@ -20,13 +20,13 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 const platformModule = require("tns-core-modules/platform")
 export default {
   name: 'ProductDetail',
-  mixins: [ imageSelector, general, sideDrawer],
+  mixins: [ imageSelector, general, ],
   props: {
     item: Object,
   },

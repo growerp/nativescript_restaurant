@@ -1,7 +1,7 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" header="dashBoard"
+      <myActionBar header="dashBoard"
         :reload="reload" :onActionTap="backToDefault" :onHeaderTap=null />
     </ActionBar>
     <GridLayout rows="*, 200, 80" class="p-10">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import general from '~/mixins/general'
 import TableDetail from './modalPages/TableDetail'
 const appSettings = require("tns-core-modules/application-settings");
@@ -68,7 +68,7 @@ export default {
       tables: [],
     }
   },
-  mixins: [sideDrawer, general],
+  mixins: [ general],
   created() {
     this.area = this.accommodationAreaId ?
       this.$store.getters.accommodationAreaById(this.accommodationAreaId):
@@ -113,8 +113,10 @@ export default {
               pageName: 'Help', pageTab: 0},
         {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),
               pageName: 'MyInfo', pageTab: 0},
+        {id: 9, image: '~/assets/images/logout.png', title: this.$t('logout'),
+              pageName: 'Logout', pageTab: 0},
         this.$store.getters.currentEmployeeUserGroupId === 'GROWERP_M_ADMIN' ?
-          {id: 8, image: '~/assets/images/setup.png', title: this.$t('admin'),
+          {id: 10, image: '~/assets/images/setup.png', title: this.$t('admin'),
               pageName: 'SetUp', pageTab: 0}: ''
       ]
       appSettings.remove('dashBoard')
@@ -124,7 +126,12 @@ export default {
       if (args.item.pageName === 'MyInfo')
         this.$navigateTo(this.$routes.UserDetail,
             {props: { item: this.$store.getters.currentEmployee, myInfo: true}})
-      else
+      else if (args.item.pageName === 'Logout') {
+          this.$backendService.removeKey()
+          console.log('logged out')
+          this.$navigateTo(this.$routes.Login, {clearHistory: true})
+//            exit() // exit caused update of apiKey to be ignored
+      } else
         this.$navigateTo(eval("this.$routes." + args.item.pageName),
             {props: { startTab: args.item.pageTab}})
     },

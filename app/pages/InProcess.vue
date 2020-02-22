@@ -1,7 +1,7 @@
 <template>
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
+      <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           header="inProcess"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange"
@@ -65,14 +65,14 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import general from '~/mixins/general'
 import Confirm from './modalPages/Confirm'
 import { isIOS, isAndroid } from 'tns-core-modules/platform';
 
 export default {
   name: 'inProcess',
-  mixins: [ sideDrawer, general ],
+  mixins: [  general ],
   props: {
       startTab: Number
   },

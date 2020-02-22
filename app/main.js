@@ -7,8 +7,7 @@ import routes from '~/router'
 import RadListView from 'nativescript-ui-listview/vue'
 import RadDataForm from 'nativescript-ui-dataform/vue'
 import RadChart from 'nativescript-ui-chart/vue'
-import sideDrawer from '~/components/sideDrawer'
-import drawerContent from '~/components/drawerContent'
+import App from '~/pages/Login'
 import VueI18n from 'vue-i18n'
 import messages from '~/lang/messages'
 import dateTimeFormats from './lang/dateTimeFormats'
@@ -25,7 +24,6 @@ Vue.use(Vuex)
 Vue.use(VueI18n)
 
 Vue.registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown)
-Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 const backendService = new BackendService()
 Vue.prototype.$backendService = backendService
 const printService = new PrintService()
@@ -82,12 +80,5 @@ application.on(application.discardedErrorEvent, function (args) {
 new Vue({
   i18n,
   store,
-  render (h) {
-    return h(
-      sideDrawer, [
-        h(drawerContent, { slot: 'drawerContent'}),
-        h(routes.Login, { slot: 'mainContent'})
-      ]
-    )
-  }
+  render: h => h('frame', [h(App)]) 
 }).$start()

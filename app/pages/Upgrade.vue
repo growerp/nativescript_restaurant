@@ -1,7 +1,7 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" header="upgrade" :onHeaderTap="onHeaderTapSetUp"/>
+      <myActionBar header="upgrade" :onHeaderTap="onHeaderTapHome" :back=true />
     </ActionBar>
     <StackLayout paddingTop="5">
       <Label class="h2" :text="$t('monthlySubscriptions')" horizontalAlignment="center"/>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import general from '~/mixins/general'
 var purchase = require("nativescript-purchase");
 var transaction = require("nativescript-purchase/transaction");
@@ -41,7 +41,7 @@ var purchase = require("nativescript-purchase");
 
 export default {
     name: 'Upgrade',
-    mixins: [ sideDrawer, general],
+    mixins: [  general],
     data() {
         return {
           itemList: [],
