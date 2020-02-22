@@ -1,11 +1,11 @@
 <template>
-  <Page @loaded="pageLoaded()">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :save="true" 
         :onActionTap="onActionTap"
         header="company"/>
     </ActionBar>
-    <GridLayout rows="auto, *, 50" class="p-10">
+    <GridLayout rows="auto, *" class="p-10">
       <GridLayout width="100%" columns="100,30,*" rows="50,50" row="0">
         <Image ref="itemForm" :src="itemImage" width="100" height="100"
             col="0" row="0" rowSpan="2" padding="10"/>

@@ -1,10 +1,10 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
           :onActionTap="onSaveTap" header="areaDetail"/>
     </ActionBar>
-    <GridLayout rows="auto, auto, auto,*, auto, 50">
+    <GridLayout rows="auto, auto, auto,*, auto">
       <GridLayout width="100%" columns="100,30,*" rows="50,50" 
             padding="20" row="0">
         <Image ref="areaForm" :src="itemImage" width="100"

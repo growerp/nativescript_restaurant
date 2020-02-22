@@ -1,10 +1,9 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :plus="true" 
             :onActionTap="onAddTap" header="categories"/>
     </ActionBar>
-    <GridLayout rows="*, 50" class="p-10">
       <RadListView for="item in itemList" height="100%" row="0">
           <v-template name="header">
             <StackLayout>
@@ -38,7 +37,6 @@
             <Label :text="'Total categories: ' + itemList.length"/>
           </v-template>
       </RadListView>
-    </GridLayout>
   </Page>
 </template>
 

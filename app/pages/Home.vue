@@ -1,10 +1,10 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar header="dashBoard"
         :reload="reload" :onActionTap="backToDefault" :onHeaderTap=null />
     </ActionBar>
-    <GridLayout rows="*, 200, 80" class="p-10">
+    <GridLayout rows="*, 200" class="p-10">
       <Stacklayout row="0">
         <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
           @propertyCommitted="onAreaCommitted" color="green"/>
@@ -107,8 +107,8 @@ export default {
         //  pageName: 'Billing', pageTab: 2},
         {id: 5, image: '~/assets/images/report.png', title: this.$t('reports'),
               pageName: 'Reports', pageTab: 0},
-        {id: 6, image: '~/assets/images/task.png', title: this.$t('tasks'),
-          pageName: 'Tasks', pageTab: 0},
+        //{id: 6, image: '~/assets/images/task.png', title: this.$t('tasks'),
+        //  pageName: 'Tasks', pageTab: 0},
         {id: 7, image: '~/assets/images/help.png', title: this.$t('help'),
               pageName: 'Help', pageTab: 0},
         {id: 8, image: '~/assets/images/myInfo.png', title: this.$t('myInfo'),

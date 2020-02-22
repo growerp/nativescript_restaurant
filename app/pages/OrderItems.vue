@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           
@@ -8,7 +8,7 @@
           :text="$t('totalAmount') + ': ' + getOrderTotal" />
     </ActionBar>
     <StackLayout>
-      <GridLayout rows="*,50,90">
+      <GridLayout rows="*,50">
         <RadListView ref="listView" for="item in orderItems"
               row="0" colSpan="3"
               @itemTap="onItemDeleteTap" height="80%"

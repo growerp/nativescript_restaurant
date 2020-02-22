@@ -1,12 +1,12 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           
           header="export"/>
     </ActionBar>
     <StackLayout padding="20">
-      <Button class="button" text="Export Orders" 
+      <Button class="-active -rounded-lg" text="Export Orders" 
         width="50%" @tap="orders"/>
       <Button class="button" text="Export Customers" 
         width="50%" @tap="customers"/>

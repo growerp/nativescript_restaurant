@@ -1,14 +1,13 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :plus="true" 
             :onActionTap="onAddTap" header="product"/>
     </ActionBar>
-    <GridLayout rows="*, 50" class="p-10">
+    <GridLayout rows="*" padding="10">
       <RadListView for="item in itemList" row="0">
         <v-template name="header">
-          <StackLayout>
-            <GridLayout columns="60, *, auto" rows="*">
+            <GridLayout columns="60, *, auto">
               <Image src="~/assets/images/search.png" 
                 width="30" col="0" @tap="searchTap"/>
               <StackLayout col="1">
@@ -19,8 +18,6 @@
               </StackLayout>
               <label :text="$t('price')" col="2" class="h3"/>
              </GridLayout>
-             <StackLayout class="hr-dark m-5"/>
-          </StackLayout>
         </v-template>
         <v-template>
           <GridLayout columns="50, *, auto" rows="*"

@@ -1,11 +1,11 @@
 <template>
-  <Page @loaded="pageLoaded(0)">
+  <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar header="admin" 
           :onHeaderTap="onHeaderTapHome" :back="true"
           :reload="reload" :onActionTap="backToDefault"/>
     </ActionBar>
-    <GridLayout rows="*, auto, 200, 90" class="p-10">
+    <GridLayout rows="*, auto, 200" class="p-10">
       <RadCartesianChart>
         <DateTimeContinuousAxis v-tkCartesianHorizontalAxis
           :minimum=fromDate :maximum=thruDate
@@ -115,8 +115,8 @@ export default {
             pageName: 'Organization', pageTab: 0},
           {id: 6, image: '~/assets/images/customers.png', title: this.$t('customer'),
             pageName: 'Organization', pageTab: 1},
-          {id: 7, image: '~/assets/images/payment.png', title: this.$t('upgrade'),
-              pageName: 'Upgrade', pageTab: 0},
+          // {id: 7, image: '~/assets/images/payment.png', title: this.$t('upgrade'),
+          //    pageName: 'Upgrade', pageTab: 0},
           {id: 8, image: '~/assets/images/export.png', title: this.$t('export'),
             pageName: 'Export', pageTab: 0},
           {id: 9, image: '~/assets/images/about.png', title: this.$t('about'),
