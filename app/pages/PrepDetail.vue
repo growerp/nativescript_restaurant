@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
-          :onActionTap="onSaveTap" :openDrawer="openDrawer" header="preparationAreaDetail"/>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
+          :onActionTap="onSaveTap" header="preparationAreaDetail"/>
     </ActionBar>
     <GridLayout rows="auto, auto, auto,*, auto, 50">
       <GridLayout width="100%" columns="100,30,*" rows="50,50,"
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import PrepCategoryMove from './modalPages/PrepCategoryMove'
@@ -45,7 +45,7 @@ import Confirm from './modalPages/Confirm'
   
 export default {
   name: 'PrepDetail',
-  mixins: [ imageSelector, general, sideDrawer],
+  mixins: [ imageSelector, general, ],
   props: {
       item: Object
   },

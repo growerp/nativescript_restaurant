@@ -2,9 +2,7 @@
   <GridLayout width="100%" columns="auto, 10, *, 10, auto, 10" rows="auto">
     <Image src="~/assets/images/go-back-arrow.png" height="25"
         @tap="$navigateBack" col="0" :visibility="back?'visible':'hidden'"/>
-    <Image src="~/assets/images/menu.png" height="25" @tap="openDrawer" 
-      col="0" :visibility="back? 'hidden':'visible'"/>
-    <StackLayout orientation="horizontal" @tap="onHeaderTap" 
+      <StackLayout orientation="horizontal" @tap="onHeaderTap" 
         horizontalAlignment="center" col="2">
       <Image src="~/assets/images/go-up-arrow.png" height="25" 
           :visibility="onHeaderTap?'visible':'hidden'"/>
@@ -29,7 +27,6 @@
     name: 'myActionBar',
     props: {
       back: {type: Boolean, default: false},
-      openDrawer: {type: Function, default: function(){}},
       onHeaderTap: {type: Function, default: function(){}},
       onActionTap: {type: Function, default: function(){}},
       save: {type: Boolean, default: false},

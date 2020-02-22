@@ -119,9 +119,6 @@ describe("2. Start test create order on GrowERP-restaurant App", () => {
         const logInButton = await driver.findElementByClassName(driver.locators.button);
         await logInButton.click();
         driver.wait("5000");
-        /*const imageviewElement = await driver.findElementsByClassName("android.widget.ImageView");
-        await imageviewElement[1].click();*/
-        // Open SideDrawer
         const imageviewElement = await driver.findElementByClassName("android.widget.ImageView");
         await imageviewElement.click();
         driver.wait("2000");

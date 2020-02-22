@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-        <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
-            :onActionTap="onAddTap" :openDrawer="openDrawer"
+        <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :plus="true" 
+            :onActionTap="onAddTap"
             header="locations"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import AreaAdd from './modalPages/AreaAdd'
 import PrepAdd from './modalPages/PrepAdd'
 import general from '~/mixins/general'
@@ -76,7 +76,7 @@ import Confirm from './modalPages/Confirm'
 
 export default {
   name: 'Locations',
-  mixins: [ sideDrawer, general ],
+  mixins: [  general ],
   props: {
       startTab: Number
   },

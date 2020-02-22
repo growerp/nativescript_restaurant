@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
-          :openDrawer="openDrawer" 
+          
           :header="this.$t('table') + this.orderHeader.description + '-' +
              ' ' + this.orderHeader.spotNumber"
           :text="$t('totalAmount') + ': ' + getOrderTotal" />
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import general from '~/mixins/general'
 export default {
   name: 'OrderItems',
@@ -56,7 +56,7 @@ export default {
     orderHeader: {},
     orderItems: ''
   },
-  mixins: [ sideDrawer,general ],
+  mixins: [ general ],
   computed: {
     getOrderTotal: function () {
       let items = this.orderItems.length; let quantities = 0; let totalPrice = 0.00

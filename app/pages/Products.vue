@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :plus="true" 
-            :onActionTap="onAddTap" :openDrawer="openDrawer" header="product"/>
+      <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :plus="true" 
+            :onActionTap="onAddTap" header="product"/>
     </ActionBar>
     <GridLayout rows="*, 50" class="p-10">
       <RadListView for="item in itemList" row="0">
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import ProductAdd from './modalPages/ProductAdd'
 import Confirm from './modalPages/Confirm'
 import Search from './modalPages/Search'
@@ -52,7 +52,7 @@ import general from '~/mixins/general'
 
 export default {
   name: 'products',
-  mixins: [ sideDrawer, general ],
+  mixins: [  general ],
   data () {
     return {
       itemList: this.$store.getters.products,

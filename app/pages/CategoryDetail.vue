@@ -1,8 +1,8 @@
 <template>
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" :back="true"
-          :onActionTap="onSaveTap" :openDrawer="openDrawer"
+      <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
+          :onActionTap="onSaveTap"
           header="categoryDetail"/>
     </ActionBar>
     <GridLayout rows="auto, auto, auto, *, auto, 50">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import sideDrawer from '~/mixins/sideDrawer'
+  
   import imageSelector from '~/mixins/imageSelector'
   import ProdCategoryMove from './modalPages/ProdCategoryMove'
   import ProductAdd from './modalPages/ProductAdd'
@@ -45,7 +45,7 @@
   import { isIOS } from 'tns-core-modules/platform';
   export default {
     name: 'CategoryDetail',
-    mixins: [ imageSelector,general, sideDrawer ],
+    mixins: [ imageSelector,general ],
     props: {
       item: Object,
     },

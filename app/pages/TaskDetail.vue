@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
-          :onActionTap="onSaveTap" :openDrawer="openDrawer" header="taskDetail"/>
+          :onActionTap="onSaveTap" header="taskDetail"/>
     </ActionBar>
     <StackLayout>
       <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
@@ -20,14 +20,14 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import Confirm from './modalPages/Confirm'
 const platformModule = require("tns-core-modules/platform")
 export default {
   name: 'TaskDetail',
-  mixins: [ imageSelector,general, sideDrawer ],
+  mixins: [ imageSelector,general ],
   props: {
       item: Object,
   },

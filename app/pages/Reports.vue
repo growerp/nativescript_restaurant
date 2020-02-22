@@ -1,8 +1,7 @@
 <template>
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapHome" :openDrawer="openDrawer"
-          header="reports"/>
+      <myActionBar :back="true" header="reports" :onHeaderTap=null />
     </ActionBar>
     <TabView>
       <TabViewItem :title="$t('allOrders')">
@@ -92,10 +91,10 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import general from '~/mixins/general'
 export default {
-  mixins: [ sideDrawer, general ],
+  mixins: [  general ],
   props: {
       startTab: Number,
       startDate: '',

@@ -2,7 +2,7 @@
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
-          :openDrawer="openDrawer" 
+          
           :headerNoI18n="header"/>
     </ActionBar>
     <GridLayout rows="*,50,90">
@@ -41,14 +41,14 @@
 
 <script>
 import general from '~/mixins/general'
-import sideDrawer from '~/mixins/sideDrawer'
+
 
 export default {
   name: 'OrderEntry',
   props: {
       orderHeader: {}
   },
-  mixins: [ sideDrawer, general ],
+  mixins: [  general ],
   data() {
     return {
       header: this.$t('orderFor') + this.$t('table') + 

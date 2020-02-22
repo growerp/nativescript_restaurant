@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :back="true"
-          :openDrawer="openDrawer" 
+      <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
+          
           header="export"/>
     </ActionBar>
     <StackLayout padding="20">
@@ -18,11 +18,11 @@
 
 <script>
 import general from '~/mixins/general'
-import sideDrawer from '~/mixins/sideDrawer'
+
 
 export default {
   name: 'Export',
-  mixins: [ sideDrawer, general ],
+  mixins: [  general ],
   methods: {
     orders() {
       this.$backendService.exportOrders(null) // add start date later

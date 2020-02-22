@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :openDrawer="openDrawer" header="admin" 
-          :onHeaderTap="onHeaderTapHome"
+      <myActionBar header="admin" 
+          :onHeaderTap="onHeaderTapHome" :back="true"
           :reload="reload" :onActionTap="backToDefault"/>
     </ActionBar>
     <GridLayout rows="*, auto, 200, 90" class="p-10">
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import general from '~/mixins/general'
 const appSettings = require("tns-core-modules/application-settings");
 
@@ -57,7 +57,7 @@ export default {
         dateFormat: 'MMM-dd',
       }
     },
-    mixins: [ sideDrawer, general],
+    mixins: [  general],
     created() {
       this.getReport('Day')
       console.log('====fromDate/ThruDate:  ' + this.fromDate + ' / ' + this.thruDate)

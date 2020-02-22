@@ -2,7 +2,7 @@
   <Page @loaded="pageLoaded(0)">
     <ActionBar><NavigationButton visibility="collapsed"/>
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
-          :openDrawer="openDrawer" :headerNoI18n="header"/>
+          :headerNoI18n="header"/>
     </ActionBar>
     <GridLayout rows="auto,50,50">
       <RadDataForm :source="orderHeaderInfo" :metadata="orderHeaderInfoMeta"
@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import general from '~/mixins/general'
 import * as frameModule from 'tns-core-modules/ui/frame'
 import { AutoCompleteDisplayMode } from 'nativescript-ui-dataform'
 export default {
   name: 'orders',
-  mixins: [ sideDrawer, general],
+  mixins: [  general],
   props: {
     orderHeader: Object
   },

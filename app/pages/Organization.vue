@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="save" :plus="plus" 
-        :onActionTap="onActionTap" :openDrawer="openDrawer"
+      <myActionBar :onHeaderTap="onHeaderTapHome" :save="save" :plus="plus" 
+        :onActionTap="onActionTap" :back=true
         header="companyEmplCust"/>
     </ActionBar>
 
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 import UserAdd from './modalPages/UserAdd'
@@ -95,7 +95,7 @@ import passwordUpdate from './modalPages/PasswordUpdate'
 import { isIOS } from 'tns-core-modules/platform';
 export default {
   name: 'organization',
-  mixins: [ sideDrawer, imageSelector, general ],
+  mixins: [  imageSelector, general ],
   props: {
     startTab: Number
   },

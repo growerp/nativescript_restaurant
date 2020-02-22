@@ -1,8 +1,8 @@
 <template>
   <Page @loaded="pageLoaded()">
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapSetUp" :save="true" 
-        :onActionTap="onActionTap" :openDrawer="openDrawer"
+      <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :save="true" 
+        :onActionTap="onActionTap"
         header="company"/>
     </ActionBar>
     <GridLayout rows="auto, *, 50" class="p-10">
@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import sideDrawer from '~/mixins/sideDrawer'
+
 import imageSelector from '~/mixins/imageSelector'
 import general from '~/mixins/general'
 const platformModule = require("tns-core-modules/platform")
 export default {
   name: 'company',
-  mixins: [ sideDrawer, imageSelector, general ],
+  mixins: [  imageSelector, general ],
   data () {
     return {
       editedItem: null,
