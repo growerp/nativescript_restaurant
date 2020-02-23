@@ -28,11 +28,11 @@
         </v-template>
       </Accordion>
       <GridLayout columns="auto,auto,*" row="1">
-        <Button class="button" col="0" text="Expand" 
+        <Button col="0" text="Expand" 
           width="25%" @tap="expandAll"/>
-        <Button class="button" col="1" text="Collapse" 
+        <Button col="1" text="Collapse" 
           width="25%" @tap="collapseAll"/>
-        <Button class="button" col="2" text="Continue" 
+        <Button col="2" text="Continue" 
           width="50%" @tap="goToItems()"/>
       </GridLayout>
     </GridLayout>

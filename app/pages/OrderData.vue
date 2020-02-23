@@ -4,10 +4,10 @@
       <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
           :headerNoI18n="header"/>
     </ActionBar>
-    <GridLayout rows="auto,50,50">
+    <GridLayout rows="*,auto">
       <RadDataForm :source="orderHeaderInfo" :metadata="orderHeaderInfoMeta"
           @propertyCommitted="onHeaderCommitted" row="0" height="80%"/>
-      <Button class="button" :text="$t('continue')" @tap="goToEntry"
+      <Button :text="$t('continue')" @tap="goToEntry"
         row="1" width="50%"/>
     </GridLayout>
   </Page>

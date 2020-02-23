@@ -9,9 +9,9 @@
       <GridLayout width="100%" columns="100,30,*" rows="50,50" row="0">
         <Image ref="itemForm" :src="itemImage" width="100" height="100"
             col="0" row="0" rowSpan="2" padding="10"/>
-        <Button class="button" :text="$t('copyFromGal')"
+        <Button :text="$t('copyFromGal')"
             @tap="selectPicture('company', itemComp.partyId)" col=2 row="0"/>
-        <Button class="button" :text="$t('useCamera')"
+        <Button :text="$t('useCamera')"
             @tap="takePicture('company', itemComp.partyId)" col="2" row="1"/>
       </GridLayout>
       <RadDataForm :source="itemComp" row="1"

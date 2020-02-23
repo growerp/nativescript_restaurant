@@ -8,7 +8,7 @@
           :text="$t('totalAmount') + ': ' + getOrderTotal" />
     </ActionBar>
     <StackLayout>
-      <GridLayout rows="*,50">
+      <GridLayout rows="*,auto">
         <RadListView ref="listView" for="item in orderItems"
               row="0" colSpan="3"
               @itemTap="onItemDeleteTap" height="80%"
@@ -33,12 +33,12 @@
               :text="$t('noItemsOnOrderAddSome')"/>
         </GridLayout>
         <GridLayout columns="*,*" rows="auto" row="1" colSpan="3">
-          <Button class="button" :text="$t('cancel')" 
+          <Button :text="$t('cancel')" 
             @tap="$navigateTo($routes.Home)" col="0"/>
-          <Button class="button" :text="$t('saveOrder')" 
+          <Button :text="$t('saveOrder')" 
               @tap="saveOrder" col="1"
               :visibility="orderItems.length? 'visible':'hidden'"/>
-          <Button class="button" :text="$t('goBack')" 
+          <Button :text="$t('goBack')" 
               @tap="$navigateBack" col="1"
               :visibility="orderItems.length? 'hidden':'visible'"/>
         </GridLayout>

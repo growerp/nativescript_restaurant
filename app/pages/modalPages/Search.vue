@@ -4,8 +4,8 @@
       <label :text="$t(message)" class="h2 text-center" textWrap="true"/>
       <RadDataForm :source="item" @propertyCommitted="onItemCommitted"/>
       <GridLayout columns="*,*" rows="auto">
-        <Button class="button" :text="$t('cancel')" @tap="$modal.close(false)" col="0"/>
-        <Button class="button" :text="$t('ok')" 
+        <Button :text="$t('cancel')" @tap="$modal.close(false)" col="0"/>
+        <Button :text="$t('ok')" 
           @tap="$modal.close(editedItem)" col="1"/>
       </GridLayout>
     </StackLayout></ModalStack>

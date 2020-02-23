@@ -5,6 +5,7 @@
           header="inProcess"/>
     </ActionBar>
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange"
+          style="tabTextColor: lightGreen;selectedTabTextColor: green;"
              paddingTop="10">
       <!-- create a list for every preparation area -->
       <TabViewItem v-for="(prep, index) in this.prepAreas"
@@ -16,7 +17,7 @@
               :visibility="$store.getters.preparationAreaHasOrders(
                 prep.preparationAreaId)? 'visible' : 'collapse'">
             <v-template name="title">
-              <GridLayout columns="50,*,auto" rows="*" paddingBottom="10">
+              <GridLayout columns="50,150,*" rows="*" paddingBottom="10">
                 <Image :src="item.image"  col="0" class="thumbnail"/>
                 <StackLayout paddingLeft="10" col="1">
                   <Label :text="item.table" class="h2"/>
@@ -25,18 +26,14 @@
                   <Label :text="$t('totalAmount') + ': ' + item.grandTotal" class="h3"  
                       :visibility="item.statusId=='OrderApproved'?'visible':'collapsed'"/>
                 </StackLayout>
-                <Label class="button" @tap="rePrint(item)"
-                    col="2" :text="$t('rePrint')" padding="10"
+                <Button @tap="rePrint(item)" col="2" :text="$t('rePrint')" padding="10"
                     :visibility="item.statusId!='OrderApproved'?'visible':'hidden'"/>
-                <StackLayout orientation="horizontal" col="2"
+                <GridLayout col="2" columns="60,70,70"
                     :visibility="item.statusId=='OrderApproved'?'visible':'hidden'">
-                    <Label class="button" :text="$t('cancel')"
-                        @tap="setCancel(item)" padding="10"/>
-                    <Label class="button" :text="$t('rePrint')"
-                        @tap="rePrint(item)" padding="10"/>
-                    <Label class="button" :text="$t('done')"
-                        @tap="setDone(item)" padding="10"/>
-                </StackLayout>
+                    <Button :text="$t('cancel')" col=0 @tap="setCancel(item)" />
+                    <Button :text="$t('rePrint')" col=1 @tap="rePrint(item)" />
+                    <Button :text="$t('done')" col=2 @tap="setDone(item)" />
+                </GridLayout>
               </GridLayout>
             </v-template>
             <v-template name="content">
@@ -56,7 +53,7 @@
             <Label class="message" col="0" row="0"
                 :text="$t('noOrdersToPrepare') + prep.description"/>
           </GridLayout>
-          <Button class="button" :text="$t('refresh')" @tap="refresh"
+          <Button :text="$t('refresh')" @tap="refresh"
                     width="50%" row="1"/>
         </GridLayout>
       </TabViewItem>
