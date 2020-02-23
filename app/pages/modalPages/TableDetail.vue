@@ -22,23 +22,23 @@
             <label text="Printed" class="h2" col="2"
               :visibility="openOrders[index].statusId==='OrderApproved'?
                 'visible':'hidden'"/>
-            <Button class="button" :text="$t('addTo')" 
+            <Button :text="$t('addTo')" 
               @tap="onAddOrderTap(order)" col="2"
               :visibility="openOrders[index].statusId==='OrderApproved'?
                 'hidden':'visible'"/>
-            <Button class="button" :text="$t('cancel') + ' ' + $t('order')" 
+            <Button :text="$t('cancel') + ' ' + $t('order')" 
               @tap="onCancelOrderTap(order)" col="4"/>
           </GridLayout>
         </v-template>
       </RadListView>
       <StackLayout row="4">
-        <Button class="button" :text="$t('billOrder')" @tap="onBillTap"
+        <Button :text="$t('billOrder')" @tap="onBillTap"
           :visibility="openOrders[0].statusId==='OrderApproved'?
             'hidden':'visible'"/>
         <GridLayout columns="*,*">
-          <Button class="button" :text="$t('new')+$t('order')" col="0" 
+          <Button :text="$t('new')+$t('order')" col="0" 
             @tap="onNewOrderTap"/>
-          <Button class="button" :text="$t('cancel')" col="1"
+          <Button :text="$t('cancel')" col="1"
             @tap="$modal.close()" row="5"/>
         </GridLayout>
       </StackLayout>

@@ -6,20 +6,21 @@
         header="companyEmplCust"/>
     </ActionBar>
 
-    <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
-      <TabViewItem :title="$t('employees')">
+    <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange" class="tabView"
+              style="tabTextColor: lightGreen;selectedTabTextColor: green;">
+    <TabViewItem :title="$t('employees')">
+       <GridLayout rows="*" class="p-10">
           <RadListView for="item in employees" row="0">
             <v-template name="header">
               <StackLayout>
-                <GridLayout columns="60, *, auto" rows="*">
+                <GridLayout columns="60, *, auto" rows="*" background="#00CAAB">
                   <Image src="~/assets/images/search.png"
                     width="30" col="0" @tap="searchTap"/>
                   <StackLayout col="1">
-                    <label :text="$t('employee') + ' ' + $t('name')"
-                        class="h3"/>
-                    <label :text="$t('email')" class="h3"/>
+                    <label :text="$t('employee') + ' ' + $t('name')" class="h3"/>
+                    <label :text="$t('email')" class="h4"/>
                   </StackLayout>
-                  <label :text="$t('userGroup')" col="2" class="h3"/>
+                  <label :text="$t('userGroup')" col="2" class="h4"/>
                 </GridLayout>
                 <StackLayout class="hr-dark m-5"/>
               </StackLayout>
@@ -38,14 +39,15 @@
               </GridLayout>
             </v-template>
           </RadListView>
+       </GridLayout>
       </TabViewItem>
 
       <TabViewItem :title="$t('customer')">
-        <GridLayout rows="*, 50" class="p-10">
+        <GridLayout rows="*" class="p-10">
           <RadListView for="item in customers" row="0">
             <v-template name="header">
               <StackLayout>
-                <GridLayout columns="60, *, auto" rows="*">
+                <GridLayout columns="60, *, auto" rows="*" background="#00CAAB">
                   <Image src="~/assets/images/search.png" 
                     width="30" col="0" @tap="searchTap"/>
                   <StackLayout col="1">

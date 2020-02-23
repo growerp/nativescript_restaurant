@@ -18,7 +18,7 @@
         </v-template>
       </RadListView>
       <Button :text="$t('cancel')" @tap="$modal.close()" 
-          class="button" width="50%"/>
+          width="50%"/>
     </StackLayout></ModalStack>
   </page>
 </template>

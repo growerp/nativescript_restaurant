@@ -10,14 +10,14 @@
       <GridLayout width="100%" columns="100,30,*" rows="50,50" padding="20">
         <Image ref="itemForm" :src="itemImage" width="100" height="100"
             col="0" row="0" rowSpan="2"/>
-        <Button class="button" :text="$t('copyFromGal')"
+        <Button :text="$t('copyFromGal')"
             @tap="selectPicture('user', item.partyId)" col=2 row="0"/>
-        <Button class="button" :text="$t('useCamera')"
+        <Button :text="$t('useCamera')"
             @tap="takePicture('user', item.partyId)" col="2" row="1"/>
       </GridLayout>
       <RadDataForm ref="itemForm" :source="itemData" height="55%"
           :metadata="itemMeta" @propertyCommitted="onItemCommitted"/>
-      <Button class="button" :text="$t('updatePassword')" @tap="onPasswordTap"
+      <Button :text="$t('updatePassword')" @tap="onPasswordTap"
         width="50%" row="1"  :visibility=
           "this.$store.getters.currentEmployeeUserGroupId ===
           'GROWERP_M_ADMIN' &amp;&amp; !this.editedItem?'visible':'hidden'"/>

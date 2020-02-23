@@ -7,16 +7,16 @@
     <GridLayout rows="*" padding="10">
       <RadListView for="item in itemList" row="0">
         <v-template name="header">
-            <GridLayout columns="60, *, auto">
+            <GridLayout columns="60, *, auto" rows="*" background="#00CAAB">
               <Image src="~/assets/images/search.png" 
                 width="30" col="0" @tap="searchTap"/>
               <StackLayout col="1">
                 <label :text="$t('product') + ' ' + $t('name')"
                     class="h3"/>
                 <label :text="$t('category') + ' ' + $t('name')"
-                    class="h3"/>
+                    class="h4"/>
               </StackLayout>
-              <label :text="$t('price')" col="2" class="h3"/>
+              <label :text="$t('price')" col="2" class="h4"/>
              </GridLayout>
         </v-template>
         <v-template>
@@ -24,10 +24,10 @@
                 @tap="$navigateTo($routes.ProductDetail,
                         {props: {item: Object.assign({},item)}})"
                 @longPress="onDeleteTap(item)">
-            <Image :src="item.image"  col="0" height="50"/>
+            <Image :src="item.image"  col="0" height="40"/>
             <StackLayout col="1" class="m-l-10">
-              <label :text="item.name" class="h2"/>
-              <label :text="item.categoryName" class="h3"/>
+              <label :text="item.name" class="h3"/>
+              <label :text="item.categoryName" class="h4"/>
             </StackLayout>
             <Label :text="item.price" class="h3" col="2"/>
           </GridLayout>

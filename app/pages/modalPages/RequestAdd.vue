@@ -5,8 +5,8 @@
       <RadDataForm ref="addItem" :source="item" :metadata="itemMeta"
         @propertyCommitted="onCommitted"/>
       <GridLayout columns="*,*" rows="auto">
-        <Button class="button" :text="$t('cancel')" @tap="$modal.close()" col="0"/>
-        <Button class="button" :text="$t('addRequest')" @tap="submit" col="1"/>
+        <Button :text="$t('cancel')" @tap="$modal.close()" col="0"/>
+        <Button :text="$t('addRequest')" @tap="submit" col="1"/>
       </GridLayout>
 	  </StackLayout></ModalStack>
   </page>

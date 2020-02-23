@@ -54,7 +54,8 @@
                 :returnKeyType="isLoggingIn ? 'done' : 'next'"></TextField>
           </StackLayout>
 
-          <ActivityIndicator col="0" colSpan="2" :busy="processing"/>
+          <ActivityIndicator col="0" colSpan="2" :busy="processing" color="#00CAAB"
+            width="100" height="100"/>
         </GridLayout>
 
         <Button :text="isLoggingIn ? $t('login') : $t('signUp') " :isEnabled="!processing"
@@ -347,7 +348,7 @@ const appSettings = require("tns-core-modules/application-settings")
     }
 
     .header {
-        horizontal-align: center;
+        text-align: center;
         font-size: 25;
         font-weight: 600;
         margin-bottom: 70;
@@ -361,7 +362,7 @@ const appSettings = require("tns-core-modules/application-settings")
 
     .input {
         font-size: 16;
-        placeholder-color: #A8A8A8;
+        color: #A8A8A8;
     }
 
     .input:disabled {
@@ -371,11 +372,11 @@ const appSettings = require("tns-core-modules/application-settings")
 
     .btn-primary {
         margin: 30 5 15 5;
-        background-color: #33cd5f;
+        background-color: #00CAAB;
     }
 
     .login-label {
-        horizontal-align: center;
+        text-align: center;
         color: rgb(19, 16, 16);
         font-size: 16;
     }

@@ -6,11 +6,11 @@
           header="export"/>
     </ActionBar>
     <StackLayout padding="20">
-      <Button class="-active -rounded-lg" text="Export Orders" 
+      <Button text="Export Orders" 
         width="50%" @tap="orders"/>
-      <Button class="button" text="Export Customers" 
+      <Button text="Export Customers" 
         width="50%" @tap="customers"/>
-      <Button class="button" text="Export Categories &amp; products" 
+      <Button text="Export Categories &amp; products" 
         width="50%" @tap="catgsProducts"/>
     </StackLayout>
 </Page>

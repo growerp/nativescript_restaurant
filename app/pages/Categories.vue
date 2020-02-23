@@ -4,10 +4,11 @@
       <myActionBar :onHeaderTap="onHeaderTapHome" :back=true :plus="true" 
             :onActionTap="onAddTap" header="categories"/>
     </ActionBar>
+    <GridLayout rows="*" padding="10">
       <RadListView for="item in itemList" height="100%" row="0">
           <v-template name="header">
             <StackLayout>
-              <GridLayout columns="60, *, auto" rows="*">
+              <GridLayout columns="60, *, auto" rows="*" background="#00CAAB">
                 <StackLayout col="1">
                   <label :text="$t('category') + ' ' + $t('name')"
                       class="h3"/>
@@ -15,7 +16,7 @@
                       class="h3"/>
                 </StackLayout>
                 <label :text="$t('nbrOf') + $t('products')"
-                        col="2" class="h3"/>
+                        col="2" class="h4"/>
               </GridLayout>
               <StackLayout class="hr-dark m-5"/>
             </StackLayout>
@@ -25,10 +26,10 @@
                 @tap="$navigateTo($routes.CategoryDetail,
                       {props: {item: Object.assign({},item)}})"
                 @longPress="onDeleteTap(item)">
-              <Image :src="item.image"  col="0" height="50"/>
+              <Image :src="item.image"  col="0" height="40"/>
               <StackLayout col="2">
-                <Label :text="item.categoryName" class="h2"/>
-                <Label :text="item.description" class="h3"/>
+                <Label :text="item.categoryName" class="h3"/>
+                <Label :text="item.description" class="h4"/>
               </StackLayout>
               <Label :text="item.nbrOfProducts" class="h3" col="3"/>
             </GridLayout>
@@ -37,6 +38,7 @@
             <Label :text="'Total categories: ' + itemList.length"/>
           </v-template>
       </RadListView>
+    </GridLayout>
   </Page>
 </template>
 

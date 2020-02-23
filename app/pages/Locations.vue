@@ -5,12 +5,13 @@
             :onActionTap="onAddTap"
             header="locations"/>
     </ActionBar>
-    <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange">
+    <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange"
+      style="tabTextColor: lightGreen;selectedTabTextColor: green;">
       <TabViewItem :title="$t('preparation')">
           <RadListView for="item in preps" row="0"><!-- @itemTap not work on IOS -->
             <v-template name="header">
               <StackLayout>
-                <GridLayout columns="60, *, auto,10, auto" rows="*">
+                <GridLayout columns="60, *, auto,10, auto" background="#00CAAB">
                     <label :text="$t('area') + ' ' + $t('name')"
                         col="1" class="h3"/>
                     <label :text="$t('printerIp')"
@@ -18,7 +19,7 @@
                     <label :text="$t('catg')"
                         col="4" class="h3"/>
                 </GridLayout>
-                <StackLayout class="hr-dark m-5"/>
+                <StackLayout `class="hr m-5"/>
               </StackLayout>
             </v-template>
             <v-template>
@@ -38,7 +39,7 @@
           <RadListView for="item in areas" row="0">
             <v-template name="header">
               <StackLayout>
-                <GridLayout columns="60, *, auto" rows="*">
+                <GridLayout columns="60, *, auto" rows="*" background="#00CAAB">
                   <label :text="$t('area') + ' ' + $t('name')"
                       col="1" class="h3"/>
                   <label :text="$t('nbrOf') + $t('tables')"

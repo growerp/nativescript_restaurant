@@ -20,9 +20,9 @@
             width="75" height="75"/>
       </RadCartesianChart>
       <GridLayout columns="*,*,*" row="1">
-        <Button class="button" col="0" :text="$t('day')" @tap="getReport('Day')"/>
-        <Button class="button" col="1" :text="$t('week')" @tap="getReport('Week')"/>
-        <Button class="button" col="2" :text="$t('month')" @tap="getReport('Month')"/>
+        <Button col="0" :text="$t('day')" @tap="getReport('Day')"/>
+        <Button col="1" :text="$t('week')" @tap="getReport('Week')"/>
+        <Button col="2" :text="$t('month')" @tap="getReport('Month')"/>
       </GridLayout>
       <RadListView for="item in dashBoard" @itemTap="onItemTap" row="2"
           itemReorder="true" @itemReordered="onItemReordered"

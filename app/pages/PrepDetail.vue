@@ -9,9 +9,9 @@
               padding="20" row="0">
         <Image ref="prepForm" :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
-        <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
+        <Button :text="$t('copyFromGal')"  col=2 row="0"
             @tap="selectPicture('prep', item.preparationAreaId)"/>
-        <Button class="button" :text="$t('useCamera')"  col="2" row="1"
+        <Button :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('prep', item.preparationAreaId)"/>
       </GridLayout>
       <RadDataForm ref="itemForm" :source="item" row="1"
@@ -28,7 +28,7 @@
           </GridLayout>
         </v-template>
       </RadListView>
-      <Button class="button" :text="$t('addCategory')" 
+      <Button :text="$t('addCategory')" 
           @tap="onAddCategoryTap" width="50%"  row="4"
           :visibility="!editedItem ? 'visible':'hidden'"/>
     </GridLayout>

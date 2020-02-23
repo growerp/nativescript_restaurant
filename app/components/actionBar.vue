@@ -6,9 +6,9 @@
         horizontalAlignment="center" col="2">
       <Image src="~/assets/images/go-up-arrow.png" height="25" 
           :visibility="onHeaderTap?'visible':'hidden'"/>
-      <Label class="title" :text="$t(header)"
+      <Label class="h2" :text="$t(header)" padding=10
           :visibility="header? 'visible': 'hidden'"/>
-      <Label class="title" :text="headerNoI18n"
+      <Label class="h2" :text="headerNoI18n"
           :visibility="headerNoI18n? 'visible': 'hidden'"/>
     </StackLayout>
     <Image src="~/assets/images/plus.png" height="25" @tap="onActionTap" 
@@ -17,7 +17,7 @@
       col="4" :visibility="save? 'visible': 'hidden'"/>
     <Image src="~/assets/images/reload.png" height="25" @tap="onActionTap" 
       col="4" :visibility="reload? 'visible': 'hidden'"/>
-    <Label :text="text" col=4
+    <Label :text="text" col=4 class="h2"
         :visibility="text? 'visible': 'hidden'"/>
   </GridLayout>
 </template>

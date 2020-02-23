@@ -10,9 +10,9 @@
               padding="20" row="0">
         <Image ref="areaForm" :src="itemImage" width="100"
             height="100" col="0" row="0" rowSpan="2"/>
-        <Button class="button" :text="$t('copyFromGal')"  col=2 row="0"
+        <Button :text="$t('copyFromGal')"  col=2 row="0"
             @tap="selectPicture('category', item.productCategoryId)"/>
-        <Button class="button" :text="$t('useCamera')"  col="2" row="1"
+        <Button :text="$t('useCamera')"  col="2" row="1"
             @tap="takePicture('category', item.productCategoryId)"/>
       </GridLayout>
       <RadDataForm ref="itemForm" :source="item" row="1"
@@ -29,7 +29,7 @@
             </GridLayout>
         </v-template>
       </RadListView>
-      <Button class="button" :text="$t('addProduct')" @tap="addProduct" 
+      <Button :text="$t('addProduct')" @tap="addProduct" 
                 row="4" width="50%"/>
     </GridLayout>
   </Page>

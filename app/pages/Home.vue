@@ -7,13 +7,13 @@
     <GridLayout rows="*, 200" class="p-10">
       <Stacklayout row="0">
         <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
-          @propertyCommitted="onAreaCommitted" color="green"/>
-        <label :text="$t('tables')" paddingLeft="10" color="green"/>
+          @propertyCommitted="onAreaCommitted" class="RadDataform"/>
+        <label :text="$t('tables')" paddingLeft="10" color="#00CAAB"/>
         <RadListView for="table in tables" @itemTap="onTableTap"
               layout="grid" :gridSpanCount="6" itemHeight="50">
           <v-template>
             <Stacklayout padding="10"> 
-            <Stacklayout :backgroundColor="table.ordered?'red':'lightGreen'"
+            <Stacklayout :backgroundColor="table.ordered?'red':'#00CAAB'" style="border-radius: 20;"
                padding="5">
               <label :text="table.spotNumber" class="h2"
                 horizontalAlignment="center" paddingTop="5"/>
@@ -59,7 +59,7 @@ export default {
       orderHeaderMeta: {
         propertyAnnotations:[
           { name: 'description', displayName: this.$t('area'),
-              editor: 'SegmentedEditor',
+              editor: 'SegmentedEditor', 
               valuesProvider:
                 this.$store.getters.accommodationAreasDesc(false)},
         ]
