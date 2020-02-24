@@ -35,6 +35,7 @@ export default {
     cancel: 'Cancel',
     cancelAllOrders: 'Cancel All Orders',
     cancelled: 'cancelled',
+    canLoginNow: 'You can login now, a password is send to: ',
     cannotBeEmpty: 'cannot be empty',
     cannotDelPrep: 'Cannot delete preparation area, move all categories first or delete them',
     cannotDelCatProd: 'Cannot delete category, attached Products first have to move to other categories',

@@ -6,17 +6,10 @@
         <Label class="header"> {{ $t("login" )}} {{ $t("restaurant") }} </Label>
 
         <GridLayout rows="auto, auto, auto, auto, auto" columns="*,*" width="100%">
-          <StackLayout row="0" col="0" colSpan="2"  v-show="isLoggingIn" class="input-field">
-            <TextField class="input" :hint="$t('usrNameEmail')" :isEnabled="!processing"
-                autocorrect="false" ref="username" 
-                autocapitalizationType="none" v-model="user.name"
-                returnKeyType="next" ></TextField>
-          </StackLayout>
 
           <StackLayout row="0" col="0" v-show="!isLoggingIn" class="input-field">
             <TextField class="input" :hint="$t('restName')" :isEnabled="!processing"
-                autocorrect="false"
-                autocapitalizationType="none" v-model="company.name"
+                autocorrect="false" v-model="company.name"
                 returnKeyType="next" ></TextField>
           </StackLayout>
 
@@ -24,6 +17,7 @@
             <DropDown :items="currencyUomIds" :hint="$t('currency')" 
               :isEnabled="!processing" class="selectionCurrency"
               @selectedIndexChanged="dropDownSelectedIndexChanged"/>
+            <StackLayout class="hr-light" />
           </StackLayout>
 
           <StackLayout row="1" col="0" v-show="!isLoggingIn" class="input-field">
@@ -45,13 +39,19 @@
             <TextField class="input" :hint="$t('email')" :isEnabled="!processing"
                 keyboardType="email" autocorrect="false"
                 autocapitalizationType="none" v-model="user.emailAddress"
-                returnKeyType="isLoggingIn ? 'next' : 'done'"></TextField>
+                returnKeyType="done"></TextField>
+          </StackLayout>
+
+          <StackLayout row="0" col="0" colSpan="2"  v-show="isLoggingIn" class="input-field">
+            <TextField class="input" :hint="$t('usrNameEmail')" :isEnabled="!processing"
+                autocorrect="false" ref="username" v-model="user.name"
+                returnKeyType="next" keyboardType="email" autocapitalizationType="none" />
           </StackLayout>
 
           <StackLayout row="3" col="0" colSpan="2" class="input-field" v-show="isLoggingIn"> 
             <TextField class="input" ref="password" :isEnabled="!processing"
                 :hint="$t('password')" secure="true" v-model="user.password"
-                :returnKeyType="done"></TextField>
+                returnKeyType="done"></TextField>
           </StackLayout>
 
           <ActivityIndicator col="0" colSpan="2" :busy="processing" color="#00CAAB"
@@ -288,7 +288,7 @@ export default {
                 console.log("====== register success! logging in")
                     this.processing = false
                     this.$showModal(Alert,{ props: {
-                      message: 'You can login now.....'}})
+                      message: this.$t('canLoginNow') + '\n' + this.user.emailAddress}})
                     .then(() => {
                       // force the user to enter password again.....
                       if (TNS_ENV === 'production') delete this.user.password 
@@ -322,12 +322,9 @@ export default {
           else exit() 
         })
       })
-    }
-  },
-      
+    },
+  },   
 }
-
-
 </script>
 
 <style scoped>
@@ -360,11 +357,12 @@ export default {
 
     .input-field {
         margin-bottom: 15;
-        color: #A8A8A8;
     }
 
     .input {
         font-size: 16;
+        placeholder-color: #A8A8A8;
+        color: black;
     }
 
     .input:disabled {
@@ -394,6 +392,8 @@ export default {
         font-size: 16;
         color: black;
         text-align: center;
+        text-underline-position: under;
+        position: -10;
     }
     .warning {
         font-size: 16;
