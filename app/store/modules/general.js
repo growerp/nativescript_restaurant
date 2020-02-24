@@ -144,8 +144,9 @@ const actions = {
   async register({commit}, input) {
     input.user.emailAddress = input.user.emailAddress.toLowerCase().trim()
     input.user.name = input.user.emailAddress
+    input.user.password = 'gvfuky6!!'
     try {
-      let response = await backendService.register(input.user, input.company)
+      let response = await backendService.register(input.user, input.company, input.env, input.data)
       if (response && response.data) { 
         appSettings.clear() // start fresh
         appSettings.setString('username', input.user.name)
@@ -194,9 +195,6 @@ const actions = {
         commit('requests', GetRequests.data)
       }))
   },
-  async loadDefaultData({}, t) { // t = list translated areas
-    await backendService.loadDefaultData(TNS_ENV, t)
-  }
 }
 
 // export this module.

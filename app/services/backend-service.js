@@ -9,7 +9,7 @@ let log = false
 if (TNS_ENV === 'production') log = false
 
 if (TNS_ENV === 'production') 
-  axios.defaults.baseURL = 'https://mobile.growerp.com/rest/'
+  axios.defaults.baseURL = 'http://10.0.2.2:8080/rest'
 else if (platformModule.isAndroid) 
   axios.defaults.baseURL = 'http://10.0.2.2:8080/rest/'
   //axios.defaults.baseURL = 'http://192.168.1.17:8080/rest/'
@@ -135,12 +135,12 @@ export default class BackendService {
     return await axios.get('s1/growerp/CheckApiKey',
       { errorHandle: false})}
   async ping() {
-    return await axios.get('s1/growerp/Ping') }
+    return await simple.get('s1/growerp/Ping') }
   async logout() {
     return await axios.get('logout')}
   async getCurrencyList() {
     return await simple.get('s1/growerp/CurrencyList')}
-  async register(user, company) {
+  async register(user, company, env, data) {
     return await simple.post('s1/growerp/RegisterUserAndCompany',
       { username: user.name, emailAddress: user.emailAddress,
         newPassword: user.password, firstName: user.firstName,
@@ -149,16 +149,15 @@ export default class BackendService {
         companyName: company.name, currencyUomId: company.currency,
         companyEmail: company.emailAddress? company.emailAddress : user.emailAddress,
         partyClassificationId : 'AppRestaurant',
+        environment: env, transData: data,
         moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
   async resetUserPassword(username) {
-    return await simple.post('s1/growerp/ResetPassword',
-      { username: username, 
-        moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
+    return await axios.post('s1/growerp/ResetPassword',
+      { username: username })}
   async updatePassword(item) {
-    return await simple.post('s1/growerp/UpdatePassword',
+    return await axios.post('s1/growerp/UpdatePassword',
       { username: item.username, oldPassword: item.oldPassword,
-        newPassword: item.newPassword,
-        moquiSessionToken: axios.defaults.headers.post['moquiSessionToken'] })}
+        newPassword: item.newPassword})}
   // ================get/update user, user liste================
   getAllPartyInfo() {
     axios.get('s1/growerp/GetAllPartyInfo')
@@ -331,9 +330,6 @@ export default class BackendService {
       axios.get('s1/growerp/GetRequests'),
     ])
   }
-  async loadDefaultData(env, t) {
-    return await axios.post('s1/growerp/LoadDefaultData', {
-      environment: env, transData: t })}
   async createSubscription(id,desc) {
     return await axios.post('s1/growerp/CreateSubscription', {
       externalSubscriptionId: id,

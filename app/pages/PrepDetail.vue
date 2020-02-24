@@ -4,7 +4,7 @@
       <myActionBar :onHeaderTap="onHeaderTapHome" :save="true" :back="true"
           :onActionTap="onSaveTap" header="preparationAreaDetail"/>
     </ActionBar>
-    <GridLayout rows="auto, auto, auto,*, auto">
+    <GridLayout rows="auto, auto, auto,*, auto,10">
       <GridLayout width="100%" columns="100,30,*" rows="50,50,"
               padding="20" row="0">
         <Image ref="prepForm" :src="itemImage" width="100"
