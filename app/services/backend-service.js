@@ -9,7 +9,7 @@ let log = false
 if (TNS_ENV === 'production') log = false
 
 if (TNS_ENV === 'production') 
-  axios.defaults.baseURL = 'http://10.0.2.2:8080/rest'
+  axios.defaults.baseURL = 'https://mobile.growerp.com/rest'
 else if (platformModule.isAndroid) 
   axios.defaults.baseURL = 'http://10.0.2.2:8080/rest/'
   //axios.defaults.baseURL = 'http://192.168.1.17:8080/rest/'
