@@ -45,13 +45,13 @@
             <TextField class="input" :hint="$t('email')" :isEnabled="!processing"
                 keyboardType="email" autocorrect="false"
                 autocapitalizationType="none" v-model="user.emailAddress"
-                returnKeyType="next"></TextField>
+                returnKeyType="isLoggingIn ? 'next' : 'done'"></TextField>
           </StackLayout>
 
           <StackLayout row="3" col="0" colSpan="2" class="input-field" v-show="isLoggingIn"> 
             <TextField class="input" ref="password" :isEnabled="!processing"
                 :hint="$t('password')" secure="true" v-model="user.password"
-                :returnKeyType="isLoggingIn ? 'done' : 'next'"></TextField>
+                :returnKeyType="done"></TextField>
           </StackLayout>
 
           <ActivityIndicator col="0" colSpan="2" :busy="processing" color="#00CAAB"
@@ -85,247 +85,249 @@ import PasswordUpdate from './modalPages/PasswordUpdate'
 import { ValueList } from "nativescript-drop-down";
 import { exit } from 'nativescript-exit';
 const appSettings = require("tns-core-modules/application-settings")
-  export default {
-    name: 'Login',
-    mixins: [ general ],
-    data() {
-      return {
-        isLoggingIn: true, // login screen, false is register
-        processing: false,
-        apiKey: '',
-        user: (TNS_ENV === 'production')? {
-          name: appSettings.getString('username'),
-          emailAddress: '',
-          password: '',
-          confirmPassword: '',
-          firstName: '',
-          lastName: '',
-          currency: '',
-          locale: ''
-        } : {
-          name: appSettings.getString('username') ?
-                  appSettings.getString('username') : "admin@growerp.com",
-          emailAddress: "admin@growerp.com",
-          password: "qqqqqq9!",
-          confirmPassword: "qqqqqq9!",
-          firstName: 'Admin',
-          lastName: 'Owner',
-          locale: 'TH',
-          currency: 'THB'
-        },
-        locales: ['EN', 'TH', 'US', 'NL'],
-        company: (TNS_ENV === 'production')? {
-          name: '',
-          currency: '',
-        } : {
-          name: 'My litle Restaurant',
-          currency: 'THB',
-        },
-        currencyUomIds: null
-      };
+export default {
+  name: 'Login',
+  mixins: [ general ],
+  data() {
+    return {
+      isLoggingIn: true, // login screen, false is register
+      processing: false,
+      apiKey: '',
+      user: (TNS_ENV === 'production')? {
+        name: appSettings.getString('username'),
+        emailAddress: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        currency: '',
+        locale: ''
+      } : {
+        name: appSettings.getString('username') ?
+                appSettings.getString('username') : "admin@growerp.com",
+        emailAddress: "admin@growerp.com",
+        password: "qqqqqq9!",
+        confirmPassword: "qqqqqq9!",
+        firstName: 'Admin',
+        lastName: 'Owner',
+        locale: 'TH',
+        currency: 'THB'
+      },
+      locales: ['EN', 'TH', 'US', 'NL'],
+      company: (TNS_ENV === 'production')? {
+        name: '',
+        currency: '',
+      } : {
+        name: 'My litle Restaurant',
+        currency: 'THB',
+      },
+      currencyUomIds: null
+    };
+  },
+  created() {
+    this.processing = true
+    log?console.log("===created get connection==="):''
+    if (!appSettings.hasKey('username')) {
+        this.processing = false
+        log? console.log('=== getConnection: first usage, so show register screen'):''
+        this.toggleForm()   // started with login, switch to register
+    } else this.$store.dispatch('getConnection').then( result => {
+      log?console.log("==== result from created getConnection: " + result):''
+      if (result == 'success') {
+        this.$store.dispatch('initialData').then(() => {
+          console.log("=====created accom areas: " + this.$store.getters.accommodationAreas[0].description)
+          log?console.log("==init ===created====going home======"):''
+          this.$navigateTo(this.$routes.Home, {clearHistory: true })
+        })
+      } else {
+        this.processing = false
+        if (result == 'serverProblem')
+          this.serverProblem()
+        if (result.startsWith('message:'))
+          this.note(result.substring(8)) 
+        else if (result == 'noApiKey')
+          ()=>{} // no-op: just show login screen
+        else console.log("==== unexpected return from getConnection dispatch! result: " + result)}
+    })
+  },
+  methods: {
+    toggleForm() {
+      this.processing = false
+      this.isLoggingIn = !this.isLoggingIn;
+      if (!this.isLoggingIn && !this.currencyUomIds){
+        console.log("====pinginh now====")
+        this.$backendService.ping()
+        .catch( error => {
+          console.log("initial ping problem....")
+          this.serverProblem()
+        })
+        .then(result => { // check if server present
+          if (result.data && result.data.ok === 'ok') {
+            this.$backendService.getCurrencyList().then(result => {
+              this.currencyUomIds = new ValueList(result.data.currencyList)})
+          } else this.serverProblem()
+        })
+      }
     },
-    created() {
+    dropDownSelectedIndexChanged(args) {
+        this.company.currency = this.currencyUomIds.getValue(args.newIndex);
+    },
+    submit() {
       this.processing = true
-      log?console.log("===created get connection==="):''
-      if (!appSettings.hasKey('username')) {
+      if (this.isLoggingIn) {
+        if ((!this.user.name && !this.user.emailAddress) || !this.user.password) {
+          this.note(this.$t('provideEmailPassword'))
           this.processing = false
-          log? console.log('=== getConnection: first usage, so show register screen'):''
-          this.toggleForm()   // started with login, switch to register
-      } else this.$store.dispatch('getConnection').then( result => {
-        log?console.log("==== result from created getConnection: " + result):''
-        if (result == 'success') {
-          this.$store.dispatch('initialData').then(() => {
-            console.log("=====created accom areas: " + this.$store.getters.accommodationAreas[0].description)
-            log?console.log("==init ===created====going home======"):''
-            this.$navigateTo(this.$routes.Home, {clearHistory: true })
+          return;
+        }
+        this.login();
+      } else {
+          this.user.name = this.user.emailAddress //initially the same
+          this.register();
+      }
+    },
+    login() {
+      log?console.log("=====logging in ======"):''
+      this.$store.dispatch('getConnection').then( result => {
+        log?console.log("==== result from login getConnection: " + result):''
+        if (result == 'noApiKey') {
+          this.$store.dispatch("login", this.user).then(result => {
+            log?console.log("==== login page login result: " + result):''
+            if (result == 'success') {
+              log?console.log("====login page success, loading initial data"):''
+              this.$store.dispatch('initialData').then(() => { 
+                console.log("========init done, accom area: " + 
+                    this.$store.getters.accommodationAreas[0].description)
+                log?console.log("====going home....."):''
+                this.$navigateTo(this.$routes.Home, {clearHistory: true })
+              })
+            } else {
+              this.processing = false
+              if (result.startsWith('message:'))
+                  this.note(result.substring(8))
+              else if (result == 'loginFailed')
+                console.log("==== login failed")
+              else if (result == 'serverProblem')
+                this.serverProblem()
+              else if (result == 'passwordChange') {
+                this.$showModal(PasswordUpdate,{props:
+                  { oldPassword : this.user.password,
+                    username: this.user.name,
+                    fullName: this.user.firstName + ' ' +
+                      this.user.lastName}})
+                .then (() => {
+                  this.user.password = '' })}
+            }
           })
-        } else {
-          this.processing = false
-          if (result == 'serverProblem')
-            this.serverProblem()
-          if (result.startsWith('message:'))
-            this.note(result.substring(8)) 
-          else if (result == 'noApiKey')
-            ()=>{} // no-op: just show login screen
-          else console.log("==== unexpected return from getConnection dispatch! result: " + result)}
+        } else if (result == 'success') { // after register
+          this.$store.dispatch('initialData').then(() => {
+            log?console.log("====apiKey found in login, init done, going home....."):''
+            this.$navigateTo(this.$routes.Home, 
+                {clearHistory: true, props: { firstTime: true }})
+          })
+        }
       })
     },
-    methods: {
-      toggleForm() {
-        this.processing = false
-        this.isLoggingIn = !this.isLoggingIn;
-        if (!this.isLoggingIn && !this.currencyUomIds){
-          console.log("====pinginh now====")
-          this.$backendService.ping()
-          .catch( error => {
-            console.log("initial ping problem....")
-            this.serverProblem()
-          })
-          .then(result => { // check if server present
-            if (result.data && result.data.ok === 'ok') {
-              this.$backendService.getCurrencyList().then(result => {
-                this.currencyUomIds = new ValueList(result.data.currencyList)})
-            } else this.serverProblem()
-          })
-        }
-      },
-      dropDownSelectedIndexChanged(args) {
-          this.company.currency = this.currencyUomIds.getValue(args.newIndex);
-      },
-      submit() {
-        if ((!this.user.name && !this.user.emailAddress) || !this.user.password) {
-            this.note(this.$t('provideEmailPassword'))
-            return;
-        }
-        this.processing = true
-        if (this.isLoggingIn) {
-            this.login();
-        } else {
-            this.user.name = this.user.emailAddress //initially the same
-            this.register();
-        }
-      },
-      login() {
-        log?console.log("=====logging in ======"):''
-        this.$store.dispatch('getConnection').then( result => {
-          log?console.log("==== result from login getConnection: " + result):''
-          if (result == 'noApiKey') {
-            this.$store.dispatch("login", this.user).then(result => {
-              log?console.log("==== login page login result: " + result):''
-              if (result == 'success') {
-                log?console.log("====login page success, loading initial data"):''
-                this.$store.dispatch('initialData').then(() => { 
-                  console.log("========init done, accom area: " + 
-                      this.$store.getters.accommodationAreas[0].description)
-                  log?console.log("====going home....."):''
-                  this.$navigateTo(this.$routes.Home, {clearHistory: true })
-                })
-              } else {
-                this.processing = false
-                if (result.startsWith('message:'))
-                    this.note(result.substring(8))
-                else if (result == 'loginFailed')
-                  console.log("==== login failed")
-                else if (result == 'serverProblem')
-                  this.serverProblem()
-                else if (result == 'passwordChange') {
-                  this.$showModal(PasswordUpdate,{props:
-                    { oldPassword : this.user.password,
-                      username: this.user.name,
-                      fullName: this.user.firstName + ' ' +
-                        this.user.lastName}})
-                  .then (() => {
-                    this.user.password = '' })}
-              }
-            })
-          } else if (result == 'success') { // after register
-            this.$store.dispatch('initialData').then(() => {
-              log?console.log("====apiKey found in login, init done, going home....."):''
-              this.$navigateTo(this.$routes.Home, 
-                  {clearHistory: true, props: { firstTime: true }})
-            })
-          }
-        })
-      },
 
-      forgotPassword() {
-       this.$store.dispatch('getConnection').then( result => {
-          if (result == 'serverProblem') {
-            this.serverProblem() }
-          else {
-            this.$showModal(Prompt,{ props:{
-              title: this.$t('forgotPassword'),
-              message: this.$t('enterEmail'),
-              defaultText: this.user.emailAddress ,
-              inputType: 'email',}
-            }).then (data => {
-              if (data) {
-                this.processing = true
-                this.$backendService.resetUserPassword(data.toLowerCase().trim())
-                .then (res => {
-                  this.processing = false
-                  this.$showModal(Alert,{ props: {
-                      message: res.data.messages}
-                  })
-                })
-                .catch( error => {
-                    this.note(this.$t('sendPasswordError') +
-                      this.$backendService.getErrorMessage(error))
-                })
-              }
-            })
-          }
-        })
-      },
-
-      register() {
-        this.$store.dispatch('getConnection').then( result => {
-          if (result == 'serverProblem') {
-            this.serverProblem() }
-          else {
-            this.processing = false
-            if (this.user.password !== this.user.confirmPassword) {
-              this.note(this.$t('passwordNotMatch'))
-            } else if (this.company.name === '') {
-              this.note(this.$t('enterRestaurantName'))
-            } else if (this.company.currency === '') {
-              this.note(this.$t('enterCurrency'))
-            } else {
+    forgotPassword() {
+      this.$store.dispatch('getConnection').then( result => {
+        if (result == 'serverProblem') {
+          this.serverProblem() }
+        else {
+          this.$showModal(Prompt,{ props:{
+            title: this.$t('forgotPassword'),
+            message: this.$t('enterEmail'),
+            defaultText: this.user.emailAddress ,
+            inputType: 'email',}
+          }).then (data => {
+            if (data) {
               this.processing = true
-              this.$store.dispatch('register', 
-                  {company: this.company, user: this.user})
-              .then( regResult => {
-                console.log("====register result: " + regResult)
-                if (regResult == 'success') {
-                  console.log("====== register success! logging in")
-                  this.$store.dispatch('login',this.user)
-                  .then (() => {
-                    console.log("=======after register logged in to setup initial data")
-                    this.$store.dispatch('loadDefaultData', [
-                        this.$t('kitchen'),this.$t('food'),this.$t('macaroni'),
-                        this.$t('bar'),this.$t('inside'),this.$t('garden'),
-                        this.$t('drinks'),this.$t('cola'),this.$t('bill')])
-                    .then(() => {
-                      console.log("===== default data loaded ")
-                      this.processing = false
-                      this.$showModal(Alert,{ props: {
-                        message: 'You can login now.....'}})
-                      .then(() => {
-                        // force the user to enter password again.....
-                        if (TNS_ENV === 'production') delete this.user.password 
-                        this.isLoggingIn = true
-                      })
-                    })
-                  })
-                } else { // something wrong....
-                  this.processing = false
-                  if (regResult.startsWith("message:Found issues with password"))
-                    this.$showModal(Confirm,{ props: {
-                      message: this.$t('passwordRequirement1') }})
-                  else if (regResult.startsWith('message:'))
-                    this.$showModal(Confirm,{ props: {
-                      message: regResult.substring(8)}})
-                }
+              this.$backendService.resetUserPassword(data.toLowerCase().trim())
+              .then (res => {
+                this.processing = false
+                this.$showModal(Alert,{ props: {
+                    message: res.data.messages}
+                })
+              })
+              .catch( error => {
+                  this.note(this.$t('sendPasswordError') +
+                    this.$backendService.getErrorMessage(error))
               })
             }
-          }
-        }) 
-      },
-      serverProblem(message=this.$t('serverNotAvailable')) {
-        console.log("====yes server problem!====")
-        this.$showModal(Confirm,{ props: {
-            message: message,
-            ok: 'retry',
-            cancel: 'exit' }
-        })
-        .then (data => {
-            if (data) this.$navigateTo(this.$routes.Login, {clearHistory: true})
-            else exit() 
-        });
-      },
-  }
+          })
+        }
+      })
+    },
 
+    register() {
+      this.$store.dispatch('getConnection').then( result => {
+        if (result == 'serverProblem') {
+          this.serverProblem() }
+        else {
+          this.processing = false
+          if (this.company.name === '') {
+            this.note(this.$t('enterRestaurantName'))
+          } else if (this.company.currency === '') {
+            this.note(this.$t('enterCurrency'))
+          } else if (this.user.firstName === '') {
+            this.note(this.$t('enterFirstName'))
+          } else if (this.user.lastName === '') {
+            this.note(this.$t('enterLastName'))
+          } else if (this.user.emailAddress === '') {
+            this.note(this.$t('enterEmail'))
+          } else {
+            this.processing = true
+            this.$store.dispatch('register', 
+                {company: this.company, user: this.user, env: TNS_ENV, data: [
+                      this.$t('kitchen'),this.$t('food'),this.$t('macaroni'),
+                      this.$t('bar'),this.$t('inside'),this.$t('garden'),
+                      this.$t('drinks'),this.$t('cola'),this.$t('bill')]})
+            .then( regResult => {
+              console.log("====register result: " + regResult)
+              if (regResult == 'success') {
+                console.log("====== register success! logging in")
+                    this.processing = false
+                    this.$showModal(Alert,{ props: {
+                      message: 'You can login now.....'}})
+                    .then(() => {
+                      // force the user to enter password again.....
+                      if (TNS_ENV === 'production') delete this.user.password 
+                      this.isLoggingIn = true
+                    })
+              } else { // something wrong....
+                this.processing = false
+                if (regResult.startsWith("message:Found issues with password"))
+                  this.$showModal(Confirm,{ props: {
+                    message: this.$t('passwordRequirement1') }})
+                else if (regResult.startsWith('message:'))
+                  this.$showModal(Confirm,{ props: {
+                    message: regResult.substring(8)}})
+              }
+            })
+          }
+        }
+      }) 
+    },
+    serverProblem(message=this.$t('serverNotAvailable')) {
+      console.log("====yes server problem!====")
+      this.$showModal(Confirm,{ props: {
+          message: message,
+          ok: 'retry',
+          cancel: 'exit' }
+      })
+      .then (data => {
+        backendService.getToken().then (data => {
+          backendService.saveToken(data)  
+          if (data) this.$navigateTo(this.$routes.Login, {clearHistory: true})
+          else exit() 
+        })
+      })
+    }
+  },
+      
 }
+
+
 </script>
 
 <style scoped>
@@ -358,11 +360,11 @@ const appSettings = require("tns-core-modules/application-settings")
 
     .input-field {
         margin-bottom: 15;
+        color: #A8A8A8;
     }
 
     .input {
         font-size: 16;
-        color: #A8A8A8;
     }
 
     .input:disabled {
