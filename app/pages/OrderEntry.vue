@@ -1,8 +1,7 @@
 <template>
   <Page>
     <ActionBar><NavigationButton visibility="collapsed"/>
-      <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"
-          
+      <myActionBar :onHeaderTap="onHeaderTapHome" :back="true"          
           :headerNoI18n="header"/>
     </ActionBar>
     <GridLayout rows="*,50" padding="10">
@@ -51,7 +50,7 @@ export default {
   mixins: [  general ],
   data() {
     return {
-      header: this.$t('orderFor') + this.$t('table') + 
+      header: this.$t('orderFor') + 
           this.orderHeader.description +
           '-' + this.orderHeader.spotNumber,
       categoriesAndProducts:  this.$store.getters.productCategoriesAndProducts,
