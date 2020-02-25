@@ -28,11 +28,11 @@
                 </StackLayout>
                 <Button @tap="rePrint(item)" col="2" :text="$t('rePrint')" padding="10"
                     :visibility="item.statusId!='OrderApproved'?'visible':'hidden'"/>
-                <GridLayout col="2" columns="60,70,70"
+                <GridLayout col="2" columns="*,*,70"
                     :visibility="item.statusId=='OrderApproved'?'visible':'hidden'">
-                    <Button :text="$t('cancel')" col=0 @tap="setCancel(item)" />
-                    <Button :text="$t('rePrint')" col=1 @tap="rePrint(item)" />
-                    <Button :text="$t('done')" col=2 @tap="setDone(item)" />
+                    <Button :text="$t('cancl')" col=0 @tap="setCancel(item)" class="h6" rotate="-90" width="100"/>
+                    <Button :text="$t('print')" col=1 @tap="rePrint(item)" class="h6" rotate="-90" width="100"/>
+                    <Button :text="$t('done')" col=2 @tap="setDone(item)"  class="h5"/>
                 </GridLayout>
               </GridLayout>
             </v-template>

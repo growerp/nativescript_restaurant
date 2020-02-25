@@ -14,6 +14,9 @@ import dateTimeFormats from './lang/dateTimeFormats'
 import numberFormats from './lang/numberFormats'
 import Pager from 'nativescript-accordion/vue'
 import { ModalStack, overrideModalViewMethod, VueWindowedModal } from "nativescript-windowed-modal"
+overrideModalViewMethod()
+Vue.registerElement("ModalStack", () => ModalStack)
+Vue.use(VueWindowedModal)
 
 Vue.use(RadListView)
 Vue.use(RadChart)
@@ -29,10 +32,6 @@ Vue.prototype.$backendService = backendService
 const printService = new PrintService()
 Vue.prototype.$printService = printService
 Vue.prototype.$routes = routes
-// modal view on IOS
-overrideModalViewMethod()
-Vue.registerElement("ModalStack", () => ModalStack)
-Vue.use(VueWindowedModal)
 
 var purchase = require("nativescript-purchase");
 global.initPurchase = purchase.init(["10010","10011","10003"])

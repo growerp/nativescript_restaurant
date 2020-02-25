@@ -1,6 +1,6 @@
 <template>
   <page><ModalStack dismissEnabled="true" class="modal-container">
-    <StackLayout backgroundColor="white" width="90%" padding="10">
+    <StackLayout >
       <label :text="$t('addPreparationArea')" class="h2" horizontalAlignment="center"/>
       <RadDataForm ref="addPrep" :source="item" :metadata="itemMeta"
           @propertyCommitted="onCommitted"/>

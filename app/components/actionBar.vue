@@ -2,11 +2,11 @@
   <GridLayout width="100%" columns="auto, 10, *, 10, auto, 10" rows="auto">
     <Image src="~/assets/images/go-back-arrow.png" height="25"
         @tap="$navigateBack" col="0" :visibility="back?'visible':'hidden'"/>
-      <StackLayout orientation="horizontal" @tap="onHeaderTap" 
+    <StackLayout orientation="horizontal" @tap="onHeaderTap" 
         horizontalAlignment="center" col="2">
-      <Image src="~/assets/images/go-up-arrow.png" height="25" 
+      <Image src="~/assets/images/go-up-arrow.png" height="25" width="35" 
           :visibility="onHeaderTap?'visible':'hidden'"/>
-      <Label class="h2" :text="$t(header)" padding=10
+      <Label class="h2" :text="$t(header)"
           :visibility="header? 'visible': 'hidden'"/>
       <Label class="h2" :text="headerNoI18n"
           :visibility="headerNoI18n? 'visible': 'hidden'"/>
