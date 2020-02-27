@@ -7,7 +7,7 @@
     <GridLayout rows="*, 200" class="p-10">
       <Stacklayout row="0">
         <RadDataForm :source="orderHeader" :metadata="orderHeaderMeta"
-          @propertyCommitted="onAreaCommitted" class="RadDataform"/>
+          @propertyCommitted="onAreaCommitted"/>
         <label :text="$t('tables')" paddingLeft="10" color="#00CAAB"/>
         <RadListView for="table in tables" @itemTap="onTableTap"
               layout="grid" :gridSpanCount="6" itemHeight="60">
@@ -58,8 +58,7 @@ export default {
       orderHeaderMeta: {
         propertyAnnotations:[
           { name: 'description', displayName: this.$t('area'),
-              editor: 'SegmentedEditor', 
-              valuesProvider:
+              editor: 'SegmentedEditor', valuesProvider:
                 this.$store.getters.accommodationAreasDesc(false)},
         ]
       },
@@ -160,4 +159,7 @@ export default {
 </script>
 
 <style lang="css">
+  PropertyEditor[type='SegmentedEditor'] {
+      background-color: #00CAAB;
+  }
 </style>
