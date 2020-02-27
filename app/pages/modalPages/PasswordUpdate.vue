@@ -18,7 +18,7 @@
 
 <script>
 import general from '~/mixins/general'
-import Confirm from '../modalPages/Confirm'
+import Alert from '../modalPages/Alert'
 
 export default {
   name: 'PasswordUpdate',
@@ -72,7 +72,7 @@ export default {
           })
           .catch( error => {
               if (error.response.data.errors.startsWith("Found issues with password")) {
-                this.$showModal(Confirm,{ props: {
+                this.$showModal(Alert,{ props: {
                 message: this.$t('passwordRequirement')}})
               } else {
                 this.note(this.$t('regError') + this.$backendService.getErrorMessage(error))

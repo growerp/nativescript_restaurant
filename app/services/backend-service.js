@@ -157,7 +157,7 @@ export default class BackendService {
   async updatePassword(item) {
     return await axios.post('s1/growerp/UpdatePassword',
       { username: item.username, oldPassword: item.oldPassword,
-        newPassword: item.newPassword})}
+        newPassword: item.newPassword}, {errorHandle: false})}
   // ================get/update user, user liste================
   getAllPartyInfo() {
     axios.get('s1/growerp/GetAllPartyInfo')
