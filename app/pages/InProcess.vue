@@ -26,13 +26,14 @@
                   <Label :text="$t('totalAmount') + ': ' + item.grandTotal" class="h3"  
                       :visibility="item.statusId=='OrderApproved'?'visible':'collapsed'"/>
                 </StackLayout>
-                <Button @tap="rePrint(item)" col="2" :text="$t('rePrint')" padding="10"
+                <!-- cannot use Button here so use cleckable label, otherwise accordeon will not expand -->
+                <Label @tap="rePrint(item)" col="2" :text="$t('rePrint')" padding="10" class="labelpr"
                     :visibility="item.statusId!='OrderApproved'?'visible':'hidden'"/>
-                <GridLayout col="2" columns="*,*,70"
+                <GridLayout col="2" columns="*,*,*"
                     :visibility="item.statusId=='OrderApproved'?'visible':'hidden'">
-                    <Button :text="$t('cancl')" col=0 @tap="setCancel(item)" class="h6" rotate="-90" width="100"/>
-                    <Button :text="$t('print')" col=1 @tap="rePrint(item)" class="h6" rotate="-90" width="100"/>
-                    <Button :text="$t('done')" col=2 @tap="setDone(item)"  class="h5"/>
+                    <Label :text="$t('cancel')" col=0 @tap="setCancel(item)" class="labelpr"/>
+                    <Label :text="$t('rePrint')" col=1 @tap="rePrint(item)" class="labelpr"/>
+                    <Label :text="$t('done')" col=2 @tap="setDone(item)"  class="labelpr"/>
                 </GridLayout>
               </GridLayout>
             </v-template>
@@ -125,4 +126,11 @@ export default {
 </script>
 
 <style lang="css">
+  label.labelpr {
+    background-color: #00CAAB;
+    border-radius: 20;
+    height: 40;  
+    text-align: center;
+    padding-top: 10;
+    }
 </style>
