@@ -27,8 +27,14 @@ export default {
           text: text,
           duration: ToastDuration.SHORT,
           position: isAndroid? ToastPosition.TOP : ToastPosition.BOTTOM,
-          yAxisOffset: isAndroid? 0 : -90,
+          backgroundColor: '#4baa9b',
+          yAxisOffset: isAndroid? 0 : -5,
           xAxisOffset: 0,
+          ios: {
+            displayShadow: true,
+            shadowColor: '#fff000',
+            cornerRadius: 24
+          },
       });
       toast.show();
     },
