@@ -1,6 +1,9 @@
 @import '~@nativescript/theme/css/core.css';
 @import '~@nativescript/theme/css/aqua.css';
 
+@import '~@nativescript/theme/css/core.css';
+@import '~@nativescript/theme/css/aqua.css';
+
 Button {
     background-color: #00CAAB;
     border-radius: 20;

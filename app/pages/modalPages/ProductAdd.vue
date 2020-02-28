@@ -1,5 +1,5 @@
 <template>
-  <page><ModalStack dismissEnabled="true" class="modal-container">
+  <page backgroundColor="#A0000000"><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="90%" padding="10">
       <label :text="$t('addProduct')" class="h2" horizontalAlignment="center"/>
       <RadDataForm ref="addItem" :source="item" :metadata="itemMeta"

@@ -1,5 +1,5 @@
 <template>
-  <page><ModalStack dismissEnabled="true" class="modal-container">
+  <page backgroundColor="#A0000000"><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="80%" class="m-20 p-20">
       <label :text="$t(message)" class="h2 text-center" textWrap="true"/>
       <RadDataForm :source="item" @propertyCommitted="onItemCommitted"/>

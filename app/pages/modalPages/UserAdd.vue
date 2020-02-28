@@ -1,5 +1,5 @@
 <template>
-  <page><ModalStack dismissEnabled="true" class="modal-container">
+  <page backgroundColor="#A0000000"><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout class="p-20" backgroundColor="white" paddingTop="40" width="90%">
       <label :text="actionText" horizontalAlignment="center" class="h2"/>
       <label :text="header" horizontalAlignment="center" class="h3"/>
