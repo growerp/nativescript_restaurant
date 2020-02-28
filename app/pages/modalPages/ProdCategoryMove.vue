@@ -1,5 +1,5 @@
 <template>
-  <page><ModalStack dismissEnabled="true" class="modal-container">
+  <page backgroundColor="#A0000000"><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout backgroundColor="white" width="90%" padding="20">
       <Label :text="product.categoryName" horizontalAlignment="center" class="h2"/>
       <Label :text="$t('moveProdCat')" textWrap="true" class="h3"

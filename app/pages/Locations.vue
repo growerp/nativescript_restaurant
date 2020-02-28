@@ -8,6 +8,7 @@
     <TabView :selectedIndex="currentTab" @selectedIndexChange="tabChange"
       style="tabTextColor: lightGreen;selectedTabTextColor: green;">
       <TabViewItem :title="$t('preparation')">
+        <GridLayout rows="*" padding="10">
           <RadListView for="item in preps" row="0"><!-- @itemTap not work on IOS -->
             <v-template name="header">
               <StackLayout>
@@ -34,8 +35,10 @@
               </GridLayout>
             </v-template>
           </RadListView>
+        </GridLayout>
       </TabViewItem>
       <TabViewItem :title="$t('tableAreas')">
+        <GridLayout rows="*" padding="10">
           <RadListView for="item in areas" row="0">
             <v-template name="header">
               <StackLayout>
@@ -59,6 +62,7 @@
               </GridLayout>
             </v-template>
           </RadListView>
+        </GridLayout>
       </TabViewItem>
     </TabView>
   </Page>
@@ -92,8 +96,8 @@ export default {
       this.currentTab = args.value
     },
     onAddTap() {
-      if (this.currentTab == 0) { this.$showModal(PrepAdd)}
-      if (this.currentTab == 1) { this.$showModal(AreaAdd)}
+      if (this.currentTab == 0) this.$showModal(PrepAdd)
+      if (this.currentTab == 1) this.$showModal(AreaAdd)
     },
     onPrepAreaDeleteTap(item) {
       if (item.nbrOfCatg) {

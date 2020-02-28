@@ -1,5 +1,5 @@
 <template>
-  <page><ModalStack dismissEnabled="true" class="modal-container">
+  <page backgroundColor="#A0000000"><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout  backgroundColor="white" padding="20" width="90%">
     <GridLayout rows="auto,10,auto,10,auto,50">
       <label :text="$t('table') + this.openOrders[0].table" 

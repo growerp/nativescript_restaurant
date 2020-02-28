@@ -1,5 +1,5 @@
 <template>
-  <page><ModalStack dismissEnabled="true" class="modal-container">
+  <Page backgroundColor="#A0000000"><ModalStack dismissEnabled="true" class="modal-container">
     <StackLayout class="p-20" backgroundColor="white" paddingTop="40" width="90%">
       <label :text="$t('addTableArea')" class="h2" horizontalAlignment="center"/>
       <RadDataForm :source="item" :metadata="itemMeta"
@@ -9,7 +9,7 @@
         <Button :text="$t('addArea')" @tap="submit" col="1"/>
       </GridLayout>
     </StackLayout></ModalStack>
-  </page>
+  </Page>
 </template>
 
 <script>

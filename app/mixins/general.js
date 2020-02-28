@@ -28,7 +28,7 @@ export default {
           duration: ToastDuration.SHORT,
           position: isAndroid? ToastPosition.TOP : ToastPosition.BOTTOM,
           backgroundColor: '#4baa9b',
-          yAxisOffset: isAndroid? 0 : -5,
+          yAxisOffset: isAndroid? 0 : -40,
           xAxisOffset: 0,
           ios: {
             displayShadow: true,
