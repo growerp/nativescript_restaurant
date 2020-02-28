@@ -100,13 +100,15 @@ export default {
             this.note(this.$t('externalId') + ' ' + this.$t('cannotBeEmpty'))
         } else if (!this.editedItem.emailAddress){
             this.note(this.$t('email') + ' ' + this.$t('cannotBeEmpty'))
-        } else if (!this.editedItem.groupDescription && this.item.roleTypeId != 'Customer'){
+            // ios groupDescription is always filled and could be 0, so not check
+        } else if (isAndroid && !this.editedItem.groupDescription && this.item.roleTypeId != 'Customer'){
             this.note(this.$t('groupDescription') + ' ' + this.$t('cannotBeEmpty'))
         } else {
           if (isIOS) { // returns an index instead of value so change
             this.editedItem.groupDescription = 
                 this.userGroups[parseInt(this.editedItem.groupDescription,10)]}
-          this.$backendService.updateUser(this.editedItem)
+          this.$backendService.updateUser(this.editedItem).then(() => {
+            this.note(this.$t('informationIsUpdated'))})
           this.editedItem.verb = 'update'
           if (this.editedItem.roleTypeId == 'Customer')
             this.$store.commit('customer', this.editedItem)
