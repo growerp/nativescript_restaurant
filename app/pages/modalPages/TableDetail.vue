@@ -1,50 +1,48 @@
 <template>
-  <page backgroundColor="#A0000000"><ModalStack dismissEnabled="true" class="modal-container">
-    <StackLayout  backgroundColor="white" padding="20" width="90%">
-    <GridLayout rows="auto,10,auto,10,auto,50">
+  <page backgroundColor="#A0000000"><ModalStack dismissEnabled="true">
+    <StackLayout  backgroundColor="white" padding="20" width="90%" height="70%">
       <label :text="$t('table') + this.openOrders[0].table" 
           class="h2" horizontalAlignment="center" row="0"/>
-      <RadListView for="order,index in openOrders" height="40%" row="2">
+      <Gridlayout rows="*, auto, auto">
+      <RadListView for="order,index in openOrders" row="0">
         <v-template name="header">
-          <GridLayout width="100%" columns="auto, 100, *">
+          <GridLayout width="100%" columns="auto, 100, *" background="#00CAAB">
             <StackLayout col="0">
-              <label :text="$t('time')" class="h3" col="0"/>
-              <label :text="$t('customer') + ' ' + $t('name')" class="h3" col="2"/>
+              <label :text="$t('time')" class="h5" col="0"/>
+              <label :text="$t('customer') + ' ' + $t('name')" class="h5" col="2"/>
             </StackLayout>
           </GridLayout>
         </v-template>
         <v-template>
-          <GridLayout width="100%" columns="*, 10, auto, 10, auto" class="m-10">
+          <Gridlayout columns="120,*,*">
             <StackLayout col="0">
-              <label :text="order.placedTime" class="h3"/>
-              <label :text="order.name" class="h3"/>
+              <label :text="order.placedTime" class="h4"/>
+              <label :text="order.name" class="h4"/>
             </StackLayout>
-            <label text="Printed" class="h2" col="2"
+            <label :text="$t('printed')" col="1" class="h5"
               :visibility="openOrders[index].statusId==='OrderApproved'?
                 'visible':'hidden'"/>
-            <Button :text="$t('addTo')" 
-              @tap="onAddOrderTap(order)" col="2"
+            <Button :text="$t('addTo')" col="1" class="h5"
+              @tap="onAddOrderTap(order)"
               :visibility="openOrders[index].statusId==='OrderApproved'?
                 'hidden':'visible'"/>
-            <Button :text="$t('cancel') + ' ' + $t('order')" 
-              @tap="onCancelOrderTap(order)" col="4"/>
-          </GridLayout>
+            <Button :text="$t('cancel')" class="h5" 
+              @tap="onCancelOrderTap(order)" col="2"/>
+          </Gridlayout>
         </v-template>
       </RadListView>
-      <StackLayout row="4">
-        <Button :text="$t('billOrder')" @tap="onBillTap"
-          :visibility="openOrders[0].statusId==='OrderApproved'?
-            'hidden':'visible'"/>
-        <GridLayout columns="*,*">
-          <Button :text="$t('new')+$t('order')" col="0" 
-            @tap="onNewOrderTap"/>
-          <Button :text="$t('cancel')" col="1"
-            @tap="$modal.close()" row="5"/>
+      <Button :text="$t('billOrder')" @tap="onBillTap" row="1"
+        :visibility="openOrders[0].statusId==='OrderApproved'?
+          'hidden':'visible'"/>
+      <GridLayout columns="*,*" row="2">
+        <Button :text="$t('new')+$t('order')" col="0" 
+          @tap="onNewOrderTap"/>
+        <Button :text="$t('cancel')" col="1"
+          @tap="$modal.close()" row="5"/>
         </GridLayout>
-      </StackLayout>
-    </GridLayout>
-    </StackLayout></ModalStack>
-  </page>
+      </Gridlayout>
+    </StackLayout>
+  </ModalStack></page>
 </template>
 
 <script>

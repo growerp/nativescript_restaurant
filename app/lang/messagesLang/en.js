@@ -176,6 +176,7 @@ export default {
     prepLoc: 'Prep.Loc',
     price: 'Price',
     print: 'Print',
+    printed: 'Printed',
     printerIp: 'Printer IP',
     product: 'Product',
     products: 'Products',
