@@ -50,7 +50,7 @@
           </Accordion>
           <GridLayout columns="*" rows="*" row="0"
               :visibility="$store.getters.preparationAreaHasOrders(
-                prep.preparationAreaId)? 'collapse' :'visible'">
+                prep.preparationAreaId)? 'hidden' :'visible'">
             <Label class="message" col="0" row="0"
                 :text="$t('noOrdersToPrepare') + prep.description"/>
           </GridLayout>
