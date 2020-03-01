@@ -1,5 +1,5 @@
 import store from "../store"
-import {PrintClient} from "nativescript-escpos-printer";
+import {Printer} from "nativescript-escpos-printer";
 import { isAndroid } from 'tns-core-modules/platform';
 const defaultIp = isAndroid? '10.0.2.2': 'localhost'
 const esc = '\x1B'; //ESC byte in hex notation
@@ -55,6 +55,7 @@ export default class PrintService {
   }
 
   printTicket(ip, content) {
+    console.log("printer service ip: " + ip + " content: " + content)
     const header = reset + doubleHeightOn + center + 
     store.getters.company.organizationName + doubleHeightOff +
     newLine + newLine 
@@ -70,7 +71,9 @@ export default class PrintService {
     if (!ip || !port) return 'printerIp and/or port not defined'
 
     console.log("printing on ip: " + ip + ' port: ' + port)
-    var printClient = new PrintClient
-    printClient.print(ip,port, header + content + cut)
+    var printer = new Printer
+    printer.print(ip,port, header + content + cut).then(ok => {
+      if (!ok) alert("printer error")
+    })
   }
 }
