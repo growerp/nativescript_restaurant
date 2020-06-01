@@ -144,7 +144,6 @@ const actions = {
   async register({commit}, input) {
     input.user.emailAddress = input.user.emailAddress.toLowerCase().trim()
     input.user.name = input.user.emailAddress
-    if (!input.user.password) input.user.password = 'gvfuky6!!'
     try {
       let response = await backendService.register(input.user, input.company, input.env, input.data)
       if (response && response.data) { 

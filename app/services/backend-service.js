@@ -336,6 +336,8 @@ export default class BackendService {
       description: desc })}
   async getActiveSubscriptions() {
     return await axios.get('s1/growerp/GetActiveSubscriptions')}
+
+  // export by email
   async exportOrders(date) {
     return await axios.post('s1/growerp/ExportOrders', {
         startDate: date })}
