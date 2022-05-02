@@ -1,4 +1,7 @@
-# GrowERP-Mobile
+# nativescript_restaurant
+
+currently not maintained.
+
 GrowERP Nativescript-Vue mobile app for Android/IOS
 
 A restaurant app available in the app/play stores:
